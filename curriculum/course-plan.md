@@ -3,7 +3,8 @@
 A ready‑to‑use schedule for a junior/senior software‑engineering course built on this
 book, run as **two parallel tracks** (as the ACM/IEEE guidelines recommend):
 
-- **Concepts track** — the ten chapters, one theme per week.
+- **Concepts track** — the ten core chapters (one theme per week), plus the optional
+  Chapter 11 on AI as an advanced capstone.
 - **Project track** — a real team project (Appendix A), started early and iterated.
 
 The two tracks are **tightly coupled at the start** (weeks 1–4, while teams form and
@@ -27,7 +28,7 @@ pace.
 | 11 | Ch. 9 — Testing (MC/DC, combinatorial) | **Status Report 2** (viable system) | NIST combinatorial |
 | 12 | Ch. 10 — Metrics (quality & defects) | Defect tracking; quality dashboard | OpenIntro Stats; DORA |
 | 13 | Ch. 10 — Metrics (statistics) | Measure & analyze project data | OpenIntro Stats |
-| 14 | Review & advanced topics | **Comprehensive Final Report** (A.5) | — |
+| 14 | Ch. 11 — SE in the Age of AI *(optional capstone)* + review | **Comprehensive Final Report** (A.5) | METR study; o16g manifesto |
 | 15 | Final presentations / demos | Ship & retrospective | — |
 
 ## Assessment (suggested weights)

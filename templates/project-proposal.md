@@ -3,7 +3,7 @@
 > **How to use this template.** Copy this file into your team's repository (for example,
 > `docs/proposal.md`), delete these instruction blockquotes, and replace every _italic
 > prompt_ with your own content. Aim for two to four pages. See
-> [Appendix A, §A.2](../chapters/appendix-a-team-project/README.md) for what makes a
+> [Appendix A, §A.2](../chapters/appendix-a-team-project/) for what makes a
 > proposal strong. Keep the scope small enough to finish, test, and measure.
 
 | Field | Value |

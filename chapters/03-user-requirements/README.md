@@ -407,7 +407,7 @@ Feature: Interpreter alerts
 > automated test. Tools such as **Cucumber**, **behave** (Python), **SpecFlow**/**Reqnroll**
 > (.NET), and **Jest‑Cucumber** map each `Given`/`When`/`Then` step to code, turning the
 > scenario into an **executable specification**. Write the scenarios with the customer,
-> and they double as your **acceptance tests** (Chapter 9, [§9.2.3](../09-testing/README.md#923-functional-system-and-acceptance-testing)).
+> and they double as your **acceptance tests** (Chapter 9, [§9.2.3](../09-testing/#923-functional-system-and-acceptance-testing)).
 
 A few guidelines for good scenarios: keep them **declarative** (describe *what*, not which
 buttons to click); use **one** `When` per scenario (multiple actions usually means you have

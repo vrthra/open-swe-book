@@ -65,8 +65,10 @@ NOTE ON SOURCE MATERIAL
 ================================================================================
 
 This is an independent open educational resource. It follows the topic
-progression of the ACM/IEEE software-engineering curriculum guidelines. All text,
-examples, and figures in this repository are original works of its contributors
-and are not reproduced from any copyrighted textbook. Third-party resources linked
-from the `resources.md` files and the curriculum map remain under their own
-licenses.
+progression of the ACM/IEEE software-engineering curriculum guidelines. Except for
+clearly attributed quotations and the linked external resources, the explanatory
+text, examples, and figures in this repository are original works of its
+contributors and are not reproduced from any copyrighted textbook. Any quoted
+material (for example, the briefly quoted o16g manifesto in Chapter 11) is
+attributed to its source, and third-party resources linked from the `resources.md`
+files and the curriculum map remain under their own licenses.

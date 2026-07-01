@@ -3,8 +3,8 @@
 > **How to use this template.** Copy this file into your repository (for example,
 > `docs/status-1.md`), delete these instruction blockquotes, and fill in every _italic
 > prompt_. Use **Report 1** for the *skeletal system* / walking skeleton
-> ([Appendix A, §A.3](../chapters/appendix-a-team-project/README.md)) and **Report 2** for
-> the *viable system* / MVP ([§A.4](../chapters/appendix-a-team-project/README.md)). Be
+> ([Appendix A, §A.3](../chapters/appendix-a-team-project/)) and **Report 2** for
+> the *viable system* / MVP ([§A.4](../chapters/appendix-a-team-project/)). Be
 > honest: graders reward a clear-eyed status over an optimistic one.
 
 | Field | Value |

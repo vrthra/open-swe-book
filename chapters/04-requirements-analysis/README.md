@@ -199,7 +199,7 @@ well‑understood project has a **thin‑tailed** duration (it lands near its ap
 while one hiding an unsolved design problem or an untested technical assumption — a
 **rabbit hole** — has a **fat tail** (it can run 3× over). You de‑risk *before* betting by
 finding those rabbit holes and either solving them or ruling them out of scope. (This is
-the shaping work discussed as a process in Chapter 2, [§2.8](../02-software-development-processes/README.md#28-shape-up-fixed-time-variable-scope).)
+the shaping work discussed as a process in Chapter 2, [§2.8](../02-software-development-processes/#28-shape-up-fixed-time-variable-scope).)
 
 **When appetites fit — and when they don't.** Appetites shine for **discretionary,
 shapeable** features where "how good?" is negotiable and you'd rather have *something*

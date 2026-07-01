@@ -319,9 +319,9 @@ person — "what would get this scope *over the hill*?" depersonalizes a status 
 that "why isn't this done?" would sour. Used well, teams push the *novel, risky* work
 uphill first and leave routine "screw‑tightening" for last, so uncertainty falls fastest
 early — the same risk‑first instinct behind the spiral model
-([§2.7](../02-software-development-processes/README.md#27-risk-reduction-the-spiral-framework))
+([§2.7](../02-software-development-processes/#27-risk-reduction-the-spiral-framework))
 and Shape Up's building phase
-([§2.8](../02-software-development-processes/README.md#28-shape-up-fixed-time-variable-scope)).
+([§2.8](../02-software-development-processes/#28-shape-up-fixed-time-variable-scope)).
 
 > **Principle.** Choose a progress metric that exposes your *uncertainty*, not just your
 > *volume*. A number that only counts finished tasks will look healthiest right before the

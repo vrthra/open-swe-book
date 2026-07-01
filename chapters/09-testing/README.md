@@ -229,7 +229,7 @@ right product?"* (validation). Both matter, and passing one tells you nothing ab
 other.
 
 > **From acceptance criteria to acceptance tests.** The **Given / When / Then** scenarios
-> you wrote as a story's acceptance criteria ([§3.4.1](../03-user-requirements/README.md#341-guidelines-for-effective-user-stories))
+> you wrote as a story's acceptance criteria ([§3.4.1](../03-user-requirements/#341-guidelines-for-effective-user-stories))
 > *are* your acceptance tests. In **Behavior‑Driven Development (BDD)**, those **Gherkin**
 > `.feature` scenarios are made executable by tools like **Cucumber**, **behave**, or
 > **SpecFlow/Reqnroll**: each `Given`/`When`/`Then` step binds to code, so the customer‑readable

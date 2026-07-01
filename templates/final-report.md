@@ -3,7 +3,7 @@
 > **How to use this template.** Copy this file into your repository (for example,
 > `docs/final-report.md`), delete these instruction blockquotes, and replace every _italic
 > prompt_ with your own content. This is your capstone artifact and the main thing you are
-> assessed on — see [Appendix A, §A.5](../chapters/appendix-a-team-project/README.md). It
+> assessed on — see [Appendix A, §A.5](../chapters/appendix-a-team-project/). It
 > should tie the whole course together: requirements (Ch. 3–5), architecture (Ch. 6–7),
 > process (Ch. 2), testing (Ch. 9), and metrics (Ch. 10). Reward comes from working
 > software, real engineering evidence, and honest reflection.

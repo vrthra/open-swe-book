@@ -1,10 +1,12 @@
 # Open Curriculum Resource Map
 
-This book covers **the full scope of a first software‑engineering course** on its own.
-This map is a companion: for each chapter it lists the best **free and open‑licensed**
-courses, textbooks, primary sources, and videos, so learners who want more depth — or
-instructors assembling a reading list — can reinforce every topic without buying
-anything. Licenses are noted where known.
+This book is designed to support **a complete first undergraduate software‑engineering
+course** on its own (see the [chapter → ACM/IEEE SEEK mapping](#coverage-vs-the-acmieee-seek-body-of-knowledge)
+below). This map is a companion: for each chapter it lists the best **free or openly
+accessible** courses, textbooks, primary sources, and videos, so learners who want more
+depth — or instructors assembling a reading list — can reinforce every topic without
+buying anything. **Licenses vary and are noted where known** — "free to read" is not the
+same as "openly licensed"; check each before adapting.
 
 Resources are grouped as:
 
@@ -13,7 +15,8 @@ Resources are grouped as:
 - 📄 **Primary source** — the canonical spec, standard, or paper.
 - 🎥 **Video** — recorded lectures or talks.
 
-> **Coverage summary.** The book's ten chapters cover the full course. The four
+> **Coverage summary.** The book's ten core chapters cover a first course; Chapter 11
+> (AI) is an optional capstone. The four
 > "anchor" open courses below reinforce most of that ground; the per‑chapter tables add
 > focused resources for the rest (estimation, use‑case mechanics, architectural pattern
 > catalogs, and the statistics in Chapter 10).
@@ -176,16 +179,41 @@ Covers: project goals, team experience, proposal, status reports, final report.
 
 ---
 
+## Coverage vs. the ACM/IEEE SEEK body of knowledge
+
+The book is designed to support a complete *first* undergraduate SE course. The table
+below maps each chapter to the knowledge areas of the ACM/IEEE **SE2014 / SEEK** guideline
+so instructors can see coverage — and its limits — directly, rather than taking a "full
+scope" claim on faith. SEEK is a curriculum *guideline*; no single one‑semester course
+covers the whole discipline, and the "Depth" column is honest about that.
+
+| SEEK knowledge area | Where in this book | Depth |
+|---------------------|--------------------|-------|
+| Professional Practice (PRF) | Ch. 1 (ethics, cases), Appendix A (teamwork) | Introductory |
+| Software Process (PRO) | Ch. 2 (Scrum, XP, waterfall, V, spiral, Shape Up) | Solid |
+| Requirements / Modeling & Analysis (REQ, MAA) | Ch. 3–5 (elicitation, analysis, use cases) | Solid |
+| Software Design (DES) | Ch. 6–7 (modularity, UML, 4+1, patterns) | Solid |
+| Software V&V (VAV) | Ch. 8–9 (reviews, static analysis, testing, coverage) | Solid |
+| Software Quality (QUA) | Ch. 10 (metrics, statistics, defects) | Solid |
+| Security (SEC) | Ch. 3 §3.7 (attack trees, STRIDE), Ch. 8 §8.4 (SAST) | Introductory |
+| Software Construction (CST) | assumed as a prerequisite; touched in Ch. 8–9 | Light |
+| Software Evolution / Maintenance | cost‑of‑change theme throughout; no dedicated chapter | Light |
+| Emerging practice: AI‑assisted SE | Ch. 11 (optional capstone) | Introductory |
+| Computing Essentials, Math & Eng. Fundamentals (CMP, FND) | assumed prerequisites | Out of scope |
+
 ## Notes on coverage & gaps
 
-The book itself covers **100%** of the course. This map records how much of each topic
-also has strong *external* open coverage, so you know where the free supplements are
-richest:
+Within the areas it *does* teach, the book is self‑contained — no purchase is required to
+follow the course. This map records how much of each topic *also* has strong external open
+coverage, so you know where the free supplements are richest:
 
 - **Abundant open supplements:** process/agile, requirements & user stories,
   design/modularity, code review & static analysis, testing & coverage, and all of the
   statistics in Chapter 10.
 - **Thinner external coverage:** some *estimation* details (e.g. COCOMO calibration), a
   few *architectural‑pattern* treatments, and worked *case studies*. Our own chapters
-  supply original explanations and examples for these, so no purchase is ever required
-  to follow the full course.
+  supply original explanations and examples for these.
+- **Deliberately light or out of scope** (per the SEEK table above): deep software
+  *construction*, *maintenance/evolution*, and the CS/math prerequisites — appropriate
+  omissions for a one‑semester first course, but worth naming so no one mistakes this for
+  the whole discipline.

@@ -157,10 +157,12 @@ produce an increment, review it with stakeholders (which reshapes the backlog), 
 on the process itself. The loop is the point. Each turn gives you a fresh chance to correct
 course based on real, working software.
 
-### 2.2.2 Scrum Roles
+### 2.2.2 Scrum Accountabilities
 
-Scrum defines three **accountabilities** (roles), and confusing them is a common source of
-dysfunction.
+The 2020 *Scrum Guide* defines three **accountabilities** — the Product Owner, the Scrum
+Master, and the Developers — within a single Scrum Team. (Earlier versions called these
+"roles"; the 2020 edition prefers *accountabilities* to stress that they describe
+responsibility, not job titles.) Confusing them is a common source of dysfunction.
 
 The **Product Owner** owns *what* and *why*. They represent the customer and stakeholders,
 maintain the product backlog, and — crucially — decide priority. When two features compete,
@@ -226,8 +228,8 @@ the team's **Definition of Done**, a shared, explicit checklist of what "finishe
 
 ### 2.2.5 Summary
 
-Scrum is a lightweight scaffold for teamwork: three roles, a handful of events, three
-artifacts, all serving one idea — deliver working software in short cycles and use each
+Scrum is a lightweight scaffold for teamwork: three accountabilities, a handful of events,
+three artifacts, all serving one idea — deliver working software in short cycles and use each
 cycle's feedback to steer. It says nothing about engineering technique, which is both its
 flexibility and its danger: Scrum with weak engineering practices produces increments that
 *look* done but rot. The next section supplies the practices that make each increment
@@ -635,7 +637,7 @@ flowchart LR
 
 **Shaping (what to build, and how much it's worth).** Before any team is committed, senior
 people *shape* the work: they set an **appetite** — the fixed time the problem is worth
-(see [§4.2.4](../04-requirements-analysis/README.md#424-appetite-fixed-time-variable-scope))
+(see [§4.2.4](../04-requirements-analysis/#424-appetite-fixed-time-variable-scope))
 — and design a solution that is deliberately **rough** (leaves room for the builders'
 judgment), **solved** (the main elements are worked out, not vague), and **bounded** (it
 says explicitly what is *out* of scope). The output is a **pitch**: problem, appetite,
@@ -668,7 +670,7 @@ practices are worth borrowing regardless of your process:
 - **Hill charts for progress.** Track each scope as a dot on a hill: **uphill** is
   *figuring it out* (unknowns remain), **downhill** is *just execution* (all unknowns
   solved). A dot that stops moving is a raised hand. This exposes uncertainty in a way a
-  to‑do list cannot — see [§10.3](../10-quality-metrics/README.md#103-graphical-displays-of-data-sets).
+  to‑do list cannot — see [§10.3](../10-quality-metrics/#103-graphical-displays-of-data-sets).
 
 **The circuit breaker.** When the cycle ends, the project ships or it is *dropped* — it does
 **not** automatically get an extension. The most you can lose is one cycle. Extending is
