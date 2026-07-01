@@ -1,0 +1,15 @@
+# mdBook build output
+book-output/
+book/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.idea/
+.vscode/
+
+# Local notes not meant for the repo
+scratch/
+*.local.md

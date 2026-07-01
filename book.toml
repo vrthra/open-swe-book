@@ -1,0 +1,38 @@
+# mdBook configuration — https://rust-lang.github.io/mdBook/format/configuration/
+[book]
+title = "Software Engineering — Principles & Practices"
+description = "An open, chapter-based curriculum for software engineering: process, requirements, design, quality, and metrics."
+authors = ["The open contributors of this repository"]
+language = "en"
+# Use the repository root as the source so chapters/ and curriculum/ resolve directly.
+src = "."
+
+[build]
+build-dir = "book-output"
+create-missing = false
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/OWNER/software-engineering-open"
+edit-url-template = "https://github.com/OWNER/software-engineering-open/edit/main/{path}"
+smart-punctuation = true
+mathjax-support = true
+additional-js = ["mermaid.min.js", "mermaid-init.js", "subsections.js"]
+additional-css = ["custom.css"]
+
+[output.html.fold]
+enable = true
+level = 1
+
+[output.html.search]
+enable = true
+
+# Optional: enable if you add MathJax-style equations in Chapter 10.
+[output.html.playground]
+editable = false
+
+[preprocessor]
+
+[preprocessor.mermaid]
+command = "mdbook-mermaid"

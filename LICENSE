@@ -1,0 +1,72 @@
+Copyright (c) 2026 The open contributors of this repository.
+
+================================================================================
+DUAL LICENSE
+================================================================================
+
+This repository is dual-licensed to keep prose open and code reusable:
+
+  * PROSE, FIGURES, DIAGRAMS, and all other non-code content are licensed under
+    the Creative Commons Attribution-ShareAlike 4.0 International License
+    (CC BY-SA 4.0).
+
+  * CODE SNIPPETS and example programs (in fenced code blocks and under any
+    `examples/` or `code/` directories) are licensed under the MIT License.
+
+================================================================================
+CC BY-SA 4.0 (prose, figures, diagrams)
+================================================================================
+
+You are free to:
+  * Share  — copy and redistribute the material in any medium or format.
+  * Adapt  — remix, transform, and build upon the material for any purpose,
+             even commercially.
+
+Under the following terms:
+  * Attribution — You must give appropriate credit, provide a link to the
+    license, and indicate if changes were made.
+  * ShareAlike  — If you remix, transform, or build upon the material, you must
+    distribute your contributions under the same license as the original.
+
+The full legal code is available at:
+  https://creativecommons.org/licenses/by-sa/4.0/legalcode
+
+A human-readable summary (not a substitute for the license) is at:
+  https://creativecommons.org/licenses/by-sa/4.0/
+
+Suggested attribution:
+  "Software Engineering — Principles & Practices", by the open contributors of
+  this repository, licensed under CC BY-SA 4.0.
+
+================================================================================
+MIT License (code snippets and example programs)
+================================================================================
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+================================================================================
+NOTE ON SOURCE MATERIAL
+================================================================================
+
+This is an independent open educational resource. It follows the topic
+progression of the ACM/IEEE software-engineering curriculum guidelines. All text,
+examples, and figures in this repository are original works of its contributors
+and are not reproduced from any copyrighted textbook. Third-party resources linked
+from the `resources.md` files and the curriculum map remain under their own
+licenses.

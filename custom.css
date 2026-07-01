@@ -1,0 +1,83 @@
+/* ------------------------------------------------------------------ *
+ * Sidebar subsection navigation (injected by subsections.js)
+ * Injected <li.subsection-item> live inside the chapter's own
+ * <ol class="section">, ABOVE its Exercises/Resources links.
+ * Design: a continuous left "rail" with an accent segment marking the
+ * section currently in view — the Stripe / Tailwind / Rust-book pattern.
+ * ------------------------------------------------------------------ */
+
+.subsection-item {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  line-height: 1.35;
+}
+
+/* NOTE: mdBook sets `html { font-size: 62.5% }`, so 1rem = 10px here.
+   We size with `em` (relative to the inherited sidebar font) so these
+   links track the chapter/Exercises links instead of shrinking. */
+.subsection-item a.subsection-link {
+  display: block;
+  color: var(--sidebar-fg, #c8c9db);
+  font-size: 1.05em;                 /* a touch larger than the sub-page links */
+  font-weight: 500;                  /* section titles read clearly */
+  line-height: 1.4;
+  padding: 0.32em 0.7em 0.32em 0.6em;
+  margin-left: 0.2em;
+  /* the rail: a light vertical line to the left of every item */
+  border-left: 2px solid
+    color-mix(in srgb, var(--sidebar-fg, #b3c0d1) 24%, transparent);
+  text-decoration: none;
+  white-space: normal;               /* wrap long headings gracefully */
+  opacity: 0.95;
+  transition: color 0.15s ease, background 0.15s ease, opacity 0.15s ease,
+    border-color 0.15s ease;
+}
+
+/* Sub-subsections (h3 / N.x.y): slightly smaller, lighter, more indented */
+.subsection-item.sub3 a.subsection-link {
+  font-size: 0.95em;
+  font-weight: 400;
+  padding-left: 1.5em;
+  opacity: 0.82;
+}
+
+.subsection-item a.subsection-link:hover {
+  opacity: 1;
+  color: var(--sidebar-active, #4a90e2);
+  background: color-mix(in srgb, var(--sidebar-active, #4a90e2) 9%, transparent);
+  border-left-color: color-mix(
+    in srgb,
+    var(--sidebar-active, #4a90e2) 55%,
+    transparent
+  );
+}
+
+/* The section currently in view (scrollspy): accent rail segment + bold */
+.subsection-item a.subsection-link.active-sub {
+  opacity: 1;
+  font-weight: 600;
+  color: var(--sidebar-active, #4a90e2);
+  border-left: 2px solid var(--sidebar-active, #4a90e2);
+  background: color-mix(in srgb, var(--sidebar-active, #4a90e2) 13%, transparent);
+}
+
+/* mdBook auto-numbers the sub-page links as N.1, N.2, … (Exercises, Open
+   Resources, and the appendix templates). Those numbers now collide with the
+   real section numbers we inject (1.1, 1.1.1, …), so hide them — the labels
+   read clearly on their own. Injected items are <li.subsection-item> with no
+   <strong>, so they are unaffected. */
+#sidebar .chapter ol.section > li.chapter-item > a > strong {
+  display: none;
+}
+
+/* Fallback for browsers without color-mix() */
+@supports not (background: color-mix(in srgb, red, blue)) {
+  .subsection-item a.subsection-link {
+    border-left-color: rgba(140, 150, 170, 0.35);
+  }
+  .subsection-item a.subsection-link:hover,
+  .subsection-item a.subsection-link.active-sub {
+    background: rgba(74, 144, 226, 0.14);
+  }
+}
