@@ -81,7 +81,12 @@ course · 📄 primary source/standard · 🎥 video.
   Free, community‑licensed guidance and checklists for turning threats into concrete
   security requirements.
 
+## Framing the problem
+
+- 📘 **"Shape Up," Ryan Singer (Basecamp), ch. "Set Boundaries"** — problem‑framing,
+  the *baseline*, and avoiding "grab‑bag" requests (used in §3.3.2).
+  <https://basecamp.com/shapeup/1.2-chapter-03> · Free to read online.
+
 ## License note
 
 Linked resources remain under their own licenses; this page is CC BY‑SA 4.0.
-</content>

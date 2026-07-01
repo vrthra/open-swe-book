@@ -93,6 +93,13 @@ open license. Prefer these over paywalled textbooks.
   available as a free PDF via university course pages.
   *Copyrighted; free preprints commonly hosted by universities.*
 
+## Appetite: fixed time, variable scope
+
+- 📘 **"Shape Up," Ryan Singer (Basecamp)** — the free online book behind §4.2.4: *appetite*
+  vs. estimate, fixed‑time/variable‑scope, the circuit breaker, scope hammering, and judging
+  against the baseline. See especially the Introduction and "Bets, Not Backlogs."
+  <https://basecamp.com/shapeup> · *Free to read online; © Basecamp.*
+
 ---
 
 > **License.** This resource list is part of an open textbook released under

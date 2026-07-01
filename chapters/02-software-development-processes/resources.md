@@ -48,6 +48,10 @@ processes. Legend: 📘 book/book chapter · 🎓 course/courseware · 📄 pape
   whiteboard talk explaining backlogs, prioritization, and the Product Owner role.
   Searchable on YouTube. · Free to view.
 
+- 📘 **"Shape Up," Ryan Singer (Basecamp)** — the free online book behind §2.8: shaping,
+  six‑week cycles plus a two‑week cool‑down, betting instead of backlogs, the circuit
+  breaker, and hill charts. <https://basecamp.com/shapeup> · Free to read online.
+
 ---
 
 Linked resources remain under their own licenses; this page is CC BY-SA 4.0.

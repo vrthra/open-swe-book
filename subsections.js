@@ -8,6 +8,18 @@
     return (el.textContent || "").replace(/¶/g, "").trim();
   }
 
+  // A concise sidebar label: drop trailing "(Chapter 8)" / "(Chapters 6-7)"
+  // parentheticals and any " — descriptive tail" after an em/en/double dash.
+  // The full heading is kept in the link's title attribute (hover tooltip).
+  function shortLabel(full) {
+    var s = full
+      .replace(/\s*\((?:chapters?|appendix|appendices)\b[^)]*\)\s*$/i, "")
+      .replace(/\s+[—–]\s+.+$/, "")
+      .replace(/\s+--\s+.+$/, "")
+      .trim();
+    return s.length >= 4 ? s : full; // never shorten to almost nothing
+  }
+
   function build() {
     var sidebar = document.querySelector("#sidebar");
     if (!sidebar) return;
@@ -40,7 +52,9 @@
       a.href = "#" + h.id;
       a.className = "subsection-link";
       a.setAttribute("data-target", h.id);
-      a.textContent = textOf(h);
+      var full = textOf(h);
+      a.title = full;
+      a.textContent = shortLabel(full);
       linkFor[h.id] = a;
       li.appendChild(a);
       frag.appendChild(li);

@@ -283,6 +283,50 @@ critical path. If any task on that chain slips, the whole quarter slips. Gantt c
 about *time and dependency*, not quantity — which is what distinguishes them from bar
 charts.
 
+### 10.3.5 Hill Charts: Displaying Uncertainty, Not Just Quantity
+
+The progress charts most teams use — a **burndown** of remaining tasks, or a "percent
+done" bar — share a blind spot: they measure *quantity remaining* and silently assume you
+already know all the work. But the riskiest work is exactly the work you *haven't figured
+out yet*, and a task list often *grows* as you discover what a problem really involves. A
+burndown that ticks down looks reassuring right up until the unknown you never listed
+blows up the schedule.
+
+The **hill chart**, popularized by Basecamp's *Shape Up*, is a small chart designed to show
+what a burndown hides: not how much is left, but *how much is still uncertain*. Picture
+each piece of work as a dot climbing and descending a hill:
+
+```text
+                 . . . . .            <- crest: "we now know exactly what to do"
+             .              .
+          .                    .
+       .                          .
+   ___.______________________________.___
+      UPHILL                    DOWNHILL
+   "figuring it out"          "just execution"
+   (unknowns remain)          (all unknowns solved)
+```
+
+- **Uphill** means *figuring it out* — open questions, unsolved design, unproven technical
+  assumptions.
+- **Downhill** means *just execution* — the unknowns are resolved and only the known,
+  routine work remains.
+
+Two properties make it a better *management* signal than a burndown. First, **a dot that
+stops moving is a raised hand**: it flags a stuck piece before a missed deadline announces
+it, and without interrogating anyone. Second, its language is about the work, not the
+person — "what would get this scope *over the hill*?" depersonalizes a status conversation
+that "why isn't this done?" would sour. Used well, teams push the *novel, risky* work
+uphill first and leave routine "screw‑tightening" for last, so uncertainty falls fastest
+early — the same risk‑first instinct behind the spiral model
+([§2.7](../02-software-development-processes/README.md#27-risk-reduction-the-spiral-framework))
+and Shape Up's building phase
+([§2.8](../02-software-development-processes/README.md#28-shape-up-fixed-time-variable-scope)).
+
+> **Principle.** Choose a progress metric that exposes your *uncertainty*, not just your
+> *volume*. A number that only counts finished tasks will look healthiest right before the
+> unknown you never measured comes due.
+
 ## 10.4 Product Quality: Measuring Defects
 
 Defects are the most measurable face of quality, so they anchor most quality programs.

@@ -613,7 +613,78 @@ whether to keep going. It generalizes both plan-driven and agile instincts into 
 risk-first frame, and it is the clearest statement of this chapter's core idea — that a good
 process is, above all, a machine for reducing risk early.
 
-## 2.8 Conclusion
+## 2.8 Shape Up: Fixed Time, Variable Scope
+
+Scrum, XP, and the spiral all iterate in short cycles and carry unfinished work forward on
+a backlog. **Shape Up** — the method Basecamp published as a free online book — keeps the
+fixed cadence but makes three sharp bets that set it apart: it fixes *time* and flexes
+*scope*, it refuses to keep a backlog, and it hands a team a whole shaped problem rather
+than a list of tasks. It is worth studying precisely because it questions assumptions the
+other models share.
+
+Shape Up runs in three phases that overlap across the calendar:
+
+```mermaid
+flowchart LR
+    S["Shaping<br/>(senior generalists, off-cycle):<br/>rough · solved · bounded → a pitch"]
+      --> B["Betting<br/>(betting table, during cool-down):<br/>fund a few pitches, no backlog"]
+    B --> U["Building<br/>(one team, whole 6-week cycle):<br/>get one piece done · map scopes · hill charts"]
+    U --> C["Cool-down<br/>(2 weeks): bugs, ideas,<br/>and the next betting table"]
+    C --> B
+```
+
+**Shaping (what to build, and how much it's worth).** Before any team is committed, senior
+people *shape* the work: they set an **appetite** — the fixed time the problem is worth
+(see [§4.2.4](../04-requirements-analysis/README.md#424-appetite-fixed-time-variable-scope))
+— and design a solution that is deliberately **rough** (leaves room for the builders'
+judgment), **solved** (the main elements are worked out, not vague), and **bounded** (it
+says explicitly what is *out* of scope). The output is a **pitch**: problem, appetite,
+solution sketch, rabbit holes to avoid, and no‑gos. Shaping is where **rabbit holes** —
+unsolved design problems or untested technical assumptions — get found and removed *before*
+anyone commits.
+
+**Betting (deciding, without a backlog).** During the two‑week **cool‑down** between
+cycles, a small **betting table** of senior people reviews the shaped pitches and *bets* on
+a few for the next cycle. A **bet** commits one team to one project for the whole cycle,
+uninterrupted, with the expectation of finishing.
+
+> **Principle — bets, not backlogs.** Shape Up keeps *no backlog*. Unchosen ideas simply
+> lapse; if one really matters, it comes back and gets re‑pitched. This trades the comfort
+> of a tracked list for freedom from the "always behind" guilt and the grooming overhead of
+> a backlog that only ever grows.
+
+**Building (hand over the whole problem).** The team gets the pitch, *not* a task
+breakdown — "splitting the project into tasks up front is like putting the pitch through a
+paper shredder." They define their own tasks and own how the pieces fit. Three building
+practices are worth borrowing regardless of your process:
+
+- **Get one piece done.** Finish one *vertically integrated* slice early — front end wired
+  to back end so *something works* in week one — instead of building all of one layer then
+  all of the next (where nothing works until the end). Pick a first slice that is **core,
+  small, and novel** so it proves the concept and kills the biggest uncertainty first.
+- **Map the scopes.** Organize the project into **scopes** — parts that can be built,
+  integrated, and finished *independently* — named by function, not by layer or person.
+  Scopes become the shared language for status.
+- **Hill charts for progress.** Track each scope as a dot on a hill: **uphill** is
+  *figuring it out* (unknowns remain), **downhill** is *just execution* (all unknowns
+  solved). A dot that stops moving is a raised hand. This exposes uncertainty in a way a
+  to‑do list cannot — see [§10.3](../10-quality-metrics/README.md#103-graphical-displays-of-data-sets).
+
+**The circuit breaker.** When the cycle ends, the project ships or it is *dropped* — it does
+**not** automatically get an extension. The most you can lose is one cycle. Extending is
+allowed only if what remains is genuine must‑have work that is *entirely downhill*; any
+remaining uphill work means the shaping was wrong, so the project goes back to shaping
+rather than dragging on.
+
+**Shape Up vs. Scrum.** The contrast sharpens both. Scrum re‑plans every 1–4‑week sprint
+and rolls unfinished stories forward on a *backlog*; Shape Up makes a *one‑shot bet* over a
+longer six‑week cycle with *no* backlog and *no* auto‑extension. Scrum layers daily
+standups, reviews, and retrospectives; Shape Up gives one integrated team full autonomy for
+the whole cycle and reads status from hill charts instead of ceremonies. Neither is
+universally right — but Shape Up is a clean demonstration of this chapter's theme that a
+process is a set of *bets about where your risk lives*.
+
+## 2.9 Conclusion
 
 Strip away the terminology and every process in this chapter is answering one question:
 **how do you find out you were wrong while being wrong is still cheap?** Plan-driven models —
@@ -642,6 +713,6 @@ and most cheaply.
 
 ---
 
-- **Key takeaways** are summarized above in §2.8.
+- **Key takeaways** are summarized above in §2.9.
 - Continue to the [Exercises](exercises.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

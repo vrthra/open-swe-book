@@ -1,3 +1,17 @@
+/* Widen the sidebar so index entries fit on one line (mdBook default 300px).
+   mdBook derives the content offset from this variable, so content shifts too. */
+:root {
+  --sidebar-width: 380px;
+}
+
+/* Keep every index entry on a single line: long labels truncate with an
+   ellipsis (full text shows on hover via the title attribute). */
+#sidebar .chapter li > a {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* ------------------------------------------------------------------ *
  * Sidebar subsection navigation (injected by subsections.js)
  * Injected <li.subsection-item> live inside the chapter's own
@@ -28,7 +42,9 @@
   border-left: 2px solid
     color-mix(in srgb, var(--sidebar-fg, #b3c0d1) 24%, transparent);
   text-decoration: none;
-  white-space: normal;               /* wrap long headings gracefully */
+  white-space: nowrap;               /* single line; truncate with ellipsis */
+  overflow: hidden;
+  text-overflow: ellipsis;
   opacity: 0.95;
   transition: color 0.15s ease, background 0.15s ease, opacity 0.15s ease,
     border-color 0.15s ease;

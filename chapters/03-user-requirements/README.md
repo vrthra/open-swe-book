@@ -260,6 +260,24 @@ you missed, and survey to prioritize what you found.
 > the system had no way to flag them. No interview surfaced this — it was too normal to
 > mention. Observation found in one hour what interviews had missed for weeks.
 
+**Frame the problem before the solution.** Users — and stakeholders — hand you *solutions*
+("add a dropdown," "redesign the reports page"). A useful habit from Basecamp's *Shape Up*
+is to flip every such request from *"what should we build?"* back to **"what's really going
+wrong?"** — the specific moment in the workflow where today's experience fails. Two ideas
+sharpen that:
+
+- **The baseline** is what users do *today* without the feature. Stated plainly ("right now
+  they keep a paper list beside the keyboard"), it both proves the problem is real and
+  becomes the reference for judging any solution: a fix only has to beat the baseline, not
+  reach perfection.
+- A **grab‑bag** is the anti‑pattern — a vague mandate ("do something about scheduling")
+  with no driving problem, so no one can tell where it starts or ends. Grab‑bags are how
+  scope explodes; the cure is to narrow to one concrete pain point before designing.
+
+> **Pitfall.** A requirement phrased as a solution smuggles in an unexamined assumption
+> about *how*. Trace it back to the problem and you often find a smaller, cheaper, better
+> answer than the one you were asked for.
+
 ### 3.3.3 Design for Delight
 
 Satisfying stated needs makes a product *acceptable*. Delighting users — meeting latent

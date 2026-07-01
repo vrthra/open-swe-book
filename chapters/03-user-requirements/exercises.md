@@ -57,4 +57,3 @@ you to reason, **[project]** connects to your team project (Appendix A).
     money, safety, availability). Build an attack tree for one attacker goal against it, and
     add the resulting security requirements to your backlog — noting for each which
     attack‑tree leaf justifies it.
-</content>

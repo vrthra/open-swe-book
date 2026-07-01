@@ -139,11 +139,11 @@ them*, because each guards against a specific way that informal review fails.
 
 ```mermaid
 flowchart TD
-    P[1. Planning] --> O[2. Overview]
-    O --> Pr[3. Preparation]
-    Pr --> M[4. Meeting]
-    M --> Rw[5. Rework]
-    Rw --> F[6. Follow-up]
+    P["1 · Planning"] --> O["2 · Overview"]
+    O --> Pr["3 · Preparation"]
+    Pr --> M["4 · Meeting"]
+    M --> Rw["5 · Rework"]
+    Rw --> F["6 · Follow-up"]
     F -->|defects remain / new material| P
     classDef ph fill:#eef,stroke:#66a;
     class P,O,Pr,M,Rw,F ph;

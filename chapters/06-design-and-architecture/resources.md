@@ -59,6 +59,10 @@ resource is free to read but not openly relicensable, it is marked *free to read
   Institute publishes free technical reports on *views and beyond* and *architecture
   documentation* at [resources.sei.cmu.edu](https://resources.sei.cmu.edu/library/).
   *License:* free to download (U.S. government–funded FFRDC reports).
+- 📘 **"Shape Up," Ryan Singer (Basecamp), ch. "Find the Elements"** — breadboarding
+  (places/affordances/connections), fat‑marker sketches, and designing at the right
+  fidelity (used in §6.1.2). <https://basecamp.com/shapeup/1.3-chapter-04> · *Free to read
+  online; © Basecamp.*
 
 ## License note
 
