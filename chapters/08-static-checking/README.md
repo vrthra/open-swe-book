@@ -438,5 +438,4 @@ why we cast several.
 
 - **Key takeaways** are summarized above in §8.5.
 - Continue to the [Exercises](exercises.md).
-- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

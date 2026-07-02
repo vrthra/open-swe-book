@@ -1,7 +1,7 @@
 # Chapter 8 — Exercises
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks you to
-reason. Project-focused exercises live in this chapter's [Project Guide](project.md).
+reason.
 
 ## Concepts
 

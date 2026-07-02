@@ -805,5 +805,4 @@ is how you learn to *combine* them, and combining them well is what architecture
 
 - **Key takeaways** are summarized above in §7.7.
 - Continue to the [Exercises](exercises.md).
-- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

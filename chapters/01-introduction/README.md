@@ -358,5 +358,4 @@ technique in this book earns its place by answering one of them.
 
 - **Key takeaways** are summarized above in §1.7.
 - Continue to the [Exercises](exercises.md).
-- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

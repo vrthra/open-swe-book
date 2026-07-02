@@ -160,9 +160,9 @@ know now, and re-plan every iteration as reality corrects you.**
 
 ```mermaid
 flowchart LR
-    A[Backlog\n130 pts] --> B{Velocity\n~22 pts/sprint}
-    B --> C[Forecast\n~6 sprints]
-    C --> D[Sprint done:\nmeasure real velocity]
+    A[Backlog<br/>130 pts] --> B{Velocity<br/>~22 pts/sprint}
+    B --> C[Forecast<br/>~6 sprints]
+    C --> D[Sprint done:<br/>measure real velocity]
     D -->|update average| B
     classDef k fill:#eef,stroke:#66a;
     class A,B,C,D k;
@@ -637,5 +637,4 @@ between a promise and a hope.
 
 - **Key takeaways** are summarized above in §4.7.
 - Continue to the [Exercises](exercises.md).
-- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

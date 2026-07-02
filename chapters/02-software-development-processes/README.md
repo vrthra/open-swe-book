@@ -142,9 +142,9 @@ Scrum exists to plan a sprint, keep it on track, ship its result, and learn from
 ```mermaid
 flowchart LR
     PB[(Product Backlog)] -->|Sprint Planning| SB[(Sprint Backlog)]
-    SB --> S{{Sprint\n1–4 weeks}}
+    SB --> S{{Sprint<br/>1–4 weeks}}
     S -->|Daily Scrum each day| S
-    S --> INC[Potentially shippable\nincrement]
+    S --> INC[Potentially shippable<br/>increment]
     INC -->|Sprint Review| PB
     INC -->|Sprint Retrospective| S
     classDef art fill:#eef,stroke:#66a;
@@ -281,8 +281,8 @@ The signature practice is **test-driven development (TDD)**, a tight loop often 
 
 ```mermaid
 flowchart LR
-    R["Red:\nwrite a failing test"] --> G["Green:\nwrite minimal code\nto pass it"]
-    G --> RF["Refactor:\nclean up, tests\nstill green"]
+    R["Red:<br/>write a failing test"] --> G["Green:<br/>write minimal code<br/>to pass it"]
+    G --> RF["Refactor:<br/>clean up, tests<br/>still green"]
     RF --> R
 ```
 
@@ -401,11 +401,11 @@ flowchart LR
     A[Requirements] --> B[Design] --> C[Implementation] --> D[Testing] --> E[Release]
     A -.->|"1×"| A
     subgraph Relative cost to fix a defect
-    P1["Requirements:\n~1×"]
-    P2["Design:\n~5×"]
-    P3["Implementation:\n~10×"]
-    P4["Testing:\n~20×"]
-    P5["After release:\n~50–100×"]
+    P1["Requirements:<br/>~1×"]
+    P2["Design:<br/>~5×"]
+    P3["Implementation:<br/>~10×"]
+    P4["Testing:<br/>~20×"]
+    P5["After release:<br/>~50–100×"]
     end
 ```
 
@@ -757,5 +757,4 @@ and most cheaply.
 
 - **Key takeaways** are summarized above in §2.9.
 - Continue to the [Exercises](exercises.md).
-- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

@@ -87,6 +87,46 @@
   display: none;
 }
 
+/* Mermaid diagrams render at natural size (mermaid-init.js sets
+   useMaxWidth:false so labels stay readable). A diagram wider than the text
+   column "full-bleeds": it centers over the column and may spill into the
+   page margins up to the viewport, and only then scrolls horizontally. */
+pre.mermaid {
+  overflow-x: auto;
+  padding: 0.5em 0;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  min-width: 100%;
+  /* --diagram-avail is measured from the live layout by mermaid-init.js,
+     so the sidebar's actual width/state is always accounted for. */
+  max-width: var(--diagram-avail, calc(100vw - 5rem));
+}
+pre.mermaid svg {
+  /* Render at natural size when it fits, but never exceed the full-bleed
+     container: oversized diagrams scale down to 100% of the page width. */
+  max-width: 100% !important;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+/* When printing, keep diagrams inside the paper width. */
+@media print {
+  pre.mermaid {
+    position: static;
+    transform: none;
+    width: auto;
+    max-width: 100%;
+    overflow-x: visible;
+  }
+  pre.mermaid svg {
+    max-width: 100% !important;
+    height: auto;
+  }
+}
+
 /* Fallback for browsers without color-mix() */
 @supports not (background: color-mix(in srgb, red, blue)) {
   .subsection-item a.subsection-link {

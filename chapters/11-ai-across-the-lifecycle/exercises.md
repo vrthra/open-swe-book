@@ -1,7 +1,6 @@
 # Chapter 11 — Exercises
 
 Tags: **[warm‑up]** checks understanding · **[analysis]** asks you to reason.
-Project-focused exercises live in this chapter's [Project Guide](project.md).
 
 ## Concepts
 

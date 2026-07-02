@@ -85,8 +85,7 @@ access terms; when in doubt, check the linked page.
 
 - 📄 **GitHub Docs — Dependabot** —
   [docs.github.com/en/code-security/dependabot](https://docs.github.com/en/code-security/dependabot).
-  Reference for the update-bot workflow of §12.4.2 and the dependency-scanning exercise in
-  this chapter's [Project Guide](project.md). *License: GitHub docs are CC BY 4.0.*
+  Reference for the update-bot workflow of §12.4.2. *License: GitHub docs are CC BY 4.0.*
 - 🛠 **OWASP Dependency-Check and Dependency-Track** —
   [owasp.org/www-project-dependency-check](https://owasp.org/www-project-dependency-check/)
   and [dependencytrack.org](https://dependencytrack.org/). Open-source SCA: the first

@@ -45,8 +45,7 @@ terms; when in doubt, check the linked page.
   domain; ACTS tool free for download.*
 - 📄 **Microsoft PICT — Pairwise Independent Combinatorial Testing tool** —
   [github.com/microsoft/pict](https://github.com/microsoft/pict). A small, scriptable
-  covering-array generator you can use for the pairwise exercise in this chapter's
-  [Project Guide](project.md). *License: MIT.*
+  covering-array generator for building pairwise test suites. *License: MIT.*
 
 ## Tools and practice
 

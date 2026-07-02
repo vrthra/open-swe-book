@@ -624,5 +624,4 @@ reuse the judgment, not just the diagram.
 
 - **Key takeaways** are summarized above in §6.6.
 - Continue to the [Exercises](exercises.md).
-- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

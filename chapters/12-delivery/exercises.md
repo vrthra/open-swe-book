@@ -1,8 +1,7 @@
 # Chapter 12 — Exercises
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks
-you to reason. Project-focused exercises live in this chapter's
-[Project Guide](project.md). Several exercises require *actual work* — computing metrics
+you to reason. Several exercises require *actual work* — computing metrics
 from a log, designing a rollout, writing a real test — not just prose. Show the work, not
 only the answer.
 

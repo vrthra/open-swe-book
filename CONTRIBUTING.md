@@ -30,7 +30,6 @@ living resource, and clear, well‑sourced contributions are very welcome.
 │   ├── 01-introduction/
 │   │   ├── README.md             # the chapter body
 │   │   ├── exercises.md          # individual practice exercises
-│   │   ├── project.md            # Project Guide: sprint actions + project exercises
 │   │   └── resources.md          # curated open resources for this chapter
 │   └── ...                       # one directory per chapter
 ├── templates/                    # reusable project & document templates
@@ -40,9 +39,9 @@ living resource, and clear, well‑sourced contributions are very welcome.
 ## House style
 
 - **Structure per chapter:** a short "Where we are / why this matters" opener, then
-  numbered sections matching `SUMMARY.md`, then a footer of four bullets: **Key
-  takeaways** (pointing at the conclusion section), a link to **Exercises**, a link to
-  the chapter's **project guide**, and a link to **Open resources**.
+  numbered sections matching `SUMMARY.md`, then a footer of three bullets: **Key
+  takeaways** (pointing at the conclusion section), a link to **Exercises**, and a link
+  to **Open resources**.
 - **Voice:** direct, second person ("you"), concrete. Explain the *why* behind each
   practice, not just the *how*. Use a running example or case study where it helps.
 - **Diagrams:** use [Mermaid](https://mermaid.js.org/) fenced code blocks (```` ```mermaid ````)

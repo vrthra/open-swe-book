@@ -839,5 +839,4 @@ to change for longer than anyone who built it expects.
 
 - **Key takeaways** are summarized above in §12.7.
 - Continue to the [Exercises](exercises.md).
-- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

@@ -74,9 +74,8 @@ Use the sidebar for the full linked table of contents (chapters and sections), o
 
 ## How to use this repository
 
-- **Learners:** read the chapters in order. Each ends with *Key takeaways*, *Exercises*
-  (individual practice), a *Project guide* (how the chapter drives a team project), and
-  *Open resources* pointing to free courses and readings for deeper study.
+- **Learners:** read the chapters in order. Each ends with *Key takeaways*, *Exercises*,
+  and *Open resources* pointing to free courses and readings for deeper study.
 - **Instructors:** the chapters map onto a 14–16 week semester — two ready-made plans
   (a milestone track and a two-week-sprint track) live in
   [`curriculum/course-plan.md`](curriculum/course-plan.md). Run the team project from

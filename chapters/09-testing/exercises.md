@@ -1,8 +1,7 @@
 # Chapter 9 — Exercises
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks
-you to reason. Project-focused exercises live in this chapter's
-[Project Guide](project.md). Several exercises require *actual work* — drawing a graph,
+you to reason. Several exercises require *actual work* — drawing a graph,
 deriving values, or constructing a test set — not just prose. Show the work, not only the
 answer.
 

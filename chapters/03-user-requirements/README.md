@@ -805,5 +805,4 @@ build here.
 
 - **Key takeaways** are summarized above in §3.8.
 - Continue to the [Exercises](exercises.md).
-- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

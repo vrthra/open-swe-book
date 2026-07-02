@@ -1,8 +1,7 @@
 # Chapter 6 — Exercises
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks you
-to reason about a design. Project-focused exercises live in this chapter's
-[Project Guide](project.md). Where an exercise asks for a diagram, a hand sketch or a
+to reason about a design. Where an exercise asks for a diagram, a hand sketch or a
 Mermaid block is fine — the thinking is what is graded.
 
 ## Concepts

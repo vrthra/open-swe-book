@@ -2,8 +2,7 @@
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks
 you to reason; a **[calculation]** tag marks exercises that require working the
-numbers. Project-focused exercises live in this chapter's
-[Project Guide](project.md). At least five exercises require calculation — show your
+numbers. At least five exercises require calculation — show your
 work, including formulas and intermediate values, not just a final number.
 
 Two datasets recur (the same ones used in the chapter). **Dataset A** is a univariate

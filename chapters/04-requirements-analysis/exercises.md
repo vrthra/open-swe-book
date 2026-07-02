@@ -2,8 +2,7 @@
 
 These exercises build the judgment behind requirements analysis: sizing work, forecasting
 from data, and ranking by value, cost, and risk. Tags indicate the kind of effort:
-**[warm-up]** checks understanding, **[analysis]** asks you to reason or compute.
-Project-focused exercises live in this chapter's [Project Guide](project.md). Several
+**[warm-up]** checks understanding, **[analysis]** asks you to reason or compute. Several
 exercises require real arithmetic — do the math, and show your work.
 
 Throughout, we reuse the **clinic scheduling app** from Chapters 1 and 3.

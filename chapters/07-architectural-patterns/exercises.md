@@ -1,8 +1,7 @@
 # Chapter 7 — Exercises
 
 Exercises are graded by depth: **[warm-up]** checks understanding, **[analysis]** asks you
-to reason about a design and its trade-offs. Project-focused exercises live in this
-chapter's [Project Guide](project.md). For every pattern you choose, the grading rubric is
+to reason about a design and its trade-offs. For every pattern you choose, the grading rubric is
 the same one an engineer applies in practice: *name what the pattern buys you and what it
 costs you.*
 

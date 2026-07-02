@@ -94,5 +94,6 @@ By the end, a student can:
 - **Bootcamp / self‑study:** follow the four anchor courses in
   [`open-resources-map.md`](open-resources-map.md) alongside the chapters; do the
   project solo or in a pair.
-- **No team project:** keep the concepts track; replace project milestones with the
-  "Project exercises" in each chapter's `project.md` (the Project Guide).
+- **No team project:** keep the concepts track; use the checkpoints in
+  [Appendix A's project exercises](../chapters/appendix-a-team-project/exercises.md) as
+  larger individual assignments.

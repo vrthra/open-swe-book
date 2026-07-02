@@ -2,7 +2,7 @@
 
 Work these in order within a theme; each theme builds from recall toward judgment and
 practice. Tags: **[warm-up]** checks understanding, **[analysis]** asks you to reason about
-trade-offs. Project-focused exercises live in this chapter's [Project Guide](project.md).
+trade-offs.
 
 ## Processes and values (§2.1)
 
