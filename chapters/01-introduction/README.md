@@ -186,7 +186,7 @@ flowchart TD
     A --> D[Module 3]
     B <-->|narrow, explicit interface| C
     C <-->|narrow, explicit interface| D
-    classDef m fill:#eef,stroke:#66a;
+    classDef m fill:#eef,stroke:#66a,color:#000;
     class B,C,D m;
 ```
 
@@ -221,8 +221,8 @@ do. No single technique suffices, which is why Chapters 8 and 9 are complementar
 ### 1.4.2 Introduction to testing
 
 **Testing** runs the software on chosen inputs and checks the outputs against what we
-expect. It cannot prove the absence of defects — as Dijkstra, a pionneer in computing 
-and mathmatics, observed, testing shows the *presence* of bugs, never their absence — 
+expect. It cannot prove the absence of defects — as Dijkstra, a pioneer in computing
+and mathematics, observed, testing shows the *presence* of bugs, never their absence —
 but a well‑designed test suite makes it *unlikely* that a serious fault survives, and 
 it makes change safe by catching regressions. Testing is important enough that Chapter 9 
 is devoted to it, including how to decide when you have tested *enough* (coverage).

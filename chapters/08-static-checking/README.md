@@ -108,7 +108,7 @@ flowchart LR
     DD --> Build[Build the system]
     Build --> R["Retrospective review<br/>(after, learning)"]
     R -.feeds next design.-> D
-    classDef rev fill:#eef,stroke:#66a;
+    classDef rev fill:#eef,stroke:#66a,color:#000;
     class D,DD,R rev;
 ```
 
@@ -145,7 +145,7 @@ flowchart TD
     M --> Rw["5 · Rework"]
     Rw --> F["6 · Follow-up"]
     F -->|defects remain / new material| P
-    classDef ph fill:#eef,stroke:#66a;
+    classDef ph fill:#eef,stroke:#66a,color:#000;
     class P,O,Pr,M,Rw,F ph;
 ```
 

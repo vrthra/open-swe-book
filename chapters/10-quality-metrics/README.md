@@ -113,7 +113,7 @@ flowchart TD
     Q1 --> M1
     Q1 --> M3
     Q2 --> M2
-    classDef g fill:#eef,stroke:#66a;
+    classDef g fill:#eef,stroke:#66a,color:#000;
     class G g;
 ```
 
@@ -373,8 +373,9 @@ is the share your internal nets caught.
 > $$
 > \text{DRE} = \frac{720}{720 + 80} \times 100\% = \frac{720}{800} \times 100\% = 90\%.
 > $$
-> The team caught nine of every ten defects before shipping. World-class organizations
-> push DRE above 95%; below about 85%, too much pain is escaping to users.
+> The team caught nine of every ten defects before shipping. Some organizations use 95%
+> DRE as an aspirational target; much lower values suggest that too many defects are
+> escaping to users.
 
 DRE can also be computed *per phase* to show where defects leak through. If a phase
 receives defects, removes some, and passes the rest downstream, its **phase DRE** is
@@ -467,7 +468,7 @@ top-line customer metric to fall.
 flowchart LR
     P[Process improvement<br/>reviews, tests, root-cause] --> D[Product improvement<br/>higher DRE]
     D --> Q["Customer quality metric<br/>severity-weighted CFDs / 1k installs"]
-    classDef top fill:#efe,stroke:#6a6;
+    classDef top fill:#efe,stroke:#6a6,color:#000;
     class Q top;
 ```
 

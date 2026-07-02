@@ -99,7 +99,7 @@ flowchart TD
     C --> T[Testing<br/>Ch.9]
     T --> M[Quality Metrics<br/>Ch.10]
     M -.feedback.-> R
-    classDef ai fill:#eef,stroke:#66a;
+    classDef ai fill:#eef,stroke:#66a,color:#000;
     class P,R,U,D,C,T,M ai;
 ```
 

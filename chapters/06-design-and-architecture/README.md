@@ -65,7 +65,7 @@ flowchart LR
     A["Architecture<br/>(system-wide, expensive to change)"] --> B["High-level design<br/>(subsystems, module boundaries)"]
     B --> C["Detailed design<br/>(class responsibilities, interfaces)"]
     C --> D["Implementation<br/>(algorithms, data structures)"]
-    classDef s fill:#eef,stroke:#66a;
+    classDef s fill:#eef,stroke:#66a,color:#000;
     class A,B,C,D s;
 ```
 
@@ -418,8 +418,8 @@ flowchart TB
     SC --- PHYS
     LOG -.-> PROC
     DEV -.-> PHYS
-    classDef v fill:#eef,stroke:#66a;
-    classDef s fill:#efe,stroke:#6a6;
+    classDef v fill:#eef,stroke:#66a,color:#000;
+    classDef s fill:#efe,stroke:#6a6,color:#000;
     class LOG,DEV,PROC,PHYS v;
     class SC s;
 ```
@@ -536,7 +536,7 @@ flowchart TB
     MSG -- "read/write" --> MDB
     MSG -- "notify" --> PRES
     MSG -. "async upload/fetch<br/>(may be degraded)" .-> ADB
-    classDef c fill:#eef,stroke:#66a;
+    classDef c fill:#eef,stroke:#66a,color:#000;
     class UI,GW,MSG,PRES c;
 ```
 
@@ -577,7 +577,7 @@ flowchart TB
     CONV --> TRANSPORT
     CONV --> PERSIST
     MODEL -.->|no dependency| TRANSPORT
-    classDef m fill:#eef,stroke:#66a;
+    classDef m fill:#eef,stroke:#66a,color:#000;
     class WEB,CONV,USERS,MODEL,TRANSPORT,PERSIST m;
 ```
 

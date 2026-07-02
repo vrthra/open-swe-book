@@ -315,9 +315,9 @@ flowchart TD
     I["Integration / service tests<br/>some · medium speed"]
     U["Unit tests<br/>many · fast · precise · cheap"]
     E --- I --- U
-    classDef top fill:#fdd,stroke:#c66;
-    classDef mid fill:#ffd,stroke:#cc6;
-    classDef bot fill:#dfd,stroke:#6c6;
+    classDef top fill:#fdd,stroke:#c66,color:#000;
+    classDef mid fill:#ffd,stroke:#cc6,color:#000;
+    classDef bot fill:#dfd,stroke:#6c6,color:#000;
     class E top; class I mid; class U bot;
 ```
 
@@ -681,8 +681,8 @@ the linear-vs-exponential saving that makes MC/DC affordable at scale.
 > condition, you *modify only it* and observe the decision change. The reused test (row 2
 > here, which serves both A and B; row 4, which serves both B and C) is why the count lands
 > at N + 1 rather than 2N — pairs share tests. When short-circuit operators or coupled
-> conditions prevent sharing, you may need slightly more than N + 1, but never the full
-> $2^N$.
+> conditions prevent sharing, you may need slightly more than N + 1, though still usually
+> far fewer than the full $2^N$.
 
 > **Pitfall.** MC/DC is defined per *condition*, not per *decision*. If you rewrite
 > `if (a > 0 && b > 0)` as two nested `if`s, tools may report "100% branch coverage" and

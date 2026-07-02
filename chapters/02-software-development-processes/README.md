@@ -147,7 +147,7 @@ flowchart LR
     S --> INC[Potentially shippable<br/>increment]
     INC -->|Sprint Review| PB
     INC -->|Sprint Retrospective| S
-    classDef art fill:#eef,stroke:#66a;
+    classDef art fill:#eef,stroke:#66a,color:#000;
     class PB,SB art;
 ```
 

@@ -53,7 +53,7 @@ flowchart LR
     V -->|new needs, corrections| E
     V -.->|approved for now| B[Build]
     B -.->|working software reveals more| E
-    classDef c fill:#eef,stroke:#66a;
+    classDef c fill:#eef,stroke:#66a,color:#000;
     class E,A,S,V c;
 ```
 
@@ -125,8 +125,8 @@ flowchart TD
     Q --> Q2["Security: no PHI in logs"]
     Q --> Q3["Usability: check-in in 3 taps"]
     Q --> Q4["Availability: 99.9% uptime"]
-    classDef f fill:#efe,stroke:#6a6;
-    classDef q fill:#fee,stroke:#a66;
+    classDef f fill:#efe,stroke:#6a6,color:#000;
+    classDef q fill:#fee,stroke:#a66,color:#000;
     class F,F1,F2 f;
     class Q,Q1,Q2,Q3,Q4 q;
 ```
@@ -333,7 +333,7 @@ flowchart LR
     M -.-> N1[implied needs]
     P -.-> N2[stated needs]
     D -.-> N3[latent needs]
-    classDef d fill:#efe,stroke:#6a6;
+    classDef d fill:#efe,stroke:#6a6,color:#000;
     class D d;
 ```
 
@@ -656,8 +656,8 @@ flowchart TD
     G2 --> S4[Pre-visit insurance verification]
     G3 --> S5[Role-based access control]
     G3 --> S6[No patient identifiers in logs]
-    classDef top fill:#eef,stroke:#66a;
-    classDef leaf fill:#efe,stroke:#6a6;
+    classDef top fill:#eef,stroke:#66a,color:#000;
+    classDef leaf fill:#efe,stroke:#6a6,color:#000;
     class G top;
     class S1,S2,S3,S4,S5,S6 leaf;
 ```
@@ -732,7 +732,7 @@ flowchart TD
     C --> C2[Tamper with patient ID in URL<br/>-IDOR-]
     D --> D1[Read unencrypted database backup]
     D --> D2[Find PHI in application logs]
-    classDef root fill:#fee,stroke:#a33;
+    classDef root fill:#fee,stroke:#a33,color:#000;
     class A root;
 ```
 

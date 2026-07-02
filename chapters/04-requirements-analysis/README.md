@@ -164,7 +164,7 @@ flowchart LR
     B --> C[Forecast<br/>~6 sprints]
     C --> D[Sprint done:<br/>measure real velocity]
     D -->|update average| B
-    classDef k fill:#eef,stroke:#66a;
+    classDef k fill:#eef,stroke:#66a,color:#000;
     class A,B,C,D k;
 ```
 
@@ -472,7 +472,7 @@ graph LR
     A -. "invest here to<br/>differentiate" .-> P
     P -. "compete here<br/>on degree" .-> M
     M -. "never skip these" .-> A
-    classDef k fill:#eef,stroke:#66a;
+    classDef k fill:#eef,stroke:#66a,color:#000;
     class A,P,M k;
 ```
 

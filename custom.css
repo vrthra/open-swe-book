@@ -112,7 +112,13 @@ pre.mermaid svg {
   margin: 0 auto;
 }
 
-/* When printing, keep diagrams inside the paper width. */
+/* Wide tables: scroll horizontally instead of overflowing the page (phones). */
+.content .table-wrapper {
+  overflow-x: auto;
+}
+
+/* When printing, keep diagrams inside the paper width and give tables
+   visible separators (screen theme colors don't print reliably). */
 @media print {
   pre.mermaid {
     position: static;
@@ -124,6 +130,14 @@ pre.mermaid svg {
   pre.mermaid svg {
     max-width: 100% !important;
     height: auto;
+  }
+  .content table {
+    border-collapse: collapse;
+  }
+  .content th,
+  .content td {
+    border: 1px solid #999;
+    padding: 3px 8px;
   }
 }
 
