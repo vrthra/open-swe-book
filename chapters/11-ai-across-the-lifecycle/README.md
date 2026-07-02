@@ -171,7 +171,8 @@ specialization to fight hallucination.[^8]<!-- -->[^9]
 
 AI cuts both ways here, sharply. On one hand, AI reviewers and smarter static analyzers
 catch real bugs, explain them, and suggest fixes.[^10] On the other hand, **a growing share
-of code under review is now itself AI-generated**, which inverts the problem from
+of code under review is now itself AI-generated** — by late 2024 Google reported more than
+a quarter of its new code was — which inverts the problem from
 Chapter 8: the scarce resource, *reviewer trust and attention*, is now spent on machine
 output produced faster than humans can vet it.[^11]
 
@@ -189,8 +190,8 @@ output produced faster than humans can vet it.[^11]
 
 Testing is where agentic AI has advanced most measurably. Benchmarks like **SWE-bench**
 (fix a real GitHub issue) and **SWT-bench** (generate a bug-reproducing test) have driven
-rapid progress in automated **test generation** and **program repair**; agents now resolve
-a substantial fraction of such benchmark issues end to end.[^13]<!-- -->[^14] Treat those numbers with
+rapid progress in automated **test generation** and **program repair**; as of 2025, agents
+resolve a substantial fraction of such benchmark issues end to end.[^13]<!-- -->[^14] Treat those numbers with
 care, though: passing a benchmark's tests is *evidence*, not proof, of a correct fix —
 studies of SWE-bench-style evaluation have found patches that pass the benchmark suite
 while failing developer-written tests or behaving differently from the true fix, so weak

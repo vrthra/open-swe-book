@@ -2,6 +2,8 @@
 
 **A free, living body of knowledge for software engineering.**
 
+*First public edition, July 2026.*
+
 This is a free, openly‑licensed, continuously maintained book that teaches the
 *principles and best practices* of modern software engineering: how software is built in industry using
 agile methods, how to discover and analyze requirements, how to design and architect
@@ -144,7 +146,7 @@ Whole book:
   title     = {Software Engineering: An Open Body of Knowledge},
   year      = {2026},
   publisher = {Self-published},
-  url       = {https://tghastings.github.io/open-swe-book/},
+  url       = {https://www.swebook.org/},
   note      = {Open textbook, licensed CC BY-SA 4.0. Source:
                \url{https://github.com/tghastings/open-swe-book}}
 }
@@ -160,7 +162,7 @@ A single chapter (adjust `title`, `chapter`, and `url`):
   chapter   = {12},
   year      = {2026},
   publisher = {Self-published},
-  url       = {https://tghastings.github.io/open-swe-book/chapters/12-delivery/}
+  url       = {https://www.swebook.org/chapters/12-delivery/}
 }
 ```
 

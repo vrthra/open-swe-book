@@ -109,8 +109,8 @@ deploying early *safe* rather than merely brave.
 
 The vendor-controlled machines of §12.1.1 have to live somewhere, and today they mostly
 live in a **public cloud**: vast provider-owned datacenters whose capacity is rented out
-over the network, by the hour or by the request. The market is led by Amazon Web Services
-(AWS), Google Cloud, and Microsoft Azure, with a long tail of smaller providers —
+over the network, by the hour or by the request. As of 2025, the market is led by Amazon
+Web Services (AWS), Google Cloud, and Microsoft Azure, with a long tail of smaller providers —
 DigitalOcean, Linode, Hetzner — that trade breadth of catalog for simplicity and price.[^1]
 Hold the names loosely: provider names and product lists date quickly, but the concepts
 beneath them do not. Every cloud, whatever its branding, sells the same four component
@@ -165,7 +165,8 @@ as a category of excuse.
 
 One host is rarely enough, so containers are run on a **cluster**: a set of
 network-connected machines managed as a single pool of compute, storage, and memory. And
-the de-facto standard software for managing that pool is **Kubernetes**, often described
+the de-facto standard software for managing that pool is **Kubernetes** (84% of
+organizations in CNCF's 2023 survey were using or evaluating it), often described
 as the *operating system for the cloud*: just as an OS schedules processes onto CPU cores,
 Kubernetes schedules containers onto the machines of a cluster.[^7] Around that core job it
 handles **ingress** (routing incoming traffic to the right containers), scaling the number
@@ -465,7 +466,7 @@ They are worth studying closely, and honestly, from the primary sources.
 > Validator that should have rejected the bad content had a bug of its own and passed it.
 >
 > The push was global and simultaneous. Within hours, roughly 8.5 million Windows
-> machines (Microsoft's estimate) were down: airlines (Delta alone cancelled on the order
+> machines (Microsoft's estimate) were down: airlines (Delta alone canceled on the order
 > of 7,000 flights), hospitals, banks, broadcasters, emergency services.[^14]<!-- -->[^15] Damage
 > estimates ran into the billions — direct losses for the Fortune 500 alone were estimated
 > at $5.4 billion, only a fraction of it insured.[^16] Recovery was brutal precisely
@@ -630,7 +631,7 @@ A student team can measure all four keys with data it already has, and the exerc
 worth doing precisely because the numbers will be humbler than the elite benchmarks.
 Define "production" honestly — your deployed demo environment, or your instructor-facing
 release — then: **deployment frequency** is a count of deploy events per week, from your
-pipeline's history. **Lead time** is deploy timestamp minus commit timestamp, medianed
+pipeline's history. **Lead time** is deploy timestamp minus commit timestamp, taken as a median
 over recent changes (`git log` and your CI dashboard give you both ends). **Change
 failure rate** requires a log discipline: record each deploy and whether it needed a
 revert or hotfix; failures divided by deploys. **Recovery time** is the gap from noticing
@@ -730,7 +731,7 @@ tests. In legacy work, the loop is the same but the entry point differs — you 
 back. The craft is to move in steps so small that each one is obviously
 behavior-preserving — rename, extract a function, inline a variable, move a method —
 running the suite after every step. If the bar goes red, the *last* step is the culprit;
-undo it and take a smaller one. Named, catalogued refactoring moves (Fowler's catalog is
+undo it and take a smaller one. Named, cataloged refactoring moves (Fowler's catalog is
 the standard reference) matter because each has known mechanics and known traps; a
 sequence of safe moves composes into a transformation you would never dare attempt as one
 leap.[^28]
@@ -804,7 +805,7 @@ traffic to it, verify it in production (a canary, §12.3.2, at the granularity o
 feature), and retire the old code path. At every moment, you have one *working* system —
 part old, part new — and every increment of the rewrite is validated by real use within
 weeks of being written. The rewrite becomes a sequence of small, reversible deployments
-instead of one giant unreversible bet: the whole argument of this chapter, applied to the
+instead of one giant irreversible bet: the whole argument of this chapter, applied to the
 biggest change a team ever makes.
 
 Modern tooling has also shifted the *comprehension* half of legacy work. Understanding

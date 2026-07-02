@@ -9,7 +9,7 @@ authors:
     affiliation: "University of Colorado, Colorado Springs"
 license: CC-BY-SA-4.0
 repository-code: "https://github.com/tghastings/open-swe-book"
-url: "https://tghastings.github.io/open-swe-book/"
+url: "https://www.swebook.org/"
 abstract: >-
   An open, chapter-based textbook for a junior/senior software-engineering
   course: process, requirements, design and architecture, static checking,
@@ -24,6 +24,7 @@ keywords:
   - software architecture
   - testing
   - CI/CD
+date-released: "2026-07-02"
 preferred-citation:
   type: book
   title: "Software Engineering: An Open Body of Knowledge"
@@ -32,5 +33,6 @@ preferred-citation:
       given-names: Thomas
       affiliation: "University of Colorado, Colorado Springs"
   year: 2026
-  url: "https://tghastings.github.io/open-swe-book/"
+  edition: "First public edition (July 2026)"
+  url: "https://www.swebook.org/"
   license: CC-BY-SA-4.0
