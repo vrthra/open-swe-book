@@ -1,0 +1,36 @@
+# Citation metadata — GitHub renders this as the "Cite this repository" button.
+# Format: Citation File Format (CFF) 1.2.0 — https://citation-file-format.github.io/
+cff-version: 1.2.0
+message: "If you use this book, please cite it using the metadata below."
+title: "Software Engineering: An Open Body of Knowledge"
+authors:
+  - family-names: Hastings
+    given-names: Thomas
+    affiliation: "University of Colorado, Colorado Springs"
+license: CC-BY-SA-4.0
+repository-code: "https://github.com/tghastings/open-swe-book"
+url: "https://tghastings.github.io/open-swe-book/"
+abstract: >-
+  An open, chapter-based textbook for a junior/senior software-engineering
+  course: process, requirements, design and architecture, static checking,
+  testing, quality metrics, AI across the lifecycle, and delivery (CI/CD),
+  with a team-project appendix.
+keywords:
+  - software engineering
+  - open textbook
+  - open educational resources
+  - agile
+  - requirements
+  - software architecture
+  - testing
+  - CI/CD
+preferred-citation:
+  type: book
+  title: "Software Engineering: An Open Body of Knowledge"
+  authors:
+    - family-names: Hastings
+      given-names: Thomas
+      affiliation: "University of Colorado, Colorado Springs"
+  year: 2026
+  url: "https://tghastings.github.io/open-swe-book/"
+  license: CC-BY-SA-4.0

@@ -1,29 +1,27 @@
 # Chapter 1 — Introduction
 
 > **Where we are.** This opening chapter introduces the ideas that thread through the
-> whole book: what software engineering *is*, why requirements are hard, why software is
-> intrinsically complex, why defects are inevitable, how projects trade off scope, cost,
-> and time, and why software professionals carry real social responsibility. Every later
+> book: what software engineering *is*, why requirements are hard, why software is
+> complex, why defects are inevitable, how projects trade off scope, cost, and time,
+> and why software professionals need to understand social responsibility. Every later
 > chapter is, in some sense, a response to one of these challenges.
 
 Writing a program that works once, on your machine, for input you chose yourself, is
 programming. **Software engineering** is what you need when *other people* depend on
 that program — when it must keep working next year, after five other developers have
 changed it, on inputs no one anticipated, at a scale no single person can hold in their
-head. The gap between those two activities is the subject of this book.
+head. Understanding the gap between those two activities is the subject of this book.
 
 ## 1.1 What Is Software Engineering?
 
 ### 1.1.1 A working definition
-
-A useful definition, adapted from decades of practice:
 
 > **Definition.** *Software engineering* is the disciplined application of principles,
 > methods, and tools to build and evolve software systems that are useful, correct
 > enough, and economical to change — usually by a **team**, usually under **changing
 > requirements**, usually at a **scale** that defeats ad‑hoc effort.
 
-Three words in that definition do a lot of work:
+Going deeper into the three words in that definition that have a lot of weight:
 
 - **Team.** Almost all real software is built by groups. Coordination, communication,
   and shared understanding become first‑class engineering concerns, not afterthoughts.
@@ -39,7 +37,8 @@ Three words in that definition do a lot of work:
 What separates software engineering from mere coding is the focus on the **why**
 behind the **how**. Any competent developer can be told "use dependency injection here."
 An engineer understands *what problem it solves* (coupling), *when it helps*, and *when
-it is overkill* — and can make the call on a design they have never seen before.
+it is overkill* along with the tradeoffs — and can make the call on a design they have never
+seen before.
 
 ### 1.1.2 A tale of two companies
 
@@ -82,10 +81,9 @@ with **priority scheduling** — the ability to shed low-priority work and keep 
 that mattered most for landing — it recovered instead of crashing, and the landing
 proceeded. A design decision made long before launch, against a failure no one could
 fully predict, saved the mission. It remains one of the clearest early proofs that
-disciplined software design is not overhead; it is what stands between a system and
-catastrophe.
+disciplined software design is critical for project success.
 
-The rest of the industry was learning the same lesson the hard way. Through the 1960s,
+The rest of the industry was learning similar lessons. Through the 1960s,
 hardware performance improved on the exponential curves we now describe with Moore's
 Law, while large software projects ran chronically late, blew their budgets, and failed
 outright in mission-critical settings — defense, aerospace, banking. Software, not
@@ -101,17 +99,18 @@ mature answer is **empiricism**: work like an experimental scientist. Iterate in
 steps, seek fast **feedback**, prefer **incremental** progress you can evaluate, run
 **experiments** when you are unsure, and let measured evidence — not opinion or
 authority — settle the argument. Modern writers such as Dave Farley frame the effective
-software engineer as exactly this kind of working scientist. Keep that framing in mind
-in Chapter 2: every process you will meet there — Scrum's sprints, XP's tests, the
+software engineer as this kind of scientist. Keep that framing in mind
+in Chapter 2: every process you will learn about there — Scrum's sprints, XP's tests, the
 spiral's risk-driven loops — is an institutionalized version of the same iterate,
 measure, and adjust cycle.
 
 ## 1.2 The Requirements Challenge
 
 The hardest part of many projects is not building the system right, but figuring out
-**which system to build**. Fred Brooks famously argued that the hardest single part of
-software work is deciding precisely what to build, because it is the one part whose
-mistakes most cripple the result and are hardest to fix later.
+**which system to build**. Fred Brooks, the author of "The Mythical Man-Month,"
+famously argued that the hardest single part of software work is deciding precisely 
+what to build, because it is the one part whose mistakes most cripple the result and 
+are hardest to fix later.
 
 ### 1.2.1 Identifying users and requirements
 
@@ -120,8 +119,7 @@ have. The catch is that the people who *have* the need are usually not the peopl
 *build* the software, and they rarely state the need precisely. Users describe
 solutions ("add a dropdown here") when what they have is a *problem* ("I can't tell
 which appointments are unconfirmed"). Part of the engineer's job is to dig past the
-requested solution to the underlying goal — because the underlying goal admits better
-solutions.
+requested solution to the underlying goal / the problem to solve. 
 
 Requirements also come from more than the obvious end user. A clinic scheduling app has:
 
@@ -145,8 +143,7 @@ Two broad answers appear throughout the book:
    iteration of rework, and so that you are always adapting to the *latest*
    understanding rather than a stale specification (Chapter 2).
 2. **Design‑level:** structure the system so that a likely change touches one module,
-   not twenty (Chapter 6). *Design for change* is not a slogan; it is a measurable
-   property of an architecture.
+   not twenty (Chapter 6).
 
 > **Principle.** The cost of a change should be proportional to the *size* of the
 > change, not to the *size* of the system. Achieving that is the central goal of good
@@ -162,7 +159,7 @@ Other complexity is **accidental** — it comes from our tools, our choices, and
 mistakes: tangled dependencies, unclear names, duplicated logic, leaky abstractions.
 
 Good engineering cannot eliminate essential complexity, but it relentlessly attacks
-accidental complexity. Much of this book is about that fight: clear specifications
+accidental complexity. Much of this book is about that: clear specifications
 (Chapter 6), patterns that package proven solutions (Chapter 7), reviews that catch
 needless complication (Chapter 8).
 
@@ -224,11 +221,11 @@ do. No single technique suffices, which is why Chapters 8 and 9 are complementar
 ### 1.4.2 Introduction to testing
 
 **Testing** runs the software on chosen inputs and checks the outputs against what we
-expect. It cannot prove the absence of defects — as Dijkstra observed, testing shows the
-*presence* of bugs, never their absence — but a well‑designed test suite makes it
-*unlikely* that a serious fault survives, and it makes change safe by catching
-regressions. Testing is important enough that Chapter 9 is devoted to it, including how
-to decide when you have tested *enough* (coverage).
+expect. It cannot prove the absence of defects — as Dijkstra, a pionneer in computing 
+and mathmatics, observed, testing shows the *presence* of bugs, never their absence — 
+but a well‑designed test suite makes it *unlikely* that a serious fault survives, and 
+it makes change safe by catching regressions. Testing is important enough that Chapter 9 
+is devoted to it, including how to decide when you have tested *enough* (coverage).
 
 ### 1.4.3 Black‑box and white‑box testing
 

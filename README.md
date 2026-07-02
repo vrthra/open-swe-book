@@ -1,9 +1,10 @@
-# Software Engineering — Principles & Practices
+# Software Engineering: An Open Body of Knowledge
 
-**An open, chapter-based curriculum for a junior/senior software‑engineering course.**
+**A free, living body of knowledge for software engineering — organized as a complete
+curriculum for a junior/senior course.**
 
-This is a free, openly‑licensed course book that teaches the *principles and best
-practices* of modern software engineering: how software is built in industry using
+This is a free, openly‑licensed, continuously maintained book that teaches the
+*principles and best practices* of modern software engineering: how software is built in industry using
 agile methods, how to discover and analyze requirements, how to design and architect
 modular systems, how to check and test code, and how to measure quality with metrics.
 
@@ -19,7 +20,9 @@ software‑engineering course** without buying anything.
 > Except for clearly attributed quotations and linked external resources, its explanatory
 > prose, examples, diagrams, and exercises are original, and the book is released under
 > Creative Commons. See [`curriculum/open-resources-map.md`](curriculum/open-resources-map.md)
-> for the mapping from each chapter to complementary open materials.
+> for the mapping from each chapter to complementary open materials. The prose was
+> drafted with AI assistance under the author's direction, review, and fact-checking —
+> see [How this book was made](#how-this-book-was-made-ai-assistance) below.
 
 ---
 
@@ -97,6 +100,57 @@ mdbook build                  # outputs static site to ./book-output
 ```
 
 `SUMMARY.md` is the mdBook table of contents; `book.toml` holds configuration.
+
+## How this book was made (AI assistance)
+
+This book was drafted with substantial help from an AI assistant (Anthropic's Claude)
+working under the author's direction: the author set the scope, chapter progression, and
+course alignment, supplied source material and corrections, fact-checked claims against
+the primary sources cited in each chapter's *Open Resources* page, and edited the prose.
+The author reviews and stands behind the content. If you find an error, please
+[open an issue](https://github.com/tghastings/open-swe-book/issues) — whoever, human or
+model, introduced it.
+
+Chapter 11 of this book teaches that professional AI use means disclosing the
+assistance, verifying the output, and owning the result. This note is that standard
+applied to the book itself.
+
+## Citing this book
+
+If you use this book in a course or reference it in your writing, please cite it.
+GitHub's **"Cite this repository"** button (from [`CITATION.cff`](CITATION.cff)) gives
+APA and BibTeX directly, or copy the BibTeX below.
+
+Whole book:
+
+```bibtex
+@book{hastings2026swe,
+  author    = {Hastings, Thomas},
+  title     = {Software Engineering: An Open Body of Knowledge},
+  year      = {2026},
+  publisher = {Self-published},
+  url       = {https://tghastings.github.io/open-swe-book/},
+  note      = {Open textbook, licensed CC BY-SA 4.0. Source:
+               \url{https://github.com/tghastings/open-swe-book}}
+}
+```
+
+A single chapter (adjust `title`, `chapter`, and `url`):
+
+```bibtex
+@inbook{hastings2026swe-ch12,
+  author    = {Hastings, Thomas},
+  title     = {Delivery: CI/CD, DevOps, and Evolution},
+  booktitle = {Software Engineering: An Open Body of Knowledge},
+  chapter   = {12},
+  year      = {2026},
+  publisher = {Self-published},
+  url       = {https://tghastings.github.io/open-swe-book/chapters/12-delivery/}
+}
+```
+
+The `\url` in `note` needs `\usepackage{url}` (or `hyperref`) in your LaTeX preamble;
+with `biblatex` you can move it to a `urldate`/`addendum` field instead.
 
 ## License
 

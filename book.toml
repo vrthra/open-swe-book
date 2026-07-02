@@ -1,8 +1,8 @@
 # mdBook configuration — https://rust-lang.github.io/mdBook/format/configuration/
 [book]
-title = "Software Engineering — Principles & Practices"
-description = "An open, chapter-based curriculum for software engineering: process, requirements, design, quality, and metrics."
-authors = ["The open contributors of this repository"]
+title = "Software Engineering: An Open Body of Knowledge"
+description = "A living, open body of knowledge for software engineering: process, requirements, design, quality, metrics, AI, and delivery."
+authors = ["Thomas Hastings and the open contributors of this repository"]
 language = "en"
 # Use the repository root as the source so chapters/ and curriculum/ resolve directly.
 src = "."
