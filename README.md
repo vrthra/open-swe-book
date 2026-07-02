@@ -1,7 +1,6 @@
 # Software Engineering: An Open Body of Knowledge
 
-**A free, living body of knowledge for software engineering — organized as a complete
-curriculum for a junior/senior course.**
+**A free, living body of knowledge for software engineering.**
 
 This is a free, openly‑licensed, continuously maintained book that teaches the
 *principles and best practices* of modern software engineering: how software is built in industry using
@@ -9,13 +8,12 @@ agile methods, how to discover and analyze requirements, how to design and archi
 modular systems, how to check and test code, and how to measure quality with metrics.
 
 It is organized as **twelve chapters and a team‑project appendix**, following the topic
-progression of the ACM/IEEE software‑engineering
-curriculum guidelines (SE2014/SEEK). Every chapter consists of original explanatory prose
-rather than copied textbook material, and is paired
-with a curated map of **free or openly accessible resources** — MOOCs, university
-courseware, primary specifications, and papers; licenses vary and are noted where known —
-so the material is **designed to support a complete first undergraduate
-software‑engineering course** without buying anything.
+progression of the ACM/IEEE software‑engineering curriculum guidelines (SE2014/SEEK).
+Every chapter consists of original explanatory prose rather than copied textbook
+material, and is paired with a curated map of **free or openly accessible resources** —
+MOOCs, university courseware, primary specifications, and papers; licenses vary and are
+noted where known — so the material is **designed to support a complete
+software‑engineering course**.
 
 > **An independent open educational resource.** This is a complete, standalone book.
 > Except for clearly attributed quotations and linked external resources, its explanatory
