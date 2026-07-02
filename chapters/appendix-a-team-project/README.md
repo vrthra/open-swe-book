@@ -1,6 +1,6 @@
 # Appendix A — The Team Project
 
-> **Where we are.** The ten chapters of this book each teach a discipline in isolation:
+> **Where we are.** The chapters of this book each teach a discipline in isolation:
 > process, requirements, design, testing, metrics. This appendix is where those
 > disciplines stop being separate lessons and become one experience. Over a semester you
 > and three or four teammates will build a real, working software system for a real user,
@@ -93,6 +93,24 @@ architecture; it is a liability.
 > a week of rework. Software is discrete (Chapter 1): a wrong assumption does not degrade
 > gracefully, it just breaks.
 
+**Psychological safety.** Cheap communication only happens where people feel safe doing
+it. **Psychological safety** is the shared belief that you can raise a problem, admit a
+mistake, or ask a "basic" question without being punished or embarrassed for it — and it
+is the research-backed foundation of team performance, not a soft nicety. Google's
+Project Aristotle, a multi-year study of hundreds of its own teams, found psychological
+safety the single strongest predictor of which teams performed well — ahead of who was on
+them. Its absence has recognizable symptoms: standups where everyone is silently "fine,"
+deadlines that arrive with surprises because nobody said they were behind, one teammate
+quietly redoing others' work instead of raising the issue. You build it with concrete
+habits, not slogans. Whoever is leading admits their own mistakes *first*, which licenses
+everyone else's honesty. Thank people for surfacing bad news early — early is exactly
+when bad news is cheap, and the thanks is what makes it happen again. And critique the
+work, never the person: "this function needs tests" opens a discussion; "you never test
+anything" closes one. The trust these habits produce has a name — **vulnerability-based
+trust**, built by admitting what you do not know — and it is precisely what this
+appendix's peer-feedback rituals (the visible board, the weekly log, the team reviews)
+are training you in.
+
 **Conflict and uneven contribution.** Disagreement about *technical direction* is healthy
 and should be resolved with evidence: a spike, a small experiment, a look at the metrics.
 Make the call, write down *why*, and move on. Do not let a decision stay open because the
@@ -138,8 +156,10 @@ and 11 are the checkpoints that keep the loosely-coupled tracks from drifting to
 apart, and the **final report** in week 14 is where everything reconverges.
 
 The full week-by-week mapping lives in the
-[15-week course plan](../../curriculum/course-plan.md); the timeline below shows how the
-four project deliverables sit on top of it.
+[course plans](../../curriculum/course-plan.md); the timeline below shows how the
+four project deliverables sit on top of it. Courses that run the project on a sprint
+cadence should read [Running the Project on Two-Week Sprints](two-week-sprints.md), which
+overlays these same four milestones on a two-week rhythm.
 
 ```mermaid
 gantt
@@ -231,7 +251,8 @@ Use the [status report template](../../templates/status-report.md) and mark it a
 > **Tip.** Build the skeleton along the *riskiest* path first, not the easiest. If a
 > third-party integration or an unfamiliar deployment worries you, make *that* the thread
 > the skeleton walks. The whole point is to buy down risk early, so aim the skeleton at
-> the thing most likely to hurt you.
+> the thing most likely to hurt you. Deployment itself is usually that thing — Chapter 12
+> shows how to make it boring.
 
 ## A.4 Viable System: Status Report 2
 
@@ -326,12 +347,14 @@ That experience, more than any exam, is what makes an engineer.
 
 ---
 
-- **Key takeaways:** ship something *real*; make scope small enough to finish and test;
-  treat team communication and fair contribution as first-class engineering work; couple
-  tightly to the lectures early, then loosen; and let the four deliverables pull each
-  chapter's discipline into practice at the moment it counts.
+- **Key takeaways** are summarized above in §A.6.
 - Continue to the [Exercises](exercises.md).
 - Go deeper with the [Open Resources](resources.md) for this appendix.
-- Templates: [proposal](../../templates/project-proposal.md) ·
+- Running on sprints? See [Running the Project on Two-Week Sprints](two-week-sprints.md).
+- Templates: [idea pitch](../../templates/idea-pitch.md) ·
+  [proposal](../../templates/project-proposal.md) ·
+  [sprint report](../../templates/sprint-report.md) ·
   [status report](../../templates/status-report.md) ·
-  [final report](../../templates/final-report.md).
+  [team review](../../templates/team-review.md) ·
+  [final report](../../templates/final-report.md) ·
+  [individual write-up](../../templates/individual-writeup.md).

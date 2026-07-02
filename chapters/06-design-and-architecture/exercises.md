@@ -1,9 +1,9 @@
 # Chapter 6 — Exercises
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks you
-to reason about a design, and **[project]** connects to your team project (Appendix A).
-Where an exercise asks for a diagram, a hand sketch or a Mermaid block is fine — the
-thinking is what is graded.
+to reason about a design. Project-focused exercises live in this chapter's
+[Project Guide](project.md). Where an exercise asks for a diagram, a hand sketch or a
+Mermaid block is fine — the thinking is what is graded.
 
 ## Concepts
 
@@ -64,24 +64,3 @@ thinking is what is graded.
     `Notification` needs the user's preferences from `User`, and `User` needs `Auth` to check
     permissions — draw the dependency cycle, then show how to break it by introducing one
     interface owned by the right module. Explain why your choice of interface owner matters.
-
-## Project
-
-11. **[project]** For your team project, list the three design decisions you believe are the
-    most *expensive to change later* (i.e., genuinely architectural). For each, state which
-    quality requirement drives it and one alternative you considered but rejected, with the
-    reason.
-
-12. **[project]** Produce a one-page **architecture description** for your project following
-    the outline in §6.5.1: context and quality goals, constraints and significant decisions,
-    at least a logical view (class or component diagram) and a development view (module
-    hierarchy), one key scenario walked through the views, and an honest list of risks.
-
-13. **[project]** Identify the single decision in your system most likely to change during
-    the term (a provider, a business rule, a UI framework, a transport). Name the module that
-    will hide that decision, write the small interface it will expose, and explain in two or
-    three sentences how this arrangement keeps the change local when it arrives.
-
-14. **[project]** Pick two modules in your planned design and classify the coupling between
-    them using the ladder from §6.2.2. If it is worse than *data* coupling, propose a concrete
-    change that would loosen it, and note what you would trade away (if anything) to get there.

@@ -1,7 +1,7 @@
 /* Widen the sidebar so index entries fit on one line (mdBook default 300px).
    mdBook derives the content offset from this variable, so content shifts too. */
 :root {
-  --sidebar-width: 380px;
+  --sidebar-width: 395px;
 }
 
 /* Keep every index entry on a single line: long labels truncate with an

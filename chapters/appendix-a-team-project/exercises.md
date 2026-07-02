@@ -2,7 +2,9 @@
 
 Unlike the chapter exercises, these are **checkpoints** for a real team project. Work
 them with your team, in order, across the term. Each maps to a deliverable in the
-[15‑week course plan](../../curriculum/course-plan.md).
+[course plans](../../curriculum/course-plan.md). Checkpoints are tagged **[team]**
+(working agreements and people), **[project]** (deliverable artifacts), or
+**[analysis]** (reflection).
 
 ## Weeks 1–2 — Team and idea
 

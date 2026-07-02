@@ -110,6 +110,18 @@ Consider four stories for the clinic app, already run through the §4.1 checklis
 | Export a schedule to PDF                           |      3 |
 | **Total**                                          | **18** |
 
+It is worth knowing what points *replaced*. The traditional approach is **bottom-up,
+time-based estimation**: estimate each story in ideal days across its activities —
+design, code, test, deliver — then sum the story estimates into a total for the whole
+project. It is a perfectly logical two-step process, and teams moved away from it for
+three empirical reasons: the day-level numbers carry **false precision** (nobody can
+distinguish a 21-day story from a 22-day one, but the arithmetic pretends they can);
+ideal days ignore interruptions, meetings, and the sheer variance of real work, so the
+sums are systematically optimistic; and every number stated in days is an **anchor**
+(§4.2.1) that hardens into a commitment the moment a manager hears it. The approach is
+not dead, though — where a contract demands a full up-front bid, plan-driven teams still
+estimate bottom-up, usually with the formal models of §4.6.
+
 ### 4.2.3 Velocity of Work
 
 Points become a *forecasting* tool the moment you measure **velocity** — the number of
@@ -190,7 +202,8 @@ Making that work requires two disciplines:
   prioritization (§4.4.1): the appetite is the box, and MoSCoW decides what goes in it.
 - **Judge against the baseline, not the ideal.** "Is it good enough to ship?" has no
   answer against a perfect vision — software is never done by that standard. Ask instead:
-  *is it better than what users have today* (the **baseline**)? That reframes an endless
+  *is it better than what users have today* (the **baseline**, introduced in
+[§3.3.2](../03-user-requirements/#332-accessing-user-needs))? That reframes an endless
   "not yet" into a shippable "yes, this beats the status quo."
 
 **Appetite and risk.** An appetite is only trustworthy if the work reliably *fits* it.
@@ -391,12 +404,28 @@ safer, comfier features.
 > the number to *structure the conversation*, then let the team override it when they know
 > something the model doesn't. A spreadsheet is a thinking aid, not an oracle.
 
+Industry has named two widely used variants of this same idea. **WSJF (Weighted Shortest
+Job First)** prioritizes by *cost of delay ÷ job size* — how much you lose per unit time
+by not having the feature, divided by how big it is. The (value + risk) ÷ cost ranking
+above is a WSJF-family scheme: value and risk stand in for cost of delay, and story
+points for job size. The **risk–value matrix** trades the arithmetic for a 2×2 quadrant
+view: plot each feature by value and risk, then read the strategy off the quadrants —
+high-value/high-risk items go *first*, to burn off risk early; high-value/low-risk items
+can be scheduled with confidence; and low-value/high-risk items are candidates to drop
+outright. Both are the same principle you saw in the risk-first sequencing of
+[§2.6](../02-software-development-processes/#26-additional-project-risks) and the spiral
+framework of
+[§2.7](../02-software-development-processes/#27-risk-reduction-the-spiral-framework):
+face the dangerous work while you can still afford to be wrong about it.
+
 ## 4.5 Customer Satisfiers and Dissatisfiers
 
 So far we have treated "value" as a single number. But not all value behaves the same way.
 Some features earn no praise yet cause fury if missing; others delight when present yet are
-never missed. Confusing the two wastes effort on the wrong things. The **Kano model** gives
-us the vocabulary to tell them apart.
+never missed. Confusing the two wastes effort on the wrong things. The **Kano model** —
+whose three categories you first met in
+[§3.3.3](../03-user-requirements/#333-design-for-delight) — gives us the vocabulary to
+tell them apart.
 
 ### 4.5.1 Kano Analysis
 
@@ -608,4 +637,5 @@ between a promise and a hope.
 
 - **Key takeaways** are summarized above in §4.7.
 - Continue to the [Exercises](exercises.md).
+- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

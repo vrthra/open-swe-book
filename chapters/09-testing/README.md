@@ -125,6 +125,47 @@ throw thousands of generated inputs at the function without hand-computing each 
 often the difference between a suite that finds real defects and one that only confirms
 the three cases you already thought of.
 
+### 9.1.5 Mutation Testing: Grading Your Suite
+
+Coverage tells you what your tests *ran*; it cannot tell you what they would *catch*. The
+pitfall in §9.1.3 — assertion-free tests that execute everything and check nothing —
+scores 100% on any coverage criterion while detecting no defects at all. **Mutation
+testing** closes that gap by testing the tests. A mutation tool takes your working code
+and plants small, deliberate defects called **mutants**: flip a `<` to `<=`, change a
+constant by one, negate a condition, delete a statement. Each mutant is a plausible bug —
+exactly the kind a tired programmer writes. The tool then reruns your suite against each
+mutant in turn:
+
+- If at least one test **fails**, the suite noticed the defect: the mutant is **killed**.
+- If every test still **passes**, the mutant is a **survivor** — your suite executed the
+  broken line and did not notice.
+
+The **mutation score** — mutants killed divided by mutants generated — grades your
+suite's defect-detecting strength in a way coverage never can. Better, every survivor is
+*actionable*: it points at a specific line where an assertion is weak or missing.
+
+Watch it work on `apply_discount`, the worked example you will meet in §9.2.1. Suppose
+the tool mutates the guard
+`price < 0` into `price <= 0`, so a price of exactly zero is now (wrongly) rejected.
+Rerun the suite: no test ever passes a zero price, so every test still passes and the
+mutant **survives**. The survivor names the missing test precisely:
+
+```python
+def test_free_item_allowed():
+    assert apply_discount(0.0, 50) == 0.0    # kills the `price <= 0` mutant
+```
+
+Add it, rerun, and the mutant dies — and, not coincidentally, you have just written the
+boundary-value test (§9.4.2) your suite was missing. Mature tools exist in every
+ecosystem: **mutmut** for Python, **PIT** for Java, **Stryker** for JavaScript and
+TypeScript.
+
+> **Pitfall — mutation testing is expensive.** Each mutant means rerunning the suite, and
+> a modest module can generate hundreds of mutants, so a full run can take hours. Do not
+> put it on every commit. Use it selectively — on critical modules, on changed code, or
+> in a periodic job — and treat the survivors it reports as a curated to-do list for your
+> suite, not a number to chase.
+
 ## 9.2 Levels of Testing
 
 Testing happens at several *levels*, distinguished by how much of the system is under
@@ -169,6 +210,20 @@ def test_rejects_bad_percent():
 Each test names a distinct behavior and carries its own oracle (the expected value or the
 expected exception). Notice we are already thinking about selection: 0 and 100 are the
 *boundaries* of the valid percent range (§9.4.2), and 150 is an invalid class.
+
+What makes a unit test *good*? The **FIRST** mnemonic names five properties worth
+enforcing on every test you write:
+
+- **F**ast — milliseconds, so the whole suite runs on every save;
+- **I**ndependent — no shared state and no required order, so any subset runs alone and
+  a failure implicates exactly one test;
+- **R**epeatable — the same result on every run and every machine, with no dependence on
+  network, clock, or leftover environment;
+- **S**elf-validating — the test asserts its own pass or fail, carrying its oracle
+  (§9.1.4) instead of printing output for a human to eyeball;
+- **T**imely — written with (or before —
+  [§2.3.2](../02-software-development-processes/#232-testing-make-it-central-to-development))
+  the code it tests, while the design can still respond to what testing reveals.
 
 ### 9.2.2 Integration Testing
 
@@ -236,6 +291,16 @@ other.
 > specification runs on every build. This is functional/acceptance testing whose oracle
 > (§9.1.4) is the agreed scenario itself.
 
+One more system-level suite earns its own name because you will run it constantly. A
+**smoke test** is a fast, shallow pass that answers a single question: *is the build
+fundamentally alive?* The app starts, the homepage loads, a user can log in — nothing
+deeper. The name comes from hardware bring-up: power the board on and see whether smoke
+comes out before bothering with finer measurements. Smoke tests run immediately after a
+build or a deployment, as a *gate*: if they fail, the build is dead on arrival, no deeper
+(and more expensive) testing is worth starting, and a deploy must not proceed. Chapter 12
+gives them a formal home as a stage of the delivery pipeline, run right after each deploy
+([§12.2.2](../12-delivery/#1222-the-stages-of-a-pipeline)).
+
 ### 9.2.4 Case Study: Test Early and Often — the Testing Pyramid
 
 The levels are not equally cheap. A unit test runs in milliseconds and never flakes; a
@@ -269,10 +334,24 @@ by roughly an order of magnitude at each stage it survives — so you push detec
 > failures are hard to localize, and developers learn to ignore red builds ("probably just
 > flaky"). An ignored test suite protects nothing. Prefer the pyramid deliberately.
 
+Because flakiness is what poisons trust, know its causes. A **flaky test** — one that
+passes and fails across runs with no code change — almost always traces to one of four
+roots: **race conditions and async timing** (the assertion runs before the work
+finishes); **shared mutable state** between tests (one test's leftovers change another's
+result); **test-order dependence** (the suite passes in one order and fails in another);
+or **unstable external dependencies** (real networks, real clocks, third-party services).
+The fixes mirror the causes: isolate state so each test builds and tears down its own
+world; make tests order-independent (and let the runner randomize order to prove it);
+await asynchronous work properly with sane timeouts instead of sleeping and hoping; and
+replace or fake unstable dependencies. For the incorrigible case, **quarantine** the test
+out of the gating suite — then fix it or delete it, because a test allowed to stay
+red-then-green trains the team to ignore the suite.
+
 "Test early and often" also means testing *continuously*: run the fast tests on every
 save, the full suite on every push, and treat a broken build as a stop-the-line event.
 This is the testing half of **continuous integration** (Chapter 2) — the discipline that
-keeps the "make change cheap" promise from Chapter 1 honest.
+keeps the "make change cheap" promise from Chapter 1 honest. Chapter 12 assembles these
+tests, with the static checks of Chapter 8, into the full delivery pipeline.
 
 ## 9.3 Code Coverage I: White-Box Testing
 
@@ -322,6 +401,19 @@ back — a **cycle** — which is why the number of *paths* through this functio
 (you can go around the loop 0, 1, 2, … times), while the number of *edges* is finite.
 That gap is the whole reason path coverage is usually impractical and weaker criteria
 exist.
+
+The CFG also gives you a number worth knowing. **Cyclomatic complexity** is the count of
+a function's decision points plus one — equivalently, for a graph with $E$ edges and $N$
+nodes, $E - N + 2$. It measures how many independent paths thread the function, and so
+roughly how many tests branch coverage will demand. For `classify_and_sum`: two decisions
+(nodes 2 and 5), so complexity $2 + 1 = 3$; or count the graph above, $E = 9$, $N = 8$,
+$9 - 8 + 2 = 3$. Conventional bands for reading the number: **1–10** is simple, readily
+testable code; **11–20** is moderately complex; **21–50** is risky; above **50** is
+effectively untestable. The metric earns its keep as a *predictor*: high-complexity
+functions are where defects cluster and where the hard-to-cover branches live, which
+makes it a map of where to spend testing effort — and refactoring (Chapter 12,
+[§12.6](../12-delivery/#126-legacy-code-refactoring-and-technical-debt)) is the
+treatment for the hot spots it finds.
 
 ### 9.3.2 Control-Flow Coverage Criteria
 
@@ -449,6 +541,17 @@ of equivalence classes.
 > triples at each boundary. For `set_volume` that is roughly 4 + 6 = a handful of tests
 > that together cover behavior far better than dozens of random ones.
 
+One black-box technique abandons careful selection altogether. **Fuzz testing (fuzzing)**
+throws huge volumes of malformed, random, or mutated inputs at a program and watches for
+crashes, hangs, and memory errors — no specification, no partitions, just the implicit
+oracle (§9.1.4) that the program *must not fall over*. It is a cousin of property-based
+testing but adversarial in spirit: instead of checking a property on well-formed inputs,
+it hunts for the ill-formed input nobody thought to reject. That makes fuzzing the
+workhorse of security testing — buffer overflows, injection flaws, and denial-of-service
+defects are exactly the bugs that surface when a parser meets input its author never
+imagined. Because an effective fuzzing campaign runs for hours or days, it belongs in a
+non-blocking pipeline stage (Chapter 12), not on the every-commit path.
+
 ## 9.5 Code Coverage II: MC/DC
 
 Branch coverage checks that each *decision* comes out true and false at least once. But a
@@ -496,8 +599,11 @@ MC/DC bundles four requirements: every decision takes both outcomes (decision co
 every condition takes both values (condition coverage); and each condition independently
 flips the decision. Remarkably, for a decision with **N conditions** this can usually be
 achieved with just **N + 1** tests — a linear number, versus $2^N$ for exhaustive testing
-of the truth table. That is why MC/DC is the sweet spot for critical code: near-exhaustive
-rigor at linear cost.
+of the truth table. That exhaustive criterion has its own name — **predicate coverage**
+(also called **multiple-condition coverage**), which requires every combination of
+condition truth values — and MC/DC is best understood as its practical approximation.
+That is why MC/DC is the sweet spot for critical code: near-exhaustive rigor at linear
+cost.
 
 Let us fully work the decision from the section opener:
 
@@ -672,4 +778,5 @@ here are among the first metrics you will report.
 
 - **Key takeaways** are summarized above in §9.7.
 - Continue to the [Exercises](exercises.md).
+- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

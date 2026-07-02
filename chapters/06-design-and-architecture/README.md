@@ -259,6 +259,36 @@ each is a heuristic that pays off far more often than not.
    rules, presentation. Do not pay for flexibility you have no reason to expect (that is
    over-engineering, its own kind of accidental complexity).
 
+Several of these guidelines circulate in industry under memorable names, and you should
+recognize them when colleagues use them. The best-known bundle is **SOLID**, five
+object-oriented design principles whose initials spell the mnemonic:
+
+- **S — Single responsibility:** guideline 1 above — one stateable job per module.
+- **O — Open-closed:** a module should be **open for extension, closed for
+  modification** — you add behavior by adding new code (a new implementation of an
+  interface, a new subclass), not by editing code that already works and that other
+  modules already depend on.
+- **L — Liskov substitution:** a subtype must be usable anywhere its supertype is
+  expected, with no surprises. If code that works on every `Conversation` breaks when
+  handed a `GroupConversation`, the generalization arrow (§6.3.2) is a lie.
+- **I — Interface segregation:** many small, client-specific interfaces beat one fat
+  one — guideline 2 taken seriously. A client forced to depend on operations it never
+  calls is coupled to changes it never needed to see.
+- **D — Dependency inversion:** guidelines 3 and 4 above — depend on abstractions, not
+  implementations, and never let stable policy depend on volatile detail.
+
+A companion rule with its own name is **DRY — Don't Repeat Yourself**: every piece of
+knowledge in the system should have a single, authoritative representation. The problem
+with duplicated logic is not the wasted keystrokes; it is that a future change must now be
+found and fixed in two places, and eventually someone will fix only one.
+
+> **Comments deserve design too.** Write comments *with* the code, not afterward — a
+> comment added later is a guess. Never restate what a line obviously does (`i += 1  # add
+> one to i` helps no one). Use comments to raise the level of abstraction above the code:
+> the *why* behind a non-obvious choice, the constraint being honored, the units of a
+> value. And prune them ruthlessly during maintenance, because a wrong comment is worse
+> than none — comments rot faster than the code they describe.
+
 ## 6.3 Class Diagrams
 
 To design and discuss modular structure, you need a notation. The **class diagram** from
@@ -594,4 +624,5 @@ reuse the judgment, not just the diagram.
 
 - **Key takeaways** are summarized above in §6.6.
 - Continue to the [Exercises](exercises.md).
+- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

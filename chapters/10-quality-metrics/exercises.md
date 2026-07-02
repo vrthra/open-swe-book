@@ -1,9 +1,10 @@
 # Chapter 10 — Exercises
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks
-you to reason, **[project]** connects to your team project (Appendix A). At least five
-exercises require calculation — show your work, including formulas and intermediate
-values, not just a final number.
+you to reason; a **[calculation]** tag marks exercises that require working the
+numbers. Project-focused exercises live in this chapter's
+[Project Guide](project.md). At least five exercises require calculation — show your
+work, including formulas and intermediate values, not just a final number.
 
 Two datasets recur (the same ones used in the chapter). **Dataset A** is a univariate
 series of customer-found defects for eleven releases; **Dataset B** pairs module size
@@ -78,17 +79,3 @@ with defects.
     $S_{xx}$, then $b_1$ and $b_0$. Compute the residual for the $x = 4$ point, the SSE,
     and $R^2$. Interpret the slope in plain words, and explain why predicting $y$ at
     $x = 40$ from this fit would be unwise.
-
-## Project
-
-16. **[project]** Choose one *goal* for your team project's quality and write a full GQM
-    tree for it (goal, at least two questions, and a metric per question). For each metric,
-    note its scale of measurement and whether it needs normalization by exposure.
-17. **[project]** Set up a lightweight defect log for your project and, at the end of an
-    iteration, compute DRE for the work you completed (defects your team caught in review
-    and testing versus defects found afterward by teammates or "users"). Report the number
-    and one concrete process change you would make to raise it next iteration.
-18. **[project]** Pick one numeric metric you will track across your project's iterations
-    (velocity, build time, defects per story, review turnaround). After three iterations,
-    plot the values as a boxplot *or* compute a confidence interval for the mean, and write
-    two sentences on whether any apparent trend is real or within normal variation.

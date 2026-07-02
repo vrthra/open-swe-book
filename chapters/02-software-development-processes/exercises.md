@@ -2,7 +2,7 @@
 
 Work these in order within a theme; each theme builds from recall toward judgment and
 practice. Tags: **[warm-up]** checks understanding, **[analysis]** asks you to reason about
-trade-offs, and **[project]** feeds directly into your team project (Appendix A).
+trade-offs. Project-focused exercises live in this chapter's [Project Guide](project.md).
 
 ## Processes and values (§2.1)
 
@@ -67,16 +67,3 @@ trade-offs, and **[project]** feeds directly into your team project (Appendix A)
 13. **[analysis]** Compare the successful iterative project (§2.6.2) with the troubled rewrite
     (§2.6.3). Identify the *single structural difference* that the chapter says explains the
     different outcomes, and connect it to the spiral model's central claim in §2.7.1.
-
-## Project
-
-14. **[project]** Choose a process for your team project and defend it in one page. State your
-    project's dominant risks using the §2.6.1 categories, rank them by rough exposure
-    (probability × impact), and show how your chosen process — likely a Scrum+XP hybrid —
-    confronts the top two risks *early*. Include your team's initial Definition of Done and the
-    length you have chosen for your sprints, with justification.
-
-15. **[project]** Set up the engineering scaffolding for one XP practice before your first
-    sprint: stand up a continuous-integration pipeline that builds your project and runs its
-    tests on every push, and write one failing test plus the minimal code to make it pass.
-    Submit the pipeline configuration and a screenshot of a green build.

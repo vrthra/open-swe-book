@@ -8,64 +8,87 @@
 
 - [Introduction](chapters/01-introduction/README.md)
   - [Exercises](chapters/01-introduction/exercises.md)
+  - [Project Guide](chapters/01-introduction/project.md)
   - [Open Resources](chapters/01-introduction/resources.md)
 - [Software Development Processes](chapters/02-software-development-processes/README.md)
   - [Exercises](chapters/02-software-development-processes/exercises.md)
+  - [Project Guide](chapters/02-software-development-processes/project.md)
   - [Open Resources](chapters/02-software-development-processes/resources.md)
 
 # What to Build
 
 - [User Requirements](chapters/03-user-requirements/README.md)
   - [Exercises](chapters/03-user-requirements/exercises.md)
+  - [Project Guide](chapters/03-user-requirements/project.md)
   - [Open Resources](chapters/03-user-requirements/resources.md)
 - [Requirements Analysis](chapters/04-requirements-analysis/README.md)
   - [Exercises](chapters/04-requirements-analysis/exercises.md)
+  - [Project Guide](chapters/04-requirements-analysis/project.md)
   - [Open Resources](chapters/04-requirements-analysis/resources.md)
 - [Use Cases](chapters/05-use-cases/README.md)
   - [Exercises](chapters/05-use-cases/exercises.md)
+  - [Project Guide](chapters/05-use-cases/project.md)
   - [Open Resources](chapters/05-use-cases/resources.md)
 
 # Design and Architecture
 
 - [Design and Architecture](chapters/06-design-and-architecture/README.md)
   - [Exercises](chapters/06-design-and-architecture/exercises.md)
+  - [Project Guide](chapters/06-design-and-architecture/project.md)
   - [Open Resources](chapters/06-design-and-architecture/resources.md)
 - [Architectural Patterns](chapters/07-architectural-patterns/README.md)
   - [Exercises](chapters/07-architectural-patterns/exercises.md)
+  - [Project Guide](chapters/07-architectural-patterns/project.md)
   - [Open Resources](chapters/07-architectural-patterns/resources.md)
 
 # Software Quality
 
 - [Static Checking](chapters/08-static-checking/README.md)
   - [Exercises](chapters/08-static-checking/exercises.md)
+  - [Project Guide](chapters/08-static-checking/project.md)
   - [Open Resources](chapters/08-static-checking/resources.md)
 - [Testing](chapters/09-testing/README.md)
   - [Exercises](chapters/09-testing/exercises.md)
+  - [Project Guide](chapters/09-testing/project.md)
   - [Open Resources](chapters/09-testing/resources.md)
 
 # Metrics
 
 - [Quality Metrics](chapters/10-quality-metrics/README.md)
   - [Exercises](chapters/10-quality-metrics/exercises.md)
+  - [Project Guide](chapters/10-quality-metrics/project.md)
   - [Open Resources](chapters/10-quality-metrics/resources.md)
 
 # The AI Shift
 
 - [Software Engineering in the Age of AI](chapters/11-ai-across-the-lifecycle/README.md)
   - [Exercises](chapters/11-ai-across-the-lifecycle/exercises.md)
+  - [Project Guide](chapters/11-ai-across-the-lifecycle/project.md)
   - [Open Resources](chapters/11-ai-across-the-lifecycle/resources.md)
+
+# Delivery
+
+- [Delivery: CI/CD, DevOps, and Evolution](chapters/12-delivery/README.md)
+  - [Exercises](chapters/12-delivery/exercises.md)
+  - [Project Guide](chapters/12-delivery/project.md)
+  - [Open Resources](chapters/12-delivery/resources.md)
 
 # Practice
 
 - [Appendix A: A Team Project](chapters/appendix-a-team-project/README.md)
+  - [Running the Project on Two-Week Sprints](chapters/appendix-a-team-project/two-week-sprints.md)
   - [Project Exercises](chapters/appendix-a-team-project/exercises.md)
   - [Open Resources](chapters/appendix-a-team-project/resources.md)
+  - [Template: Idea Pitch](templates/idea-pitch.md)
   - [Template: Project Proposal](templates/project-proposal.md)
+  - [Template: Sprint Report](templates/sprint-report.md)
   - [Template: Status Report](templates/status-report.md)
+  - [Template: Team Review](templates/team-review.md)
   - [Template: Final Report](templates/final-report.md)
+  - [Template: Individual Write-up](templates/individual-writeup.md)
 
 ---
 
 - [Curriculum: Open Resource Map](curriculum/open-resources-map.md)
-- [Curriculum: 15-Week Course Plan](curriculum/course-plan.md)
+- [Curriculum: Course Plans](curriculum/course-plan.md)
 - [Contributing](CONTRIBUTING.md)

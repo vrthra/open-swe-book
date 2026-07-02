@@ -217,6 +217,13 @@ The **Sprint Backlog** is the subset the team pulls in for the current sprint, p
 for delivering it. It is owned by the Developers and updated daily. Its commitment is the
 **Sprint Goal**.
 
+Some teams — especially XP-influenced ones — keep a third scope between those two: the
+**release backlog**, the subset of the product backlog targeted at a specific release. It
+sits between the product backlog (everything the product might ever do) and the sprint
+backlog (what the team is doing *this* iteration), and it is the natural artifact of
+release planning: you group stories by the release that will carry them, so everyone can
+see what "version 2.0" actually means without wading through the whole product backlog.
+
 The **Increment** is the sum of completed backlog items — actual working software that meets
 the team's **Definition of Done**, a shared, explicit checklist of what "finished" means
 (compiled, reviewed, tested, documented, integrated). The Definition of Done is what stops
@@ -259,7 +266,8 @@ first version and show it. Stories keep requirements small, concrete, and ground
 value, and their size makes them easy to prioritize, estimate, and slot into a sprint.
 
 Good stories are often summarized by the acronym **INVEST**: Independent, Negotiable,
-Valuable, Estimable, Small, and Testable. That last property matters most for the next
+Valuable, Estimable, Small, and Testable (each unpacked in
+[§3.4.1](../03-user-requirements/#341-guidelines-for-effective-user-stories)). That last property matters most for the next
 section: if you cannot state how you would *test* that a story is satisfied, you do not yet
 understand it well enough to build it.
 
@@ -325,7 +333,8 @@ Scrum gives the cadence — sprints, backlog, review, retrospective — and the 
 priorities and impediments owned. XP fills the sprint with the discipline that makes each
 increment genuinely done: TDD, pair or peer review, refactoring, and **continuous
 integration**, in which everyone merges into a shared mainline many times a day and an
-automated build-and-test pipeline verifies each merge.
+automated build-and-test pipeline verifies each merge. (Chapter 12 dissects that pipeline
+stage by stage and follows it all the way to production.)
 
 The combination is more than the sum of its parts. Scrum without engineering practice
 produces increments that pass the demo and fail in maintenance; XP without a coordinating
@@ -645,6 +654,27 @@ solution sketch, rabbit holes to avoid, and no‑gos. Shaping is where **rabbit 
 unsolved design problems or untested technical assumptions — get found and removed *before*
 anyone commits.
 
+Appetites come in two standard batch sizes. A **small batch** is a designer and one or two
+programmers for one to two weeks; a **big batch** is that same small team for the full
+six‑week cycle. An idea that will not fit even a big batch is not given more time — it is
+narrowed until it fits, because the appetite, not the idea, is fixed.
+
+Shaping itself follows four steps, in order:
+
+1. **Set boundaries.** Decide how much time the raw idea is *worth* — the appetite — and
+   what the problem actually is.
+2. **Rough out the elements.** Sketch a solution at a level higher than wireframes, moving
+   fast and exploring alternatives while the drawing is still cheap.
+3. **Find risks and rabbit holes.** Hunt for holes and unanswered questions, then amend
+   the solution and spell out the tricky spots before they can swallow a team.
+4. **Write the pitch.** A formal write‑up of problem, appetite, solution, rabbit holes,
+   and no‑gos, ready for the betting table.
+
+Who does this work? A **shaper** is a technically literate generalist doing strategic
+design work. They need not be the team's best programmer — they may not write production
+code at all — but they must know what is cheap and what is expensive to build, or their
+sketches will make promises the appetite cannot keep.
+
 **Betting (deciding, without a backlog).** During the two‑week **cool‑down** between
 cycles, a small **betting table** of senior people reviews the shaped pitches and *bets* on
 a few for the next cycle. A **bet** commits one team to one project for the whole cycle,
@@ -654,6 +684,16 @@ uninterrupted, with the expectation of finishing.
 > lapse; if one really matters, it comes back and gets re‑pitched. This trades the comfort
 > of a tracked list for freedom from the "always behind" guilt and the grooming overhead of
 > a backlog that only ever grows.
+
+No backlog also implies an etiquette for new **raw ideas**. The default answer to any raw
+idea is a soft *"interesting — maybe someday,"* never an on‑the‑spot yes or no, because
+the real gate is not approval but *shaping*: only shaped work can be bet on, and a raw
+idea has not yet earned that. Do not shut down an idea you do not understand, and keep a
+poker face even about ideas you love — visible enthusiasm commits you before anyone has
+checked for rabbit holes. Bugs get no privileged lane either; Shape Up handles them three
+ways: fix them during cool‑down (that slack time exists partly for this), pitch a big
+bug at the betting table like any other project, or run an occasional dedicated
+**bug‑smash** cycle where the whole team pays down accumulated defects.
 
 **Building (hand over the whole problem).** The team gets the pitch, *not* a task
 breakdown — "splitting the project into tasks up front is like putting the pitch through a
@@ -717,4 +757,5 @@ and most cheaply.
 
 - **Key takeaways** are summarized above in §2.9.
 - Continue to the [Exercises](exercises.md).
+- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

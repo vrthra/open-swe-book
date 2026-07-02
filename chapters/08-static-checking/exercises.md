@@ -1,7 +1,7 @@
 # Chapter 8 — Exercises
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks you to
-reason, **[project]** connects to your team project (Appendix A).
+reason. Project-focused exercises live in this chapter's [Project Guide](project.md).
 
 ## Concepts
 
@@ -74,25 +74,3 @@ reason, **[project]** connects to your team project (Appendix A).
     news — the faster reviews find fewer problems, so the code must be getting cleaner." Explain
     why this interpretation is exactly backwards, and describe the one metric you would add to
     the team's dashboard to expose the real story.
-
-## Project
-
-12. **[project]** Design a lightweight code‑review policy for your team project. Specify: the
-    maximum change size you will target and *why*; your review‑latency goal (in hours) and how
-    you will hit it; who reviews changes to your most sensitive module and why they are the
-    *invested expert*; and one rule for keeping reviews focused on codebase health rather than
-    personal style. Keep it to one page a new teammate could actually follow.
-
-13. **[project]** Set up automated static analysis for your project's language(s). Turn on a
-    type checker (or your compiler's strict mode), a linter, and one bug‑pattern or security
-    scanner, and wire them into CI so they run on every change (Chapter 2). Report: what each
-    tool is, how many findings each produced on your current code, and — picking three findings
-    — classify each as a *true positive worth fixing*, a *false positive to suppress*, or a
-    *style preference*. Note the change you made to reduce false‑positive noise.
-
-14. **[project]** Run one real architecture review of your team's design before you build the
-    riskiest part. Pick the review type from §8.1.2 that fits your stage, invite at least one
-    person who is *not* an author of the design, and drive it with two or three concrete
-    scenarios (a load spike, a dependency failure, a security threat). Record every concern as
-    an item with an owner and a disposition (fix now / accept the risk and why / investigate by
-    a date). Submit the scenario list and the resulting decision log.

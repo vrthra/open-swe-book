@@ -51,6 +51,19 @@ Free, openly-licensed materials to help your team run the semester project well.
   The professional-society guidelines that recommend a substantial team project and the
   parallel concepts/project tracks this course uses. Freely available.
 
+## Cross-team customer models (the dual-hat swap)
+
+- 📘 **Austin Z. Henley — "The design of software engineering course projects"** —
+  [austinhenley.com/blog/groupprojects.html](https://austinhenley.com/blog/groupprojects.html).
+  A practitioner-professor's survey of project-course designs, including rotating
+  customer/lead roles and mid-course team swaps — context for why separating the customer
+  from the builders matters. *Free to read.*
+- 📄 **"Software engineering team project courses with industrial customers: Students'
+  insights on challenges and lessons learned"** (Journal of Systems and Software, 2025) —
+  [sciencedirect.com](https://www.sciencedirect.com/science/article/pii/S0164121225001098).
+  Research on courses that use real external customers — the same customer–developer
+  separation the dual-hat swap creates without needing industry partners. *Open access.*
+
 ## Metrics for status reports and the final report (referenced from Ch. 10)
 
 - 📘 **OpenIntro Statistics** — [openintro.org](https://www.openintro.org/book/os/).

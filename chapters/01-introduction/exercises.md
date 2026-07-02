@@ -1,7 +1,8 @@
 # Chapter 1 — Exercises
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks
-you to reason, **[project]** connects to your team project (Appendix A).
+you to reason. Project-focused exercises live in this chapter's
+[Project Guide](project.md).
 
 ## Concepts
 
@@ -39,15 +40,3 @@ you to reason, **[project]** connects to your team project (Appendix A).
 10. **[analysis]** You are asked to implement a feature you believe misleads users but is
     legal. Using the ACM code as your basis, script (in ~150 words) how you would raise
     the concern with your team and manager.
-
-## Project
-
-11. **[project]** For your team‑project idea, list every distinct *stakeholder* (end
-    users, secondary users, sponsors, regulators). For each, write one sentence on what
-    they most need and one risk if that need is missed.
-12. **[project]** Name one requirement of your project that you expect to *change* during
-    the term. Describe one *process‑level* and one *design‑level* way you will make that
-    change cheap to accommodate.
-13. **[project]** Identify one way your project could cause real harm if it failed
-    (privacy, safety, money, fairness). Write a one‑paragraph "responsibility note" for
-    your team's README describing how you will guard against it.

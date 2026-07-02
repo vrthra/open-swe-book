@@ -328,6 +328,17 @@ should show — moves it back under test.
 > aesthetics; it is a testability strategy. Treat the boundary of your test coverage as a
 > design constraint, and keep the untestable layer as thin as physically possible.
 
+> **MVC in the wild.** Real frameworks realize the pattern under shuffled names. Django
+> calls its variant **MVT (Model-View-Template)**: Django's "view" plays the controller
+> role and its "template" is the view — the same triad, relabeled. Rails is classic
+> server-side MVC. **Single-page applications (SPAs)** built with React or Angular move
+> the triad into the browser, often replacing two-way observer wiring with a
+> **unidirectional data-flow** store (Flux/Redux): the view fires actions, the store
+> updates, the view re-renders — the same separation with a stricter update discipline.
+> Very large products run on each (Instagram on Django, Shopify on Rails, Airbnb on
+> React), which is exactly the point: the pattern, not the framework, is the transferable
+> knowledge.
+
 ## 7.4 Dataflow Architectures
 
 The patterns so far organize systems around *objects that call each other*. A different
@@ -530,7 +541,9 @@ thing, such as "what does the UI do when the server returns a 500?" It is the ne
 echo of the layering benefit in §7.1.2: *depend on an interface, and you can swap the
 implementation.* The trade-off is that a test server is only as faithful as you make it —
 tests can pass against a fake that behaves differently from reality, so a smaller number
-of full **integration tests** against a real server remain essential (Chapter 9).
+of full **integration tests** against a real server remain essential (Chapter 9). The same
+substitution idea, scaled to production, powers the blue‑green and canary deployment
+strategies of Chapter 12.
 
 ### 7.5.3 The Broker Pattern
 
@@ -577,6 +590,66 @@ load-balancing and observability. You pay in **latency** (an extra hop), in **co
 (the broker itself must be built, deployed, and scaled), and in **risk concentration** —
 the broker can become the very single point of failure it was meant to help you avoid, so
 in practice it too must be made redundant.
+
+### 7.5.4 RESTful APIs
+
+Client–server tells you *who talks to whom*; it does not tell you what the conversation
+looks like. The dominant answer on today's web is **REST** (Representational State
+Transfer) — less a new pattern than a set of conventions that make the client–server
+pattern scale across the internet. An API that follows them is called **RESTful**.
+
+**Problem it solves.** If every server invents its own vocabulary of operations
+(`getPatient`, `fetch_appt`, `makeBookingV2`…), every client must learn every server's
+private language, and generic infrastructure — caches, proxies, browsers, load balancers —
+can help with none of it. REST standardizes the conversation so that *any* client can talk
+to *any* server using the same small grammar.
+
+**Structure.** Four conventions do the work:
+
+- **Resources, named by URIs.** Everything interesting is a **resource** with a stable
+  name: `/patients/123`, `/patients/123/appointments`, `/appointments/987`. Nouns, not
+  verbs — the URI names a *thing*, not an *action*.
+- **A fixed set of verbs.** Instead of unlimited custom operations, HTTP's methods act on
+  resources: **GET** reads (safely, with no side effects), **POST** creates, **PUT/PATCH**
+  update, **DELETE** removes. The clinic app's "mark patient arrived" becomes
+  `PATCH /appointments/987` with body `{"status": "arrived"}` — no bespoke
+  `markArrived` endpoint to document or learn.
+- **Representations.** The client never touches the server's internal objects; it
+  exchanges **representations** of them — today almost always JSON. The server's database
+  schema can change freely as long as the representation stays stable (an interface, in
+  Chapter 6's sense, at network scale).
+- **Statelessness.** Each request carries everything the server needs (identity,
+  parameters); the server keeps **no per‑client session state** between requests. That is
+  what lets any of the broker's servers (§7.5.3) answer any request — the foundation of
+  horizontal scaling.
+
+**Example.** A slice of the clinic scheduler's API:
+
+| Request | Meaning |
+|---------|---------|
+| `GET /patients/123/appointments` | List patient 123's appointments |
+| `POST /patients/123/appointments` | Book a new appointment for patient 123 |
+| `GET /appointments/987` | Fetch one appointment's representation |
+| `PATCH /appointments/987` | Update it (e.g., `{"status": "arrived"}`) |
+| `DELETE /appointments/987` | Cancel it |
+
+**Trade-offs.** You gain **uniformity** (one grammar for every service; tooling, caching,
+and testing all get cheaper), **evolvability** (representations decouple clients from
+server internals), and effortless fit with the web's infrastructure. You pay when the
+domain is not noun‑shaped — long‑running operations, batch actions, and "verbs with no
+natural resource" (send reminder? merge records?) force modeling contortions — and
+statelessness pushes real state you *do* need (sessions, carts) into tokens or the shared
+data layer (§7.2.1). When a client needs many resources at once, REST's one‑resource‑per‑
+request grain can also mean chatty interfaces.
+
+> **Principle.** REST is the interface discipline of Chapter 6 applied across a network:
+> stable names, a small uniform contract, and hidden internals. If your API needs a
+> manual per endpoint, it is not benefiting from the pattern.
+
+One more pair of names to recognize: **service-oriented architecture (SOA)** and its
+modern descendant, **microservices**, describe systems built as fleets of small services
+calling one another — the services-calling-services lineage that client-server, broker,
+and REST together make workable at scale.
 
 ## 7.6 Families and Product Lines
 
@@ -717,17 +790,20 @@ solves the problem in front of you and to state out loud what it will cost.
 | **MapReduce-style** | Batch-process data too large for one machine | Free parallelism/fault tolerance vs. rigid two-phase shape and shuffle cost |
 | **Client-server** | Many users need shared access to one authoritative resource | Central control vs. bottleneck and single point of failure |
 | **Broker** | Many services must find each other without hard-wired locations | Location transparency vs. extra hop, complexity, and risk concentration |
+| **RESTful API** | Every server invents its own vocabulary, defeating generic clients and tooling | Uniform grammar and evolvability vs. contortions for non-resource-shaped operations |
 | **Product line** | Build a family of related products from shared assets | Reuse and consistency vs. up-front platform cost and misprediction risk |
 
 No system uses one pattern. A real application layers presentation over domain over
 infrastructure (layering), renders through MVC (which runs on the observer), talks to a
-database (shared data) across the network (client-server, perhaps via a broker), ingests
+database (shared data) across the network (client-server over a REST API, perhaps via a
+broker), ingests
 events as a stream (dataflow), and — if the company is lucky enough to sell many editions
 — does all of this on a shared platform (product line). Learning the patterns individually
 is how you learn to *combine* them, and combining them well is what architecture is.
 
 ---
 
-- **Key takeaways** are summarized in the pattern table in §7.7.
+- **Key takeaways** are summarized above in §7.7.
 - Continue to the [Exercises](exercises.md).
+- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

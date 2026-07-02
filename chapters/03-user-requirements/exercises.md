@@ -1,7 +1,8 @@
 # Chapter 3 — Exercises
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks
-you to reason, **[project]** connects to your team project (Appendix A).
+you to reason. Project-focused exercises live in this chapter's
+[Project Guide](project.md).
 
 ## Concepts
 
@@ -43,17 +44,3 @@ you to reason, **[project]** connects to your team project (Appendix A).
 11. **[analysis]** Build a three‑level attack tree for the goal "post a message as another
     user" on a social app. Use at least three STRIDE categories to find branches, then turn
     two leaves into concrete security requirements, naming the attack each one defeats.
-
-## Project
-
-12. **[project]** For your team project, run one lightweight elicitation activity with a
-    real or stand‑in user (interview, observation, or a paper prototype reaction). Write up
-    what you *expected* to learn, what you *actually* learned, and at least one *implied or
-    latent* need that surprised you.
-13. **[project]** Write five user stories for your project in Connextra format, each with at
-    least two *Given/When/Then* acceptance criteria. Group them under one or two named
-    *features*, and for each feature, name the stakeholder *goal* it serves.
-14. **[project]** Identify the single most valuable asset your project protects (data,
-    money, safety, availability). Build an attack tree for one attacker goal against it, and
-    add the resulting security requirements to your backlog — noting for each which
-    attack‑tree leaf justifies it.

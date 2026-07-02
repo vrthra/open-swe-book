@@ -58,6 +58,16 @@ its author's copyright.
   the practice areas an organization needs to run a product line; a good map of §7.6 at
   organizational scale. *Free to read; © CMU/SEI.*
 
+## RESTful APIs (§7.5.4)
+
+- 📄 **Roy Fielding — "Architectural Styles and the Design of Network-based Software
+  Architectures," ch. 5** — the doctoral dissertation that defined REST.
+  [ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm).
+  *Free to read; © Roy Fielding.*
+- 📘 **MDN Web Docs — HTTP methods and status codes** —
+  [developer.mozilla.org/docs/Web/HTTP](https://developer.mozilla.org/en-US/docs/Web/HTTP).
+  The practical reference for the verb grammar REST builds on. *CC BY-SA.*
+
 ## Foundational background
 
 - 📄 **M. Shaw & D. Garlan — architectural styles** — the academic origin of thinking about

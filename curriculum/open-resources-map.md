@@ -15,8 +15,7 @@ Resources are grouped as:
 - 📄 **Primary source** — the canonical spec, standard, or paper.
 - 🎥 **Video** — recorded lectures or talks.
 
-> **Coverage summary.** The book's ten core chapters cover a first course; Chapter 11
-> (AI) is an optional capstone. The four
+> **Coverage summary.** The book's twelve chapters cover a first course. The four
 > "anchor" open courses below reinforce most of that ground; the per‑chapter tables add
 > focused resources for the rest (estimation, use‑case mechanics, architectural pattern
 > catalogs, and the statistics in Chapter 10).
@@ -125,7 +124,7 @@ diagrams, 4+1 views, describing an architecture.
 | 📘 | [Software Product Lines (SEI)](https://resources.sei.cmu.edu/library/asset-view.cfm?assetid=513819) | Families & product lines. |
 
 Covers: layering, shared‑data, observer, publish‑subscribe, MVC, dataflow/pipelines,
-client‑server, broker, product lines.
+client‑server, broker, RESTful APIs, product lines.
 
 ## Chapter 8 — Static Checking
 
@@ -166,6 +165,36 @@ boundary, combinatorial testing.
 Covers: meaningful metrics & scales, forms of quality, boxplots/histograms, variance/
 SD, normal & t‑distributions, confidence intervals, linear regression.
 
+## Chapter 11 — Software Engineering in the Age of AI
+
+| Type | Resource | Notes |
+|------|----------|-------|
+| 📄 | [METR — Early-2025 AI & experienced developer productivity RCT](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | The ~19% slowdown trial (§11.1.4). |
+| 📄 | [o16g — the Outcome Engineering manifesto](https://o16g.com/manifesto/) | Primary source for §11.4. |
+| 📄 | [Perry et al. — "Do Users Write More Insecure Code with AI Assistants?"](https://arxiv.org/abs/2211.03622) | The false-sense-of-security study (§11.3). |
+| 📄 | [GitClear — AI code quality research](https://www.gitclear.com/ai_assistant_code_quality_2025_research) | Duplication up, refactoring down (§11.3). |
+| 📄 | [SWE-bench](https://www.swebench.com/) · [SWT-bench](https://arxiv.org/pdf/2406.12952) | Coding-agent capability benchmarks (§11.2.7). |
+| 📄 | [DORA](https://dora.dev/) | Delivery-performance research referenced in §11.2.8. |
+
+Covers: what AI changes vs. what endures, the productivity paradox, AI across each
+lifecycle stage, evidence on quality/security, the o16g manifesto.
+
+## Chapter 12 — Delivery: CI/CD, DevOps, and Evolution
+
+| Type | Resource | Notes |
+|------|----------|-------|
+| 📄 | [SEC Release No. 34‑70694 — In the Matter of Knight Capital](https://www.sec.gov/litigation/admin/2013/34-70694.pdf) | The primary source for the Knight Capital case study (§12.3). Public domain. |
+| 📄 | [CrowdStrike — External Technical Root Cause Analysis (2024)](https://www.crowdstrike.com/falcon-content-update-remediation-and-guidance-hub/) | Primary source for the July 2024 outage case study (§12.3). |
+| 📄 | [DORA — research and the four keys](https://dora.dev/) | Deployment frequency, lead time, change‑fail rate, failed‑deployment recovery time (§12.5). |
+| 📘 | [Martin Fowler — CI, Deployment Pipelines, Blue‑Green, Strangler Fig](https://martinfowler.com/) | Canonical free articles for §12.2–12.3, §12.6. |
+| 📘 | [Google SRE books](https://sre.google/books/) | Free online; reliability, release engineering, postmortems. |
+| 📄 | [GitHub Dependabot docs](https://docs.github.com/en/code-security/dependabot) · [OWASP Dependency‑Check](https://owasp.org/www-project-dependency-check/) · [SLSA](https://slsa.dev/) | Dependency scanning and supply‑chain security (§12.4). |
+| 📘 | [minimumcd.org](https://minimumcd.org/) | A concise, community definition of minimum CD practice. |
+
+Covers: SaaS & cloud, CI pipelines, continuous deployment & rollout strategies (Knight
+Capital and CrowdStrike case studies), security pipelines & supply chain, DORA metrics,
+legacy code/refactoring/technical debt.
+
 ## Appendix A — A Team Project
 
 | Type | Resource | Notes |
@@ -195,10 +224,10 @@ covers the whole discipline, and the "Depth" column is honest about that.
 | Software Design (DES) | Ch. 6–7 (modularity, UML, 4+1, patterns) | Solid |
 | Software V&V (VAV) | Ch. 8–9 (reviews, static analysis, testing, coverage) | Solid |
 | Software Quality (QUA) | Ch. 10 (metrics, statistics, defects) | Solid |
-| Security (SEC) | Ch. 3 §3.7 (attack trees, STRIDE), Ch. 8 §8.4 (SAST) | Introductory |
+| Security (SEC) | Ch. 3 §3.7 (attack trees, STRIDE), Ch. 8 §8.4 (SAST), Ch. 12 §12.4 (supply chain, SCA) | Introductory |
 | Software Construction (CST) | assumed as a prerequisite; touched in Ch. 8–9 | Light |
-| Software Evolution / Maintenance | cost‑of‑change theme throughout; no dedicated chapter | Light |
-| Emerging practice: AI‑assisted SE | Ch. 11 (optional capstone) | Introductory |
+| Software Evolution / Maintenance | Ch. 12 §12.6 (legacy code, refactoring, technical debt); cost‑of‑change theme throughout | Introductory |
+| Emerging practice: AI‑assisted SE | Ch. 11 | Introductory |
 | Computing Essentials, Math & Eng. Fundamentals (CMP, FND) | assumed prerequisites | Out of scope |
 
 ## Notes on coverage & gaps
@@ -214,6 +243,7 @@ coverage, so you know where the free supplements are richest:
   few *architectural‑pattern* treatments, and worked *case studies*. Our own chapters
   supply original explanations and examples for these.
 - **Deliberately light or out of scope** (per the SEEK table above): deep software
-  *construction*, *maintenance/evolution*, and the CS/math prerequisites — appropriate
-  omissions for a one‑semester first course, but worth naming so no one mistakes this for
-  the whole discipline.
+  *construction* and the CS/math prerequisites — appropriate omissions for a one‑semester
+  first course, but worth naming so no one mistakes this for the whole discipline.
+  (*Maintenance/evolution* moved from this list to introductory coverage when Chapter 12
+  added legacy code, refactoring, and technical debt.)

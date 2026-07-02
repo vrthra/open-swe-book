@@ -34,7 +34,7 @@ known; linked resources remain under their own terms.
   authors' freely posted lecture notes and papers, and library copies.
 - 📄 **DORA — DevOps Research and Assessment metrics** — [dora.dev](https://dora.dev/).
   The four key delivery metrics (deployment frequency, lead time for changes, change
-  failure rate, time to restore) and the annual *State of DevOps* reports. An excellent,
+  failure rate, failed-deployment recovery time) and the annual *State of DevOps* reports. An excellent,
   evidence-based example of goal-directed, hard-to-game operational metrics (§10.2,
   §10.5). Reports free to read.
 - 📄 **ISO/IEC 25010 — Systems and software Quality Requirements and Evaluation

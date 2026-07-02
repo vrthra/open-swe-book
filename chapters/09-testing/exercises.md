@@ -1,9 +1,10 @@
 # Chapter 9 — Exercises
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks
-you to reason, **[project]** connects to your team project (Appendix A). Several exercises
-require *actual work* — drawing a graph, deriving values, or constructing a test set — not
-just prose. Show the work, not only the answer.
+you to reason. Project-focused exercises live in this chapter's
+[Project Guide](project.md). Several exercises require *actual work* — drawing a graph,
+deriving values, or constructing a test set — not just prose. Show the work, not only the
+answer.
 
 ## Concepts
 
@@ -91,19 +92,3 @@ just prose. Show the work, not only the answer.
     surcharges). (a) How many distinct paths does it have? (b) How many tests for branch
     coverage? (c) Explain the exponential-vs-linear gap and what it implies about when path
     coverage is worth attempting.
-
-## Project
-
-13. **[project]** For one non-trivial function in your team project, write a unit-test
-    suite that reaches 100% branch coverage. Include the coverage tool's report (or a hand
-    analysis) and, for at least one test, name the equivalence class or boundary it targets.
-
-14. **[project]** Identify one place in your project configured by two or more parameters
-    (e.g., user role × subscription tier × platform). Model the parameters and values, then
-    produce a pairwise test plan — by hand for a small case, or with a tool (PICT/ACTS) for
-    a larger one. Report how many configurations pairwise required versus exhaustive.
-
-15. **[project]** Audit your project's test strategy against the testing pyramid (§9.2.4).
-    Count your unit, integration, and end-to-end tests; plot the shape; and write a
-    one-paragraph plan to move it toward a healthy pyramid, naming one slow test you would
-    replace with faster lower-level tests.

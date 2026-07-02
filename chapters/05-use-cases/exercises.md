@@ -1,7 +1,8 @@
 # Chapter 5 — Exercises
 
 Exercises are graded by depth: **[warm‑up]** checks understanding, **[analysis]** asks
-you to reason, **[project]** connects to your team project (Appendix A).
+you to reason. Project-focused exercises live in this chapter's
+[Project Guide](project.md).
 
 ## Concepts
 
@@ -48,14 +49,3 @@ you to reason, **[project]** connects to your team project (Appendix A).
     shares with a second plausible use case for the same clinic system (e.g., *Reschedule
     Appointment*). Factor that shared behavior into an `«include»`d use case, and show the
     single line that now replaces the shared steps in each includer.
-
-## Project
-
-12. **[project]** For your team project, produce a one-page actor–goal list: every actor
-    (primary and supporting) and every user-goal-level goal. Mark which goals you will
-    write full use cases for this term and which are out of scope, and give a one-sentence
-    reason for each cut.
-13. **[project]** Choose the single most important goal from Exercise 12 and write its
-    complete use case using the §5.3.1 template, built in the three passes of §5.3.3.
-    Then extract the two or three alternative flows whose postconditions you consider most
-    critical, and hand them to whoever writes tests as named scenarios for Chapter 9.

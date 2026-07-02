@@ -356,7 +356,7 @@ different question. It helps to know the categories so you can assemble the righ
   detector for it. Security-focused variants (often called SAST tools) specialize in patterns
   that lead to vulnerabilities.
 
-Most teams run several of these together in **continuous integration** (Chapter 2), so that
+Most teams run several of these together in **continuous integration** (Chapters 2 and 12), so that
 every proposed change is automatically type-checked, linted, and pattern-scanned before a
 human reviewer ever looks at it. The tools handle the mechanical layer; the humans handle
 judgment. That division of labor is the whole point.
@@ -438,4 +438,5 @@ why we cast several.
 
 - **Key takeaways** are summarized above in §8.5.
 - Continue to the [Exercises](exercises.md).
+- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

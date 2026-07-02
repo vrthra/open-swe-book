@@ -101,7 +101,18 @@ again, we would…". Insight is rewarded here, not spin._
 - **What we'd do differently:** _…_
 - **Biggest lesson about software engineering:** _…_
 
-## 8. Individual contributions
+## 8. AI use and provenance
+
+_Where and how AI assisted the work, per the running log your README kept all term
+(Chapter 11, §11.2.9): the kinds of tasks you delegated, links to the transcripts, and —
+most importantly — how each AI-assisted change was verified (tests, review) before it
+shipped. One honest paragraph plus the log link beats a list of tools._
+
+- **README AI log:** _link_
+- **What we delegated vs. owned:** _…_
+- **How we verified AI-assisted changes:** _…_
+
+## 9. Individual contributions
 
 _A fair account of who did what, backed by your running log and version-control history.
 Keep it factual._
@@ -114,7 +125,7 @@ Keep it factual._
 - **Notes on collaboration:** _how work was divided and reviewed; how conflicts or
   imbalances were handled_
 
-## 9. Appendix (optional)
+## 10. Appendix (optional)
 
 _Links to the proposal, both status reports, the backlog, and any supporting data or
 diagrams._

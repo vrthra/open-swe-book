@@ -1,9 +1,10 @@
 # Chapter 7 — Exercises
 
 Exercises are graded by depth: **[warm-up]** checks understanding, **[analysis]** asks you
-to reason about a design and its trade-offs, **[project]** connects to your team project
-(Appendix A). For every pattern you choose, the grading rubric is the same one an engineer
-applies in practice: *name what the pattern buys you and what it costs you.*
+to reason about a design and its trade-offs. Project-focused exercises live in this
+chapter's [Project Guide](project.md). For every pattern you choose, the grading rubric is
+the same one an engineer applies in practice: *name what the pattern buys you and what it
+costs you.*
 
 ## Concepts
 
@@ -75,12 +76,3 @@ defensible answer; the justification is what matters.
     layers-list sidebar, and a properties panel; editing any one must instantly update the
     others. Pick a pattern (or combination), show the wiring, and explain how it keeps the
     three displays consistent without any of them knowing about the others.
-
-13. **[project]** For your team project, identify the *one* place where you most expect the
-    design to change during the term (a swappable data source, a UI that will be restyled, a
-    third-party service that might be replaced, a feature that some users get and others do
-    not). Choose the architectural pattern that would make that specific change cheap, place
-    it in your architecture, and write a short "trade-off note" (about 150 words) stating
-    what the pattern costs you and why you judge it worth paying here. If you conclude *no*
-    pattern is worth it yet, justify that too — declining to add machinery is also a design
-    decision.

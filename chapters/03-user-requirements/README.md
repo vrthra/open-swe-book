@@ -246,6 +246,19 @@ spot:
   tool for latent needs, because a person who cannot describe what they want can almost
   always react to what is in front of them. Blind spot: users may fixate on the prototype's
   incidental choices.
+- **Brainstorming (blue-sky sessions).** Gather many stakeholders and think big: during
+  the session, *no idea is ruled out or criticized*, and everything is captured — the goal
+  is quantity first, judgment second, because premature filtering kills the unusual idea
+  that turns out to matter. Keep the focus on the core of what the software is supposed to
+  do, then reconvene later, with cooler heads, to filter and prioritize what the session
+  produced. Blind spot: without that second, critical pass, a brainstorm yields a wish
+  list, not requirements.
+- **Role play.** A developer *pretends to be the software* while the customer walks
+  through using it: "I'd click here… no, it should already show today's schedule." The
+  customer's instructions — and especially their corrections — are requirements spoken
+  aloud. Write everything down during the session, then split the notes afterward into
+  requirements and open questions. Blind spot: you only exercise the workflows the
+  customer thinks to perform.
 - **Studying existing systems and data.** Support tickets, competitor products, and usage
   logs are elicitation gold — they are records of real needs and real friction, unfiltered
   by anyone's memory.
@@ -278,12 +291,27 @@ sharpen that:
 > about *how*. Trace it back to the problem and you often find a smaller, cheaper, better
 > answer than the one you were asked for.
 
+Whatever mix of techniques you use, there will always be a gap between what the customer
+said and what you understood — and that gap fills itself with **assumptions**. Every
+unstated assumption buried in a story is untracked risk: you will build on it, and if it
+is wrong, everything on top of it is wrong too.
+
+> **Technique — track your assumptions.** Write assumptions down *explicitly*, the moment
+> you notice yourself making one ("we assume clinicians never edit each other's
+> appointments"). Then convert each into a question for the customer at the next meeting —
+> an assumption is just a question you have not asked yet. If an assumption cannot be
+> clarified yet, treat that as a prioritization signal: deprioritize the work that depends
+> on it until it can be, and spend the iteration on stories that stand on firmer ground
+> (see the prioritization techniques in Chapter 4,
+> [§4.4](../04-requirements-analysis/#44-balancing-priorities)).
+
 ### 3.3.3 Design for Delight
 
 Satisfying stated needs makes a product *acceptable*. Delighting users — meeting latent
 needs they did not know to ask for — makes a product *loved*, and loved products win. A
-useful mental model here distinguishes categories of features by how user satisfaction
-responds to them:
+useful mental model here — the **Kano model**, developed fully in
+[§4.5](../04-requirements-analysis/#45-customer-satisfiers-and-dissatisfiers) —
+distinguishes categories of features by how user satisfaction responds to them:
 
 - **Must‑be features** (basic expectations). Their presence is unnoticed; their absence is
   a dealbreaker. A scheduler that loses appointments has failed no matter how pretty it is.
@@ -532,6 +560,38 @@ stated as human reality rather than as a number, which you then make testable. A
 well‑written scenario routinely uncovers more real requirements than a day of abstract
 brainstorming, because it refuses to let anything stay vague.
 
+### 3.5.3 Storyboards: Drawing the Scenario
+
+A scenario is a story told in prose; a **storyboard** is the same story told in pictures —
+a short sequence of rough sketches, one frame per step, showing what the user sees and
+does at each moment. Borrowed from film, storyboarding earns its place in requirements
+work because a drawing forces decisions that a sentence lets you dodge: what is actually
+*on* the screen when Priya searches? Where does the *pending‑insurance* flag appear? What
+does she tap? If you cannot draw the frame, you have not yet imagined the requirement.
+
+Storyboards at this stage are **lo‑fi** (low fidelity) on purpose: boxes, arrows, stick
+figures, and hand lettering, drawn in minutes on paper or a whiteboard. The roughness is a
+feature twice over. It keeps *you* from sliding into visual design when the question is
+still *what happens*, and it signals to stakeholders that everything is still changeable —
+people freely correct a scribble but hesitate to criticize something that looks finished.
+This is the same right‑fidelity discipline as the fat‑marker sketches and breadboards of
+[§6.1.2](../06-design-and-architecture/#612-design-includes-architecture); a storyboard is
+essentially a breadboard with time running left to right.
+
+> **Technique — storyboard an exception.** Storyboard the *unhappy* paths, not just the
+> demo path. Drawing §3.5.2's Exception A frame by frame — Ms. Okafor at the desk, the
+> empty search result, Priya switching to phone‑number lookup, the inline correction, the
+> line still moving — immediately raises the questions that matter: where does the
+> correction happen? does Priya lose her place in check‑in? what does the system show the
+> *next* patient while she fixes it? Each frame you cannot draw is a requirement you have
+> not discovered yet.
+
+A practical rhythm for a team: write the scenario (§3.5.1), storyboard its key flows in
+four to eight frames, walk the storyboard with a real user while they narrate what they'd
+expect, then convert what you learned into stories and acceptance criteria (§3.4). The
+storyboard itself becomes a cheap, durable artifact — teams pin them up and check designs
+against them for the rest of the project.
+
 ## 3.6 Clarifying User Goals
 
 Beneath every feature and story lies a **goal** — a state of the world a stakeholder wants
@@ -745,4 +805,5 @@ build here.
 
 - **Key takeaways** are summarized above in §3.8.
 - Continue to the [Exercises](exercises.md).
+- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

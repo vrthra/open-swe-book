@@ -1,7 +1,7 @@
 # Chapter 5 — Use Cases
 
 > **Where we are.** Chapter 3 gathered raw needs as user stories and features, and
-> Chapter 4 organized them into a coherent model of the problem. Those artifacts are
+> Chapter 4 sized and prioritized them into a plan. Those artifacts are
 > deliberately small and fragmented — a story fits on an index card. But a card tells you
 > *that* a user wants to withdraw cash; it does not tell you what the machine says when
 > the account is overdrawn, what happens if the network drops mid-transaction, or in what
@@ -467,7 +467,7 @@ Use `«include»` when several use cases genuinely share a stretch of behavior. 
 copy the PIN-entry-and-validation steps into each, you extract them into an
 `Authenticate Cardholder` use case and have both includers invoke it:
 
-- In *Withdraw Cash*, step 2–4 become: "**Include** *Authenticate Cardholder*."
+- In *Withdraw Cash*, steps 2–4 become: "**Include** *Authenticate Cardholder*."
 - In *Check Balance*, the same line appears.
 
 Now the authentication rules — retry limits, card capture, lockout — live in exactly one
@@ -541,4 +541,5 @@ value from one disciplined story.
 
 - **Key takeaways** are summarized above in §5.6.
 - Continue to the [Exercises](exercises.md).
+- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

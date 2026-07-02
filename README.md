@@ -7,8 +7,8 @@ practices* of modern software engineering: how software is built in industry usi
 agile methods, how to discover and analyze requirements, how to design and architect
 modular systems, how to check and test code, and how to measure quality with metrics.
 
-It is organized as **ten core chapters, an optional Chapter 11 on AI, and a team‑project
-appendix**, following the topic progression of the ACM/IEEE software‑engineering
+It is organized as **twelve chapters and a team‑project appendix**, following the topic
+progression of the ACM/IEEE software‑engineering
 curriculum guidelines (SE2014/SEEK). Every chapter is written from scratch and is paired
 with a curated map of **free or openly accessible resources** — MOOCs, university
 courseware, primary specifications, and papers; licenses vary and are noted where known —
@@ -40,7 +40,7 @@ These four ideas thread through every chapter.
 
 ## How the book is organized
 
-The chapters group into five arcs:
+The chapters group into arcs:
 
 | Arc | Chapters | Question it answers |
 |-----|----------|---------------------|
@@ -49,7 +49,8 @@ The chapters group into five arcs:
 | **Design & architecture** | 6–7 | How do we structure a system to tame complexity? |
 | **Software quality** | 8–9 | How do we check and test that the system works? |
 | **Metrics** | 10 | How do we measure quality and track progress? |
-| **The AI shift** *(optional)* | 11 | How is AI reshaping every stage — and what stays the same? |
+| **The AI shift** | 11 | How is AI reshaping every stage — and what stays the same? |
+| **Delivery** | 12 | How does code get from a merged branch to running safely in production? |
 | **Practice** | Appendix A | How do we run a real team project alongside the concepts? |
 
 ## Table of contents
@@ -62,21 +63,26 @@ Use the sidebar for the full linked table of contents (chapters and sections), o
 4. [Requirements Analysis](chapters/04-requirements-analysis/) — estimation, planning poker, MoSCoW, Kano, value/cost/risk, COCOMO.
 5. [Use Cases](chapters/05-use-cases/) — actors & goals, basic and alternative flows, use‑case diagrams and relationships.
 6. [Design and Architecture](chapters/06-design-and-architecture/) — modularity, coupling & cohesion, UML class diagrams, 4+1 views.
-7. [Architectural Patterns](chapters/07-architectural-patterns/) — layering, shared‑data, observer, pub‑sub, MVC, dataflow, client‑server, broker, product lines.
+7. [Architectural Patterns](chapters/07-architectural-patterns/) — layering, shared‑data, observer, pub‑sub, MVC, dataflow, client‑server, broker, REST, product lines.
 8. [Static Checking](chapters/08-static-checking/) — architecture reviews, inspections, code reviews, automated static analysis.
 9. [Testing](chapters/09-testing/) — levels of testing, control‑flow & MC/DC coverage, black‑box coverage, combinatorial testing.
 10. [Quality Metrics](chapters/10-quality-metrics/) — meaningful metrics, defect measures, boxplots/histograms, statistics, confidence intervals, regression.
 11. [Software Engineering in the Age of AI](chapters/11-ai-across-the-lifecycle/) — how AI reshapes every lifecycle stage, the productivity/quality/security evidence, and the o16g Outcome Engineering manifesto.
-    - [Appendix A: A Team Project](chapters/appendix-a-team-project/) — proposal, status reports, and final report templates.
+12. [Delivery: CI/CD, DevOps, and Evolution](chapters/12-delivery/) — SaaS and the cloud, CI pipelines, continuous deployment (the Knight Capital and CrowdStrike case studies), security pipelines, DORA metrics, legacy code and technical debt.
+
+- [Appendix A: A Team Project](chapters/appendix-a-team-project/) — proposal, sprint and status reports, team reviews, and final-report templates.
 
 ## How to use this repository
 
-- **Learners:** read the chapters in order. Each ends with *Key takeaways*, *Exercises*,
-  and *Open resources* pointing to free courses and readings for deeper study.
-- **Instructors:** the chapters map onto a 14–15 week semester (see
-  [`curriculum/course-plan.md`](curriculum/course-plan.md)). Run the team project from
-  Appendix A on a parallel track. Reusable document templates (proposal, status report,
-  final report) are linked from [Appendix A](chapters/appendix-a-team-project/).
+- **Learners:** read the chapters in order. Each ends with *Key takeaways*, *Exercises*
+  (individual practice), a *Project guide* (how the chapter drives a team project), and
+  *Open resources* pointing to free courses and readings for deeper study.
+- **Instructors:** the chapters map onto a 14–16 week semester — two ready-made plans
+  (a milestone track and a two-week-sprint track) live in
+  [`curriculum/course-plan.md`](curriculum/course-plan.md). Run the team project from
+  Appendix A on a parallel track. Reusable document templates (idea pitch, proposal,
+  sprint and status reports, team review, final report, individual write-up) are linked
+  from [Appendix A](chapters/appendix-a-team-project/).
 - **Contributors:** see [`CONTRIBUTING.md`](CONTRIBUTING.md). This is meant to be a
   living, community‑improved resource.
 

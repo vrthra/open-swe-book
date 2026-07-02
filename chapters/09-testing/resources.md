@@ -45,7 +45,8 @@ terms; when in doubt, check the linked page.
   domain; ACTS tool free for download.*
 - 📄 **Microsoft PICT — Pairwise Independent Combinatorial Testing tool** —
   [github.com/microsoft/pict](https://github.com/microsoft/pict). A small, scriptable
-  covering-array generator you can use for Exercise 14. *License: MIT.*
+  covering-array generator you can use for the pairwise exercise in this chapter's
+  [Project Guide](project.md). *License: MIT.*
 
 ## Tools and practice
 
@@ -56,6 +57,23 @@ terms; when in doubt, check the linked page.
   [hypothesis.readthedocs.io](https://hypothesis.readthedocs.io/). Puts the property/
   invariant oracles of §9.1.4 into practice by generating inputs for you. *License:
   MPL‑2.0.*
+- 📘 **Python `unittest.mock` — official documentation** —
+  [docs.python.org/3/library/unittest.mock.html](https://docs.python.org/3/library/unittest.mock.html).
+  `Mock`, `patch`, and `side_effect` — the standard-library way to build the stubs and
+  mocks of §9.2.1. *License: Python docs, PSF license (free to read and reuse).*
+- 📘 **behave — BDD for Python, documentation** —
+  [behave.readthedocs.io](https://behave.readthedocs.io/). Executable Gherkin as in the
+  §9.2.3 callout: a `features/` directory of `.feature` scenarios plus a `steps/`
+  directory whose `@given`/`@when`/`@then` functions bind each step to code. *License:
+  BSD‑2‑Clause.*
+- 📄 **mutmut — mutation testing for Python** —
+  [mutmut.readthedocs.io](https://mutmut.readthedocs.io/). Generates and runs the mutants
+  of §9.1.5 against a pytest suite and reports the survivors. *License: open source; see
+  the project page.*
+- 📄 **Google OSS‑Fuzz — continuous fuzzing documentation** —
+  [google.github.io/oss-fuzz](https://google.github.io/oss-fuzz/). How industrial-scale
+  fuzz testing (§9.4) is run continuously against hundreds of open-source projects, with
+  guides for adding your own. *License: Apache‑2.0.*
 - 🎥 **"TDD, Where Did It All Go Wrong" — Ian Cooper** (conference talk, freely on
   YouTube). A widely-cited critique of testing implementation details instead of behavior;
   a good companion to the pyramid and oracle discussions. *Access: free to view.*

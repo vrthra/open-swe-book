@@ -65,6 +65,47 @@ small, early, *predictable* cost to avoid a large, late, *unpredictable* one. Th
 of this book is, in effect, a catalog of the disciplines that make a team behave like
 Company B — and an honest account of when each is worth its cost.
 
+### 1.1.3 Where the discipline came from
+
+The phrase "software engineering" was not coined by a standards committee. In the 1960s,
+**Margaret Hamilton** led the team at the MIT Instrumentation Laboratory that wrote the
+flight software for the **Apollo Guidance Computer** — the code that flew astronauts to
+the Moon. At the time, programming was widely seen as a clerical afterthought to the
+"real" engineering of hardware. Hamilton pushed the term **software engineering** into
+use deliberately, to insist that building flight software deserved — and required — the
+same rigor, respect, and discipline as the aerospace engineering around it.
+
+Her team's discipline paid off in the most public way imaginable. Minutes before the
+Apollo 11 lunar landing, the guidance computer was flooded with unexpected input and
+began running out of capacity, throwing alarms. Because the software had been engineered
+with **priority scheduling** — the ability to shed low-priority work and keep the tasks
+that mattered most for landing — it recovered instead of crashing, and the landing
+proceeded. A design decision made long before launch, against a failure no one could
+fully predict, saved the mission. It remains one of the clearest early proofs that
+disciplined software design is not overhead; it is what stands between a system and
+catastrophe.
+
+The rest of the industry was learning the same lesson the hard way. Through the 1960s,
+hardware performance improved on the exponential curves we now describe with Moore's
+Law, while large software projects ran chronically late, blew their budgets, and failed
+outright in mission-critical settings — defense, aerospace, banking. Software, not
+hardware, had become the bottleneck. In 1968, a NATO-sponsored conference in Garmisch,
+Germany gave the problem a name — the **software crisis** — and proposed a remedy in its
+very title: the *NATO Software Engineering* conference argued that software should be
+developed like an engineering discipline, with deliberate methods, rather than by ad-hoc
+programming and heroics.
+
+What ultimately answered the crisis, though, was not a fixed body of rules like a
+building code. Software turned out to be too changeable for that. The discipline's
+mature answer is **empiricism**: work like an experimental scientist. Iterate in small
+steps, seek fast **feedback**, prefer **incremental** progress you can evaluate, run
+**experiments** when you are unsure, and let measured evidence — not opinion or
+authority — settle the argument. Modern writers such as Dave Farley frame the effective
+software engineer as exactly this kind of working scientist. Keep that framing in mind
+in Chapter 2: every process you will meet there — Scrum's sprints, XP's tests, the
+spiral's risk-driven loops — is an institutionalized version of the same iterate,
+measure, and adjust cycle.
+
 ## 1.2 The Requirements Challenge
 
 The hardest part of many projects is not building the system right, but figuring out
@@ -231,7 +272,10 @@ Agile methods make a deliberate choice here: they **fix time and cost** (a fixed
 iteration with a fixed team) and let **scope flex** — you always ship *something* valuable
 on the date, even if not everything. Plan‑driven methods more often fix scope and flex
 time. Chapters 2 and 4 return to this trade‑off with concrete estimation and
-prioritization techniques (story points, MoSCoW, value/cost/risk).
+prioritization techniques (story points, MoSCoW, value/cost/risk). And modern software
+increasingly ships as a **continuously updated service** rather than a boxed product —
+Chapter 12 examines how that reshapes the triangle, when releasing becomes a routine
+decision instead of a once‑a‑year event.
 
 > **Pitfall.** Silently absorbing a scope increase by working nights ("crunch") hides
 > the trade‑off instead of resolving it. It borrows against future quality — the debt is
@@ -314,4 +358,5 @@ technique in this book earns its place by answering one of them.
 
 - **Key takeaways** are summarized above in §1.7.
 - Continue to the [Exercises](exercises.md).
+- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

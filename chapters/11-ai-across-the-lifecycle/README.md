@@ -208,7 +208,7 @@ sign that raw output volume hides.
 
 - **Human owns:** choosing metrics that resist gaming (Chapter 10's Goodhart's-Law
   discipline) and that measure **outcomes** — defect-removal efficiency, customer-found
-  defects, DORA delivery metrics, verified value delivered — rather than agent *activity*.
+  defects, DORA delivery metrics (Chapter 12), verified value delivered — rather than agent *activity*.
   This is the empirical backbone of Outcome Engineering (§11.4).
 
 ### 11.2.9 The team project (Appendix A)
@@ -357,10 +357,7 @@ less engineering. It is *more* of the hardest, most human parts of it.
 
 ---
 
-- **Key takeaways:** AI attacks accidental complexity but not essential complexity;
-  perceived productivity ≠ measured productivity (verification is the new bottleneck); every
-  lifecycle stage gains an AI draft step but keeps a human-owned decision; the book's
-  disciplines become the *verification layer*; Outcome Engineering (o16g) reframes the goal
-  from producing code to delivering verified outcomes.
+- **Key takeaways** are summarized above in §11.6.
 - Continue to the [Exercises](exercises.md).
+- Apply it with this chapter's [project guide](project.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.

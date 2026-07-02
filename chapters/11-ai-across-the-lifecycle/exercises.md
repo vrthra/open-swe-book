@@ -1,7 +1,7 @@
 # Chapter 11 — Exercises
 
-Tags: **[warm‑up]** checks understanding · **[analysis]** asks you to reason ·
-**[project]** connects to your team project (Appendix A).
+Tags: **[warm‑up]** checks understanding · **[analysis]** asks you to reason.
+Project-focused exercises live in this chapter's [Project Guide](project.md).
 
 ## Concepts
 
@@ -43,15 +43,3 @@ Tags: **[warm‑up]** checks understanding · **[analysis]** asks you to reason 
 11. **[analysis]** "Certainty, not vibes" is the manifesto's verification slogan. Give one
     kind of outcome that is cheap to verify automatically and one that is expensive or
     impossible, and connect the second to the oracle problem.
-
-## Project
-
-12. **[project]** Write an *AI‑use policy* for your team (½ page): where agents may be used,
-    what evidence (tests, review, metric) is required before merging AI‑generated code, and
-    how you will record provenance in your final report.
-13. **[project]** Take one backlog item. Have an AI draft its user story, acceptance
-    criteria, and unit tests; then *review* them as an engineer. Document every change you
-    made and why — this is your verification layer in action.
-14. **[project]** Choose one **outcome** metric (not an activity metric) for your project in
-    the spirit of Outcome Engineering, define it precisely (Chapter 10), and measure it
-    before and after adopting an AI tool. Report whether the outcome actually improved.

@@ -1,17 +1,18 @@
-# 15‑Week Course Plan
+# Course Plans
 
-A ready‑to‑use schedule for a junior/senior software‑engineering course built on this
-book, run as **two parallel tracks** (as the ACM/IEEE guidelines recommend):
+Two ready‑to‑use schedules for a junior/senior software‑engineering course built on this
+book — **Variant A**, a 15‑week milestone track, and **Variant B**, a 16‑week semester run
+on two‑week sprints. Both run **two parallel tracks** (as the ACM/IEEE guidelines
+recommend):
 
-- **Concepts track** — the ten core chapters (one theme per week), plus the optional
-  Chapter 11 on AI as an advanced capstone.
+- **Concepts track** — the twelve chapters, one theme at a time.
 - **Project track** — a real team project (Appendix A), started early and iterated.
 
 The two tracks are **tightly coupled at the start** (weeks 1–4, while teams form and
 scope their projects) and **loosely coupled afterward**, so each can move at its own
 pace.
 
-## Weekly schedule
+## Variant A: 15-week milestone track
 
 | Week | Concepts (chapter) | Project milestone | Key open resources |
 |------|--------------------|-------------------|--------------------|
@@ -23,13 +24,47 @@ pace.
 | 6 | Ch. 6 — Design & Architecture | Architecture sketch; class diagram | MIT 6.031; 4+1 views |
 | 7 | Ch. 7 — Architectural Patterns | **Status Report 1** (skeletal system) | Fowler PoEAA; MS patterns |
 | 8 | *Midterm / catch‑up* | Sprint review + retrospective | — |
-| 9 | Ch. 8 — Static Checking | Set up CI, linters, code review | Google eng‑practices; Fagan |
+| 9 | Ch. 8 — Static Checking; CI pipelines (§12.2) | Set up CI, linters, code review | Google eng‑practices; Fagan |
 | 10 | Ch. 9 — Testing (coverage) | Test plan; coverage targets | MIT 6.031 testing; Ammann/Offutt |
 | 11 | Ch. 9 — Testing (MC/DC, combinatorial) | **Status Report 2** (viable system) | NIST combinatorial |
 | 12 | Ch. 10 — Metrics (quality & defects) | Defect tracking; quality dashboard | OpenIntro Stats; DORA |
-| 13 | Ch. 10 — Metrics (statistics) | Measure & analyze project data | OpenIntro Stats |
-| 14 | Ch. 11 — SE in the Age of AI *(optional capstone)* + review | **Comprehensive Final Report** (A.5) | METR study; o16g manifesto |
+| 13 | Ch. 10 — Metrics (statistics); DORA (§12.5) | Measure & analyze project data | OpenIntro Stats; DORA |
+| 14 | Ch. 11 — SE in the Age of AI; Ch. 12 — CD, security pipelines, evolution + review | **Comprehensive Final Report** (A.5) | METR study; o16g manifesto; SEC 34‑70694 |
 | 15 | Final presentations / demos | Ship & retrospective | — |
+
+## Variant B: 16-week semester on two-week sprints
+
+For courses that run the project on a two-week sprint cadence with the **dual-hat
+cross-team customer model** — each team pitches an idea that *another* team builds, and
+serves as customer for its own pitch (see
+[Running the Project on Two-Week Sprints](../chapters/appendix-a-team-project/two-week-sprints.md)).
+Concepts and project interleave: four onboarding deliverables (Sprint 0‑0 … 0‑3), then four
+two-week build sprints, each ending in a **Demo Day** and a team/customer review, with a
+progressive engineering-hardening arc (CI → CD → lint/dependency scans → debt paydown).
+
+| Week | Concepts (chapter) | Project / sprint deliverable |
+|------|--------------------|------------------------------|
+| 1 | Ch. 1 — Introduction; SaaS & the cloud (§12.1) | Think about project ideas |
+| 2 | Ch. 3 — User Requirements; Shape Up (§2.8, §4.2.4) | — |
+| 3 | Ch. 2 — Processes & types of agile | Teams form; **Sprint 0‑0**: idea pitches |
+| 4 | Ch. 6 — Design principles | **Sprint 0‑1**: pitch swap + proposal with customer |
+| 5 | Ch. 7 — Architectures + REST (§7.5.4); idea presentations | **Sprint 0‑2**: user stories + lo‑fi UI/storyboards (§3.4–3.5) |
+| 6 | Ch. 9 — Testing; CI pipelines (§12.2); DORA (§12.5) | **Sprint 0‑3**: initial view, deployed |
+| 7 | Demo Day; sprints & iterations (§2.2) | **Sprint 1** begins; team review #0 |
+| 8 | *Test 1* | — |
+| 9 | Continuous deployment (§12.3: Knight Capital, CrowdStrike) | Sprint 1 due → Demo Day; **Sprint 2**; review #1 |
+| 10 | *Spring break* | — |
+| 11 | Ch. 8 — Static checking; risk | Sprint 2 continues |
+| 12 | Security pipelines (§12.4) | Sprint 2 due → Demo Day; **Sprint 3**; review #2 |
+| 13 | Legacy code & refactoring (§12.6); Ch. 11 AI readings | Sprint 3 continues |
+| 14 | Work days; Ch. 10 metrics in practice | Sprint 3 due → Demo Day; **Sprint 4**; review #3 |
+| 15 | *Test 2* | Sprint 4 due |
+| 16 | Final presentations | Individual write‑ups; review #4 |
+
+Chapters 4–5 (estimation, use cases) are woven into the sprint work as read‑before
+material (see the sprint table in the appendix page) rather than given lecture weeks.
+Assessment shifts accordingly: sprint reports and team reviews replace the two status
+reports, and two in‑term tests replace the midterm/final split.
 
 ## Assessment (suggested weights)
 
@@ -60,4 +95,4 @@ By the end, a student can:
   [`open-resources-map.md`](open-resources-map.md) alongside the chapters; do the
   project solo or in a pair.
 - **No team project:** keep the concepts track; replace project milestones with the
-  larger exercises marked *"project"* in each chapter's `exercises.md`.
+  "Project exercises" in each chapter's `project.md` (the Project Guide).
