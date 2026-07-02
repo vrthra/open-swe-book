@@ -1,8 +1,8 @@
 # Chapter 12 — Open Resources
 
-Free, openly‑licensed materials that reinforce this chapter. Types: 📘 open text · 🎓
-course · 📄 primary source / standard · 🎥 video · 🛠 tool. Each entry notes its license or
-access terms; when in doubt, check the linked page.
+Free, open‑licensed, or freely accessible materials that reinforce this chapter. Types: 📘 open
+text · 🎓 course · 📄 primary source / standard · 🎥 video · 🛠 tool. Licenses vary and are noted
+where known. Each entry notes its license or access terms; when in doubt, check the linked page.
 
 ## Primary sources for the case studies
 

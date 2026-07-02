@@ -325,9 +325,10 @@ The pyramid is an economic argument. Suppose a defect in the discount logic coul
 caught at any level. Caught by a unit test, the feedback arrives in seconds, on the exact
 line, before you even commit. Caught by an E2E test in CI, it arrives twenty minutes
 later as "checkout total was wrong," and you must *debug down* to the line. Caught in
-production, it arrives as a customer complaint and a refund. The cost of a defect grows
-by roughly an order of magnitude at each stage it survives — so you push detection as far
-*down* and *early* as it will go.
+production, it arrives as a customer complaint and a refund. The cost of a defect
+typically rises substantially with each stage it survives — the exact multiplier varies
+by domain, tooling, and release process (§2.4.2) — so you push detection as far *down*
+and *early* as it will go.
 
 > **Pitfall — the ice-cream cone.** Teams that skip unit tests and lean on a big pile of
 > slow, flaky E2E tests invert the pyramid into an "ice-cream cone." Their CI is slow,
@@ -557,9 +558,10 @@ non-blocking pipeline stage (Chapter 12), not on the every-commit path.
 Branch coverage checks that each *decision* comes out true and false at least once. But a
 decision can be a **compound** boolean expression — `(A && B) || C` — and branch coverage
 says nothing about the individual **conditions** inside it. A suite can flip the whole
-decision true/false while some condition never actually influenced the outcome. For
-safety-critical software (avionics runs under DO-178C, which *mandates* it), we need a
-stronger criterion: **Modified Condition/Decision Coverage (MC/DC)**.
+decision true/false while some condition never actually influenced the outcome. For the
+highest-criticality software (in avionics, DO-178C requires it at the most critical
+design-assurance level), we need a stronger criterion:
+**Modified Condition/Decision Coverage (MC/DC)**.
 
 ### 9.5.1 Condition and Decision Coverage Are Independent
 

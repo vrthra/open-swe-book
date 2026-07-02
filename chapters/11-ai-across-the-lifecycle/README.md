@@ -69,7 +69,10 @@ mixed enough to demand humility.*
   trial, METR had experienced open-source developers do real tasks in repositories they
   knew well. Developers *predicted* AI would make them ~24% faster; in fact they were about
   **19% slower** with AI — and still *believed* they'd been faster afterward. The slowdown
-  came largely from the overhead of **reviewing and integrating** generated output.
+  came largely from the overhead of **reviewing and integrating** generated output. Scope
+  the finding as carefully as the researchers did: it describes *that specific setting* —
+  experienced developers, mature and familiar repositories, high quality standards,
+  early-2025 tools — not AI-assisted work in general, and tools have moved since.
 
 > **Principle.** Perceived productivity is not measured productivity. On familiar,
 > high-standards code, the time you save typing can be swamped by the time you spend
@@ -185,7 +188,12 @@ on machine output produced faster than humans can vet it.
 Testing is where agentic AI has advanced most measurably. Benchmarks like **SWE-bench**
 (fix a real GitHub issue) and **SWT-bench** (generate a bug-reproducing test) have driven
 rapid progress in automated **test generation** and **program repair**; agents now resolve
-a large and growing fraction of real issues end to end. Models are also strong at
+a substantial fraction of such benchmark issues end to end. Treat those numbers with
+care, though: passing a benchmark's tests is *evidence*, not proof, of a correct fix —
+studies of SWE-bench-style evaluation have found patches that pass the benchmark suite
+while failing developer-written tests or behaving differently from the true fix, so weak
+or incomplete test suites can inflate reported resolution rates (the **oracle problem**
+again, wearing a benchmark's clothes). Models are also strong at
 generating unit tests, property-based tests, and boundary cases (Chapter 9's black-box
 techniques).
 
@@ -202,9 +210,10 @@ the tests assert the wrong thing.
 
 AI forces a reckoning with **what we measure**. Lines of code and commit counts were always
 weak proxies; when a machine emits thousands of lines on request, they become actively
-misleading. Independent analyses report that as AI assistance spread (2021→2024), the share
-of **duplicated/cloned** code rose while **refactoring** fell — a maintainability warning
-sign that raw output volume hides.
+misleading. One industry analysis reports that as AI assistance spread (2021→2024), the
+share of **duplicated/cloned** code rose while **refactoring** fell — a maintainability
+warning sign that raw output volume hides, though it awaits independent academic
+replication.
 
 - **Human owns:** choosing metrics that resist gaming (Chapter 10's Goodhart's-Law
   discipline) and that measure **outcomes** — defect-removal efficiency, customer-found

@@ -1,8 +1,8 @@
 # Chapter 11 — Open Resources
 
-Free/open and primary sources behind this chapter. Types: 📘 open text · 🎓 course ·
-📄 primary source/paper · 🎥 video. AI moves fast — prefer primary studies over vendor
-blogs, and check dates.
+Free/open and primary sources behind this chapter. Types: 📘 open text · 🎓 course · 📄 primary
+source/paper · 🎥 video. Licenses vary and are noted where known. AI moves fast — prefer primary
+studies over vendor blogs, and check dates.
 
 ## The o16g manifesto (used in §11.4)
 

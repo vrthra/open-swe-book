@@ -1,7 +1,7 @@
 # Chapter 6 — Open Resources
 
-Free, openly‑licensed materials that reinforce this chapter. Types: 📘 open text · 🎓
-course · 📄 primary source · 🎥 video. Each entry notes its license where known; when a
+Free, open‑licensed, or freely accessible materials that reinforce this chapter. Types: 📘 open
+text · 🎓 course · 📄 primary source · 🎥 video. Licenses vary and are noted where known; when a
 resource is free to read but not openly relicensable, it is marked *free to read*.
 
 ## Modularity, abstraction, and interfaces

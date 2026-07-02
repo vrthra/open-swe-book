@@ -1,7 +1,7 @@
 # Chapter 3 — Open Resources
 
-Free, openly‑licensed materials that reinforce this chapter. Types: 📘 open text · 🎓
-course · 📄 primary source/standard · 🎥 video.
+Free, open‑licensed, or freely accessible materials that reinforce this chapter. Types: 📘 open
+text · 🎓 course · 📄 primary source/standard · 🎥 video. Licenses vary and are noted where known.
 
 ## User stories, features, and BDD
 

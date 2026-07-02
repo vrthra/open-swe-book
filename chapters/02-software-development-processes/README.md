@@ -356,7 +356,11 @@ To appreciate why the industry moved toward iteration, you have to understand wh
 *away from*. The **waterfall** model runs the project as a single pass through a strict
 sequence of phases — requirements, design, implementation, verification, maintenance — with
 each phase completed and signed off before the next begins, like water flowing down a series
-of steps and never back up.
+of steps and never back up. (One historical note before we critique it: this strict,
+single-pass model is the *textbook* waterfall. Royce's 1970 paper — the usual citation —
+presented the strict sequence and then argued it was risky and needed feedback and
+iteration. The industry largely adopted the diagram and skipped the warning; this section
+critiques the model as it was actually practiced.)
 
 Its appeal is real: it is simple to explain, easy to plan and bill against, and it front-loads
 the thinking. For genuinely well-understood problems with stable requirements, a waterfall-ish

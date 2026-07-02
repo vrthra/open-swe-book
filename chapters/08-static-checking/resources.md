@@ -1,7 +1,7 @@
 # Chapter 8 — Open Resources
 
-Free, openly‑licensed materials that reinforce this chapter. Types: 📘 open text · 🎓 course ·
-📄 primary source · 🎥 video.
+Free, open‑licensed, or freely accessible materials that reinforce this chapter. Types: 📘 open
+text · 🎓 course · 📄 primary source · 🎥 video. Licenses vary and are noted where known.
 
 ## Code review (used in §8.3)
 

@@ -1,7 +1,8 @@
 # Chapter 5 — Open Resources
 
-Free, openly‑licensed materials that reinforce this chapter. Types: 📘 open text · 🎓
-course · 📄 primary source / reference · 🎥 video.
+Free, open‑licensed, or freely accessible materials that reinforce this chapter. Types: 📘 open
+text · 🎓 course · 📄 primary source / reference · 🎥 video. Licenses vary and are noted where
+known.
 
 ## Foundations: what a use case is
 

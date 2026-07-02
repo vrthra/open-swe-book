@@ -512,9 +512,10 @@ of sufficiency, and past it, more effort is wasted: a schedule that shows the co
 is sufficient; making it "extra correct" is meaningless. Over-investing in a basic quality
 buys you nothing, because it saturates at neutral.
 
-**Performance** qualities have no natural ceiling — faster search is always at least a little
-better — so "sufficiency" here is an economic decision: keep investing while the marginal
-satisfaction exceeds the marginal cost, and stop when it doesn't. **Delighters** are
+**Performance** qualities have no hard ceiling — faster search is often better, until the
+gain drops below what users can perceive or what the improvement costs — so "sufficiency"
+here is an economic decision: keep investing while the marginal satisfaction exceeds the
+marginal cost, and stop when it doesn't. **Delighters** are
 all-or-nothing in a different sense: a half-built delighter often delights no one, so either
 fund it enough to actually thrill or don't start.
 

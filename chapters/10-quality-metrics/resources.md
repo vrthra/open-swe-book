@@ -1,7 +1,7 @@
 # Chapter 10 — Open Resources
 
-Free, openly‑licensed materials that reinforce this chapter. Types: 📘 open text · 🎓
-course · 📄 primary source / standard · 🎥 video. Each entry notes its license where
+Free, open‑licensed, or freely accessible materials that reinforce this chapter. Types: 📘 open
+text · 🎓 course · 📄 primary source / standard · 🎥 video. Licenses vary and are noted where
 known; linked resources remain under their own terms.
 
 ## Statistics foundations (§§10.6–10.9)

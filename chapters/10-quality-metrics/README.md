@@ -150,11 +150,14 @@ name them explicitly:
   only loosely correlated with the others: users can love buggy software that solves
   their problem, and hate flawless software that does not.
 
-The international standard **ISO/IEC 25010** organizes product and operational quality
-into eight characteristics — functional suitability, performance efficiency,
-compatibility, usability, reliability, security, maintainability, and portability — each
-subdivided further. You do not need to memorize the taxonomy; you need the habit it
-encodes: *before you measure quality, say which quality.*
+The international standard **ISO/IEC 25010** organizes product quality into nine
+characteristics — functional suitability, performance efficiency, compatibility,
+interaction capability, reliability, security, maintainability, flexibility, and safety —
+each subdivided further. (The widely cited 2011 edition had eight, with *usability* and
+*portability* where the current edition has *interaction capability* and *flexibility*;
+taxonomies get revised, which is itself a lesson about measurement.) You do not need to
+memorize the taxonomy; you need the habit it encodes: *before you measure quality, say
+which quality.*
 
 > **Principle.** There is no single "quality score." Different stakeholders optimize
 > different forms of quality, and improving one can degrade another (heavy security

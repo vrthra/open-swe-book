@@ -1,8 +1,8 @@
 # Chapter 9 — Open Resources
 
-Free, openly‑licensed materials that reinforce this chapter. Types: 📘 open text · 🎓
-course · 📄 primary source / standard · 🎥 video. Each entry notes its license or access
-terms; when in doubt, check the linked page.
+Free, open‑licensed, or freely accessible materials that reinforce this chapter. Types: 📘 open
+text · 🎓 course · 📄 primary source / standard · 🎥 video. Licenses vary and are noted where
+known. Each entry notes its license or access terms; when in doubt, check the linked page.
 
 ## Foundations: what to test and how
 
