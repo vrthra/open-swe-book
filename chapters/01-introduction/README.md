@@ -36,7 +36,7 @@ Three words in that definition do a lot of work:
   We manage that with **design and architecture** (Chapters 6–7): dividing the system so
   each part can be understood, changed, and tested in relative isolation.
 
-Software engineering is distinguished from mere coding by its focus on the **why**
+What separates software engineering from mere coding is the focus on the **why**
 behind the **how**. Any competent developer can be told "use dependency injection here."
 An engineer understands *what problem it solves* (coupling), *when it helps*, and *when
 it is overkill* — and can make the call on a design they have never seen before.
@@ -56,9 +56,9 @@ weight of the system's own complexity.
 
 **Company B** spends the first two weeks talking to clinic staff, writing a handful of
 user stories, sketching a modular architecture, and setting up automated tests and code
-review. Their first demo comes a week later than Company A's. But their third month
-looks nothing alike: new engineers are productive in days, changes are localized,
-and a regression is usually caught by a failing test before it reaches a user.
+review. Their first demo comes a week later than Company A's. But by the third month
+the two teams look nothing alike: new engineers are productive in days, changes are
+localized, and a failing test usually catches a regression before it reaches a user.
 
 Neither team is smarter. The difference is **engineering discipline**: Company B paid a
 small, early, *predictable* cost to avoid a large, late, *unpredictable* one. The rest
@@ -73,7 +73,7 @@ flight software for the **Apollo Guidance Computer** — the code that flew astr
 the Moon. At the time, programming was widely seen as a clerical afterthought to the
 "real" engineering of hardware. Hamilton pushed the term **software engineering** into
 use deliberately, to insist that building flight software deserved — and required — the
-same rigor, respect, and discipline as the aerospace engineering around it.
+same rigor and respect as the aerospace engineering around it.
 
 Her team's discipline paid off in the most public way imaginable. Minutes before the
 Apollo 11 lunar landing, the guidance computer was flooded with unexpected input and
