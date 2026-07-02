@@ -64,11 +64,12 @@ Does AI make developers faster? The honest answer is *it depends, and the eviden
 mixed enough to demand humility.*
 
 - **Perceived gains are large.** In field studies, a majority of developers report feeling
-  more productive with tools like GitHub Copilot, and vendors cite eye-catching numbers.
+  more productive with tools like GitHub Copilot, and vendors cite eye-catching
+  numbers.[^1]<!-- -->[^2]
 - **Measured gains are smaller and sometimes negative.** In a 2025 randomized controlled
   trial, METR had experienced open-source developers do real tasks in repositories they
   knew well. Developers *predicted* AI would make them ~24% faster; in fact they were about
-  **19% slower** with AI — and still *believed* they'd been faster afterward. The slowdown
+  **19% slower** with AI — and still *believed* they'd been faster afterward.[^3] The slowdown
   came largely from the overhead of **reviewing and integrating** generated output. Scope
   the finding as carefully as the researchers did: it describes *that specific setting* —
   experienced developers, mature and familiar repositories, high quality standards,
@@ -113,20 +114,20 @@ a ticket and open a pull request unattended, which strains the assumptions of Sc
 - **Fails at:** judgment about *value* and *sequencing*; reading the human dynamics of a
   team; owning accountability for what ships.
 - **Human owns:** the definition of done, the choice of what to build next, and
-  responsibility. The agile value of "working software as the measure of progress" gets
-  *sharper*, not softer — see the manifesto's "verified reality" in §11.4.
+  responsibility. The agile principle "working software is the primary measure of progress"
+  gets *sharper*, not softer — see the manifesto's "verified reality" in §11.4.[^4]
 
 ### 11.2.2 Requirements (Chapter 3)
 
 Large language models are genuinely useful for **elicitation and drafting**: turning
 interview notes, tickets, and support logs into candidate user stories, acceptance
 criteria (Given/When/Then), and edge-case lists. Studies report LLM-drafted requirements
-that reviewers rate as *more complete* and better aligned than hand-written first drafts,
-produced far faster and cheaper.
+that reviewers rate as complete, consistent first drafts — comparable to an entry-level
+engineer's — produced far faster and cheaper.[^5]<!-- -->[^6]
 
 - **Fails at:** knowing what users actually *need* versus what is *plausible*; an LLM will
   cheerfully invent requirements that sound reasonable and are wrong (**hallucinated
-  requirements**), and its fluency can manufacture false consensus.
+  requirements**), and its fluency can manufacture false consensus.[^7]
 - **Human owns:** talking to real stakeholders, resolving conflicting goals (Chapter 3's
   goal hierarchies), and *validating* that a story reflects a real need. Use AI to widen
   the net of candidate requirements; use humans to decide which are true.
@@ -157,7 +158,7 @@ This is where the human-owned layer is thickest. AI can propose class structures
 **Architecture Decision Records (ADRs)**, suggest applicable patterns from Chapter 7, and
 even prototype competing designs to compare. Research on multi-agent systems that go from
 requirements to candidate architectures is active but early, and leans on role
-specialization to fight hallucination.
+specialization to fight hallucination.[^8]<!-- -->[^9]
 
 - **Fails at:** the *significant, expensive-to-change decisions* that define architecture
   (Chapter 6); it has no stake in your five-year maintenance cost and cannot feel the pain
@@ -169,13 +170,14 @@ specialization to fight hallucination.
 ### 11.2.6 Static checking and code review (Chapter 8)
 
 AI cuts both ways here, sharply. On one hand, AI reviewers and smarter static analyzers
-catch real bugs, explain them, and suggest fixes, and teams report faster review cycles. On
-the other hand, **most code under review is now itself AI-generated**, which inverts the
-problem from Chapter 8: the scarce resource, *reviewer trust and attention*, is now spent
-on machine output produced faster than humans can vet it.
+catch real bugs, explain them, and suggest fixes.[^10] On the other hand, **a growing share
+of code under review is now itself AI-generated**, which inverts the problem from
+Chapter 8: the scarce resource, *reviewer trust and attention*, is now spent on machine
+output produced faster than humans can vet it.[^11]
 
 > **Pitfall.** A 2023 controlled study found developers with an AI assistant wrote
-> *less secure* code while being *more confident* it was secure — a false sense of safety.
+> *less secure* code while being *more confident* it was secure — a false sense of
+> safety.[^12]
 > Static analysis and human review are not optional overhead in the AI era; they are the
 > brakes that make the speed usable.
 
@@ -188,14 +190,14 @@ on machine output produced faster than humans can vet it.
 Testing is where agentic AI has advanced most measurably. Benchmarks like **SWE-bench**
 (fix a real GitHub issue) and **SWT-bench** (generate a bug-reproducing test) have driven
 rapid progress in automated **test generation** and **program repair**; agents now resolve
-a substantial fraction of such benchmark issues end to end. Treat those numbers with
+a substantial fraction of such benchmark issues end to end.[^13]<!-- -->[^14] Treat those numbers with
 care, though: passing a benchmark's tests is *evidence*, not proof, of a correct fix —
 studies of SWE-bench-style evaluation have found patches that pass the benchmark suite
 while failing developer-written tests or behaving differently from the true fix, so weak
 or incomplete test suites can inflate reported resolution rates (the **oracle problem**
-again, wearing a benchmark's clothes). Models are also strong at
+again, wearing a benchmark's clothes).[^15] Models are also strong at
 generating unit tests, property-based tests, and boundary cases (Chapter 9's black-box
-techniques).
+techniques).[^16]
 
 But the deepest problem in testing survives untouched: the **oracle problem**. A generated
 test encodes *what the model thinks correct behavior is* — which may simply mirror a
@@ -213,7 +215,7 @@ weak proxies; when a machine emits thousands of lines on request, they become ac
 misleading. One industry analysis reports that as AI assistance spread (2021→2024), the
 share of **duplicated/cloned** code rose while **refactoring** fell — a maintainability
 warning sign that raw output volume hides, though it awaits independent academic
-replication.
+replication.[^17]
 
 - **Human owns:** choosing metrics that resist gaming (Chapter 10's Goodhart's-Law
   discipline) and that measure **outcomes** — defect-removal efficiency, customer-found
@@ -234,9 +236,9 @@ A balanced reading of the current research:
 
 | Dimension | What the evidence suggests | Caveat |
 |-----------|---------------------------|--------|
-| **Productivity** | Real gains on boilerplate, unfamiliar APIs, greenfield, narrow well-specified tasks. | On familiar, high-standards code, a 2025 RCT found a ~19% *slowdown*; perception overstates gains. |
-| **Quality** | Faster first drafts; good at tests and explanations. | Rising code duplication and falling refactoring point to maintainability debt. |
-| **Security** | Analyzers + AI review can catch known bug patterns. | ~40% of AI-generated programs in one study contained vulnerabilities; users felt *more* secure while being *less* so. |
+| **Productivity** | Real gains on boilerplate, unfamiliar APIs, greenfield, narrow well-specified tasks. | On familiar, high-standards code, a 2025 RCT found a ~19% *slowdown*; perception overstates gains.[^3] |
+| **Quality** | Faster first drafts; good at tests and explanations. | Rising code duplication and falling refactoring in one industry analysis point to maintainability debt.[^17] |
+| **Security** | Analyzers + AI review can catch known bug patterns. | ~40% of AI-generated programs in one study contained vulnerabilities; users felt *more* secure while being *less* so.[^18]<!-- -->[^12] |
 
 The through-line: **AI is a power tool, and a power tool amplifies the operator.** In
 skilled hands with strong verification (specs, tests, reviews, metrics), it is a real
@@ -252,18 +254,18 @@ multiplier. Without those disciplines, it multiplies *output* while quietly degr
 
 In 2026, Cory Ondrejka (co-creator of Second Life; former engineering leader at Google and
 Meta; CTO of Onebrief) published the **o16g manifesto** — *Outcome Engineering* — arguing
-that agentic development demands a new frame. Its thesis: **"It was never about the code."**
-Code is "the incantation transforming computation into magic," a *mechanism* for delivering
-an idea. Once agents remove the constraint of human typing bandwidth, the manifesto argues,
-creation is limited by the *cost of compute*, not human capacity — and the profession
-should move "beyond software engineering" toward engineering **outcomes**.
+that agentic development demands a new frame.[^19]<!-- -->[^20] Its thesis: **"It was never about the
+code."** Code is "the incantation transforming computation into magic," a *mechanism* for
+delivering an idea. Once agents remove the constraint of human typing bandwidth, the
+manifesto argues, creation is limited by the *cost of compute*, not human capacity — and the
+profession should move "beyond software engineering" toward engineering **outcomes**.[^19]
 
-It is organized around four shifts and **16 principles** in two parts. Whatever you make of
+It is organized around four shifts and **16 principles** in two parts.[^19] Whatever you make of
 its rhetoric, its principles map with surprising directness onto the disciplines in this
 book — which is itself an argument that the fundamentals endure.
 
-**The four shifts:** *Creation, not code. Cost, not time. Capacity not backlog. Certainty,
-not vibes.*
+**The four shifts:** *Creation not code. Cost not time. Capacity not backlog. Certainty
+not vibes.*[^19]
 
 ### Part I — The Goals ("superpowered creation")
 
@@ -272,11 +274,11 @@ not vibes.*
 2. **The Truth — Verified Reality is the Only Truth.** Code is a vanity metric; grade agents
    on the verified rate of positive change delivered, not lines written. *(Testing &
    metrics, Ch. 9–10.)*
-3. **The Teamwork — No More Single-Player Mode.** Outcome engineering is a team sport;
+3. **The Teamwork — No More Single Player Mode.** Outcome engineering is a team sport;
    define explicit protocols for debate, decision, and delivery. *(Process, Ch. 2.)*
 4. **The Liberation — The Backlog is Dead.** Never reject an idea for lack of *time*, only
    lack of *budget*; manage to cost, not capacity. *(Prioritization reframed, Ch. 4.)*
-5. **The Joy — Unleash the Builders.** Write code only where it brings value/joy; delegate
+5. **The Joy — Unleash the Builders.** Write code only when it brings joy; delegate
    the toil. *(Essential vs. accidental complexity, Ch. 1.)*
 6. **The Map — No Wandering in the Dark.** Never dispatch an agent without context; map the
    territory before building. *(Architecture description, Ch. 6.)*
@@ -363,6 +365,31 @@ The o16g manifesto pushes this to its edge — *it was never about the code* —
 not you accept its every claim, it points where the profession is heading: engineers who
 direct fleets of agents toward well-specified, rigorously verified outcomes. That job is not
 less engineering. It is *more* of the hardest, most human parts of it.
+
+---
+
+### Sources
+
+[^1]: GitHub (Eirini Kalliamvakou), *Research: Quantifying GitHub Copilot's Impact on Developer Productivity and Happiness* (2022). [github.blog](https://github.blog/news-insights/research/research-quantifying-github-copilots-impact-on-developer-productivity-and-happiness/).
+[^2]: Sida Peng, Eirini Kalliamvakou, Peter Cihon, and Mert Demirer, *The Impact of AI on Developer Productivity: Evidence from GitHub Copilot* (2023). [arXiv 2302.06590](https://arxiv.org/abs/2302.06590).
+[^3]: METR (Joel Becker, Nate Rush, Elizabeth Barnes, and David Rein), *Measuring the Impact of Early-2025 AI on Experienced Open-Source Developer Productivity* (2025). [metr.org](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) · [arXiv 2507.09089](https://arxiv.org/abs/2507.09089).
+[^4]: Kent Beck et al., *Principles behind the Agile Manifesto* (2001). [agilemanifesto.org](https://agilemanifesto.org/principles.html).
+[^5]: Madhava Krishna, Bhagesh Gaur, Arsh Verma, and Pankaj Jalote, *Using LLMs in Software Requirements Specifications: An Empirical Evaluation* (2024). [arXiv 2404.17842](https://arxiv.org/abs/2404.17842).
+[^6]: Asma Yamani, Malak Baslyman, and Moataz Ahmed, *Leveraging LLMs for User Stories in AI Systems: UStAI Dataset* (2025). [arXiv 2504.00513](https://arxiv.org/abs/2504.00513).
+[^7]: Haowei Cheng et al., *Generative AI for Requirements Engineering: A Systematic Literature Review* (2024). [arXiv 2409.06741](https://arxiv.org/abs/2409.06741).
+[^8]: Sirui Hong et al., *MetaGPT: Meta Programming for a Multi-Agent Collaborative Framework* (2023). [arXiv 2308.00352](https://arxiv.org/abs/2308.00352).
+[^9]: Ruiyin Li et al., *Bridging Requirements and Architecture: Multi-Agent Orchestration with External Knowledge and Hierarchical Memory* (2026). [arXiv 2606.01385](https://arxiv.org/abs/2606.01385).
+[^10]: Google Research, *Resolving Code Review Comments with Machine Learning* (2023). [research.google](https://research.google/blog/resolving-code-review-comments-with-ml/).
+[^11]: Sundar Pichai, Alphabet Q3 2024 earnings-call remarks — more than a quarter of new code at Google is AI-generated, then reviewed by engineers — as reported by Fortune (2024). [fortune.com](https://fortune.com/2024/10/30/googles-code-ai-sundar-pichai/).
+[^12]: Neil Perry, Megha Srivastava, Deepak Kumar, and Dan Boneh, *Do Users Write More Insecure Code with AI Assistants?* (CCS 2023). [arXiv 2211.03622](https://arxiv.org/abs/2211.03622).
+[^13]: Carlos E. Jimenez et al., *SWE-bench: Can Language Models Resolve Real-World GitHub Issues?* (2023). [arXiv 2310.06770](https://arxiv.org/abs/2310.06770) · leaderboard at [swebench.com](https://www.swebench.com/).
+[^14]: Niels Mündler, Mark Niklas Müller, Jingxuan He, and Martin Vechev, *SWT-Bench: Testing and Validating Real-World Bug-Fixes with Code Agents* (2024). [arXiv 2406.12952](https://arxiv.org/abs/2406.12952).
+[^15]: Reem Aleithan et al., *SWE-Bench+: Enhanced Coding Benchmark for LLMs* (2024). [arXiv 2410.06992](https://arxiv.org/abs/2410.06992).
+[^16]: Max Schäfer, Sarah Nadi, Aryaz Eghbali, and Frank Tip, *An Empirical Evaluation of Using Large Language Models for Automated Unit Test Generation* (2023). [arXiv 2302.06527](https://arxiv.org/abs/2302.06527).
+[^17]: GitClear (William Harding et al.), *AI Copilot Code Quality: 2025 Research* (2025). [gitclear.com](https://www.gitclear.com/ai_assistant_code_quality_2025_research).
+[^18]: Hammond Pearce et al., *Asleep at the Keyboard? Assessing the Security of GitHub Copilot's Code Contributions* (2021). [arXiv 2108.09293](https://arxiv.org/abs/2108.09293).
+[^19]: Cory Ondrejka, *Outcome Engineering — The o16g Manifesto* (2026). [o16g.com](https://o16g.com/manifesto/).
+[^20]: Onebrief, *Onebrief Hires Cory Ondrejka as Chief Technology Officer* (2026). [businesswire.com](https://www.businesswire.com/news/home/20260203520166/en/Onebrief-Hires-Cory-Ondrejka-as-Chief-Technology-Officer-to-Drive-Next-Gen-Command-Operating-System).
 
 ---
 

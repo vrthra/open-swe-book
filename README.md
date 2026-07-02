@@ -8,7 +8,7 @@ agile methods, how to discover and analyze requirements, how to design and archi
 modular systems, how to check and test code, and how to measure quality with metrics.
 
 It is organized as **twelve chapters and a team‑project appendix**, following the topic
-progression of the ACM/IEEE software‑engineering curriculum guidelines (SE2014/SEEK).
+progression of the ACM/IEEE software‑engineering curriculum guidelines (SE2014/SEEK).[^1]
 Every chapter consists of original explanatory prose rather than copied textbook
 material, and is paired with a curated map of **free or openly accessible resources** —
 MOOCs, university courseware, primary specifications, and papers; licenses vary and are
@@ -171,3 +171,8 @@ with `biblatex` you can move it to a `urldate`/`addendum` field instead.
 
 Text and figures are licensed **[CC BY‑SA 4.0](LICENSE)**; any code snippets are
 **MIT**. You are free to share and adapt with attribution. See [`LICENSE`](LICENSE).
+
+[^1]: ACM/IEEE‑CS Joint Task Force on Computing Curricula, *Software Engineering 2014:
+Curriculum Guidelines for Undergraduate Degree Programs in Software Engineering*
+(SE2014), which defines the SEEK body of knowledge.
+[acm.org/education/curricula-recommendations](https://www.acm.org/education/curricula-recommendations).

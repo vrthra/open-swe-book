@@ -41,9 +41,9 @@ measure your own process. You are being graded not only on the artifact but on t
 *engineering* that produced it.
 
 The third goal is **to learn to work as a team** — which is a skill, not a personality
-trait, and one that most employers value above raw coding ability. A team that
-communicates well and distributes work fairly will out-build a team of stronger
-individuals who do not.
+trait, and one that employers consistently rank among the attributes they most want to
+see in new graduates.[^1] A team that communicates well and distributes work fairly will
+out-build a team of stronger individuals who do not.
 
 > **Tip.** Pick a project you can *finish*, not one you can *imagine*. A scheduling tool
 > for a campus club that you complete, test, and measure teaches you more than an
@@ -96,10 +96,10 @@ architecture; it is a liability.
 **Psychological safety.** Cheap communication only happens where people feel safe doing
 it. **Psychological safety** is the shared belief that you can raise a problem, admit a
 mistake, or ask a "basic" question without being punished or embarrassed for it — and it
-is the research-backed foundation of team performance, not a soft nicety. Google's
-Project Aristotle, a multi-year study of hundreds of its own teams, found psychological
-safety the single strongest predictor of which teams performed well — ahead of who was on
-them. Its absence has recognizable symptoms: standups where everyone is silently "fine,"
+is the research-backed foundation of team performance, not a soft nicety.[^2] Google's
+Project Aristotle, a multi-year study of 180 of its own teams, found psychological
+safety the most important of the dynamics that set effective teams apart — ahead of who
+was on them.[^3] Its absence has recognizable symptoms: standups where everyone is silently "fine,"
 deadlines that arrive with surprises because nobody said they were behind, one teammate
 quietly redoing others' work instead of raising the issue. You build it with concrete
 habits, not slogans. Whoever is leading admits their own mistakes *first*, which licenses
@@ -109,7 +109,7 @@ work, never the person: "this function needs tests" opens a discussion; "you nev
 anything" closes one. The trust these habits produce has a name — **vulnerability-based
 trust**, built by admitting what you do not know — and it is precisely what this
 appendix's peer-feedback rituals (the visible board, the weekly log, the team reviews)
-are training you in.
+are training you in.[^4]
 
 **Conflict and uneven contribution.** Disagreement about *technical direction* is healthy
 and should be resolved with evidence: a spike, a small experiment, a look at the metrics.
@@ -223,7 +223,7 @@ By around week 7 your team delivers a **skeletal system** — a *walking skeleto
 reports on it. A walking skeleton is a tiny implementation that exercises the system
 **end to end**: a real request enters through the real interface, flows through each
 architectural layer, touches the real database or service, and produces a real response —
-but does almost nothing useful yet. If your app is a web tool, the skeleton might let a
+but does almost nothing useful yet.[^5] If your app is a web tool, the skeleton might let a
 user log in, create one empty record, and see it listed. That is all. The value is not in
 *what* it does but in the fact that *every connection is proven to work*.
 
@@ -344,6 +344,20 @@ value is usable, and account for the whole with evidence. Do them honestly and y
 finish the semester not just having read about software engineering, but having *done* it —
 on a team, under changing requirements, at a scale that would have defeated improvisation.
 That experience, more than any exam, is what makes an engineer.
+
+---
+
+### Sources
+
+[^1]: National Association of Colleges and Employers, *Job Outlook 2025* (2025). [naceweb.org](https://www.naceweb.org/docs/default-source/default-document-library/2025/publication/research-report/2025-nace-job-outlook-jan-2025.pdf).
+
+[^2]: Amy C. Edmondson, *Psychological Safety and Learning Behavior in Work Teams*, Administrative Science Quarterly 44(2) (1999). [doi.org](https://doi.org/10.2307/2666999).
+
+[^3]: Google re:Work, *Guide: Understand Team Effectiveness* (2016). [rework.withgoogle.com](https://rework.withgoogle.com/intl/en/guides/understand-team-effectiveness).
+
+[^4]: Patrick Lencioni, *The Five Dysfunctions of a Team* (2002). [tablegroup.com](https://www.tablegroup.com/vulnerability-based-trust/).
+
+[^5]: Alistair Cockburn, *Crystal Clear: A Human-Powered Methodology for Small Teams* (2004). [alistair.cockburn.us, archived](https://web.archive.org/web/20081017110100/http://alistair.cockburn.us/Walking+skeleton).
 
 ---
 

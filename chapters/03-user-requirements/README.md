@@ -113,7 +113,7 @@ when 200 clinics are active." Quality requirements are the ones teams most often
 because they are easy to state vaguely ("it should be fast") and hard to state testably
 ("p95 latency under 1s at 200 concurrent clinics"). The discipline is to attach a
 **measurable fit criterion** to every quality requirement, so that "done" is a fact and not
-an argument.
+an argument.[^1]
 
 ```mermaid
 flowchart TD
@@ -170,13 +170,13 @@ the person who has the answer in the room.
 The agile move is to shift requirements from a *document* to a *conversation plus a thin
 written reminder*. A user story (§3.4) is deliberately too short to be a full
 specification; it is a **promise to have a conversation** later, when the team is about to
-build it and knows the most it will ever know. This defers the detailed decisions to the
+build it and knows the most it will ever know.[^2] This defers the detailed decisions to the
 last responsible moment, when they are cheapest and best‑informed.
 
 > **Principle.** In agile work, the written requirement is a placeholder for a
 > conversation, not a substitute for it. The story reminds you *what* to talk about; the
 > value is created when the developer, the customer, and the tester talk it through
-> together — the "three amigos."
+> together — the "three amigos."[^3]
 
 ### 3.2.3 Plan-Driven Methods Validate a Specification
 
@@ -235,7 +235,7 @@ spot:
 - **Interviews.** Direct and flexible; great for stated needs and stakeholder goals. Blind
   spot: people rationalize and misremember what they actually do. What people *say* they do
   and what they *do* often differ.
-- **Observation (contextual inquiry).** Watch users do the real task in their real
+- **Observation (contextual inquiry).**[^4] Watch users do the real task in their real
   environment. Superb for tacit and implied needs — you see the sticky note on the monitor,
   the workaround, the double‑entry no one mentioned. Blind spot: expensive, and observation
   can change behavior.
@@ -276,7 +276,7 @@ you missed, and survey to prioritize what you found.
 **Frame the problem before the solution.** Users — and stakeholders — hand you *solutions*
 ("add a dropdown," "redesign the reports page"). A useful habit from Basecamp's *Shape Up*
 is to flip every such request from *"what should we build?"* back to **"what's really going
-wrong?"** — the specific moment in the workflow where today's experience fails. Two ideas
+wrong?"** — the specific moment in the workflow where today's experience fails.[^5] Two ideas
 sharpen that:
 
 - **The baseline** is what users do *today* without the feature. Stated plainly ("right now
@@ -309,7 +309,7 @@ is wrong, everything on top of it is wrong too.
 
 Satisfying stated needs makes a product *acceptable*. Delighting users — meeting latent
 needs they did not know to ask for — makes a product *loved*, and loved products win. A
-useful mental model here — the **Kano model**, developed fully in
+useful mental model here — the **Kano model**,[^6] developed fully in
 [§4.5](../04-requirements-analysis/#45-customer-satisfiers-and-dissatisfiers) —
 distinguishes categories of features by how user satisfaction responds to them:
 
@@ -357,7 +357,7 @@ conversational) and **system features** (larger capabilities that group related 
 
 A **user story** is a short statement of a need from a user's point of view, written to
 provoke a conversation rather than to settle every detail. The most widely used template,
-often called the **Connextra format** after the company that popularized it, is:
+often called the **Connextra format** after the company where it originated,[^7] is:
 
 > **As a** *&lt;role&gt;*, **I want** *&lt;capability&gt;*, **so that** *&lt;benefit&gt;*.
 
@@ -374,7 +374,7 @@ When a story's benefit clause is vague or circular ("...so that I can flag patie
 a warning that no one understands why the feature exists — and a feature no one can justify
 is a feature to cut.
 
-To judge whether a story is *ready* to build, teams use the **INVEST** checklist. A good
+To judge whether a story is *ready* to build, teams use the **INVEST** checklist.[^8] A good
 story is:
 
 - **I — Independent.** It can be built and shipped without depending on other stories being
@@ -411,9 +411,9 @@ example of the story working:
 > **When** the clinician opens the visit,
 > **Then** an interpreter‑needed banner is shown.
 
-This structured‑English format is called **Gherkin**, and it comes from **Behavior‑Driven
+This structured‑English format is called **Gherkin**,[^9] and it comes from **Behavior‑Driven
 Development (BDD)** — an approach that writes requirements as concrete examples of
-behavior, in language a customer can read. In a BDD workflow the scenarios live in plain
+behavior, in language a customer can read.[^10] In a BDD workflow the scenarios live in plain
 `.feature` files and look like this:
 
 ```gherkin
@@ -434,7 +434,7 @@ Feature: Interpreter alerts
 > **Why it matters.** The same words that specify the requirement can *run* as an
 > automated test. Tools such as **Cucumber**, **behave** (Python), **SpecFlow**/**Reqnroll**
 > (.NET), and **Jest‑Cucumber** map each `Given`/`When`/`Then` step to code, turning the
-> scenario into an **executable specification**. Write the scenarios with the customer,
+> scenario into an **executable specification**.[^11] Write the scenarios with the customer,
 > and they double as your **acceptance tests** (Chapter 9, [§9.2.3](../09-testing/#923-functional-system-and-acceptance-testing)).
 
 A few guidelines for good scenarios: keep them **declarative** (describe *what*, not which
@@ -564,7 +564,7 @@ brainstorming, because it refuses to let anything stay vague.
 
 A scenario is a story told in prose; a **storyboard** is the same story told in pictures —
 a short sequence of rough sketches, one frame per step, showing what the user sees and
-does at each moment. Borrowed from film, storyboarding earns its place in requirements
+does at each moment. Borrowed from film,[^12] storyboarding earns its place in requirements
 work because a drawing forces decisions that a sentence lets you dodge: what is actually
 *on* the screen when Priya searches? Where does the *pending‑insurance* flag appear? What
 does she tap? If you cannot draw the frame, you have not yet imagined the requirement.
@@ -610,7 +610,7 @@ Good goals share properties that make them useful for reasoning:
 - **A goal can be satisfied to a degree.** Unlike a functional requirement (done or not),
   many goals — especially quality goals like "fast" or "secure" — are matters of *more or
   less*. These are sometimes called **soft goals**, and you satisfy them by argument and
-  measurement, not by a checkbox.
+  measurement, not by a checkbox.[^13]
 - **A goal is measurable, at least in principle.** "Reduce no‑shows to under 8%" can be
   checked against reality. A goal you cannot measure even in principle is a slogan, and it
   will not help you decide anything.
@@ -641,7 +641,7 @@ hierarchy of the next section.
 Asking "why" moves you toward broader goals; asking "how" moves you toward narrower ones.
 Do this systematically and goals organize into a **goal hierarchy** (or goal tree): a
 high‑level goal at the top, refined downward into sub‑goals, and finally into concrete
-features and stories at the leaves. The tree makes the *rationale* of your backlog visible
+features and stories at the leaves.[^13] The tree makes the *rationale* of your backlog visible
 — every leaf traces up to a goal someone owns, and every goal traces down to work that
 serves it.
 
@@ -713,7 +713,7 @@ trying to break your system.
 
 ### 3.7.1 Attack Trees: Think Like an Attacker
 
-An **attack tree** is a goal hierarchy for the enemy. The root is the attacker's goal —
+An **attack tree** is a goal hierarchy for the enemy.[^14] The root is the attacker's goal —
 "read a patient's medical record without authorization." The branches are the ways to
 achieve it, refined downward into ever more concrete attacks, exactly as a goal tree refines
 a user goal into stories. The power of the technique is that it forces *systematic*
@@ -757,7 +757,7 @@ otherwise miss:
 - **Use a threat checklist.** A common one groups threats as **STRIDE**: *Spoofing*
   (pretending to be someone), *Tampering* (altering data), *Repudiation* (denying an
   action), *Information disclosure* (leaking data), *Denial of service* (blocking access),
-  and *Elevation of privilege* (gaining rights you shouldn't have). Walking each category
+  and *Elevation of privilege* (gaining rights you shouldn't have).[^15] Walking each category
   against each asset surfaces branches brainstorming misses.
 - **Attack the humans and the process, not just the code.** The cheapest attack is often a
   convincing phone call to the front desk. Social engineering, weak password‑reset flows,
@@ -800,6 +800,40 @@ called engineering discipline, applied to the hardest question a project faces: 
 build it, but *what* to build. The next chapters take these requirements and turn them into
 plans, designs, and tests — but each of those inherits the quality of the understanding you
 build here.
+
+---
+
+### Sources
+
+[^1]: Suzanne Robertson & James Robertson, *Volere Requirements Specification Template* (Atlantic Systems Guild). [volere.org](https://www.volere.org/templates/volere-requirements-specification-template/).
+
+[^2]: Ron Jeffries, *Essential XP: Card, Conversation, Confirmation* (2001). [ronjeffries.com](https://ronjeffries.com/xprog/articles/expcardconversationconfirmation/).
+
+[^3]: Agile Alliance, *Three Amigos* (glossary entry; term credited to George Dinwiddie). [agilealliance.org](https://agilealliance.org/glossary/three-amigos/).
+
+[^4]: Hugh Beyer & Karen Holtzblatt, *Contextual Design: Defining Customer-Centered Systems* (Morgan Kaufmann, 1998). [dl.acm.org](https://dl.acm.org/doi/10.5555/286067).
+
+[^5]: Ryan Singer, *Shape Up*, ch. "Set Boundaries" (Basecamp, 2019). [basecamp.com/shapeup](https://basecamp.com/shapeup/1.2-chapter-03).
+
+[^6]: Noriaki Kano, Nobuhiku Seraku, Fumio Takahashi & Shin-ichi Tsuji, "Attractive Quality and Must-Be Quality," *Journal of the Japanese Society for Quality Control* 14(2) (1984). [jstage.jst.go.jp](https://www.jstage.jst.go.jp/article/quality/14/2/14_KJ00002952366/_article/-char/en).
+
+[^7]: Mike Cohn, *Why the Three-Part User Story Template Works So Well* (Mountain Goat Software; credits the template to Rachel Davies and the Connextra team, early 2000s). [mountaingoatsoftware.com](https://www.mountaingoatsoftware.com/blog/why-the-three-part-user-story-template-works-so-well).
+
+[^8]: Bill Wake, *INVEST in Good Stories, and SMART Tasks* (2003). [xp123.com](https://xp123.com/invest-in-good-stories-and-smart-tasks/).
+
+[^9]: Cucumber, *Gherkin Reference* (documentation). [cucumber.io](https://cucumber.io/docs/gherkin/reference/).
+
+[^10]: Dan North, "Introducing BDD," *Better Software* (2006). [dannorth.net](https://dannorth.net/introducing-bdd/).
+
+[^11]: Cucumber, *Behaviour-Driven Development* (documentation). [cucumber.io](https://cucumber.io/docs/bdd/).
+
+[^12]: Interaction Design Foundation, *What are Storyboards?* (traces storyboarding to Walt Disney Studios in the 1930s). [interaction-design.org](https://www.interaction-design.org/literature/topics/storyboards).
+
+[^13]: Axel van Lamsweerde, "Goal-Oriented Requirements Engineering: A Guided Tour," *Proceedings of RE'01* (IEEE, 2001). [author PDF](https://webperso.info.ucl.ac.be/~avl/files/RE01.pdf).
+
+[^14]: Bruce Schneier, "Attack Trees," *Dr. Dobb's Journal* (1999). [schneier.com](https://www.schneier.com/academic/archives/1999/12/attack_trees.html).
+
+[^15]: Microsoft, *The STRIDE model* (Microsoft Threat Modeling Tool documentation). [learn.microsoft.com](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats).
 
 ---
 

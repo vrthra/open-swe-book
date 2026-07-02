@@ -23,7 +23,7 @@ anything, walk the requirement against a **checklist** of questions you have lea
 hard way, to ask. Checklists convert hard-won experience into a procedure that a tired
 person can follow at 4 p.m. without heroics. Atul Gawande's surgeons and Boeing's pilots
 rely on them for the same reason engineers should: not because the steps are difficult,
-but because *skipping* one is easy and expensive.
+but because *skipping* one is easy and expensive.[^1]
 
 A requirement is ready to be estimated only when you can answer questions like these:
 
@@ -51,9 +51,9 @@ retrospective is a candidate for a new line.
 
 ## 4.2 Relative Estimation: Iteration Planning
 
-Humans are notoriously bad at estimating absolute quantities — ask someone how many
-minutes a task will take and the answer is close to random. But we are surprisingly good
-at **relative** judgments: *this task is about twice as big as that one.* Relative
+Humans are notoriously bad at estimating absolute quantities — ask people how many
+minutes a task will take and the answers vary widely. But we are surprisingly good
+at **relative** judgments: *this task is about twice as big as that one.*[^2] Relative
 estimation exploits that strength. Instead of asking "how many hours?", you ask "how big
 is this compared to something we already understand?" This is the foundation of agile
 iteration planning.
@@ -62,9 +62,9 @@ iteration planning.
 
 Before we use numbers, respect how easily they mislead. **Anchoring** is a cognitive bias:
 the first number mentioned drags every subsequent estimate toward it, even when it is
-arbitrary. In a famous demonstration, people asked whether Gandhi died before or after age
-144 later guessed a much higher age at death than people asked about age 9 — the absurd
-anchor still pulled them.
+arbitrary.[^3] In a famous demonstration, people asked whether Gandhi died before or after age
+140 later guessed a much higher age at death than people asked about age 9 — the absurd
+anchor still pulled them.[^4]
 
 On a team, anchoring is everywhere. The lead says "this should take about three days," and
 suddenly no one estimates two or eight; the whole discussion orbits three. The sponsor
@@ -79,7 +79,7 @@ one.
 
 ### 4.2.2 Agile Story Points
 
-A **story point** is a unit of *relative size*, not time. When you say a story is 5 points
+A **story point** is a unit of *relative size*, not time.[^2] When you say a story is 5 points
 and another is 2, you are claiming the first is about two-and-a-half times as much work —
 accounting for effort, complexity, and uncertainty together. Points deliberately hide the
 hours, which frees the team from false precision and from the anchoring trap of committing
@@ -87,7 +87,7 @@ to a clock.
 
 Most teams draw point values from a restricted scale — commonly a Fibonacci-like sequence:
 
-> **1, 2, 3, 5, 8, 13, 20, 40, 100**
+> **1, 2, 3, 5, 8, 13, 20, 40, 100**[^5]
 
 The gaps widen on purpose. You can tell a 2 from a 3, but no one can honestly tell a 21
 from a 22, so the scale refuses to offer that false choice. A large gap also sends a
@@ -125,7 +125,7 @@ estimate bottom-up, usually with the formal models of §4.6.
 ### 4.2.3 Velocity of Work
 
 Points become a *forecasting* tool the moment you measure **velocity** — the number of
-points a team actually completes in one iteration (sprint). Velocity is measured, not
+points a team actually completes in one iteration (sprint).[^2] Velocity is measured, not
 decreed: you finish a sprint, add up the points of the stories that met the definition of
 done, and that sum is your velocity for that sprint. Only *completed* work counts; a story
 that is 90% done contributes zero, because 90%-done software delivers 0% of its value and
@@ -172,7 +172,7 @@ flowchart LR
 
 Everything so far *estimates* work: you look at a feature and ask "how big is this?" There
 is a provocative alternative from **Shape Up** (Basecamp's product‑development method):
-don't estimate at all — set an **appetite**.
+don't estimate at all — set an **appetite**.[^6]
 
 An estimate and an appetite point in opposite directions:
 
@@ -184,7 +184,7 @@ An estimate and an appetite point in opposite directions:
 An appetite is a **budget, not a prediction.** It flips the iron triangle (Chapter 1):
 instead of fixing scope and letting time flex, you **fix time and let scope flex**. The
 deadline is a **circuit breaker** — when the budget runs out, you ship what you have or
-drop the project; you do *not* automatically extend it. That hard stop is what forces the
+drop the project; you do *not* automatically extend it.[^6] That hard stop is what forces the
 important trade‑offs to happen *early* instead of in a panic at the end.
 
 > **Principle.** Fixed time, variable scope. A budget you cannot exceed turns "how long
@@ -198,7 +198,7 @@ Making that work requires two disciplines:
   is this a pre‑existing problem we don't have to solve now?* This is sharper than the
   passive "cut if we have time" — you go looking for things to cut. Mark genuinely
   optional work as **nice‑to‑haves** (Shape Up prefixes them with a "~") and let them fall
-  off the edge of the budget without guilt. It connects directly to MoSCoW
+  off the edge of the budget without guilt.[^6] It connects directly to MoSCoW
   prioritization (§4.4.1): the appetite is the box, and MoSCoW decides what goes in it.
 - **Judge against the baseline, not the ideal.** "Is it good enough to ship?" has no
   answer against a perfect vision — software is never done by that standard. Ask instead:
@@ -210,7 +210,7 @@ Making that work requires two disciplines:
 Shape Up's insight is to reduce the *variance* of a project before committing: a
 well‑understood project has a **thin‑tailed** duration (it lands near its appetite),
 while one hiding an unsolved design problem or an untested technical assumption — a
-**rabbit hole** — has a **fat tail** (it can run 3× over). You de‑risk *before* betting by
+**rabbit hole** — has a **fat tail** (it can run 3× over).[^6] You de‑risk *before* betting by
 finding those rabbit holes and either solving them or ruling them out of scope. (This is
 the shaping work discussed as a process in Chapter 2, [§2.8](../02-software-development-processes/#28-shape-up-fixed-time-variable-scope).)
 
@@ -235,13 +235,13 @@ that.
 
 **Wideband Delphi** (Barry Boehm's adaptation of the classic Delphi method for software) is
 a structured cycle: experts estimate privately, the estimates are revealed together, the
-outliers *explain their reasoning*, and everyone re-estimates. The magic is in that middle
+outliers *explain their reasoning*, and everyone re-estimates.[^7] The magic is in that middle
 step — the person who guessed 13 when everyone else guessed 3 usually knows something the
 others don't ("that feature needs a HIPAA audit log"), or has misunderstood the story.
 Either way, surfacing the *reason* — not splitting the difference — is what improves the
 estimate.
 
-**Planning Poker** is Wideband Delphi made fast and fun for agile teams. Each estimator
+**Planning Poker** is Wideband Delphi made fast and fun for agile teams.[^8] Each estimator
 holds a deck of cards printed with the point scale (1, 2, 3, 5, 8, 13, …). For each story:
 
 1. The product owner reads the story and answers questions.
@@ -252,7 +252,7 @@ holds a deck of cards printed with the point scale (1, 2, 3, 5, 8, 13, …). For
 5. If they diverge, the **highest and lowest** estimators explain their thinking. Then the
    team re-votes.
 
-Repeat until the estimates converge — usually in two or three rounds. Here is a walkthrough
+Repeat until the estimates converge — usually in two or three rounds.[^5] Here is a walkthrough
 for the SMS-reminders story:
 
 > **Round 1.** Cards flip: 3, 5, 5, **13**. The 13 is an outlier. The developer who played
@@ -275,9 +275,9 @@ the point value is a by-product.
 
 Planning Poker's ancestor is the **Delphi method**, developed at the RAND Corporation in
 the 1950s to forecast the effects of technology on warfare — questions with no data and no
-experts who could be safely gathered in one room. Its designers, Olaf Helmer and Norman
+experts who could be safely gathered in one room.[^9] Its designers, Olaf Helmer and Norman
 Dalkey, identified a real problem with panels: face-to-face groups are distorted by
-seniority, volume, and the bandwagon effect. People converge on the boss's view, or on
+seniority, volume, and the bandwagon effect.[^10] People converge on the boss's view, or on
 whoever spoke first and loudest — the anchoring bias of §4.2.1, weaponized by social
 pressure.
 
@@ -307,7 +307,7 @@ or money (and you will), you want the *unfinished* work to be the *least* import
 ### 4.4.1 Must-Should-Could-Won't (MoSCoW) Prioritization
 
 **MoSCoW** — from the DSDM agile framework — sorts requirements into four blunt but
-powerful buckets. The capital letters spell the name; the lowercase o's are filler.
+powerful buckets.[^11] The capital letters spell the name; the lowercase o's are filler.
 
 - **Must have.** Non-negotiable. Without it the release is useless or illegal. If a Must
   slips, you slip the release.
@@ -327,7 +327,7 @@ powerful buckets. The capital letters spell the name; the lowercase o's are fill
 | Multi-language UI                    | Won't (yet) | No current demand; revisit next quarter    |
 
 A healthy release is mostly *Should* and *Could*, with *Musts* held to roughly **60% or
-less** of the total effort. Why the cap? Because if every item is a Must, you have no
+less** of the total effort.[^11] Why the cap? Because if every item is a Must, you have no
 flexibility — the first delay forces a broken promise. The *Coulds* are the shock absorber
 that lets you hit the date with something shippable. A backlog with no Coulds is a plan with
 no margin.
@@ -406,7 +406,7 @@ safer, comfier features.
 
 Industry has named two widely used variants of this same idea. **WSJF (Weighted Shortest
 Job First)** prioritizes by *cost of delay ÷ job size* — how much you lose per unit time
-by not having the feature, divided by how big it is. The (value + risk) ÷ cost ranking
+by not having the feature, divided by how big it is.[^12] The (value + risk) ÷ cost ranking
 above is a WSJF-family scheme: value and risk stand in for cost of delay, and story
 points for job size. The **risk–value matrix** trades the arithmetic for a 2×2 quadrant
 view: plot each feature by value and risk, then read the strategy off the quadrants —
@@ -430,7 +430,7 @@ tell them apart.
 ### 4.5.1 Kano Analysis
 
 In the 1980s, Noriaki Kano challenged the assumption that customer satisfaction rises
-linearly with how much you deliver. He showed that satisfaction depends on the *kind* of
+linearly with how much you deliver.[^13] He showed that satisfaction depends on the *kind* of
 feature, and that you learn the kind by asking customers **two** questions about each one:
 
 - The **functional** question: "How do you feel if this feature is *present*?"
@@ -443,7 +443,7 @@ never distinguish these; the two-question structure is Kano's central methodolog
 
 ### 4.5.2 Classification of Features
 
-Kano's questions sort features into categories. The three that matter most for planning:
+Kano's questions sort features into categories.[^13] The three that matter most for planning:
 
 - **Must-be (basic) qualities.** Expected, unspoken, taken for granted. Their presence earns
   *nothing* — no one thanks you — but their absence causes strong dissatisfaction. For the
@@ -490,7 +490,7 @@ out** — but never chase Delighters while a Must-be is still broken.
 
 ### 4.5.3 Life Cycles of Attractiveness
 
-Kano's subtlest insight is that categories **decay over time**. Yesterday's delighter is
+Kano's subtlest insight is that categories **decay over time**.[^14] Yesterday's delighter is
 today's expectation and tomorrow's basic requirement. A front-facing camera on a phone was
 once an *attractive* surprise; then, as every phone had one, it became a *performance*
 feature (megapixels mattered); now it is a *must-be* — ship a phone without one and you have
@@ -536,11 +536,11 @@ and every engineer should understand how they work.
 ### 4.6.1 How Are Size and Effort Related?
 
 The intuitive guess is that effort scales *linearly* with size: twice the code, twice the
-work. Decades of project data say otherwise. Effort grows **faster than linearly** —
+work. Decades of project data say otherwise.[^7] Effort grows **faster than linearly** —
 *super-linearly* — because of communication and integration overhead. A program twice as
 big has more than twice as many interactions between its parts, and a team twice as big has
 *far* more than twice as many communication paths (recall Brooks: *n* people have *n(n−1)/2*
-channels). Complexity compounds.
+channels).[^15] Complexity compounds.
 
 Models capture this with a **power law**:
 
@@ -551,19 +551,19 @@ where **Size** is measured in thousands of lines of code (**KLOC**) or function 
 term. If *b* = 1, effort is linear. Real projects show **b slightly greater than 1**
 (typically 1.05–1.2), which is the mathematical signature of *diseconomy of scale*: unlike
 building identical widgets, where bigger batches get cheaper per unit, bigger software costs
-*more* per line. Doubling the size more than doubles the effort. That single fact — that
-software exhibits diseconomies of scale — is one of the strongest empirical regularities in
-the field, and it is the reason "just add more code" and "just add more people" both
-disappoint.
+*more* per line.[^7] Doubling the size more than doubles the effort. That single fact — that
+software exhibits diseconomies of scale — is the reason "just add more code" and "just add
+more people" both disappoint.
 
 ### 4.6.2 The Cocomo Family of Estimation Models
 
 The best-known plan-driven model is **COCOMO** (the COnstructive COst MOdel), published by
-Barry Boehm in 1981 and revised as **COCOMO II** in the 1990s. It is a family of power-law
+Barry Boehm in 1981[^7] and revised as **COCOMO II** in the 1990s.[^16] It is a family of power-law
 equations calibrated on real project data, and it makes the abstract "Effort = a × Size^b"
 concrete.
 
-The original **Basic COCOMO** used three settings for *a* and *b* depending on project type:
+The original **Basic COCOMO** used three settings for *a* and *b* depending on project
+type:[^7]
 
 | Project type   | Description                                     |    a |    b |
 |----------------|-------------------------------------------------|-----:|-----:|
@@ -596,10 +596,10 @@ you can put in a proposal.
 
 COCOMO also estimates **schedule** (calendar months) from effort, again as a power law
 (roughly Time ≈ 2.5 × Effort^0.38 for the basic organic case), which lets you derive team
-size: dividing effort by schedule gives the average staff needed. **COCOMO II** refines all
+size: dividing effort by schedule gives the average staff needed.[^7] **COCOMO II** refines all
 of this with size in function points, *scale factors* for team maturity and requirements
 volatility, and seventeen *effort multipliers* for things like personnel skill and tool
-support — but the beating heart is still Effort = a × Size^b.
+support — but the beating heart is still Effort = a × Size^b.[^16]
 
 > **Pitfall.** A COCOMO estimate is only as good as its *size* input, and estimating KLOC
 > before you have written the code is itself hard and error-prone — you have pushed the
@@ -633,6 +633,27 @@ signal to go learn more. Above all, remember the through-line from Chapter 1: es
 exist to make trade-offs **visible and negotiable** — scope, cost, and time argued in the
 open, with data, rather than settled by whoever talks loudest. That is the difference
 between a promise and a hope.
+
+---
+
+### Sources
+
+[^1]: Atul Gawande, *The Checklist Manifesto: How to Get Things Right* (Metropolitan Books, 2009). [atulgawande.com](https://atulgawande.com/book/the-checklist-manifesto/).
+[^2]: Mike Cohn, *Agile Estimating and Planning* (Prentice Hall, 2005). [mountaingoatsoftware.com](https://www.mountaingoatsoftware.com/books/agile-estimating-and-planning).
+[^3]: Amos Tversky and Daniel Kahneman, "Judgment under Uncertainty: Heuristics and Biases," *Science* 185(4157) (1974). [science.org](https://www.science.org/doi/10.1126/science.185.4157.1124).
+[^4]: Fritz Strack and Thomas Mussweiler, "Explaining the Enigmatic Anchoring Effect: Mechanisms of Selective Accessibility," *Journal of Personality and Social Psychology* 73(3) (1997). [doi.org](https://doi.org/10.1037/0022-3514.73.3.437).
+[^5]: Mountain Goat Software (Mike Cohn), "Planning Poker: An Agile Estimating and Planning Technique." [mountaingoatsoftware.com](https://www.mountaingoatsoftware.com/agile/planning-poker).
+[^6]: Ryan Singer, *Shape Up: Stop Running in Circles and Ship Work that Matters* (Basecamp, 2019). [basecamp.com/shapeup](https://basecamp.com/shapeup).
+[^7]: Barry W. Boehm, *Software Engineering Economics* (Prentice-Hall, 1981). [dl.acm.org](https://dl.acm.org/doi/10.5555/539425).
+[^8]: James Grenning, "Planning Poker or How to Avoid Analysis Paralysis While Release Planning" (2002). [wingman-sw.com](https://wingman-sw.com/papers/PlanningPoker-v1.1.pdf). Popularized by Mike Cohn in *Agile Estimating and Planning* (2005).
+[^9]: RAND Corporation, "Delphi Method" (topic overview). [rand.org](https://www.rand.org/topics/delphi-method.html).
+[^10]: Norman Dalkey and Olaf Helmer, "An Experimental Application of the Delphi Method to the Use of Experts," *Management Science* 9(3) (1963); RAND memorandum RM-727/1. [rand.org](https://www.rand.org/pubs/research_memoranda/RM727z1.html).
+[^11]: Agile Business Consortium, "MoSCoW Prioritisation," *DSDM Agile Project Framework Handbook* (2014). [agilebusiness.org](https://www.agilebusiness.org/dsdm-project-framework/moscow-prioritisation.html).
+[^12]: Donald G. Reinertsen, *The Principles of Product Development Flow: Second Generation Lean Product Development* (Celeritas, 2009); the cost-of-delay ÷ job-size form follows Scaled Agile's WSJF. [scaledagile.com](https://framework.scaledagile.com/wsjf).
+[^13]: Noriaki Kano, Nobuhiko Seraku, Fumio Takahashi, and Shinichi Tsuji, "Attractive Quality and Must-Be Quality," *Journal of the Japanese Society for Quality Control* 14(2) (1984). [doi.org](https://doi.org/10.20684/quality.14.2_147).
+[^14]: Noriaki Kano, "Life Cycle and Creation of Attractive Quality," *Proceedings of the 4th International QMOD Conference* (2001). [semanticscholar.org](https://www.semanticscholar.org/paper/Life-Cycle-and-Creation-of-Attractive-Quality-Kano/488788f1b49e92ee9ffb3bae6164c24374e1b2e4).
+[^15]: Frederick P. Brooks, Jr., *The Mythical Man-Month: Essays on Software Engineering* (Addison-Wesley, 1975; anniversary ed. 1995). [informit.com](https://www.informit.com/store/mythical-man-month-essays-on-software-engineering-anniversary-9780201835953).
+[^16]: Barry Boehm et al., *COCOMO II Model Definition Manual, version 2.1* (USC Center for Software Engineering, 2000). [rose-hulman.edu mirror](https://www.rose-hulman.edu/class/csse/csse372/201410/Homework/CII_modelman2000.pdf).
 
 ---
 

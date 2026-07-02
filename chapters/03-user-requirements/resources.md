@@ -13,9 +13,24 @@ text · 🎓 course · 📄 primary source/standard · 🎥 video. Licenses vary
   [agilealliance.org/glossary/invest](https://www.agilealliance.org/glossary/invest/).
   The canonical short definition of Independent/Negotiable/Valuable/Estimable/Small/
   Testable, with links to Bill Wake's original 2003 article.
+- 📄 **Bill Wake — "INVEST in Good Stories, and SMART Tasks" (2003)** —
+  [xp123.com](https://xp123.com/invest-in-good-stories-and-smart-tasks/). The original
+  article that coined the INVEST checklist (§3.4.1). Free to read on the author's site.
+- 📄 **Ron Jeffries — "Essential XP: Card, Conversation, Confirmation" (2001)** —
+  [ronjeffries.com](https://ronjeffries.com/xprog/articles/expcardconversationconfirmation/).
+  The classic statement that a story card is a token for a conversation, confirmed by
+  acceptance tests — the "three Cs" behind §3.2.2. Free on the author's site.
+- 📄 **Agile Alliance — "Three Amigos" (glossary)** —
+  [agilealliance.org/glossary/three-amigos](https://agilealliance.org/glossary/three-amigos/).
+  Short definition of the business/developer/tester conversation used in §3.2.2; credits
+  the term to George Dinwiddie. Freely accessible.
 - 📘 **Mountain Goat Software — User Stories & story writing (Mike Cohn)** —
   [mountaingoatsoftware.com/agile/user-stories](https://www.mountaingoatsoftware.com/agile/user-stories).
   Free articles on story structure, splitting epics, and acceptance criteria.
+- 📄 **Mike Cohn — "Why the Three-Part User Story Template Works So Well"** —
+  [mountaingoatsoftware.com](https://www.mountaingoatsoftware.com/blog/why-the-three-part-user-story-template-works-so-well).
+  Free article on the *as a… I want… so that* template; credits its origin to Rachel
+  Davies and the team at Connextra (§3.4.1).
 
 ## Gherkin, Given/When/Then, and BDD
 
@@ -52,30 +67,41 @@ text · 🎓 course · 📄 primary source/standard · 🎥 video. Licenses vary
 ## Eliciting and prioritizing needs
 
 - 📄 **Noriaki Kano — the Kano model of customer satisfaction.** The origin of the
-  must‑be / performance / delighter distinction used in §3.3.3. Openly summarized in many
-  free write‑ups; search "Kano model must-be attractive one-dimensional" for primary‑style
-  explanations and the original 1984 study "Attractive Quality and Must‑Be Quality."
+  must‑be / performance / delighter distinction used in §3.3.3. The original 1984 study,
+  Kano, Seraku, Takahashi & Tsuji, "Attractive Quality and Must‑Be Quality" (*Journal of
+  the Japanese Society for Quality Control* 14(2)), is archived on
+  [J‑STAGE](https://www.jstage.jst.go.jp/article/quality/14/2/14_KJ00002952366/_article/-char/en)
+  (abstract free; article in Japanese). Openly summarized in many free write‑ups.
+- 📄 **Hugh Beyer & Karen Holtzblatt — *Contextual Design: Defining Customer‑Centered
+  Systems* (Morgan Kaufmann, 1998)** — [dl.acm.org](https://dl.acm.org/doi/10.5555/286067).
+  The book that defined *contextual inquiry*, the field‑observation technique behind
+  §3.3.2. The book is commercial; the ACM listing and many summaries are freely accessible.
 - 🎓 **Interaction Design Foundation — user research & personas (free article set)** —
   [interaction-design.org/literature](https://www.interaction-design.org/literature).
   Open articles on contextual inquiry, interviews, and persona/scenario writing that back
   §3.3 and §3.5.
+- 🎓 **Interaction Design Foundation — "What are Storyboards?"** —
+  [interaction-design.org/literature/topics/storyboards](https://www.interaction-design.org/literature/topics/storyboards).
+  Open topic page on storyboarding in design, including its film origins at Walt Disney
+  Studios in the 1930s (§3.5.3).
 
 ## Goals and goal modeling
 
 - 📄 **Axel van Lamsweerde — goal‑oriented requirements engineering (KAOS).** The academic
   foundation for goal hierarchies, soft goals, and contributing/conflicting goals (§3.6).
-  His tutorial papers (e.g., "Goal‑Oriented Requirements Engineering: A Guided Tour") are
-  posted openly on university and author pages — search the title for a free PDF.
+  His tutorial paper "Goal‑Oriented Requirements Engineering: A Guided Tour" (RE'01, IEEE)
+  is posted openly by the author:
+  [webperso.info.ucl.ac.be/~avl/files/RE01.pdf](https://webperso.info.ucl.ac.be/~avl/files/RE01.pdf).
 
 ## Security requirements and attack trees
 
 - 📄 **Bruce Schneier — "Attack Trees"** (*Dr. Dobb's Journal*, 1999) —
   [schneier.com/academic/archives/1999/12/attack_trees.html](https://www.schneier.com/academic/archives/1999/12/attack_trees.html).
   The original, very readable introduction to modeling threats as trees (§3.7).
-- 📄 **Microsoft — The STRIDE threat model** — documented across Microsoft's open security
-  engineering guidance; search "Microsoft STRIDE threat modeling." Explains the six threat
-  categories (Spoofing, Tampering, Repudiation, Information disclosure, Denial of service,
-  Elevation of privilege) used in §3.7.2.
+- 📄 **Microsoft — The STRIDE threat model** — Microsoft Threat Modeling Tool docs,
+  [learn.microsoft.com](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats).
+  Explains the six threat categories (Spoofing, Tampering, Repudiation, Information
+  disclosure, Denial of service, Elevation of privilege) used in §3.7.2. Freely accessible.
 - 📄 **OWASP — Threat Modeling & Application Security Verification Standard (ASVS)** —
   [owasp.org/www-community/Threat_Modeling](https://owasp.org/www-community/Threat_Modeling).
   Free, community‑licensed guidance and checklists for turning threats into concrete

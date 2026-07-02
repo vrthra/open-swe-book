@@ -15,8 +15,8 @@ The single hardest thing to make real in a classroom project is the **gap betwee
 customer and the developers**. When a team builds its own idea, requirements work becomes
 theater: everyone already "knows" what the product should do, elicitation is a
 conversation with yourself, and acceptance means grading your own homework. Courses solve
-this in different ways — some recruit external or industrial customers, some rotate a
-customer role among students each sprint. This variant uses a **swap**:
+this in different ways — some recruit external or industrial customers,[^1] some rotate a
+customer role among students each sprint.[^2] This variant uses a **swap**:
 
 - Every team **authors a project pitch** — and *another team builds it*.
 - Every team **is assigned a different team's pitch** — and builds *that*, all semester.
@@ -67,7 +67,7 @@ with two events:
 - **Demo Day** — the sprint review of
   [§2.2.3](../02-software-development-processes/#223-scrum-events): the team demonstrates
   the deployed system to the class and to its customer, and the feedback goes straight
-  into the next sprint's backlog.
+  into the next sprint's backlog.[^3]
 - **A team and customer review** — the retrospective half of the cycle, recorded with the
   [team review template](../../templates/team-review.md), plus peer evaluations.
 
@@ -107,10 +107,10 @@ The exact weeks flex with a given calendar (breaks, exams); what does not flex i
 
 | Sprint | Deliverable | Read first | Done means |
 |--------|-------------|------------|------------|
-| **0-0** | **Idea pitches — customer hat.** Every member pitches at least one project idea in Shape Up pitch form: problem, appetite, rough solution, rabbit holes, no-gos. You are writing the pitch **another team will build**; you will be its customer. | [§2.8](../02-software-development-processes/#28-shape-up-fixed-time-variable-scope) on pitches and appetite | Each [idea pitch](../../templates/idea-pitch.md) names a real, reachable user, fits on a page, and is clear enough for strangers to build from. |
+| **0-0** | **Idea pitches — customer hat.** Every member pitches at least one project idea in Shape Up pitch form: problem, appetite, rough solution, rabbit holes, no-gos.[^4] You are writing the pitch **another team will build**; you will be its customer. | [§2.8](../02-software-development-processes/#28-shape-up-fixed-time-variable-scope) on pitches and appetite | Each [idea pitch](../../templates/idea-pitch.md) names a real, reachable user, fits on a page, and is clear enough for strangers to build from. |
 | **0-1** | **The swap + selection.** Pitches are exchanged across teams (however your course assigns them). The developer team reads its assigned pitch, meets its customer, and records scope decisions — what the first version will and won't attempt, and why ([§4.4.3](../04-requirements-analysis/#443-balancing-value-cost-and-risk)) — then completes the proposal (§A.2) *with the customer's sign-off*. | [§3.1](../03-user-requirements/#31-what-is-a-requirement) — you are now on the far side of the requirements gap | [Project proposal](../../templates/project-proposal.md) + decision notes, acknowledged by the customer team. |
 | **0-2** | **User stories + lo-fi UI — elicited, not invented.** The first backlog as INVEST-shaped stories with **Gherkin acceptance criteria** ([§3.4.1](../03-user-requirements/#341-guidelines-for-effective-user-stories)), plus storyboards of the main flows ([§3.5.3](../03-user-requirements/#353-storyboards-drawing-the-scenario)) — built from interviews with your customer team, and walked past them before it counts. | [§3.3](../03-user-requirements/#33-eliciting-user-needs) on elicitation; [§3.4–3.5](../03-user-requirements/#34-writing-requirements-stories-and-features) | Must-have stories are testable and customer-prioritized; a stranger can follow the sketched flow. |
-| **0-3** | **Initial view, DEPLOYED.** The walking skeleton of §A.3: one thin path, end to end, live on a real URL — "get one piece done" ([§2.8](../02-software-development-processes/#28-shape-up-fixed-time-variable-scope)). | §A.3; [Chapter 12](../12-delivery/) on deployment | [Status report](../../templates/status-report.md) 1; a grader can open the URL and exercise one real path. |
+| **0-3** | **Initial view, DEPLOYED.** The walking skeleton of §A.3: one thin path, end to end, live on a real URL — "get one piece done" ([§2.8](../02-software-development-processes/#28-shape-up-fixed-time-variable-scope)).[^5] | §A.3; [Chapter 12](../12-delivery/) on deployment | [Status report](../../templates/status-report.md) 1; a grader can open the URL and exercise one real path. |
 
 ## Sprints 1–4: build cycles with a hardening arc
 
@@ -192,10 +192,10 @@ Demo Day is the sprint review, and four rules keep it honest:
 
 Each sprint is a **fixed two-week box**: time and team size are constants, so scope is
 the only variable
-([§4.2.4](../04-requirements-analysis/#424-appetite-fixed-time-variable-scope)). Plan
+([§4.2.4](../04-requirements-analysis/#424-appetite-fixed-time-variable-scope)).[^6] Plan
 each sprint by appetite — "what is the best version of this we can demo in two weeks?" —
 rather than by estimate. When the box gets tight, practice **scope hammering**: shrink
-the task, not the deadline. Mark nice-to-haves with a `~` on your board when you write
+the task, not the deadline.[^7] Mark nice-to-haves with a `~` on your board when you write
 them down, so that cutting them at crunch time is a pre-authorized decision instead of a
 mid-sprint argument — and keep a few pre-groomed extras ready so a member who finishes
 early has a next story waiting. A team that ends every sprint with a working demo and a
@@ -231,6 +231,24 @@ as the presentation's opening exhibit. If you kept your sprint reports and revie
 current, the final report is an act of assembly, not archaeology: the velocity data,
 coverage and vulnerability trends, scope cuts, and retrospective insights are already
 written down, one sprint at a time.
+
+---
+
+### Sources
+
+[^1]: Nayla Nasir, Muhammad Usman, Jürgen Börstler, and Nina Dzamashvili Fogelström, *Software engineering team project courses with industrial customers: Students' insights on challenges and lessons learned*, Journal of Systems and Software (2025). [sciencedirect.com](https://www.sciencedirect.com/science/article/pii/S0164121225001098).
+
+[^2]: Austin Z. Henley, *The design of software engineering course projects* (2025). [austinhenley.com](https://austinhenley.com/blog/groupprojects.html).
+
+[^3]: Ken Schwaber and Jeff Sutherland, *The Scrum Guide* (2020). [scrumguides.org](https://scrumguides.org/scrum-guide.html).
+
+[^4]: Ryan Singer, *Shape Up: Stop Running in Circles and Ship Work that Matters*, ch. 6 "Write the Pitch" (2019). [basecamp.com/shapeup](https://basecamp.com/shapeup/1.5-chapter-06).
+
+[^5]: Ryan Singer, *Shape Up*, ch. 11 "Get One Piece Done" (2019). [basecamp.com/shapeup](https://basecamp.com/shapeup/3.2-chapter-11).
+
+[^6]: Ryan Singer, *Shape Up*, ch. 3 "Set Boundaries" (2019). [basecamp.com/shapeup](https://basecamp.com/shapeup/1.2-chapter-03).
+
+[^7]: Ryan Singer, *Shape Up*, ch. 14 "Decide When to Stop" (2019). [basecamp.com/shapeup](https://basecamp.com/shapeup/3.5-chapter-14).
 
 ---
 

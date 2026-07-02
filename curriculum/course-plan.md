@@ -3,7 +3,7 @@
 Two ready‑to‑use schedules for a junior/senior software‑engineering course built on this
 book — **Variant A**, a 15‑week milestone track, and **Variant B**, a 16‑week semester run
 on two‑week sprints. Both run **two parallel tracks** (as the ACM/IEEE guidelines
-recommend):
+recommend[^1]):
 
 - **Concepts track** — the twelve chapters, one theme at a time.
 - **Project track** — a real team project (Appendix A), started early and iterated.
@@ -97,3 +97,8 @@ By the end, a student can:
 - **No team project:** keep the concepts track; use the checkpoints in
   [Appendix A's project exercises](../chapters/appendix-a-team-project/exercises.md) as
   larger individual assignments.
+
+[^1]: ACM/IEEE‑CS Joint Task Force on Computing Curricula, *Software Engineering 2014:
+Curriculum Guidelines for Undergraduate Degree Programs in Software Engineering*
+(SE2014), which recommends a substantial team project alongside the concepts.
+[acm.org/education/curricula-recommendations](https://www.acm.org/education/curricula-recommendations).

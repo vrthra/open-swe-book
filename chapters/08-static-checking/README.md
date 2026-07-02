@@ -100,7 +100,7 @@ reality diverge from the design? Which assumptions held and which broke? A retro
 review is not about blame; it is about *learning*, both to guide the next iteration of this
 system and to make the *team* better at designing. The Therac-25 disaster from Chapter 1 is,
 among other things, a story of a team that never conducted an honest retrospective on its own
-assumptions about software reliability.
+assumptions about software reliability.[^1]
 
 ```mermaid
 flowchart LR
@@ -125,16 +125,16 @@ document — line by line, with a defined process, for the explicit purpose of f
 Inspection is the most formal member of the static-checking family. It is slow and it is
 disciplined, and decades of data show that, done well, it is startlingly effective: teams
 routinely find *more than half* of a document's defects in inspection, before any of that
-code runs.
+code runs.[^2]
 
 The formal version was pioneered by Michael Fagan at IBM in the 1970s, and a **Fagan
 inspection** remains the archetype: a small group, a defined sequence of phases, assigned
-roles, and — crucially — *measurement* of the process itself. What distinguishes an inspection
+roles, and — crucially — *measurement* of the process itself.[^3] What distinguishes an inspection
 from someone "taking a look" is that it is repeatable and its effectiveness can be quantified.
 
 ### 8.2.1 The Phases of a Traditional Inspection
 
-A traditional inspection moves through six phases. The discipline is in *not skipping any of
+A traditional inspection moves through six phases.[^4] The discipline is in *not skipping any of
 them*, because each guards against a specific way that informal review fails.
 
 ```mermaid
@@ -152,7 +152,7 @@ flowchart TD
 1. **Planning.** The author and moderator decide *what* will be inspected, confirm it meets
    entry criteria (it compiles, it is complete enough to review), choose the participants,
    and schedule the meeting. Planning also means keeping the chunk small — inspecting more
-   than a few hundred lines in one sitting reliably degrades into skimming.
+   than a few hundred lines in one sitting reliably degrades into skimming.[^5]
 
 2. **Overview.** The author briefly educates the reviewers on the context: what this code is
    for, how it fits the larger system, any background they need. This phase is optional when
@@ -160,7 +160,7 @@ flowchart TD
 
 3. **Preparation.** Each reviewer examines the work product *individually and in advance*,
    noting suspected defects and questions. This is the phase where most defects are actually
-   found. The meeting does not exist to read the code for the first time; it exists to
+   found.[^6] The meeting does not exist to read the code for the first time; it exists to
    consolidate what individual, focused reading has already turned up.
 
 4. **Meeting.** The group convenes. The reader walks through the material (see the roles
@@ -200,7 +200,7 @@ whether the process is healthy — and the numbers are often surprising.
 
 The lesson generalizes. A too-high preparation or review rate means reviewers are skimming,
 and a suspiciously *low* defect count is then bad news, not good — it usually means the
-review was shallow, not that the code was clean. By recording review rates, defect densities,
+review was shallow, not that the code was clean.[^5] By recording review rates, defect densities,
 and where in the lifecycle each defect was found, a team can answer questions that opinion
 alone cannot: *Are our inspections worth the time? Which kinds of defects slip through? Should
 we inspect this class of module at all?* Measurement turns inspection from a ritual into a
@@ -212,7 +212,7 @@ controllable process, and connects directly to Chapter 10's treatment of quality
 ### 8.2.3 Organizing an Inspection
 
 An inspection works because the participants play *distinct roles*, not because more eyeballs
-are inherently better. Assigning roles prevents the classic failure where everyone assumes
+are inherently better.[^7] Assigning roles prevents the classic failure where everyone assumes
 someone else is doing the careful reading.
 
 - **Author.** The person who wrote the work product. Their job in the meeting is to *listen*,
@@ -221,7 +221,7 @@ someone else is doing the careful reading.
 - **Reviewer (inspector).** The people whose job is to find defects. They do the essential
   preparation work individually beforehand and raise issues in the meeting. A good inspection
   has two to four reviewers with relevant expertise; many more than that and the meeting bogs
-  down without finding proportionally more.
+  down without finding proportionally more.[^3]
 - **Reader.** One reviewer designated to *paraphrase* the material aloud during the meeting —
   restating what each piece of code does in their own words, rather than reading it
   verbatim. This is subtly powerful: when the reader's paraphrase diverges from what the
@@ -245,13 +245,13 @@ escape.
 Full Fagan inspection is heavyweight, and most teams do not inspect every change that way —
 the cost is justified only for the riskiest material. What virtually every professional team
 *does* do, on nearly every change, is a lighter-weight **code review**: before a change is
-merged, at least one engineer other than the author reads it and must approve it. This is the
-single most widely practiced static-checking technique in the industry, and it is the daily
-face of everything the inspection literature discovered.
+merged, at least one engineer other than the author reads it and must approve it. This is one
+of the most widely practiced static-checking techniques in the industry, and it is the daily
+face of everything the inspection literature discovered.[^8]
 
 Modern code review through pull requests is less about hunting for every defect (automated
 tools, §8.4, are better at the mechanical ones) and more about two human questions that no
-tool can answer: **intent** and **trust**. *Intent*: does this change do what the author
+tool can answer: **intent** and **trust**.[^8] *Intent*: does this change do what the author
 *meant* it to do, and is what they meant actually the right thing? A reviewer who understands
 the system can see that a change is technically correct but solves the wrong problem, or
 introduces a subtle inconsistency with how the rest of the codebase works. *Trust*: code
@@ -262,7 +262,7 @@ is why "the reviewer will catch it" and "I'm just approving to unblock them" are
 corrosive.
 
 > **Principle.** The primary question in a code review is not "is this how *I* would have
-> written it?" but "will this change make the codebase *healthier over time*?" A reviewer's
+> written it?" but "will this change make the codebase *healthier over time*?"[^9] A reviewer's
 > job is to prevent decline, not to enforce personal style. If a change clearly improves the
 > system, it should be approved even when the reviewer can imagine a marginally better
 > version.
@@ -290,7 +290,7 @@ is worse than no approval at all.
 ### 8.3.2 Reviewing Is Done within Hours
 
 The other thing modern practice has learned is that **review latency matters enormously**, and
-the target is *hours, not days*. This surprises people who assume slower means more thorough,
+the target is *hours, not days*.[^10] This surprises people who assume slower means more thorough,
 but the reasoning is about the whole system's throughput, not one review's depth.
 
 When a change sits unreviewed for days, several bad things happen. The author, blocked, either
@@ -304,7 +304,7 @@ current, and keeps the feedback loop tight enough that the author actually learn
 "Within hours" does not mean "instantly and carelessly." The practice that squares speed with
 quality is **small changes**: a reviewer can give a 50-line change a genuinely careful read in
 minutes and turn it around the same day, whereas a 2,000-line change cannot be reviewed well
-*or* quickly — the reviewer skims, approves out of fatigue, and the review becomes theater.
+*or* quickly — the reviewer skims, approves out of fatigue, and the review becomes theater.[^5]
 Small, frequently reviewed changes are the mechanism that makes fast, thorough review
 possible at once. This is the everyday, industrialized descendant of the inspection data in
 §8.2.2: keep the chunk small, keep the reviewer engaged, and the defects surface.
@@ -399,7 +399,7 @@ sacrifice recall for precision: a tool that reports *fewer* defects but is *righ
 time earns the team's trust and gets acted upon, while a "thorough" tool that is frequently
 wrong gets turned off. Google's experience with static analysis is explicit about this — they
 target a false-positive rate low enough (roughly one in ten or better) that developers treat
-warnings as worth fixing rather than as noise.
+warnings as worth fixing rather than as noise.[^11]
 
 > **Principle.** For a static analyzer, *trust is the scarce resource*. A tool the team
 > believes will get acted upon; a tool the team distrusts gets suppressed, and then even its
@@ -433,6 +433,22 @@ from Chapter 1 is best broken at every link at once: reviews and inspection redu
 that reach the codebase, static analysis catches whole categories automatically, and testing
 provokes the failures that slip through. No single net catches everything, which is exactly
 why we cast several.
+
+---
+
+### Sources
+
+[^1]: Nancy G. Leveson and Clark S. Turner, *An Investigation of the Therac-25 Accidents*, IEEE Computer 26(7) (1993). [ieeexplore.ieee.org](https://ieeexplore.ieee.org/document/274940).
+[^2]: Barry Boehm and Victor R. Basili, *Software Defect Reduction Top 10 List*, IEEE Computer 34(1) (2001). [cs.umd.edu](https://www.cs.umd.edu/projects/SoftEng/ESEG/papers/82.78.pdf).
+[^3]: Michael E. Fagan, *Design and Code Inspections to Reduce Errors in Program Development*, IBM Systems Journal 15(3) (1976). [dl.acm.org](https://dl.acm.org/doi/10.1147/sj.153.0182).
+[^4]: Michael E. Fagan, *Advances in Software Inspections*, IEEE Transactions on Software Engineering SE-12(7) (1986). [research.ibm.com](https://research.ibm.com/publications/advances-in-software-inspections).
+[^5]: SmartBear Software, *Best Practices for Peer Code Review* — findings from a study of a Cisco Systems team (2006). [smartbear.com](https://smartbear.com/learn/code-review/best-practices-for-peer-code-review/).
+[^6]: Lawrence G. Votta, *Does Every Inspection Need a Meeting?*, ACM SIGSOFT Symposium on Foundations of Software Engineering (1993). [dl.acm.org](https://dl.acm.org/doi/10.1145/167049.167070).
+[^7]: NASA, *Software Formal Inspections Standard*, NASA-STD-8739.9 (2013). [standards.nasa.gov](https://standards.nasa.gov/standard/NASA/NASA-STD-87399).
+[^8]: Alberto Bacchelli and Christian Bird, *Expectations, Outcomes, and Challenges of Modern Code Review*, ICSE (2013). [microsoft.com](https://www.microsoft.com/en-us/research/publication/expectations-outcomes-and-challenges-of-modern-code-review/).
+[^9]: Google, *The Standard of Code Review*, Engineering Practices documentation. [google.github.io](https://google.github.io/eng-practices/review/reviewer/standard.html).
+[^10]: Google, *Speed of Code Reviews*, Engineering Practices documentation. [google.github.io](https://google.github.io/eng-practices/review/reviewer/speed.html).
+[^11]: Caitlin Sadowski, Edward Aftandilian, Alex Eagle, Liam Miller-Cushon, and Ciera Jaspan, *Lessons from Building Static Analysis Tools at Google*, Communications of the ACM 61(4) (2018). [cacm.acm.org](https://cacm.acm.org/research/lessons-from-building-static-analysis-tools-at-google/).
 
 ---
 

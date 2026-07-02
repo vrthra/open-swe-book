@@ -50,7 +50,7 @@ two actors even though it is one person. Conversely, many different people play 
 role `Cardholder`. Naming the *role* rather than the *person* keeps the use case stable
 when the org chart changes.
 
-Actors come in two broad kinds, and the distinction matters:
+Actors come in two broad kinds, and the distinction matters:[^1]
 
 - **Primary actors** initiate a use case to reach a goal *of their own*. The `Cardholder`
   wants money; that desire is why the use case exists. Every use case should have one.
@@ -73,9 +73,9 @@ should your phrasing.
 > would force you to reword the goal, you have described a screen, not a requirement.
 
 Listing the actors and their goals — before writing a single flow — gives you a
-lightweight outline of the whole system. It is often the first thing a team produces, and
-it fits on one page. The **actor–goal list** (also called a use-case index) is simply a
-table: each row a goal, tagged with its primary actor. For the ATM:
+lightweight outline of the whole system.[^2] It is often the first thing a team produces,
+and it fits on one page. The **actor–goal list** is simply a table: each row a goal,
+tagged with its primary actor.[^3] For the ATM:
 
 | Primary actor | Goal (use case)            |
 | ------------- | -------------------------- |
@@ -98,7 +98,7 @@ system responds. The steps alternate like a conversation, and each one moves the
 forward.
 
 The most important flow is the **basic flow** — also called the *main success scenario*
-or the *happy path*. It describes what happens when everything goes right: the card is
+or the *happy path*.[^3] It describes what happens when everything goes right: the card is
 valid, the PIN is correct, the account has funds, the machine has cash, and the network
 stays up. The basic flow is deliberately optimistic. It is the shortest, cleanest story of
 the goal being achieved, and it should read as a smooth narrative with nothing branching
@@ -182,7 +182,7 @@ from step 6 onward behaves exactly as already written.
 
 Sometimes you want to say "at this moment, additional behavior *may* occur" without
 committing, in the basic flow, to what that behavior is. An **extension point** is a named
-location in a flow where such optional behavior can be attached. It is a labeled hook: the
+location in a flow where such optional behavior can be attached.[^4] It is a labeled hook: the
 basic flow declares "here is a place where things may branch," and one or more extending
 use cases (§5.5.3) plug in at that label.
 
@@ -240,7 +240,7 @@ A template is a checklist wearing the costume of a document. Its job is to make 
 never forget the preconditions, never leave the postconditions implicit, and never ship a
 use case whose failure modes went unconsidered. Teams differ on the fields, but a solid,
 widely used template contains the following — shown here fully filled in for the ATM
-example, so you see a complete artifact rather than an empty form:
+example, so you see a complete artifact rather than an empty form:[^3]
 
 ---
 
@@ -390,8 +390,8 @@ who the actors are, what goals the system offers them, and how those goals relat
 
 A use-case diagram uses a tiny visual vocabulary. **Actors** are drawn as stick figures
 (or labeled boxes for non-human systems). **Use cases** are ovals labeled with a goal.
-A plain line — an **association** — connects an actor to each use case it participates in.
-That is nearly the whole notation, and its minimalism is the point: the diagram is meant
+A plain line — an **association** — connects an actor to each use case it participates
+in.[^4] That is nearly the whole notation, and its minimalism is the point: the diagram is meant
 to show *scope and relationships*, not to reproduce the flows. The story stays in the
 text; the diagram shows the forest.
 
@@ -459,7 +459,7 @@ it in one spot. But keep subflows *local*: the moment a chunk of behavior is wan
 
 An **include** relationship factors shared behavior out into its own use case that other
 use cases invoke. When use case A `«include»`s use case B, it means "at this point, A
-performs all of B, then continues." It is textual composition across use-case boundaries —
+performs all of B, then continues."[^4] It is textual composition across use-case boundaries —
 the same idea as calling a shared function, raised to the level of requirements.
 
 Use `«include»` when several use cases genuinely share a stretch of behavior. Both
@@ -482,7 +482,7 @@ An **extend** relationship is the mirror image of include. Where include is
 *mandatory behavior pulled out of* a base use case, extend is *optional behavior added
 onto* one — and, crucially, the base use case does not know its extender exists. When use
 case E `«extend»`s use case A at extension point P, it means "*if* E's condition holds when
-A reaches point P, then E's steps run; otherwise A proceeds unchanged." The base flow is
+A reaches point P, then E's steps run; otherwise A proceeds unchanged."[^4] The base flow is
 complete and sensible on its own; the extension is an optional overlay.
 
 This is exactly the `AmountConfirmed` extension point from §5.2.2. `Withdraw Cash` is a
@@ -491,7 +491,7 @@ use case extends it at `AmountConfirmed`, contributing its steps only when the c
 out-of-network. If tomorrow the bank drops all fees, you delete one extending use case and
 never touch `Withdraw Cash`.
 
-The direction of dependency is the whole point, and it is worth stating plainly:
+The direction of dependency is the whole point, and it is worth stating plainly:[^4]
 
 - With **include**, the *base* names the *included* use case ("Withdraw includes
   Authenticate"). The base depends on the shared part.
@@ -536,6 +536,18 @@ become ready-made scenarios for the tests of Chapter 9. Written well, a use case
 same artifact that lets a bank teller confirm you understood them, lets an architect
 decompose the system, and lets a tester know when it is done — which is a great deal of
 value from one disciplined story.
+
+---
+
+### Sources
+
+[^1]: Ivar Jacobson and Alistair Cockburn, *Use-Case Foundation*, v1.1 (2024). [alistaircockburn.com](https://alistaircockburn.com/Use%20Case%20Foundation.pdf).
+
+[^2]: Alistair Cockburn, "Structuring Use Cases with Goals," *Journal of Object-Oriented Programming* (1997). [web.archive.org](https://web.archive.org/web/20170620145208/http://alistair.cockburn.us/Structuring+use+cases+with+goals).
+
+[^3]: Alistair Cockburn, *Writing Effective Use Cases* (Addison-Wesley, 2001). [informit.com](https://www.informit.com/store/writing-effective-use-cases-9780201702255).
+
+[^4]: Object Management Group, *OMG Unified Modeling Language (UML)*, v2.5.1, clause 18 "UseCases" (2017). [omg.org](https://www.omg.org/spec/UML/2.5.1).
 
 ---
 

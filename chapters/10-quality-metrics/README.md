@@ -75,7 +75,7 @@ measuring. A useful metric passes several tests at once:
    survive contact with a deadline.
 4. **Robust against gaming.** The moment a metric becomes a target for people's
    incentives, they optimize the metric rather than the goal. This is **Goodhart's Law**,
-   and it is not a footnote — it is the single most common way metrics programs go wrong.
+   and it is not a footnote — it is the single most common way metrics programs go wrong.[^1]
 
 > **Pitfall.** Reward developers for "lines of code written" and you will get more, longer,
 > more duplicated code. Reward testers for "number of bugs found" and you will get a flood
@@ -89,7 +89,7 @@ measuring. A useful metric passes several tests at once:
 
 The antidote to measuring the merely convenient is to start from a goal, not from a tool.
 The **Goal-Question-Metric (GQM)** method, introduced by Victor Basili and colleagues,
-gives measurement a top-down discipline:
+gives measurement a top-down discipline:[^2]
 
 - **Goal** — a business or engineering objective, stated with an object, a purpose, a
   quality focus, a viewpoint, and a context. *"Improve (purpose) the reliability (focus)
@@ -155,7 +155,7 @@ characteristics — functional suitability, performance efficiency, compatibilit
 interaction capability, reliability, security, maintainability, flexibility, and safety —
 each subdivided further. (The widely cited 2011 edition had eight, with *usability* and
 *portability* where the current edition has *interaction capability* and *flexibility*;
-taxonomies get revised, which is itself a lesson about measurement.) You do not need to
+taxonomies get revised, which is itself a lesson about measurement.)[^3] You do not need to
 memorize the taxonomy; you need the habit it encodes: *before you measure quality, say
 which quality.*
 
@@ -176,7 +176,7 @@ a rich source of metrics — and a treacherous one. Common support metrics inclu
 - **Reopen rate** — the fraction of "resolved" tickets the customer reopens (a
   counter-metric to resolution speed).
 - **Customer satisfaction (CSAT)** and **Net Promoter Score (NPS)** — survey-based
-  measures of how customers *feel*.
+  measures of how customers *feel*.[^4]
 
 Notice how each metric, alone, misleads. Falling ticket volume might mean the software
 improved — or that users gave up and left. Fast resolution might mean skillful support —
@@ -296,7 +296,7 @@ burndown that ticks down looks reassuring right up until the unknown you never l
 blows up the schedule.
 
 The **hill chart**, popularized by Basecamp's *Shape Up*, is a small chart designed to show
-what a burndown hides: not how much is left, but *how much is still uncertain*. Picture
+what a burndown hides: not how much is left, but *how much is still uncertain*.[^5] Picture
 each piece of work as a dot climbing and descending a hill:
 
 ```text
@@ -375,7 +375,7 @@ is the share your internal nets caught.
 > $$
 > The team caught nine of every ten defects before shipping. Some organizations use 95%
 > DRE as an aspirational target; much lower values suggest that too many defects are
-> escaping to users.
+> escaping to users.[^6]
 
 DRE can also be computed *per phase* to show where defects leak through. If a phase
 receives defects, removes some, and passes the rest downstream, its **phase DRE** is
@@ -947,6 +947,22 @@ theater: dashboards no one reads, targets everyone games, averages that hide the
 The difference is not statistical sophistication. It is the discipline to start from a
 goal, to say what you mean by quality, and to never report a change without its error
 bars.
+
+---
+
+### Sources
+
+[^1]: C. A. E. Goodhart, *Problems of Monetary Management: The U.K. Experience* (1975; reprinted in *Monetary Theory and Practice*, Palgrave, 1984). [link.springer.com](https://link.springer.com/chapter/10.1007/978-1-349-17295-5_4). The popular phrasing — "when a measure becomes a target, it ceases to be a good measure" — is Marilyn Strathern's, from "'Improving Ratings': Audit in the British University System," *European Review* 5(3) (1997).
+
+[^2]: Victor R. Basili, Gianluigi Caldiera & H. Dieter Rombach, "The Goal Question Metric Approach," *Encyclopedia of Software Engineering* (Wiley, 1994). [cs.umd.edu](https://www.cs.umd.edu/users/mvz/handouts/gqm.pdf).
+
+[^3]: ISO/IEC 25010:2023, *Systems and software engineering — SQuaRE — Product quality model* (2023) — nine characteristics; it revises ISO/IEC 25010:2011, whose product-quality model had eight. [iso25000.com](https://iso25000.com/index.php/en/iso-25000-standards/iso-25010); [iso.org](https://www.iso.org/standard/78176.html).
+
+[^4]: Frederick F. Reichheld, "The One Number You Need to Grow," *Harvard Business Review* (December 2003). [hbr.org](https://hbr.org/2003/12/the-one-number-you-need-to-grow).
+
+[^5]: Ryan Singer, *Shape Up: Stop Running in Circles and Ship Work that Matters*, ch. 13 "Show Progress" (Basecamp, 2019). [basecamp.com](https://basecamp.com/shapeup/3.4-chapter-13).
+
+[^6]: Capers Jones, *Software Defect Removal Efficiency* (Capers Jones & Associates, 2011) — reports a U.S. average DRE near 85% and that combining inspections, static analysis, and testing is how projects top 95%. [ppi-int.com](https://www.ppi-int.com/wp-content/uploads/2021/01/Software-Defect-Removal-Efficiency.pdf).
 
 ---
 

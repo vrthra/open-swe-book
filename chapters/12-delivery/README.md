@@ -111,7 +111,7 @@ The vendor-controlled machines of §12.1.1 have to live somewhere, and today the
 live in a **public cloud**: vast provider-owned datacenters whose capacity is rented out
 over the network, by the hour or by the request. The market is led by Amazon Web Services
 (AWS), Google Cloud, and Microsoft Azure, with a long tail of smaller providers —
-DigitalOcean, Linode, Hetzner — that trade breadth of catalog for simplicity and price.
+DigitalOcean, Linode, Hetzner — that trade breadth of catalog for simplicity and price.[^1]
 Hold the names loosely: provider names and product lists date quickly, but the concepts
 beneath them do not. Every cloud, whatever its branding, sells the same four component
 families. **Compute** is processing capacity — virtual machines, containers, or functions
@@ -129,7 +129,7 @@ and physical security are all handled below the waterline of the service you ren
 What the provider explicitly does *not* handle is captured by the **shared responsibility
 model**: the provider secures the cloud — the facilities, the hardware, the hypervisor —
 while you secure what is *in* it — your operating-system configuration, your code, your
-data, and who can access all three. This is a legal line as much as a practical one, and
+data, and who can access all three.[^2] This is a legal line as much as a practical one, and
 teams forget it at their peril: a world-readable storage bucket full of customer records
 is *your* breach, however secure the datacenter around it was.
 
@@ -143,10 +143,10 @@ matters more than unit cost, and when a small team has no one to spare for opera
 > **Case study.** *Cloud repatriation.* The trade cuts the other way, too. In 2022–23,
 > 37signals — the company behind Basecamp — publicly moved its products off the cloud and
 > onto purchased hardware, documenting seven-figure annual savings for workloads that were
-> steady and predictable rather than spiky. And Amazon's own Prime Video team published an
+> steady and predictable rather than spiky.[^3]<!-- -->[^4] And Amazon's own Prime Video team published an
 > account of cutting the cost of one audio/video monitoring service by roughly 90 percent —
 > by moving it *away* from a serverless, distributed-microservices design and back into a
-> monolith-style process. The lesson is not "the cloud is over"; it is that the cloud is a
+> monolith-style process.[^5] The lesson is not "the cloud is over"; it is that the cloud is a
 > *cost-and-flexibility trade*, not an axiom. Elastic, uncertain load is where renting
 > wins; steady, predictable load is where owning wins. Run the numbers, not the fashion.
 
@@ -157,7 +157,7 @@ containing an application plus everything it needs to run — language runtime, 
 configuration — isolated from other software on the same machine while *sharing the host
 operating system's kernel*. Sharing the kernel is what distinguishes a container from a
 **virtual machine**, which carries an entire guest operating system of its own: a
-container starts in seconds rather than minutes, and a single host can run dozens of them.
+container starts in seconds rather than minutes, and a single host can run dozens of them.[^6]
 The container **image** is the immutable, versioned artifact that a CI pipeline (§12.2.2)
 builds exactly once and then deploys everywhere — the same byte-for-byte thing on a
 laptop, in the test environment, and in production, which retires "works on my machine"
@@ -167,7 +167,7 @@ One host is rarely enough, so containers are run on a **cluster**: a set of
 network-connected machines managed as a single pool of compute, storage, and memory. And
 the de-facto standard software for managing that pool is **Kubernetes**, often described
 as the *operating system for the cloud*: just as an OS schedules processes onto CPU cores,
-Kubernetes schedules containers onto the machines of a cluster. Around that core job it
+Kubernetes schedules containers onto the machines of a cluster.[^7] Around that core job it
 handles **ingress** (routing incoming traffic to the right containers), scaling the number
 of running copies up and down with demand, restarting containers that crash or fail health
 checks, and attaching storage to containers that need it — the operational chores of
@@ -186,8 +186,8 @@ Horizontal scaling (§12.1.2) eventually reaches the data layer, and the moment 
 Brewer's **CAP theorem** concerns three properties of a distributed data system:
 **consistency** (every read sees the most recent write), **availability** (every request
 receives a response), and **partition tolerance** (the system keeps operating when the
-network splits and some machines cannot reach others). The theorem says you cannot
-guarantee all three at once: when a partition happens, a system can preserve at most two.
+network splits and some machines cannot reach others).[^8] The theorem says you cannot
+guarantee all three at once: when a partition happens, a system can preserve at most two.[^9]
 
 Since partitions are a fact of real networks — switches fail, cables get cut, datacenters
 lose connectivity — partition tolerance is not really optional, and the practical content
@@ -317,7 +317,7 @@ Pipeline speed is not a convenience; it is load-bearing. Developers are supposed
 several times a day and to *wait for green* before moving on. If the pipeline takes an
 hour, they will not wait — they will batch up bigger changes to amortize the wait,
 which re-creates precisely the large, risky merges CI exists to eliminate. A useful
-target is roughly ten minutes from push to verdict for the merge-blocking stages.
+target is roughly ten minutes from push to verdict for the merge-blocking stages.[^10]
 
 Achieving that is the testing pyramid of
 [§9.2.4](../09-testing/#924-case-study-test-early-and-often--the-testing-pyramid) applied
@@ -411,29 +411,31 @@ They are worth studying closely, and honestly, from the primary sources.
 > equity market makers in the United States. When the New York Stock Exchange launched its
 > Retail Liquidity Program, Knight updated SMARS — its automated order router — to
 > participate. What follows is drawn from the findings in the SEC's later enforcement
-> order (Release No. 34-70694, October 2013).
+> order (Release No. 34-70694, October 2013).[^11]
 >
-> The new code reused a **feature flag** that had previously activated "Power Peg," a
-> defunct test routine unused since 2003, whose dead code had been left in SMARS. Worse,
-> the safety counter that once told Power Peg to stop when orders were filled had been
-> removed from the code years earlier. In the week before launch, a technician manually
+> The new code reused a **feature flag** that had previously activated "Power Peg,"
+> defunct order-routing functionality unused since 2003, whose dead code had been left in
+> SMARS. Worse, the safety counter that once told Power Peg to stop when orders were
+> filled had been inadvertently disabled in 2005, when the counter was moved elsewhere in
+> the code and Power Peg was never retested. In the week before launch, a technician manually
 > copied the new code onto SMARS's eight production servers — and missed one. No second
 > person reviewed the deployment; there was no automated, repeatable deployment process
 > to make the eight servers provably identical.
 >
 > On the morning of August 1, orders routed to the un-updated eighth server hit the
 > repurposed flag and woke the old Power Peg code, which began generating child orders
-> continuously, never tracking fills, never stopping. Ninety-seven automated email alerts
+> continuously, never tracking fills, never stopping. Ninety-seven automated email messages
 > referencing the Power Peg error had gone out *before the market opened*; no one acted on
-> them, because they went to a list rather than to an owner with a duty to respond. In the
+> them — they were not designed as alerts, and they went to a group of personnel rather
+> than to an owner with a duty to respond. In the
 > roughly forty-five minutes that followed, Knight executed about four million trades
 > across 154 stocks — on the order of 397 million shares — and, during diagnosis,
 > engineers made the situation worse: suspecting the new code, they *rolled it back* on
 > the seven correct servers, which put the repurposed flag's old behavior in force on all
-> eight. There was no kill switch and no documented incident procedure. The loss exceeded
-> $440 million. Knight survived only through an emergency investment and was merged away
-> within a year; the SEC fined it $12 million for violating market-access risk-control
-> rules.
+> eight. There was no procedure for halting the system's aberrant activity and no
+> documented incident-response plan. The loss exceeded $460 million. Knight survived only
+> through an emergency investment and was merged away within a year;[^12] the SEC fined it
+> $12 million for violating market-access risk-control and related rules.
 >
 > A note on honesty: the SEC order is an enforcement action about risk controls, and the
 > deployment details above are findings within it — the record shows a chain of process
@@ -450,10 +452,10 @@ They are worth studying closely, and honestly, from the primary sources.
 > forgiving place code can live. To respond to new threats quickly, CrowdStrike ships
 > "Rapid Response Content": threat-detection configuration delivered to all customers
 > through a fully automated global push. The account below follows CrowdStrike's own
-> external root-cause analysis, published in August 2024.
+> external root-cause analysis, published in August 2024.[^13]
 >
-> In February 2024, sensor version 7.11 added a new content type whose interpreter
-> expected twenty-one input fields. The code that supplied those inputs provided twenty.
+> In February 2024, sensor version 7.11 added a new content type defined with twenty-one
+> input fields. The code that supplied those inputs provided twenty.
 > The mismatch stayed latent for months because both the tests and all earlier content of
 > that type used a wildcard match for the twenty-first field, so the missing input was
 > never read. On July 19, a new content instance — Channel File 291 — used a non-wildcard
@@ -464,10 +466,11 @@ They are worth studying closely, and honestly, from the primary sources.
 >
 > The push was global and simultaneous. Within hours, roughly 8.5 million Windows
 > machines (Microsoft's estimate) were down: airlines (Delta alone cancelled on the order
-> of 7,000 flights), hospitals, banks, broadcasters, emergency services. Damage estimates
-> ran into the billions — insured losses for the Fortune 500 alone were estimated above
-> $5 billion. Recovery was brutal precisely because the machines could not boot: in many
-> cases a human had to start each machine in safe mode and delete the file by hand.
+> of 7,000 flights), hospitals, banks, broadcasters, emergency services.[^14]<!-- -->[^15] Damage
+> estimates ran into the billions — direct losses for the Fortune 500 alone were estimated
+> at $5.4 billion, only a fraction of it insured.[^16] Recovery was brutal precisely
+> because the machines could not boot: in many cases a human had to start each machine in
+> safe mode and delete the file by hand.[^17]
 > CrowdStrike's committed remediations read like this chapter's outline: staged canary
 > rings for content, customer control over update cadence, a hardened validator, bounds
 > checking in the interpreter, and more diverse testing.
@@ -487,8 +490,8 @@ deployment costs: without automation, you cannot even guarantee that eight serve
 the same code. CrowdStrike shows what automation without staging costs: with a perfect
 distribution machine and no progressive rollout, one latent defect reached the whole
 world before anyone could react. Twelve years apart, the timelines rhyme — about
-forty-five minutes for Knight's loss, about an hour for CrowdStrike's push to circle the
-globe. Automation sets the *speed* of your outcomes; only progressive exposure and tested
+forty-five minutes for Knight's loss, about eighty minutes from CrowdStrike's push to its
+reversion.[^18] Automation sets the *speed* of your outcomes; only progressive exposure and tested
 recovery decide their *sign*.
 
 ## 12.4 Continuous Security Pipelines
@@ -512,7 +515,7 @@ outside, the way an adversary would: probing endpoints with malformed inputs, in
 payloads, and authentication bypasses, knowing nothing about the source. SAST and DAST
 are complementary the way white-box and black-box testing were in Chapter 9: SAST sees
 code paths DAST may never reach; DAST sees emergent, deployed behavior — server
-configuration, header mistakes, the composition of services — that no source scan can.
+configuration, header mistakes, the composition of services — that no source scan can.[^31]
 
 **Software composition analysis (SCA)** examines neither your code nor your running app
 but your *dependency manifest*: the inventory of third-party packages your build pulls
@@ -527,7 +530,7 @@ Because dependencies drift out of date on their own — vulnerabilities are disc
 versions you already ship — SCA cannot be a one-time gate; it must run continuously. The
 practical pattern is the **automated update bot** (GitHub's Dependabot is the archetype):
 a service that watches vulnerability databases and your manifests, and when a dependency
-needs bumping, *opens a pull request* that updates it. The elegance is in what happens
+needs bumping, *opens a pull request* that updates it.[^19] The elegance is in what happens
 next: your CI pipeline runs on that PR like any other, so the same suite that protects
 you from your own mistakes now proves the upgrade is safe to merge. The stronger your
 pipeline, the cheaper staying current becomes — one more return on the investment of
@@ -537,12 +540,12 @@ The wider issue is **supply-chain risk**: your build is only as trustworthy as e
 it downloads. Attackers have learned to poison the well — **typosquatting** packages
 whose names are one keystroke from a popular library, or compromising a legitimate
 package's maintainer account and publishing a malicious release. The 2020 SolarWinds
-attack planted malicious code inside a vendor's *build system*, so customers received a
-compromised product signed with authentic signatures; the 2016 left-pad incident showed
-the fragility side, when the removal of an eleven-line package briefly broke builds
-across the industry. Defenses are accumulating — lockfiles that pin exact versions,
-cryptographic signing and provenance attestation for artifacts (the SLSA framework), and
-a **software bill of materials (SBOM)** enumerating everything inside a release — but the
+attack planted malicious code inside a vendor's *build process*, so customers received a
+compromised product signed with authentic signatures;[^20] the 2016 left-pad incident
+showed the fragility side, when the removal of an eleven-line package briefly broke
+builds across the industry.[^21]<!-- -->[^22] Defenses are accumulating — lockfiles that pin exact versions,
+cryptographic signing and provenance attestation for artifacts (the SLSA framework),[^32]
+and a **software bill of materials (SBOM)** enumerating everything inside a release[^33] — but the
 first defense is the cultural one: treat adding a dependency as an engineering decision
 with a threat model, not a free lunch.
 
@@ -552,7 +555,7 @@ One more scanner earns its place in every pipeline: **secrets scanning**, which 
 commits for credentials — API keys, tokens, passwords, private keys — before they enter
 history. A secret pushed to a repository must be treated as compromised the moment it
 lands, because git history is effectively permanent and harvesting bots scan public
-commits within seconds. Rotating a leaked credential is painful; a pre-commit or
+commits continuously. Rotating a leaked credential is painful; a pre-commit or
 pre-receive scan that blocks the leak is nearly free.
 
 Placement follows one principle: **run each gate at the earliest point it can give a
@@ -573,7 +576,7 @@ programs fail by measuring what is easy instead of what matters. The delivery wo
 unusually good answer, produced by the **DORA** research program (DevOps Research and
 Assessment) — a multi-year academic effort, surveying tens of thousands of professionals,
 published in the annual *State of DevOps* reports and the book *Accelerate* (Forsgren,
-Humble, and Kim). Its core finding is a set of four outcome measures — the **four keys** —
+Humble, and Kim).[^23]<!-- -->[^24] Its core finding is a set of four outcome measures — the **four keys** —
 that jointly predict software-delivery performance:
 
 1. **Deployment frequency** — how often your team deploys to production.
@@ -581,7 +584,7 @@ that jointly predict software-delivery performance:
 3. **Change failure rate** — what fraction of deployments cause a failure in production
    (an incident, a rollback, a hotfix).
 4. **Failed-deployment recovery time** — when a deployment does cause a failure, how long
-   restoring service takes.
+   restoring service takes.[^25]
 
 Notice the shape: the first two measure **throughput** (how fast value moves), the second
 two measure **stability** (how safely it moves). All four are *outcomes* of your whole
@@ -608,12 +611,12 @@ Two findings from the DORA research deserve to reshape your intuitions. First, t
 between the best and the rest is not incremental — it is multiplicative. Across survey
 years, **elite** performers deploy on demand (many times per day) where **low** performers
 deploy between once a month and once every six months; elite lead times are under a day
-against months; elite recovery times are under an hour against days to weeks — differences
-of two to three orders of magnitude on the throughput measures, with change failure rates
-lower as well.
+against months; elite recovery times are under an hour against a week or more — differences
+of orders of magnitude on the throughput measures, with change failure rates
+lower as well.[^23]
 
 Second — and this is the finding that overturned decades of folklore — **speed and
-stability correlate positively**. The traditional assumption was a trade-off: move fast
+stability correlate positively**.[^23] The traditional assumption was a trade-off: move fast
 *or* be careful. The data say the teams that deploy most often are *also* the teams that
 break production least and recover fastest. The mechanism should be familiar by now: high
 frequency forces small changes; small changes are easier to review
@@ -649,8 +652,8 @@ deprecated API, a new regulation — where the code did nothing wrong but the wo
 **Perfective maintenance** adds the features and improvements users keep asking a living
 system for. And **preventative maintenance** — refactoring, debt paydown — improves
 structure now so that all the other kinds stay affordable later. The standard industry
-rule of thumb is that maintenance, taken together, consumes roughly two-thirds of a
-system's lifetime cost. Read that number again: the phase this book spent eleven chapters
+rule of thumb is that maintenance, taken together, consumes roughly 60 percent of a
+system's lifetime cost.[^26] Read that number again: the phase this book spent eleven chapters
 preparing you for is the *minority* of the money, which is reason enough to treat evolving
 code as the main event of an engineering career rather than the cleanup after it.
 
@@ -669,7 +672,7 @@ everyone is being careful. Breaking that spiral is a skill, and it starts with a
 inversion of the testing you learned in Chapter 9.
 
 The tests-first definition comes from Michael Feathers, whose *Working Effectively with
-Legacy Code* also names the only two ways there are to change legacy code. **Edit and
+Legacy Code* also names the only two ways there are to change legacy code.[^27] **Edit and
 pray**: study the code, make the change, look around manually for anything you broke,
 deploy, and hope. **Cover and modify**: first build tests that cover the code you must
 touch, then make the change and let the tests detect any behavior you altered without
@@ -730,7 +733,7 @@ running the suite after every step. If the bar goes red, the *last* step is the 
 undo it and take a smaller one. Named, catalogued refactoring moves (Fowler's catalog is
 the standard reference) matter because each has known mechanics and known traps; a
 sequence of safe moves composes into a transformation you would never dare attempt as one
-leap.
+leap.[^28]
 
 Where should you aim the moves? **Code smells** are surface symptoms that *suggest* — not
 prove — a deeper design problem: a long method, a large class that does too many things, a
@@ -767,7 +770,7 @@ the point where a test can grip, and no further.
 The economics underneath all of this has a name. **Technical debt** is the metaphor for
 the future cost incurred when you take a shortcut today: like financial debt, it lets you
 move faster *now* in exchange for **interest** — and the interest is that *every future
-change to that code costs more* than it would have. The metaphor's precision is its
+change to that code costs more* than it would have.[^29] The metaphor's precision is its
 virtue. Debt is not simply "bad code"; it is a *deal*, and sometimes a good one.
 **Deliberate debt** is a conscious trade — "we hard-code the tax rule to make the pilot;
 we log a ticket to generalize it" — the engineering equivalent of a startup loan, rational
@@ -794,7 +797,7 @@ browser rewrite
 code that handles a thousand edge cases, you run two systems (one frozen, one imaginary)
 for the duration, and the new system's first real validation comes at the end, all at
 once. The delivery-era alternative is the **strangler fig** pattern, named for the fig
-that grows around a host tree, roots itself, and gradually replaces the host it envelops.
+that grows around a host tree, roots itself, and gradually replaces the host it envelops.[^30]
 You place an interception layer — a routing facade — in front of the legacy system, then
 peel off one capability at a time: build the new implementation, route that slice of
 traffic to it, verify it in production (a canary, §12.3.2, at the granularity of a
@@ -834,6 +837,47 @@ If the chapter compresses to one sentence, it is this: **make change small, make
 to users automatic and progressively exposed, watch the outcomes, and keep the code
 changeable** — because the one certainty about a successful system is that it will have
 to change for longer than anyone who built it expects.
+
+---
+
+### Sources
+
+[^1]: Synergy Research Group, *Cloud Market Share Trends — Big Three Together Hold 63%* (2025). [srgresearch.com](https://www.srgresearch.com/articles/cloud-market-share-trends-big-three-together-hold-63-while-oracle-and-the-neoclouds-inch-higher).
+[^2]: Amazon Web Services, *Shared Responsibility Model*. [aws.amazon.com](https://aws.amazon.com/compliance/shared-responsibility-model/).
+[^3]: David Heinemeier Hansson (37signals), *Why we're leaving the cloud* (2022). [world.hey.com/dhh](https://world.hey.com/dhh/why-we-re-leaving-the-cloud-654b47e0).
+[^4]: David Heinemeier Hansson (37signals), *We have left the cloud* (2023). [world.hey.com/dhh](https://world.hey.com/dhh/we-have-left-the-cloud-251760fb).
+[^5]: Marcin Kolny (Prime Video Tech), *Scaling up the Prime Video audio/video monitoring service and reducing costs by 90%* (2023). [web.archive.org](https://web.archive.org/web/20230504060528/https://www.primevideotech.com/video-streaming/scaling-up-the-prime-video-audio-video-monitoring-service-and-reducing-costs-by-90) (original post now offline).
+[^6]: Amazon Web Services, *What's the Difference Between Containers and Virtual Machines?* [aws.amazon.com](https://aws.amazon.com/compare/the-difference-between-containers-and-virtual-machines/).
+[^7]: Cloud Native Computing Foundation, *CNCF Annual Survey 2023* (2023). [cncf.io](https://www.cncf.io/reports/cncf-annual-survey-2023/).
+[^8]: Eric Brewer, *Towards Robust Distributed Systems* (PODC keynote, 2000). [people.eecs.berkeley.edu](https://people.eecs.berkeley.edu/~brewer/cs262b-2004/PODC-keynote.pdf).
+[^9]: Seth Gilbert and Nancy Lynch, *Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services* (ACM SIGACT News, 2002). [doi.org](https://doi.org/10.1145/564585.564601).
+[^10]: Martin Fowler, *Continuous Integration* (2006; revised 2024). [martinfowler.com](https://martinfowler.com/articles/continuousIntegration.html).
+[^11]: U.S. Securities and Exchange Commission, *In the Matter of Knight Capital Americas LLC*, Exchange Act Release No. 34-70694 (2013). [sec.gov](https://www.sec.gov/litigation/admin/2013/34-70694.pdf).
+[^12]: CNNMoney, *Knight Capital in $400 million rescue agreement* (2012). [money.cnn.com](https://money.cnn.com/2012/08/06/investing/knight-capital-agreement/index.htm).
+[^13]: CrowdStrike, *External Technical Root Cause Analysis — Channel File 291* (2024). [crowdstrike.com](https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf).
+[^14]: David Weston (Microsoft), *Helping our customers through the CrowdStrike outage* (2024). [blogs.microsoft.com](https://blogs.microsoft.com/blog/2024/07/20/helping-our-customers-through-the-crowdstrike-outage/).
+[^15]: Delta Air Lines, *Form 8-K* (October 2024). [sec.gov](https://www.sec.gov/Archives/edgar/data/27904/000168316824005369/delta_8k.htm).
+[^16]: Parametrix, *CrowdStrike to cost Fortune 500 $5.4 billion; insured loss range of $540 million to $1.08 billion* (2024). [parametrixinsurance.com](https://www.parametrixinsurance.com/in-the-news/crowdstrike-to-cost-fortune-500-5-4-billion-insured-loss-range-of-540-million-to-1-08-billion).
+[^17]: CrowdStrike, *Falcon Content Update Remediation and Guidance Hub* (2024). [crowdstrike.com](https://www.crowdstrike.com/falcon-content-update-remediation-and-guidance-hub/).
+[^18]: CrowdStrike, *Preliminary Post Incident Review — Falcon Content Update for Windows Hosts* (2024). [crowdstrike.com](https://www.crowdstrike.com/en-us/blog/falcon-content-update-preliminary-post-incident-report/).
+[^19]: GitHub, *Dependabot documentation*. [docs.github.com](https://docs.github.com/en/code-security/dependabot).
+[^20]: CISA, *Alert AA20-352A: Advanced Persistent Threat Compromise of Government Agencies, Critical Infrastructure, and Private Sector Organizations* (2020). [cisa.gov](https://www.cisa.gov/news-events/cybersecurity-advisories/aa20-352a).
+[^21]: npm, *kik, left-pad, and npm* (2016). [blog.npmjs.org](https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm).
+[^22]: The Register, *How one developer just broke Node, Babel and thousands of projects in 11 lines of JavaScript* (2016). [theregister.com](https://www.theregister.com/2016/03/23/npm_left_pad_chaos/).
+[^23]: DORA, *Accelerate State of DevOps Report 2019* (2019). [dora.dev](https://dora.dev/research/2019/dora-report/).
+[^24]: Nicole Forsgren, Jez Humble, and Gene Kim, *Accelerate: The Science of Lean Software and DevOps* (IT Revolution Press, 2018). [itrevolution.com](https://itrevolution.com/product/accelerate/).
+[^25]: DORA, *DORA's software delivery metrics: the four keys*. [dora.dev](https://dora.dev/guides/dora-metrics-four-keys/).
+[^26]: Robert L. Glass, *Frequently Forgotten Fundamental Facts about Software Engineering* (IEEE Software, 2001). [doi.org](https://doi.org/10.1109/MS.2001.922739).
+[^27]: Michael Feathers, *Working Effectively with Legacy Code* (Prentice Hall, 2004). [informit.com](https://www.informit.com/store/working-effectively-with-legacy-code-9780131177055).
+[^28]: Martin Fowler, *Catalog of Refactorings*. [refactoring.com](https://refactoring.com/catalog/).
+[^29]: Ward Cunningham, *The WyCash Portfolio Management System* (OOPSLA experience report, 1992). [c2.com](http://c2.com/doc/oopsla92.html).
+[^30]: Martin Fowler, *StranglerFigApplication* (2004). [martinfowler.com](https://martinfowler.com/bliki/StranglerFigApplication.html).
+[^31]: OWASP Foundation, community references for the scanner families:
+[Source Code Analysis Tools (SAST)](https://owasp.org/www-community/Source_Code_Analysis_Tools),
+[Vulnerability Scanning Tools (DAST)](https://owasp.org/www-community/Vulnerability_Scanning_Tools),
+and [Component Analysis (SCA)](https://owasp.org/www-community/Component_Analysis).
+[^32]: OpenSSF, *SLSA — Supply-chain Levels for Software Artifacts*. [slsa.dev](https://slsa.dev/).
+[^33]: CISA, *Software Bill of Materials (SBOM)*. [cisa.gov/sbom](https://www.cisa.gov/sbom).
 
 ---
 

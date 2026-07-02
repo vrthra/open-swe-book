@@ -6,12 +6,23 @@ known.
 
 ## Foundations: what a use case is
 
-- 📄 **Alistair Cockburn — use cases and the "coffee-cup" template** —
-  [alistair.cockburn.us/coffee](https://alistair.cockburn.us/coffee/) and
-  [Structuring use cases with goals](https://alistair.cockburn.us/structuring-use-cases-with-goals/).
+- 📄 **Ivar Jacobson & Alistair Cockburn — *Use-Case Foundation* (v1.1)** —
+  [alistaircockburn.com](https://alistaircockburn.com/Use%20Case%20Foundation.pdf). A short,
+  freely downloadable joint statement of the core concepts — system of interest, primary
+  and supporting actors, goals, and scenarios — from the two people most associated with
+  the practice.
+- 📄 **Alistair Cockburn — "Structuring Use Cases with Goals" (JOOP, 1997)** —
+  [archived copy at web.archive.org](https://web.archive.org/web/20170620145208/http://alistair.cockburn.us/Structuring+use+cases+with+goals).
   Cockburn originated much of the modern practice, including goal levels, the fully
   dressed vs. casual template, and the "main success scenario / extensions" structure this
-  chapter follows. His site hosts freely readable articles and templates.
+  chapter follows. The paper is freely readable at the archived link; his current site is
+  [alistaircockburn.com](https://alistaircockburn.com/).
+- 📄 **Alistair Cockburn — *Writing Effective Use Cases* (Addison-Wesley, 2001)** —
+  [official catalog page at informit.com](https://www.informit.com/store/writing-effective-use-cases-9780201702255).
+  The definitive book-length treatment behind §5.1–§5.3. The book itself is commercial,
+  but the publisher posts a substantial free
+  [sample-pages PDF](https://ptgmedia.pearsoncmg.com/images/9780201702255/samplepages/0201702258.pdf)
+  covering the writing process and a fully dressed example.
 - 📘 **UC Berkeley — Engineering Software as a Service (ESaaS)** —
   [saasbook.info](https://saasbook.info/). The requirements chapters connect user stories
   (Chapter 3) to more structured behavioral descriptions, with an agile framing. Book and
@@ -37,9 +48,10 @@ known.
 
 ## Templates and practice
 
-- 📄 **Cockburn's use-case template (downloadable)** — linked from
-  [alistair.cockburn.us](https://alistair.cockburn.us/get-started-with-use-cases/). A
-  ready-to-fill "fully dressed" template with the same fields used in §5.3.1.
+- 📄 **Cockburn's use-case template (free sample pages)** — the publisher's
+  [sample-pages PDF](https://ptgmedia.pearsoncmg.com/images/9780201702255/samplepages/0201702258.pdf)
+  from *Writing Effective Use Cases* shows the "fully dressed" template filled in, with the
+  same fields used in §5.3.1.
 - 📘 **Wikibooks — Systems Analysis and Design** —
   [en.wikibooks.org/wiki/Systems_Analysis_and_Design](https://en.wikibooks.org/wiki/Systems_Analysis_and_Design).
   An openly licensed (CC BY-SA) community text with worked use-case and diagram examples

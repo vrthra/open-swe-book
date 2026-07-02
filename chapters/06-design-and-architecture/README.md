@@ -24,7 +24,7 @@ go** — and of writing that decision down so the next person can respect it.
 Ask five engineers to define software architecture and you will get five answers, but
 they cluster around a single idea. The architecture of a system is the set of
 **structures** needed to reason about it: the parts it is made of, the externally visible
-properties of those parts, and the relationships among them. Two phrases in that
+properties of those parts, and the relationships among them.[^1] Two phrases in that
 sentence carry the weight.
 
 First, **externally visible properties.** Architecture is deliberately about the *outside*
@@ -92,14 +92,14 @@ their job. Stay too vague ("redesign the reports section") and there is no share
 reason about, so scope quietly explodes. Basecamp's *Shape Up* names a useful target
 between these failures: a design should be **rough** (visibly unfinished, so it invites
 change), **solved** (the main elements and their connections are worked out, not hand‑waved),
-and **bounded** (it states what is explicitly *out* of scope).
+and **bounded** (it states what is explicitly *out* of scope).[^2]
 
 > **Technique — breadboards and fat‑marker sketches.** To design at that level, work in
 > deliberately low‑fidelity forms. A **breadboard** (borrowed from electronics) captures
 > only *places* (screens, states), *affordances* (things a user can act on — a button, a
 > field), and *connection lines* between them — the functional wiring, with no visual
 > styling. A **fat‑marker sketch** is drawn with strokes so thick that fine detail is
-> *impossible*, which forces attention onto layout and relationships rather than polish.
+> *impossible*, which forces attention onto layout and relationships rather than polish.[^3]
 > The same instinct applies to system design: a boxes‑and‑arrows component sketch (§6.4)
 > is the architectural breadboard — enough to reason about structure, not so much that you
 > have secretly written the code in a diagram.
@@ -125,7 +125,7 @@ Concretely, a good architecture tends to have these properties.
 - **It can be understood.** An architecture that no one on the team can hold in their head
   is, for practical purposes, no architecture at all: people will violate boundaries they
   cannot see. Conceptual integrity — a small number of consistent ideas applied
-  throughout — is worth more than local cleverness.
+  throughout — is worth more than local cleverness.[^4]
 - **It is buildable and testable.** A structure that looks elegant on a diagram but forces
   every test to spin up the entire system is a bad architecture, because it makes the
   feedback loop that catches defects slow and expensive (Chapter 9).
@@ -151,7 +151,7 @@ almost entirely from what it *hides*.
 
 **Information hiding** is the discipline of designing each module around a decision — often
 a design decision likely to change — and hiding that decision behind an interface, so that
-the rest of the system depends on the *interface* and not on the decision. The classic
+the rest of the system depends on the *interface* and not on the decision.[^5] The classic
 example: a module that stores user records should expose operations like `find(id)` and
 `save(record)` while hiding whether the records live in a SQL database, a file, or a
 remote service. Because callers never learned how records are stored, you can switch from
@@ -179,12 +179,12 @@ public method is a hostage to fortune.
 
 ### 6.2.2 Coupling and Cohesion
 
-Two measures, introduced together decades ago and never improved upon, tell you whether a
-decomposition is good: **coupling** between modules and **cohesion** within each.
+Two measures, introduced together decades ago, tell you whether a
+decomposition is good: **coupling** between modules and **cohesion** within each.[^6]
 
 **Coupling** is the strength of the dependency between two modules — how much one must know
 about the other, and how badly a change to one ripples into the other. You want it **low**.
-Coupling is not binary; it comes in kinds, and the kinds form a ladder from worst to best.
+Coupling is not binary; it comes in kinds, and the kinds form a ladder from worst to best.[^7]
 Knowing the ladder lets you diagnose *why* a dependency hurts, not just that it does.
 
 - **Content coupling (worst).** One module reaches inside another and manipulates its
@@ -208,7 +208,7 @@ Knowing the ladder lets you diagnose *why* a dependency hurts, not just that it 
 
 **Cohesion** is how well the elements *inside* a single module belong together — how
 focused the module is on one job. You want it **high**. It, too, comes in kinds, from worst
-to best:
+to best:[^7]
 
 - **Coincidental (worst):** the parts are grouped for no real reason — a "utils" grab-bag.
 - **Logical:** parts are grouped because they are the same *category* of thing (all the
@@ -221,7 +221,7 @@ to best:
   does that task completely and does nothing else.
 
 Coupling and cohesion pull in the same direction, which is why they are always taught
-together: **when you raise cohesion, coupling tends to fall, and vice versa.** If each
+together: **when you raise cohesion, coupling tends to fall, and vice versa.**[^7] If each
 module does exactly one thing (high cohesion), related logic sits together and does not need
 to reach across boundaries (low coupling). If a module does five unrelated things (low
 cohesion), pieces of those five jobs inevitably entangle with five other modules (high
@@ -261,15 +261,15 @@ each is a heuristic that pays off far more often than not.
 
 Several of these guidelines circulate in industry under memorable names, and you should
 recognize them when colleagues use them. The best-known bundle is **SOLID**, five
-object-oriented design principles whose initials spell the mnemonic:
+object-oriented design principles whose initials spell the mnemonic:[^8]
 
 - **S — Single responsibility:** guideline 1 above — one stateable job per module.
 - **O — Open-closed:** a module should be **open for extension, closed for
   modification** — you add behavior by adding new code (a new implementation of an
   interface, a new subclass), not by editing code that already works and that other
-  modules already depend on.
+  modules already depend on.[^9]
 - **L — Liskov substitution:** a subtype must be usable anywhere its supertype is
-  expected, with no surprises. If code that works on every `Conversation` breaks when
+  expected, with no surprises.[^10] If code that works on every `Conversation` breaks when
   handed a `GroupConversation`, the generalization arrow (§6.3.2) is a lie.
 - **I — Interface segregation:** many small, client-specific interfaces beat one fat
   one — guideline 2 taken seriously. A client forced to depend on operations it never
@@ -278,7 +278,7 @@ object-oriented design principles whose initials spell the mnemonic:
   implementations, and never let stable policy depend on volatile detail.
 
 A companion rule with its own name is **DRY — Don't Repeat Yourself**: every piece of
-knowledge in the system should have a single, authoritative representation. The problem
+knowledge in the system should have a single, authoritative representation.[^11] The problem
 with duplicated logic is not the wasted keystrokes; it is that a future change must now be
 found and fixed in two places, and eventually someone will fix only one.
 
@@ -294,7 +294,7 @@ found and fixed in two places, and eventually someone will fix only one.
 To design and discuss modular structure, you need a notation. The **class diagram** from
 the Unified Modeling Language (UML) is the lingua franca for describing the static
 structure of object-oriented systems: the classes, what each holds and does, and how they
-relate. You will not draw every class; you draw the ones whose relationships someone needs
+relate.[^12] You will not draw every class; you draw the ones whose relationships someone needs
 to understand.
 
 ### 6.3.1 Representing a Class
@@ -355,7 +355,7 @@ real content of the diagram, and they are the subject of the next section.
 ### 6.3.2 Relationships between Classes
 
 The lines in a class diagram are not decoration; each *shape* means something precise about
-how two classes are connected and how tightly. Getting them right is how a diagram
+how two classes are connected and how tightly.[^12] Getting them right is how a diagram
 communicates coupling.
 
 - **Association** (a plain solid line) says two classes are connected: objects of one
@@ -386,7 +386,7 @@ Multiplicities are not pedantry: `1` versus `0..1` versus `0..*` is often the di
 between a null-pointer bug, a missing foreign key, and a correct schema.
 
 > **Pitfall.** Do not agonize over aggregation versus composition in every diagram — even
-> UML experts argue about the boundary. What matters is the *lifetime and ownership*
+> the UML specification leaves the precise semantics of aggregation open.[^12] What matters is the *lifetime and ownership*
 > question the distinction forces you to ask: "if I delete the whole, does the part die,
 > and can two wholes share one part?" Answer that; the diamond follows.
 
@@ -396,12 +396,12 @@ A single diagram cannot capture a whole system any more than a single photograph
 a building. Stakeholders ask different questions — "what are the responsibilities?", "how
 does it perform under load?", "how do I check out and build the code?", "which server runs
 what?" — and each question is best answered by a different picture. A **view** is a
-representation of the system from one such perspective.
+representation of the system from one such perspective.[^13]
 
 ### 6.4.1 The 4+1 Grouping of Views
 
 A widely used way to organize views, introduced by Philippe Kruchten, groups them into four
-plus one. The four cover distinct concerns; the "+1" ties them together.
+plus one.[^14] The four cover distinct concerns; the "+1" ties them together.
 
 ```mermaid
 flowchart TB
@@ -454,7 +454,7 @@ It helps to distinguish a **structure** from a **view**. A structure is somethin
 the system — the actual set of modules and their dependencies, the actual set of runtime
 processes. A view is a *representation* of a structure, drawn for an audience. The three
 big families of structure are worth naming because almost every architectural confusion is
-a failure to keep them apart:
+a failure to keep them apart:[^1]
 
 - **Module structures** — how the system is divided into units of *code*: modules,
   packages, classes, layers, and the "is-part-of," "depends-on," and "is-a" relations
@@ -619,6 +619,25 @@ takes the next step, showing that you rarely invent these structures from nothin
 problems have well-understood **architectural patterns** — layered, client-server,
 pipe-and-filter, publish-subscribe, and more — that package hard-won decisions so you can
 reuse the judgment, not just the diagram.
+
+---
+
+### Sources
+
+[^1]: Len Bass, Paul Clements, and Rick Kazman, *Software Architecture in Practice*, 4th ed. (2021). [sei.cmu.edu](https://insights.sei.cmu.edu/library/software-architecture-in-practice-fourth-edition/).
+[^2]: Ryan Singer, *Shape Up: Stop Running in Circles and Ship Work that Matters*, ch. "Principles of Shaping" (Basecamp, 2019). [basecamp.com](https://basecamp.com/shapeup/1.1-chapter-02).
+[^3]: Ryan Singer, *Shape Up: Stop Running in Circles and Ship Work that Matters*, ch. "Find the Elements" (Basecamp, 2019). [basecamp.com](https://basecamp.com/shapeup/1.3-chapter-04).
+[^4]: Frederick P. Brooks, Jr., *The Mythical Man-Month: Essays on Software Engineering* (1975; anniversary ed. 1995). [informit.com](https://www.informit.com/store/mythical-man-month-essays-on-software-engineering-anniversary-9780201835953).
+[^5]: David L. Parnas, "On the Criteria To Be Used in Decomposing Systems into Modules," *Communications of the ACM* 15(12) (1972). [dl.acm.org](https://dl.acm.org/doi/10.1145/361598.361623).
+[^6]: W. P. Stevens, G. J. Myers, and L. L. Constantine, "Structured Design," *IBM Systems Journal* 13(2) (1974). [dl.acm.org](https://dl.acm.org/doi/10.1147/sj.132.0115).
+[^7]: Edward Yourdon and Larry L. Constantine, *Structured Design: Fundamentals of a Discipline of Computer Program and Systems Design* (1979). [archive.org](https://archive.org/details/Structured_Design_Edward_Yourdon_Larry_Constantine).
+[^8]: Robert C. Martin, "Design Principles and Design Patterns" (2000). [objectmentor.com via web.archive.org](https://web.archive.org/web/20030416004136/http://www.objectmentor.com/resources/articles/Principles_and_Patterns.PDF).
+[^9]: Bertrand Meyer, *Object-Oriented Software Construction* (1988; 2nd ed. 1997). [bertrandmeyer.com](https://bertrandmeyer.com/OOSC2/).
+[^10]: Barbara H. Liskov and Jeannette M. Wing, "A Behavioral Notion of Subtyping," *ACM Transactions on Programming Languages and Systems* 16(6) (1994). [dl.acm.org](https://dl.acm.org/doi/10.1145/197320.197383).
+[^11]: Andrew Hunt and David Thomas, *The Pragmatic Programmer* (1999; 20th-anniversary ed. 2019). [pragprog.com](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/).
+[^12]: Object Management Group, *OMG Unified Modeling Language (OMG UML)*, version 2.5.1 (2017). [omg.org](https://www.omg.org/spec/UML/2.5.1/).
+[^13]: ISO/IEC/IEEE, *ISO/IEC/IEEE 42010:2022 — Software, systems and enterprise — Architecture description* (2022). [iso.org](https://www.iso.org/standard/74393.html).
+[^14]: Philippe Kruchten, "Architectural Blueprints — The 4+1 View Model of Software Architecture," *IEEE Software* 12(6) (1995). [cs.ubc.ca](https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf).
 
 ---
 

@@ -24,7 +24,7 @@ expected and **fails** otherwise. A **test suite** is a collection of tests run
 together. This sounds trivial, and for one test it is; the engineering lives in the four
 questions the rest of this section raises.
 
-> **Principle.** Testing can reveal the *presence* of defects but never their *absence*.
+> **Principle.** Testing can reveal the *presence* of defects but never their *absence*.[^1]
 > A passing suite means "no defect was triggered by these inputs," not "no defect
 > exists." Everything in this chapter is about making that first statement as strong as
 > it can practically be.
@@ -98,7 +98,7 @@ under any test is code you know nothing about empirically.
 An **oracle** is whatever decides, for a given input, whether the actual output is
 correct. In a textbook example the oracle is obvious — you write `assert add(2, 3) == 5`,
 and `5` is the oracle. In real systems it is often the hardest part of testing, a
-difficulty known as the **oracle problem**. If you are testing a function that renders a
+difficulty known as the **oracle problem**.[^2] If you are testing a function that renders a
 map, or ranks search results, or predicts weather, what exactly should you compare
 against?
 
@@ -130,7 +130,7 @@ the three cases you already thought of.
 Coverage tells you what your tests *ran*; it cannot tell you what they would *catch*. The
 pitfall in §9.1.3 — assertion-free tests that execute everything and check nothing —
 scores 100% on any coverage criterion while detecting no defects at all. **Mutation
-testing** closes that gap by testing the tests. A mutation tool takes your working code
+testing** closes that gap by testing the tests.[^3] A mutation tool takes your working code
 and plants small, deliberate defects called **mutants**: flip a `<` to `<=`, change a
 constant by one, negate a condition, delete a statement. Each mutant is a plausible bug —
 exactly the kind a tired programmer writes. The tool then reruns your suite against each
@@ -212,7 +212,7 @@ expected exception). Notice we are already thinking about selection: 0 and 100 a
 *boundaries* of the valid percent range (§9.4.2), and 150 is an invalid class.
 
 What makes a unit test *good*? The **FIRST** mnemonic names five properties worth
-enforcing on every test you write:
+enforcing on every test you write:[^4]
 
 - **F**ast — milliseconds, so the whole suite runs on every save;
 - **I**ndependent — no shared state and no required order, so any subset runs alone and
@@ -280,7 +280,7 @@ Higher levels test the assembled product against ever-broader notions of "correc
 
 A useful way to remember the difference: functional and system testing ask *"did we build
 the product right?"* (verification), while acceptance testing asks *"did we build the
-right product?"* (validation). Both matter, and passing one tells you nothing about the
+right product?"* (validation).[^5] Both matter, and passing one tells you nothing about the
 other.
 
 > **From acceptance criteria to acceptance tests.** The **Given / When / Then** scenarios
@@ -295,9 +295,9 @@ One more system-level suite earns its own name because you will run it constantl
 **smoke test** is a fast, shallow pass that answers a single question: *is the build
 fundamentally alive?* The app starts, the homepage loads, a user can log in — nothing
 deeper. The name comes from hardware bring-up: power the board on and see whether smoke
-comes out before bothering with finer measurements. Smoke tests run immediately after a
+comes out before bothering with finer measurements.[^6] Smoke tests run immediately after a
 build or a deployment, as a *gate*: if they fail, the build is dead on arrival, no deeper
-(and more expensive) testing is worth starting, and a deploy must not proceed. Chapter 12
+(and more expensive) testing is worth starting, and a deploy must not proceed.[^7] Chapter 12
 gives them a formal home as a stage of the delivery pipeline, run right after each deploy
 ([§12.2.2](../12-delivery/#1222-the-stages-of-a-pipeline)).
 
@@ -307,7 +307,7 @@ The levels are not equally cheap. A unit test runs in milliseconds and never fla
 full end-to-end (E2E) test may spin up a browser, a database, and three services, take
 minutes, and fail intermittently for reasons that have nothing to do with your code.
 This cost gradient motivates the **testing pyramid**: have *many* fast unit tests, *fewer*
-integration tests, and *only a handful* of slow end-to-end tests.
+integration tests, and *only a handful* of slow end-to-end tests.[^8]
 
 ```mermaid
 flowchart TD
@@ -328,7 +328,7 @@ later as "checkout total was wrong," and you must *debug down* to the line. Caug
 production, it arrives as a customer complaint and a refund. The cost of a defect
 typically rises substantially with each stage it survives — the exact multiplier varies
 by domain, tooling, and release process (§2.4.2) — so you push detection as far *down*
-and *early* as it will go.
+and *early* as it will go.[^9]
 
 > **Pitfall — the ice-cream cone.** Teams that skip unit tests and lean on a big pile of
 > slow, flaky E2E tests invert the pyramid into an "ice-cream cone." Their CI is slow,
@@ -336,11 +336,11 @@ and *early* as it will go.
 > flaky"). An ignored test suite protects nothing. Prefer the pyramid deliberately.
 
 Because flakiness is what poisons trust, know its causes. A **flaky test** — one that
-passes and fails across runs with no code change — almost always traces to one of four
+passes and fails across runs with no code change — most often traces to one of four
 roots: **race conditions and async timing** (the assertion runs before the work
 finishes); **shared mutable state** between tests (one test's leftovers change another's
 result); **test-order dependence** (the suite passes in one order and fails in another);
-or **unstable external dependencies** (real networks, real clocks, third-party services).
+or **unstable external dependencies** (real networks, real clocks, third-party services).[^10]
 The fixes mirror the causes: isolate state so each test builds and tears down its own
 world; make tests order-independent (and let the runner randomize order to prove it);
 await asynchronous work properly with sane timeouts instead of sleeping and hoping; and
@@ -405,16 +405,16 @@ exist.
 
 The CFG also gives you a number worth knowing. **Cyclomatic complexity** is the count of
 a function's decision points plus one — equivalently, for a graph with $E$ edges and $N$
-nodes, $E - N + 2$. It measures how many independent paths thread the function, and so
+nodes, $E - N + 2$.[^11] It measures how many independent paths thread the function, and so
 roughly how many tests branch coverage will demand. For `classify_and_sum`: two decisions
 (nodes 2 and 5), so complexity $2 + 1 = 3$; or count the graph above, $E = 9$, $N = 8$,
 $9 - 8 + 2 = 3$. Conventional bands for reading the number: **1–10** is simple, readily
 testable code; **11–20** is moderately complex; **21–50** is risky; above **50** is
-effectively untestable. The metric earns its keep as a *predictor*: high-complexity
+effectively untestable.[^12] The metric earns its keep as a *predictor*: high-complexity
 functions are where defects cluster and where the hard-to-cover branches live, which
 makes it a map of where to spend testing effort — and refactoring (Chapter 12,
 [§12.6](../12-delivery/#126-legacy-code-refactoring-and-technical-debt)) is the
-treatment for the hot spots it finds.
+treatment for the hot spots it finds.[^13]
 
 ### 9.3.2 Control-Flow Coverage Criteria
 
@@ -465,7 +465,7 @@ branch coverage plus judgment about loops (commonly: test the loop 0 times, once
 independent decisions, so path coverage is exponential and reserved for tiny, critical
 routines.
 
-The hierarchy, then: **path ⇒ branch ⇒ statement** (each implies the ones to its right).
+The hierarchy, then: **path ⇒ branch ⇒ statement** (each implies the ones to its right).[^14]
 Strength costs test cases; the engineering choice is how far up the hierarchy a given
 piece of code justifies climbing. A checkout total earns branch coverage; an autopilot
 earns more (§9.5).
@@ -481,7 +481,7 @@ edges.
 The insight is that inputs are not all different: a program usually treats whole *classes*
 of inputs identically, so one representative of a class is (almost) as good as any other.
 An **equivalence class (equivalence partition)** is a set of inputs the specification
-implies should be handled the same way. You partition the input space into classes —
+implies should be handled the same way.[^15] You partition the input space into classes —
 covering both *valid* and *invalid* classes — and pick one representative from each. This
 slashes the number of tests from "every input" to "one per class" while keeping strong
 coverage of *behaviors*.
@@ -506,7 +506,7 @@ forces you to remember the *invalid* classes that ad-hoc testing skips.
 Defects cluster at the *edges* of equivalence classes, because that is where programmers
 write the fragile comparisons: `<` versus `<=`, an off-by-one in a loop bound, `>` versus
 `>=`. **Boundary-value analysis** targets exactly those edges: for each boundary, test the
-value just below it, at it, and just above it.
+value just below it, at it, and just above it.[^15]
 
 For `set_volume`, valid range 1..100, the two boundaries are 1 (lower) and 100 (upper).
 The boundary values to test:
@@ -545,7 +545,7 @@ of equivalence classes.
 One black-box technique abandons careful selection altogether. **Fuzz testing (fuzzing)**
 throws huge volumes of malformed, random, or mutated inputs at a program and watches for
 crashes, hangs, and memory errors — no specification, no partitions, just the implicit
-oracle (§9.1.4) that the program *must not fall over*. It is a cousin of property-based
+oracle (§9.1.4) that the program *must not fall over*.[^16] It is a cousin of property-based
 testing but adversarial in spirit: instead of checking a property on well-formed inputs,
 it hunts for the ill-formed input nobody thought to reject. That makes fuzzing the
 workhorse of security testing — buffer overflows, injection flaws, and denial-of-service
@@ -561,7 +561,7 @@ says nothing about the individual **conditions** inside it. A suite can flip the
 decision true/false while some condition never actually influenced the outcome. For the
 highest-criticality software (in avionics, DO-178C requires it at the most critical
 design-assurance level), we need a stronger criterion:
-**Modified Condition/Decision Coverage (MC/DC)**.
+**Modified Condition/Decision Coverage (MC/DC)**.[^17]
 
 ### 9.5.1 Condition and Decision Coverage Are Independent
 
@@ -592,7 +592,7 @@ result.
 ### 9.5.2 MC/DC Pairs of Tests
 
 **MC/DC** demands the strongest practical property: **every condition must be shown to
-independently affect the decision's outcome.** Concretely, for each condition you must
+independently affect the decision's outcome.**[^18] Concretely, for each condition you must
 exhibit a **pair** of tests in which *only that condition changes*, everything else is
 held fixed, *and the decision's result flips*. That pair proves the condition is not dead
 weight — it really controls the outcome on its own.
@@ -601,9 +601,9 @@ MC/DC bundles four requirements: every decision takes both outcomes (decision co
 every condition takes both values (condition coverage); and each condition independently
 flips the decision. Remarkably, for a decision with **N conditions** this can usually be
 achieved with just **N + 1** tests — a linear number, versus $2^N$ for exhaustive testing
-of the truth table. That exhaustive criterion has its own name — **predicate coverage**
-(also called **multiple-condition coverage**), which requires every combination of
-condition truth values — and MC/DC is best understood as its practical approximation.
+of the truth table.[^18] That exhaustive criterion has its own name — **multiple-condition
+coverage**, which requires every combination of condition truth values — and MC/DC is
+best understood as its practical approximation.[^15]
 That is why MC/DC is the sweet spot for critical code: near-exhaustive rigor at linear
 cost.
 
@@ -707,8 +707,8 @@ misses interaction bugs like "date format breaks *only* on Safari *with* the JP 
 
 **Combinatorial testing** exploits an empirical regularity: the large majority of
 interaction defects are triggered by the interaction of just **two** parameters, and
-almost all of the rest by three. NIST studied fault databases across many domains and
-found that testing all *pairs* of parameter values catches the bulk of interaction faults.
+almost all of the rest by three.[^19] NIST studied fault databases across many domains and
+found that testing all *pairs* of parameter values catches the bulk of interaction faults.[^20]
 So instead of covering all *combinations*, we cover all *pairs* — **pairwise** (a.k.a.
 **all-pairs**, or 2-way) testing.
 
@@ -775,6 +775,84 @@ oracles, run automatically on every change — is the most reliable, most econom
 have for catching the defects Chapter 1 promised are inevitable. In Chapter 10 we turn to
 measuring quality across a project as a whole; the coverage numbers you learned to compute
 here are among the first metrics you will report.
+
+---
+
+### Sources
+
+[^1]: Edsger W. Dijkstra, *Notes on Structured Programming*, EWD249 (1970), §3 ("Program
+    testing can be used to show the presence of bugs, but never to show their absence!");
+    the aphorism also appears in the 1969 NATO *Software Engineering Techniques* report.
+    [cs.utexas.edu](https://www.cs.utexas.edu/~EWD/ewd02xx/EWD249.PDF).
+
+[^2]: Earl T. Barr, Mark Harman, Phil McMinn, Muzammil Shahbaz, and Shin Yoo, *The Oracle
+    Problem in Software Testing: A Survey*, IEEE Transactions on Software Engineering 41(5)
+    (2015). [doi.org](https://doi.org/10.1109/TSE.2014.2372785).
+
+[^3]: Richard A. DeMillo, Richard J. Lipton, and Frederick G. Sayward, *Hints on Test Data
+    Selection: Help for the Practicing Programmer*, IEEE Computer 11(4) (1978).
+    [doi.org](https://doi.org/10.1109/C-M.1978.218136).
+
+[^4]: Tim Ottinger and Brett Schuchert, *F.I.R.S.T.* (Agile in a Flash, 2009); popularized
+    in Robert C. Martin, *Clean Code*, ch. 9 (2008).
+    [agileinaflash.blogspot.com](https://agileinaflash.blogspot.com/2009/02/first.html).
+
+[^5]: Barry W. Boehm, *Verifying and Validating Software Requirements and Design
+    Specifications*, IEEE Software 1(1) (1984). [doi.org](https://doi.org/10.1109/MS.1984.233702).
+
+[^6]: Cem Kaner, James Bach, and Bret Pettichord, *Lessons Learned in Software Testing: A
+    Context-Driven Approach* (Wiley, 2002).
+    [wiley.com](https://www.wiley.com/en-us/Lessons+Learned+in+Software+Testing:+A+Context+Driven+Approach-p-9780471081128).
+
+[^7]: Steve McConnell, *Daily Build and Smoke Test*, IEEE Software 13(4) (1996).
+    [stevemcconnell.com](https://stevemcconnell.com/ieeesoftware/bp04.htm).
+
+[^8]: Mike Cohn, *Succeeding with Agile: Software Development Using Scrum* (Addison-Wesley,
+    2009); summarized in Martin Fowler, *TestPyramid* (2012).
+    [martinfowler.com](https://martinfowler.com/bliki/TestPyramid.html).
+
+[^9]: Barry Boehm and Victor R. Basili, *Software Defect Reduction Top 10 List*, IEEE
+    Computer 34(1) (2001). [cs.umd.edu](https://www.cs.umd.edu/projects/SoftEng/ESEG/papers/82.78.pdf).
+
+[^10]: Qingzhou Luo, Farah Hariri, Lamyaa Eloussi, and Darko Marinov, *An Empirical
+    Analysis of Flaky Tests*, Proc. FSE 2014. [doi.org](https://doi.org/10.1145/2635868.2635920).
+
+[^11]: Thomas J. McCabe, *A Complexity Measure*, IEEE Transactions on Software Engineering
+    SE-2(4) (1976). [doi.org](https://doi.org/10.1109/TSE.1976.233837).
+
+[^12]: Software Engineering Institute, *C4 Software Technology Reference Guide — A
+    Prototype*, CMU/SEI-97-HB-001 (1997), "Cyclomatic Complexity" section.
+    [sei.cmu.edu](https://www.sei.cmu.edu/documents/1625/1997_002_001_16523.pdf).
+
+[^13]: Arthur H. Watson and Thomas J. McCabe, *Structured Testing: A Testing Methodology
+    Using the Cyclomatic Complexity Metric*, NIST Special Publication 500-235 (1996).
+    [nvlpubs.nist.gov](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication500-235.pdf).
+
+[^14]: Paul Ammann and Jeff Offutt, *Introduction to Software Testing*, 2nd ed. (2016).
+    [cs.gmu.edu](https://cs.gmu.edu/~offutt/softwaretest/).
+
+[^15]: Glenford J. Myers, *The Art of Software Testing* (Wiley, 1979; 3rd ed. 2011).
+    [wiley.com](https://www.wiley.com/en-us/The+Art+of+Software+Testing%2C+3rd+Edition-p-9781119202486).
+
+[^16]: Barton P. Miller, Lars Fredriksen, and Bryan So, *An Empirical Study of the
+    Reliability of UNIX Utilities*, Communications of the ACM 33(12) (1990).
+    [doi.org](https://doi.org/10.1145/96267.96279).
+
+[^17]: RTCA, *DO-178C: Software Considerations in Airborne Systems and Equipment
+    Certification* (2011), Table A-7 — MC/DC is an objective only at Level A.
+    [rtca.org](https://www.rtca.org/).
+
+[^18]: Kelly J. Hayhurst, Dan S. Veerhusen, John J. Chilenski, and Leanna K. Rierson, *A
+    Practical Tutorial on Modified Condition/Decision Coverage*, NASA/TM-2001-210876 (2001).
+    [ntrs.nasa.gov](https://ntrs.nasa.gov/citations/20010057789).
+
+[^19]: D. Richard Kuhn, Dolores R. Wallace, and Albert M. Gallo, *Software Fault
+    Interactions and Implications for Software Testing*, IEEE Transactions on Software
+    Engineering 30(6) (2004).
+    [csrc.nist.gov](https://csrc.nist.gov/pubs/journal/2004/06/software-fault-interactions-and-implications-for-s/final).
+
+[^20]: D. Richard Kuhn, Raghu N. Kacker, and Yu Lei, *Practical Combinatorial Testing*,
+    NIST Special Publication 800-142 (2010). [csrc.nist.gov](https://csrc.nist.gov/pubs/sp/800/142/final).
 
 ---
 

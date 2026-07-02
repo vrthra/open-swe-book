@@ -15,6 +15,11 @@ well. Types: 📘 open text · 🎓 course · 📄 primary source/standard · �
   [web.mit.edu/6.031](https://web.mit.edu/6.031/www/). Course readings under a Creative
   Commons license; excellent for the architecture, testing, and code-quality work in the
   building phase (Status Reports 1–2).
+- 📄 **Alistair Cockburn — "Walking skeleton" (from *Crystal Clear*, 2004)** —
+  [alistair.cockburn.us (archived)](https://web.archive.org/web/20081017110100/http://alistair.cockburn.us/Walking+skeleton).
+  The original description of the walking-skeleton strategy behind the skeletal-system
+  milestone (§A.3). The book is commercially published; Cockburn's own page, preserved by
+  the Internet Archive, is free to read.
 
 ## Requirements for the proposal (A.2)
 
@@ -30,16 +35,35 @@ well. Types: 📘 open text · 🎓 course · 📄 primary source/standard · �
 ## Team effectiveness (A.1.2)
 
 - 📄 **Google re:Work — Guide: "Understand team effectiveness" (Project Aristotle)** —
-  [rework.withgoogle.com](https://rework.withgoogle.com/guides/understanding-team-effectiveness/introduction/).
+  [rework.withgoogle.com](https://rework.withgoogle.com/intl/en/guides/understand-team-effectiveness).
   Google's research finding that *how* a team works together — especially psychological
   safety — matters more than *who* is on it. Directly relevant to conflict and uneven
   contribution. The re:Work guides and tools are free to use.
+- 📄 **Amy C. Edmondson — "Psychological Safety and Learning Behavior in Work Teams"**
+  (*Administrative Science Quarterly*, 1999) — [doi.org](https://doi.org/10.2307/2666999).
+  The original research article defining psychological safety as a shared belief that a
+  team is safe for interpersonal risk taking. The journal article is paywalled; access it
+  through your library, or read the free re:Work guide above, which summarizes it.
+- 📄 **Patrick Lencioni — *The Five Dysfunctions of a Team* (2002), model overview** —
+  [tablegroup.com](https://www.tablegroup.com/vulnerability-based-trust/). The source of
+  **vulnerability-based trust** as the foundation of teamwork (§A.1.2). The book is
+  commercially published; the publisher's overview of the model is free to read.
+- 📄 **NACE — Job Outlook 2025** —
+  [naceweb.org](https://www.naceweb.org/docs/default-source/default-document-library/2025/publication/research-report/2025-nace-job-outlook-jan-2025.pdf).
+  The National Association of Colleges and Employers' annual employer survey; teamwork
+  consistently ranks among the attributes employers most want to see in new graduates.
+  The report is freely downloadable.
 
 ## Process (A.1.1, referenced from Ch. 2)
 
 - 📄 **The Scrum Guide** — [scrumguides.org](https://scrumguides.org/). The definitive,
-  short, free definition of Scrum roles, events, and artifacts, released under a Creative
-  Commons Attribution-ShareAlike license. Ideal for teams choosing a process in week 2.
+  short, free definition of Scrum accountabilities, events, and artifacts, released under a
+  Creative Commons Attribution-ShareAlike license. Ideal for teams choosing a process in
+  week 2.
+- 📘 **Ryan Singer — *Shape Up: Stop Running in Circles and Ship Work that Matters*** —
+  [basecamp.com/shapeup](https://basecamp.com/shapeup). Basecamp's product-development
+  method — pitches, appetite, fixed time and variable scope, scope hammering — that the
+  two-week-sprint variant of this project draws on. Free to read online.
 - 📄 **Manifesto for Agile Software Development** —
   [agilemanifesto.org](https://agilemanifesto.org/). The four values and twelve
   principles, freely readable, that motivate the whole iterate-early approach here.

@@ -79,13 +79,13 @@ The **Unix philosophy**, distilled from the culture that built the Unix operatin
 values small tools that each do one thing well and compose through clean interfaces. Its
 maxims — *write programs that do one thing well; expect the output of one program to become
 the input of another; build a prototype as soon as possible; prefer clarity over
-cleverness* — are really a philosophy of **decomposition and iteration**. The connection to
+cleverness* — are really a philosophy of **decomposition and iteration**.[^1] The connection to
 process is direct: build small, integrate through narrow interfaces, and get something
 running early so reality can correct you. Those instincts reappear in every good modern
 process.
 
-The **Agile Manifesto** (2001) crystallized the grow-it culture into four value statements.
-In each, both sides have worth, but the left is valued *more*:
+The **Agile Manifesto** (2001) crystallized the grow-it culture into four value
+statements.[^2] In each, both sides have worth, but the left is valued *more*:
 
 - **Individuals and interactions** over processes and tools.
 - **Working software** over comprehensive documentation.
@@ -97,7 +97,7 @@ what to trust when they conflict. If your beautiful plan and your working softwa
 disagree, believe the software. If a document and a conversation with the customer
 disagree, have the conversation. The manifesto's twelve supporting principles push
 further: deliver working software frequently, welcome changing requirements even late,
-maintain a sustainable pace, and reflect regularly on how to improve. Every agile framework
+maintain a sustainable pace, and reflect regularly on how to improve.[^3] Every agile framework
 in this chapter is one concrete way to live those values.
 
 > **Principle.** Values outrank rules. A team that follows Scrum's ceremonies to the letter
@@ -129,14 +129,14 @@ coordination — and pick the process that best answers the ones that dominate y
 
 ### 2.2.1 Overview of Scrum
 
-**Scrum** is the most widely used framework for organizing agile teamwork. It is
+**Scrum** is one of the most widely used frameworks for organizing agile teamwork. It is
 deliberately minimal: it does not tell you how to write code, design modules, or test. It
 tells you how to *organize the team's time and decisions* so that you deliver working
 software in short, regular cycles and improve as you go. You supply the engineering
 practices (Section 2.3 covers a strong set); Scrum supplies the rhythm.
 
 The heartbeat of Scrum is the **sprint**: a fixed-length iteration, usually one to four
-weeks, that produces a potentially shippable increment of the product. Everything else in
+weeks, that produces a potentially shippable increment of the product.[^4] Everything else in
 Scrum exists to plan a sprint, keep it on track, ship its result, and learn from it.
 
 ```mermaid
@@ -160,9 +160,9 @@ course based on real, working software.
 ### 2.2.2 Scrum Accountabilities
 
 The 2020 *Scrum Guide* defines three **accountabilities** — the Product Owner, the Scrum
-Master, and the Developers — within a single Scrum Team. (Earlier versions called these
+Master, and the Developers — within a single Scrum Team.[^4] (Earlier versions called these
 "roles"; the 2020 edition prefers *accountabilities* to stress that they describe
-responsibility, not job titles.) Confusing them is a common source of dysfunction.
+responsibility, not job titles.)[^5] Confusing them is a common source of dysfunction.
 
 The **Product Owner** owns *what* and *why*. They represent the customer and stakeholders,
 maintain the product backlog, and — crucially — decide priority. When two features compete,
@@ -171,7 +171,7 @@ gets one coherent voice about value, not a committee.
 
 The **Developers** (the people building the product — programmers, testers, designers, and
 anyone else doing the work) own *how*. They estimate, design, build, and test. In Scrum they
-are **self-organizing**: no one outside the group assigns tasks to individuals within it.
+are **self-managing**: no one outside the group assigns tasks to individuals within it.[^4]
 The team collectively commits to a sprint goal and figures out how to meet it.
 
 The **Scrum Master** owns *the process itself*. They are not a project manager who assigns
@@ -195,7 +195,7 @@ them as empty ritual is a classic failure.
   work — the sprint backlog. The output answers two questions: *what* will we deliver, and
   *how* will we approach it.
 - The **Daily Scrum** (or standup) is a short, time-boxed check-in — fifteen minutes — where
-  the Developers synchronize and re-plan the next day's work toward the sprint goal. It is
+  the Developers synchronize and re-plan the next day's work toward the sprint goal.[^4] It is
   for the *team*, not a status report to a manager. The useful frame is not "what did I do
   yesterday" theater but "are we still on track for the goal, and what is in our way?"
 - The **Sprint Review** closes the sprint's *product* loop. The team demonstrates the working
@@ -207,7 +207,7 @@ them as empty ritual is a classic failure.
 
 ### 2.2.4 Scrum Artifacts
 
-Scrum has three artifacts, each paired with a commitment that keeps it honest.
+Scrum has three artifacts, each paired with a commitment that keeps it honest.[^4]
 
 The **Product Backlog** is the single, ordered list of everything that might be worth doing
 to the product — features, fixes, improvements. It is never "done"; it evolves as you learn.
@@ -248,7 +248,7 @@ Where Scrum organizes the team's *time*, **Extreme Programming (XP)** prescribes
 *engineering discipline*. XP takes practices that are known to be good — testing, code
 review, integration, simple design — and turns their dials up to "extreme": if testing is
 good, test constantly; if review is good, review continuously by programming in pairs; if
-integration is good, integrate many times a day. The two frameworks are complementary, and
+integration is good, integrate many times a day.[^6] The two frameworks are complementary, and
 teams often combine them.
 
 ### 2.3.1 Listening to Customers: User Stories
@@ -260,14 +260,14 @@ front-desk clerk, I want to see unconfirmed appointments highlighted so that I c
 those patients before the day fills up."*
 
 A story is deliberately *not* a specification. It is, in the well-worn phrase, a *promise to
-have a conversation*. The card is a placeholder for a discussion between the developers and
+have a conversation*.[^7] The card is a placeholder for a discussion between the developers and
 the customer about the details — details you will understand far better once you build the
 first version and show it. Stories keep requirements small, concrete, and grounded in user
 value, and their size makes them easy to prioritize, estimate, and slot into a sprint.
 
 Good stories are often summarized by the acronym **INVEST**: Independent, Negotiable,
 Valuable, Estimable, Small, and Testable (each unpacked in
-[§3.4.1](../03-user-requirements/#341-guidelines-for-effective-user-stories)). That last property matters most for the next
+[§3.4.1](../03-user-requirements/#341-guidelines-for-effective-user-stories)).[^8] That last property matters most for the next
 section: if you cannot state how you would *test* that a story is satisfied, you do not yet
 understand it well enough to build it.
 
@@ -289,7 +289,7 @@ flowchart LR
 You write a small automated test for behavior that does not exist yet and watch it fail
 (*red*) — proving the test can fail and pinning down what "done" means for this slice. Then
 you write the least code that makes it pass (*green*). Then you improve the design while the
-test guards against breakage (*refactor*). Repeat in minutes-long cycles.
+test guards against breakage (*refactor*). Repeat in minutes-long cycles.[^9]
 
 Why work this way? Three reasons. First, tests written *first* are honest — they cannot be
 quietly shaped to match whatever the code happens to do. Second, the growing suite is a
@@ -310,7 +310,7 @@ are where accidental complexity comes from.
 XP's answer rests on three habits. **Simple design**: build the simplest thing that could
 possibly work for the stories you have *now*, not the ones you imagine you might have later
 (the discipline of resisting speculative generality is sometimes captured as YAGNI — *you
-aren't gonna need it*). **Refactoring**: continuously improve the design of existing code
+aren't gonna need it*).[^10] **Refactoring**: continuously improve the design of existing code
 without changing its behavior, so the structure keeps pace with your growing understanding.
 And the **test suite** that makes refactoring safe. Together these let the design *emerge*:
 it is always as good as your current understanding, and it improves as your understanding
@@ -333,7 +333,7 @@ Scrum gives the cadence — sprints, backlog, review, retrospective — and the 
 priorities and impediments owned. XP fills the sprint with the discipline that makes each
 increment genuinely done: TDD, pair or peer review, refactoring, and **continuous
 integration**, in which everyone merges into a shared mainline many times a day and an
-automated build-and-test pipeline verifies each merge. (Chapter 12 dissects that pipeline
+automated build-and-test pipeline verifies each merge.[^11] (Chapter 12 dissects that pipeline
 stage by stage and follows it all the way to production.)
 
 The combination is more than the sum of its parts. Scrum without engineering practice
@@ -359,7 +359,7 @@ each phase completed and signed off before the next begins, like water flowing d
 of steps and never back up. (One historical note before we critique it: this strict,
 single-pass model is the *textbook* waterfall. Royce's 1970 paper — the usual citation —
 presented the strict sequence and then argued it was risky and needed feedback and
-iteration. The industry largely adopted the diagram and skipped the warning; this section
+iteration.[^12] The industry largely adopted the diagram and skipped the warning; this section
 critiques the model as it was actually practiced.)
 
 Its appeal is real: it is simple to explain, easy to plan and bill against, and it front-loads
@@ -398,7 +398,7 @@ The economic argument against waterfall is captured by the **cost-of-change curv
 of real projects have long observed that the cost of fixing a defect or accommodating a change
 rises steeply the later it is discovered — a requirements error caught during requirements is
 nearly free to fix; the same error caught after release can cost orders of magnitude more,
-because so much work has been built on top of the mistake.
+because so much work has been built on top of the mistake.[^13]
 
 ```mermaid
 xychart-beta
@@ -517,7 +517,7 @@ enumerate the likely ones in advance and attack the biggest first.
 
 You do not need a heavy methodology to reason about risk usefully. A rough assessment ranks
 risks by **exposure** — roughly, *probability × impact* — so you spend your limited attention
-where it matters. A defect that is very likely but trivial ranks below one that is unlikely
+where it matters.[^14] A defect that is very likely but trivial ranks below one that is unlikely
 but catastrophic.
 
 Common risk categories on software projects include:
@@ -560,7 +560,7 @@ Now a cautionary tale, drawn from a widely discussed episode in the history of w
 the mid-1990s, a leading browser maker shipped a hugely successful early version of its product.
 For the next major version, rather than evolving the working codebase, the organization
 undertook a sweeping rewrite of large parts of the system at once — a big, ambitious, mostly
-up-front effort to build the successor.
+up-front effort to build the successor.[^15]
 
 The rewrite proved far harder and slower than planned. Because so much was rebuilt
 simultaneously, the familiar big-bang pathology appeared: integration was painful, the new
@@ -569,7 +569,7 @@ shipping steady improvements to their own products. By the time the ambitious su
 stabilized, the organization had bled schedule, quality, and market position. Commentators
 later treated the episode as a textbook argument against throwing away working software for a
 grand rewrite — you discard hard-won knowledge embedded in code that already handles a thousand
-edge cases, and you take on enormous integration and schedule risk all at once.
+edge cases, and you take on enormous integration and schedule risk all at once.[^15]
 
 The contrast with Section 2.6.2 is the lesson. The successful project reduced risk by evolving a
 working system in small, validated steps. The troubled one *concentrated* risk into a single
@@ -585,7 +585,7 @@ late-validated bets are dangerous; small, early-validated ones are safe.
 
 ### 2.7.1 Overview of the Spiral Framework
 
-The **spiral model** is an explicitly **risk-driven** process framework. Its central claim is
+The **spiral model** is an explicitly **risk-driven** process framework.[^16] Its central claim is
 that the *risks* of your particular project — not a fixed schedule — should decide what you do
 next. It is best understood not as a rival to waterfall or agile but as a meta-framework: at
 each turn it tells you *which* approach to apply based on where your biggest uncertainties lie.
@@ -629,7 +629,7 @@ Scrum, XP, and the spiral all iterate in short cycles and carry unfinished work 
 a backlog. **Shape Up** — the method Basecamp published as a free online book — keeps the
 fixed cadence but makes three sharp bets that set it apart: it fixes *time* and flexes
 *scope*, it refuses to keep a backlog, and it hands a team a whole shaped problem rather
-than a list of tasks. It is worth studying precisely because it questions assumptions the
+than a list of tasks.[^17] It is worth studying precisely because it questions assumptions the
 other models share.
 
 Shape Up runs in three phases that overlap across the calendar:
@@ -651,12 +651,12 @@ judgment), **solved** (the main elements are worked out, not vague), and **bound
 says explicitly what is *out* of scope). The output is a **pitch**: problem, appetite,
 solution sketch, rabbit holes to avoid, and no‑gos. Shaping is where **rabbit holes** —
 unsolved design problems or untested technical assumptions — get found and removed *before*
-anyone commits.
+anyone commits.[^18]
 
 Appetites come in two standard batch sizes. A **small batch** is a designer and one or two
 programmers for one to two weeks; a **big batch** is that same small team for the full
 six‑week cycle. An idea that will not fit even a big batch is not given more time — it is
-narrowed until it fits, because the appetite, not the idea, is fixed.
+narrowed until it fits, because the appetite, not the idea, is fixed.[^18]
 
 Shaping itself follows four steps, in order:
 
@@ -677,7 +677,7 @@ sketches will make promises the appetite cannot keep.
 **Betting (deciding, without a backlog).** During the two‑week **cool‑down** between
 cycles, a small **betting table** of senior people reviews the shaped pitches and *bets* on
 a few for the next cycle. A **bet** commits one team to one project for the whole cycle,
-uninterrupted, with the expectation of finishing.
+uninterrupted, with the expectation of finishing.[^19]
 
 > **Principle — bets, not backlogs.** Shape Up keeps *no backlog*. Unchosen ideas simply
 > lapse; if one really matters, it comes back and gets re‑pitched. This trades the comfort
@@ -692,11 +692,11 @@ poker face even about ideas you love — visible enthusiasm commits you before a
 checked for rabbit holes. Bugs get no privileged lane either; Shape Up handles them three
 ways: fix them during cool‑down (that slack time exists partly for this), pitch a big
 bug at the betting table like any other project, or run an occasional dedicated
-**bug‑smash** cycle where the whole team pays down accumulated defects.
+**bug‑smash** cycle where the whole team pays down accumulated defects.[^19]
 
 **Building (hand over the whole problem).** The team gets the pitch, *not* a task
 breakdown — "splitting the project into tasks up front is like putting the pitch through a
-paper shredder." They define their own tasks and own how the pieces fit. Three building
+paper shredder."[^20] They define their own tasks and own how the pieces fit. Three building
 practices are worth borrowing regardless of your process:
 
 - **Get one piece done.** Finish one *vertically integrated* slice early — front end wired
@@ -715,7 +715,7 @@ practices are worth borrowing regardless of your process:
 **not** automatically get an extension. The most you can lose is one cycle. Extending is
 allowed only if what remains is genuine must‑have work that is *entirely downhill*; any
 remaining uphill work means the shaping was wrong, so the project goes back to shaping
-rather than dragging on.
+rather than dragging on.[^21]
 
 **Shape Up vs. Scrum.** The contrast sharpens both. Scrum re‑plans every 1–4‑week sprint
 and rolls unfinished stories forward on a *backlog*; Shape Up makes a *one‑shot bet* over a
@@ -738,7 +738,8 @@ explicit by steering each loop toward the biggest remaining risk.
 The practical takeaways connect straight back to Chapter 1's four pressures:
 
 - **Coordination:** a named, deliberate process lets a team of people act like one competent
-  engineer instead of a crowd; Scrum's roles, events, and artifacts are one proven scaffold.
+  engineer instead of a crowd; Scrum's accountabilities, events, and artifacts are one proven
+  scaffold.
 - **Change:** short iterations make change cheap by ensuring any rework costs at most one
   iteration, and by always adapting to your *latest* understanding.
 - **Defects:** continuous testing and integration, structured by the V-model's levels of
@@ -751,6 +752,32 @@ There is no universally best process — only a best process for *this* project'
 and constraints. Your job as an engineer is not to pledge allegiance to a methodology but to
 read the risks in front of you and choose, and adapt, the process that confronts them earliest
 and most cheaply.
+
+---
+
+### Sources
+
+[^1]: M. D. McIlroy's Unix maxims (1978), as collected in Eric S. Raymond, *The Art of Unix Programming*, ch. 1 (2003). [catb.org](http://www.catb.org/esr/writings/taoup/html/ch01s06.html).
+[^2]: Kent Beck et al., *Manifesto for Agile Software Development* (2001). [agilemanifesto.org](https://agilemanifesto.org/).
+[^3]: *Principles behind the Agile Manifesto* (2001). [agilemanifesto.org](https://agilemanifesto.org/principles.html).
+[^4]: Ken Schwaber and Jeff Sutherland, *The Scrum Guide* (2020). [scrumguides.org](https://scrumguides.org/scrum-guide.html).
+[^5]: Ken Schwaber and Jeff Sutherland, *Scrum Guide Revisions* (2020). [scrumguides.org](https://scrumguides.org/revisions.html).
+[^6]: Kent Beck with Cynthia Andres, *Extreme Programming Explained: Embrace Change*, 2nd ed. (2004). [informit.com](https://www.informit.com/store/extreme-programming-explained-embrace-change-9780321278654).
+[^7]: Ron Jeffries, *Essential XP: Card, Conversation, Confirmation* (2001); the phrase "a promise for a conversation" is Alistair Cockburn's. [ronjeffries.com](https://ronjeffries.com/xprog/articles/expcardconversationconfirmation/).
+[^8]: Bill Wake, *INVEST in Good Stories, and SMART Tasks* (2003). [xp123.com](https://xp123.com/articles/invest-in-good-stories-and-smart-tasks/).
+[^9]: Kent Beck, *Test-Driven Development: By Example* (2002). [informit.com](https://www.informit.com/store/test-driven-development-by-example-9780321146533).
+[^10]: Martin Fowler, *Yagni* (2015). [martinfowler.com](https://martinfowler.com/bliki/Yagni.html).
+[^11]: Martin Fowler, *Continuous Integration* (2024 revision). [martinfowler.com](https://martinfowler.com/articles/continuousIntegration.html).
+[^12]: Winston W. Royce, *Managing the Development of Large Software Systems*, Proceedings of IEEE WESCON (1970). [cs.umd.edu](https://www.cs.umd.edu/class/spring2003/cmsc838p/Process/waterfall.pdf).
+[^13]: Barry Boehm and Victor R. Basili, *Software Defect Reduction Top 10 List*, IEEE Computer 34(1) (2001), summarizing data reported in Barry W. Boehm, *Software Engineering Economics* (Prentice-Hall, 1981). [cs.umd.edu](https://www.cs.umd.edu/projects/SoftEng/ESEG/papers/82.78.pdf).
+[^14]: Barry W. Boehm, *Software Risk Management: Principles and Practices*, IEEE Software 8(1) (1991). [cs.virginia.edu](https://www.cs.virginia.edu/~sherriff/papers/Boehm%20-%201991.pdf).
+[^15]: Joel Spolsky, *Things You Should Never Do, Part I* (2000). [joelonsoftware.com](https://www.joelonsoftware.com/2000/04/06/things-you-should-never-do-part-i/).
+[^16]: Barry W. Boehm, *A Spiral Model of Software Development and Enhancement*, IEEE Computer 21(5) (1988). [cse.msu.edu](https://www.cse.msu.edu/~cse435/Homework/HW3/boehm.pdf).
+[^17]: Ryan Singer, *Shape Up: Stop Running in Circles and Ship Work that Matters* (Basecamp, 2019). [basecamp.com/shapeup](https://basecamp.com/shapeup).
+[^18]: Ryan Singer, *Shape Up*, Part One: Shaping, chs. 2–6 (2019). [basecamp.com](https://basecamp.com/shapeup/1.1-chapter-02).
+[^19]: Ryan Singer, *Shape Up*, Part Two: Betting, chs. 7–9 (2019). [basecamp.com](https://basecamp.com/shapeup/2.1-chapter-07).
+[^20]: Ryan Singer, *Shape Up*, Part Three: Building, chs. 10–13 (2019). [basecamp.com](https://basecamp.com/shapeup/3.1-chapter-10).
+[^21]: Ryan Singer, *Shape Up*, ch. 14, "Decide When to Stop" (2019). [basecamp.com](https://basecamp.com/shapeup/3.5-chapter-14).
 
 ---
 
