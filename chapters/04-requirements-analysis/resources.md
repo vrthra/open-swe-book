@@ -12,7 +12,7 @@ open license. Prefer these over paywalled textbooks.
 
 - 📘 **Mike Cohn — "Story Points" and estimation articles** (Mountain Goat Software blog).
   The most widely cited practitioner writing on story points, velocity, and relative sizing.
-  <https://www.mountaingoatsoftware.com/blog/categories/estimating>
+  <https://www.mountaingoatsoftware.com/blog>
   *Free to read; © Mountain Goat Software. Concepts are freely reusable; do not copy text.*
 
 - 📘 **Mike Cohn — main blog** (agile planning, splitting stories, release forecasting).

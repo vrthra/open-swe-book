@@ -28,7 +28,7 @@ known.
   (Chapter 3) to more structured behavioral descriptions, with an agile framing. Book and
   companion MOOC materials are free to read.
 - 📘 **MIT 6.005 / 6.031 — Software Construction, "Specifications" readings** —
-  [MIT OpenCourseWare](https://ocw.mit.edu/courses/6-005-software-construction-fall-2016/).
+  [MIT OpenCourseWare](https://ocw.mit.edu/courses/6-005-software-construction-spring-2016/).
   Complements this chapter by showing how the behavior a use case describes becomes a
   precise specification to design and test against. CC BY-NC-SA.
 

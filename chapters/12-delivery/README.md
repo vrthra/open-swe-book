@@ -854,7 +854,7 @@ to change for longer than anyone who built it expects.
 [^9]: Seth Gilbert and Nancy Lynch, *Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services* (ACM SIGACT News, 2002). [doi.org](https://doi.org/10.1145/564585.564601).
 [^10]: Martin Fowler, *Continuous Integration* (2006; revised 2024). [martinfowler.com](https://martinfowler.com/articles/continuousIntegration.html).
 [^11]: U.S. Securities and Exchange Commission, *In the Matter of Knight Capital Americas LLC*, Exchange Act Release No. 34-70694 (2013). [sec.gov](https://www.sec.gov/litigation/admin/2013/34-70694.pdf).
-[^12]: CNNMoney, *Knight Capital in $400 million rescue agreement* (2012). [money.cnn.com](https://money.cnn.com/2012/08/06/investing/knight-capital-agreement/index.htm).
+[^12]: CNNMoney, *Knight Capital in $400 million rescue agreement* (2012). [money.cnn.com](https://web.archive.org/web/2013/https://money.cnn.com/2012/08/06/investing/knight-capital-agreement/index.htm).
 [^13]: CrowdStrike, *External Technical Root Cause Analysis — Channel File 291* (2024). [crowdstrike.com](https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf).
 [^14]: David Weston (Microsoft), *Helping our customers through the CrowdStrike outage* (2024). [blogs.microsoft.com](https://blogs.microsoft.com/blog/2024/07/20/helping-our-customers-through-the-crowdstrike-outage/).
 [^15]: Delta Air Lines, *Form 8-K* (October 2024). [sec.gov](https://www.sec.gov/Archives/edgar/data/27904/000168316824005369/delta_8k.htm).

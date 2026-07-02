@@ -11,7 +11,7 @@ resource is free to read but not openly relicensable, it is marked *free to read
   *abstract data types*, and *abstraction functions & rep invariants* are the best free
   treatment of information hiding and interface design anywhere. *License:* course
   materials under **CC BY‑SA** (see the site footer).
-- 📘 **Software Engineering at Google** — [abseil.io/resources/swe-book](https://abseil.io/resources/swe-book/).
+- 📘 **Software Engineering at Google** — [abseil.io/resources/swe-book](https://abseil.io/resources/swe-book).
   Especially the chapters on *dependencies*, *large-scale change*, and *deprecation*, which
   show coupling, modularity, and "design for change" at industrial scale. *License:* free to
   read online; individual figures **CC BY 4.0** (see the book's front matter).
@@ -28,7 +28,7 @@ resource is free to read but not openly relicensable, it is marked *free to read
 ## Coupling, cohesion, and design principles
 
 - 📘 **Refactoring.Guru — Design Principles & SOLID** —
-  [refactoring.guru/design-patterns/design-principles](https://refactoring.guru/design-patterns/design-principles)
+  [refactoring.guru/design-patterns](https://refactoring.guru/design-patterns)
   and [refactoring.guru/refactoring/smells/couplers](https://refactoring.guru/refactoring/smells/couplers).
   Clear, illustrated explanations of coupling smells and the principles behind low
   coupling / high cohesion. *License:* free to read; content is the site's own (not openly
@@ -89,7 +89,7 @@ resource is free to read but not openly relicensable, it is marked *free to read
   author's university page.
 - 📄 **ISO/IEC/IEEE 42010 — Architecture description** — the standard behind "views,"
   "viewpoints," and "concerns." Overview and definitions at
-  [iso-architecture.org/42010](https://www.iso-architecture.org/42010/); official catalog
+  [archived overview site](https://web.archive.org/web/2023/http://www.iso-architecture.org/42010/) (original site now offline); official catalog
   page: [iso.org/standard/74393.html](https://www.iso.org/standard/74393.html). *License:*
   standard is paid; the overview page is *free to read*.
 - 📘 **Software Architecture in Practice / SEI resources** — L. Bass, P. Clements, and

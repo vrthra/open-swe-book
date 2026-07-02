@@ -40,7 +40,7 @@ where known. Each entry notes its license or access terms; when in doubt, check 
   (excluding Microsoft), with only 10–20 percent likely covered by cyber insurance.
   *Access: free to read.*
 - 📄 **CNNMoney — "Knight Capital in $400 million rescue agreement"** (August 6, 2012) —
-  [money.cnn.com](https://money.cnn.com/2012/08/06/investing/knight-capital-agreement/index.htm).
+  [money.cnn.com](https://web.archive.org/web/2013/https://money.cnn.com/2012/08/06/investing/knight-capital-agreement/index.htm).
   Contemporary account of the emergency financing that kept Knight alive after August 1;
   the SEC order above records the July 2013 merger into KCG Holdings. *Access: free to
   read.*
@@ -112,7 +112,7 @@ where known. Each entry notes its license or access terms; when in doubt, check 
   — a useful checklist for auditing your own pipeline against §12.2–12.3. *License: CC
   BY-SA 4.0.*
 - 📘 **Bryan Finster — "5-Minute DevOps" series** — free to read on
-  [dev.to/bdfinst](https://dev.to/bdfinst) and Medium. Short, blunt essays from a
+  [bdfinst.medium.com](https://bdfinst.medium.com/) and [bryanfinster.com](https://bryanfinster.com/). Short, blunt essays from a
   practitioner on trunk-based development, small batches, pipeline discipline, and why
   "we're too regulated for CD" is usually wrong. Several installments pair directly with
   this chapter's sections. *Access: free to read.*

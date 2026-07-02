@@ -6,7 +6,7 @@ well. Types: 📘 open text · 🎓 course · 📄 primary source/standard · �
 ## Running a team project end to end
 
 - 🎓 **UC Berkeley — Engineering Software as a Service (ESaaS), project guidance** —
-  [saasbook.info/resources](https://www.saasbook.info/resources). Berkeley's course
+  [saasbook.info](https://www.saasbook.info/). Berkeley's course
   materials on scoping, running, and grading agile team projects, including customer
   interaction and the iterate-toward-a-viable-product model this appendix follows. The
   companion MOOC and slides are free to use; the textbook itself is separately licensed,

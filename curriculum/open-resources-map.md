@@ -81,7 +81,7 @@ hierarchies, security attack trees.
 | 📘 | M. Cohn, ["Agile Estimating and Planning" free chapters/articles](https://www.mountaingoatsoftware.com/blog) | Velocity, story points. |
 | 📄 | [MoSCoW prioritization (DSDM/Agile Business)](https://www.agilebusiness.org/dsdm-project-framework/moscow-prioritisation.html) | Must/Should/Could/Won't. |
 | 📄 | N. Kano et al., [Kano model overview](https://foldingburritos.com/blog/kano-model/) | Satisfiers vs. dissatisfiers. |
-| 📄 | B. Boehm, [COCOMO II model definition](http://csse.usc.edu/TECHRPTS/1995/usccse95-500/usccse95-500.pdf) | Parametric effort estimation. |
+| 📄 | B. Boehm, [COCOMO II model definition](https://web.archive.org/web/20160910062006/http://csse.usc.edu/TECHRPTS/1995/usccse95-500/usccse95-500.pdf) | Parametric effort estimation. |
 | 📄 | [Wideband Delphi](https://en.wikipedia.org/wiki/Wideband_delphi) | Structured group consensus. |
 
 Covers: iteration planning, anchoring bias, story points & velocity, Planning Poker,
@@ -91,7 +91,7 @@ MoSCoW, Kano, value/cost/risk, COCOMO.
 
 | Type | Resource | Notes |
 |------|----------|-------|
-| 📘 | A. Cockburn, ["Use cases, ten years later" & templates](https://alistair.cockburn.us/coffee-cup-example/) | The definitive use‑case method. |
+| 📘 | A. Cockburn, [*Use-Case Foundation* — templates & method](https://alistaircockburn.com/Use%20Case%20Foundation.pdf) | The definitive use‑case method. |
 | 📄 | [UML Use Case Diagrams (OMG UML spec)](https://www.omg.org/spec/UML/) | Actors, relationships, notation. |
 | 📘 | [ESaaS §7 (user stories vs. use cases)](https://saasbook.info/) | When to use each. |
 | 🎥 | [Use case modeling tutorials (free)](https://www.uml-diagrams.org/use-case-diagrams.html) | Notation reference. |
@@ -132,7 +132,7 @@ client‑server, broker, RESTful APIs, product lines.
 |------|----------|-------|
 | 📘 | [Google Engineering Practices — Code Review](https://google.github.io/eng-practices/review/) | How industry does code review. |
 | 📘 | [MIT 6.031 — Code Review reading](http://web.mit.edu/6.031/www/sp21/classes/04-code-review/) | Static checking & review practice. |
-| 📄 | M. Fagan, ["Design and Code Inspections"](https://www.cs.umd.edu/class/spring2019/cmsc435/reading/Fagan-inspections.pdf) (IBM Sys. J., 1976) | The origin of formal inspection. |
+| 📄 | M. Fagan, ["Design and Code Inspections"](https://dl.acm.org/doi/10.1147/sj.153.0182) (IBM Sys. J., 1976) | The origin of formal inspection. |
 | 📘 | ["Software Engineering at Google" — code review ch.](https://abseil.io/resources/swe-book) | Review at scale. |
 | 📄 | [SonarQube / linters docs](https://docs.sonarsource.com/) | Automated static analysis in practice. |
 
@@ -199,7 +199,7 @@ legacy code/refactoring/technical debt.
 
 | Type | Resource | Notes |
 |------|----------|-------|
-| 🎓 | [ESaaS project guidance & rubric](https://saasbook.info/resources) | Running a semester team project. |
+| 🎓 | [ESaaS project guidance & rubric](https://www.saasbook.info/) | Running a semester team project. |
 | 📄 | [Volere templates](https://www.volere.org/templates/) | Proposal & requirements docs. |
 | 📘 | [Google Project Aristotle (team effectiveness)](https://rework.withgoogle.com/print/guides/5721312655835136/) | What makes teams work. |
 | 📄 | [ACM/IEEE CS Curricula — SE course guidance](https://www.acm.org/education/curricula-recommendations) | Why a project is required. |
