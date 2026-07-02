@@ -1,8 +1,8 @@
 # Chapter 2 — Open Resources
 
-Curated free and openly licensed material for going deeper on software development
-processes. Legend: 📘 book/book chapter · 🎓 course/courseware · 📄 paper or standard ·
-🎥 video/talk.
+Free, open‑licensed, or freely accessible material for going deeper on software
+development processes. Legend: 📘 book/book chapter · 🎓 course/courseware · 📄 paper or
+standard · 🎥 video/talk. Licenses vary and are noted where known.
 
 ## Foundational values
 

@@ -40,8 +40,9 @@ known; linked resources remain under their own terms.
 - 📄 **ISO/IEC 25010 — Systems and software Quality Requirements and Evaluation
   (SQuaRE): Product quality model** —
   [iso25000.com/en/iso-25000-standards/iso-25010](https://iso25000.com/index.php/en/iso-25000-standards/iso-25010).
-  The eight product-quality characteristics referenced in §10.2.1. The summary portal is
-  free; the formal standard is paywalled by ISO.
+  The nine product-quality characteristics referenced in §10.2.1 (the 2023 revision;
+  the widely cited 2011 edition had eight). The summary portal is free; the formal
+  standard is paywalled by ISO.
 
 ## Reference and data
 

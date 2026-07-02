@@ -10,7 +10,8 @@ modular systems, how to check and test code, and how to measure quality with met
 
 It is organized as **twelve chapters and a team‑project appendix**, following the topic
 progression of the ACM/IEEE software‑engineering
-curriculum guidelines (SE2014/SEEK). Every chapter is written from scratch and is paired
+curriculum guidelines (SE2014/SEEK). Every chapter consists of original explanatory prose
+rather than copied textbook material, and is paired
 with a curated map of **free or openly accessible resources** — MOOCs, university
 courseware, primary specifications, and papers; licenses vary and are noted where known —
 so the material is **designed to support a complete first undergraduate
@@ -55,6 +56,22 @@ The chapters group into arcs:
 | **The AI shift** | 11 | How is AI reshaping every stage — and what stays the same? |
 | **Delivery** | 12 | How does code get from a merged branch to running safely in production? |
 | **Practice** | Appendix A | How do we run a real team project alongside the concepts? |
+
+## Suggested paths through the book
+
+- **One-semester course (14–16 weeks).** Read all twelve chapters in order, one to two
+  weeks each, with the Appendix A team project running in parallel from week 2. Two
+  ready-made week-by-week plans (a milestone track and a two-week-sprint track) are in
+  [`curriculum/course-plan.md`](curriculum/course-plan.md).
+- **One-quarter course (~10 weeks).** Keep the spine and compress: Chapters 1–2
+  (week 1), 3–4 (weeks 2–3, folding Chapter 5's use-case notation into the requirements
+  work), 6–7 (weeks 4–5), 8–9 (weeks 6–7), 10 (week 8), and 12 (week 9), with
+  Chapter 11 read alongside each topic through its per-stage sections (§11.2). Run a
+  scoped-down project: proposal, two sprints, final demo.
+- **Self-study.** Read in order — every chapter ends with key takeaways, exercises, and
+  free resources for going deeper. Or enter through the arc table above for a specific
+  goal (Chapters 8–9 for quality practices, 12 for CI/CD); chapters cross-reference the
+  earlier ideas they depend on.
 
 ## Table of contents
 

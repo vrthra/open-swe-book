@@ -401,16 +401,11 @@ nearly free to fix; the same error caught after release can cost orders of magni
 because so much work has been built on top of the mistake.
 
 ```mermaid
-flowchart LR
-    A[Requirements] --> B[Design] --> C[Implementation] --> D[Testing] --> E[Release]
-    A -.->|"1×"| A
-    subgraph Relative cost to fix a defect
-    P1["Requirements:<br/>~1×"]
-    P2["Design:<br/>~5×"]
-    P3["Implementation:<br/>~10×"]
-    P4["Testing:<br/>~20×"]
-    P5["After release:<br/>~50–100×"]
-    end
+xychart-beta
+    title "Relative cost to fix a defect, by phase where it is found (illustrative)"
+    x-axis ["Requirements", "Design", "Implementation", "Testing", "After release"]
+    y-axis "Relative cost (multiple of a requirements-phase fix)" 0 --> 100
+    bar [1, 5, 10, 20, 100]
 ```
 
 The exact multipliers vary by study and context, and modern tooling flattens the curve
