@@ -516,7 +516,7 @@ outside, the way an adversary would: probing endpoints with malformed inputs, in
 payloads, and authentication bypasses, knowing nothing about the source. SAST and DAST
 are complementary the way white-box and black-box testing were in Chapter 9: SAST sees
 code paths DAST may never reach; DAST sees emergent, deployed behavior — server
-configuration, header mistakes, the composition of services — that no source scan can.[^31]
+configuration, header mistakes, the composition of services — that no source scan can.[^19]
 
 **Software composition analysis (SCA)** examines neither your code nor your running app
 but your *dependency manifest*: the inventory of third-party packages your build pulls
@@ -531,7 +531,7 @@ Because dependencies drift out of date on their own — vulnerabilities are disc
 versions you already ship — SCA cannot be a one-time gate; it must run continuously. The
 practical pattern is the **automated update bot** (GitHub's Dependabot is the archetype):
 a service that watches vulnerability databases and your manifests, and when a dependency
-needs bumping, *opens a pull request* that updates it.[^19] The elegance is in what happens
+needs bumping, *opens a pull request* that updates it.[^20] The elegance is in what happens
 next: your CI pipeline runs on that PR like any other, so the same suite that protects
 you from your own mistakes now proves the upgrade is safe to merge. The stronger your
 pipeline, the cheaper staying current becomes — one more return on the investment of
@@ -542,11 +542,11 @@ it downloads. Attackers have learned to poison the well — **typosquatting** pa
 whose names are one keystroke from a popular library, or compromising a legitimate
 package's maintainer account and publishing a malicious release. The 2020 SolarWinds
 attack planted malicious code inside a vendor's *build process*, so customers received a
-compromised product signed with authentic signatures;[^20] the 2016 left-pad incident
+compromised product signed with authentic signatures;[^21] the 2016 left-pad incident
 showed the fragility side, when the removal of an eleven-line package briefly broke
-builds across the industry.[^21]<!-- -->[^22] Defenses are accumulating — lockfiles that pin exact versions,
-cryptographic signing and provenance attestation for artifacts (the SLSA framework),[^32]
-and a **software bill of materials (SBOM)** enumerating everything inside a release[^33] — but the
+builds across the industry.[^22]<!-- -->[^23] Defenses are accumulating — lockfiles that pin exact versions,
+cryptographic signing and provenance attestation for artifacts (the SLSA framework),[^24]
+and a **software bill of materials (SBOM)** enumerating everything inside a release[^25] — but the
 first defense is the cultural one: treat adding a dependency as an engineering decision
 with a threat model, not a free lunch.
 
@@ -577,7 +577,7 @@ programs fail by measuring what is easy instead of what matters. The delivery wo
 unusually good answer, produced by the **DORA** research program (DevOps Research and
 Assessment) — a multi-year academic effort, surveying tens of thousands of professionals,
 published in the annual *State of DevOps* reports and the book *Accelerate* (Forsgren,
-Humble, and Kim).[^23]<!-- -->[^24] Its core finding is a set of four outcome measures — the **four keys** —
+Humble, and Kim).[^26]<!-- -->[^27] Its core finding is a set of four outcome measures — the **four keys** —
 that jointly predict software-delivery performance:
 
 1. **Deployment frequency** — how often your team deploys to production.
@@ -585,7 +585,7 @@ that jointly predict software-delivery performance:
 3. **Change failure rate** — what fraction of deployments cause a failure in production
    (an incident, a rollback, a hotfix).
 4. **Failed-deployment recovery time** — when a deployment does cause a failure, how long
-   restoring service takes.[^25]
+   restoring service takes.[^28]
 
 Notice the shape: the first two measure **throughput** (how fast value moves), the second
 two measure **stability** (how safely it moves). All four are *outcomes* of your whole
@@ -614,10 +614,10 @@ years, **elite** performers deploy on demand (many times per day) where **low** 
 deploy between once a month and once every six months; elite lead times are under a day
 against months; elite recovery times are under an hour against a week or more — differences
 of orders of magnitude on the throughput measures, with change failure rates
-lower as well.[^23]
+lower as well.[^26]
 
 Second — and this is the finding that overturned decades of folklore — **speed and
-stability correlate positively**.[^23] The traditional assumption was a trade-off: move fast
+stability correlate positively**.[^26] The traditional assumption was a trade-off: move fast
 *or* be careful. The data say the teams that deploy most often are *also* the teams that
 break production least and recover fastest. The mechanism should be familiar by now: high
 frequency forces small changes; small changes are easier to review
@@ -654,7 +654,7 @@ deprecated API, a new regulation — where the code did nothing wrong but the wo
 system for. And **preventative maintenance** — refactoring, debt paydown — improves
 structure now so that all the other kinds stay affordable later. The standard industry
 rule of thumb is that maintenance, taken together, consumes roughly 60 percent of a
-system's lifetime cost.[^26] Read that number again: the phase this book spent eleven chapters
+system's lifetime cost.[^29] Read that number again: the phase this book spent eleven chapters
 preparing you for is the *minority* of the money, which is reason enough to treat evolving
 code as the main event of an engineering career rather than the cleanup after it.
 
@@ -673,7 +673,7 @@ everyone is being careful. Breaking that spiral is a skill, and it starts with a
 inversion of the testing you learned in Chapter 9.
 
 The tests-first definition comes from Michael Feathers, whose *Working Effectively with
-Legacy Code* also names the only two ways there are to change legacy code.[^27] **Edit and
+Legacy Code* also names the only two ways there are to change legacy code.[^30] **Edit and
 pray**: study the code, make the change, look around manually for anything you broke,
 deploy, and hope. **Cover and modify**: first build tests that cover the code you must
 touch, then make the change and let the tests detect any behavior you altered without
@@ -734,7 +734,7 @@ running the suite after every step. If the bar goes red, the *last* step is the 
 undo it and take a smaller one. Named, cataloged refactoring moves (Fowler's catalog is
 the standard reference) matter because each has known mechanics and known traps; a
 sequence of safe moves composes into a transformation you would never dare attempt as one
-leap.[^28]
+leap.[^31]
 
 Where should you aim the moves? **Code smells** are surface symptoms that *suggest* — not
 prove — a deeper design problem: a long method, a large class that does too many things, a
@@ -771,7 +771,7 @@ the point where a test can grip, and no further.
 The economics underneath all of this has a name. **Technical debt** is the metaphor for
 the future cost incurred when you take a shortcut today: like financial debt, it lets you
 move faster *now* in exchange for **interest** — and the interest is that *every future
-change to that code costs more* than it would have.[^29] The metaphor's precision is its
+change to that code costs more* than it would have.[^32] The metaphor's precision is its
 virtue. Debt is not simply "bad code"; it is a *deal*, and sometimes a good one.
 **Deliberate debt** is a conscious trade — "we hard-code the tax rule to make the pilot;
 we log a ticket to generalize it" — the engineering equivalent of a startup loan, rational
@@ -798,7 +798,7 @@ browser rewrite
 code that handles a thousand edge cases, you run two systems (one frozen, one imaginary)
 for the duration, and the new system's first real validation comes at the end, all at
 once. The delivery-era alternative is the **strangler fig** pattern, named for the fig
-that grows around a host tree, roots itself, and gradually replaces the host it envelops.[^30]
+that grows around a host tree, roots itself, and gradually replaces the host it envelops.[^33]
 You place an interception layer — a routing facade — in front of the legacy system, then
 peel off one capability at a time: build the new implementation, route that slice of
 traffic to it, verify it in production (a canary, §12.3.2, at the granularity of a
@@ -861,24 +861,24 @@ to change for longer than anyone who built it expects.
 [^16]: Parametrix, *CrowdStrike to cost Fortune 500 $5.4 billion; insured loss range of $540 million to $1.08 billion* (2024). [parametrixinsurance.com](https://www.parametrixinsurance.com/in-the-news/crowdstrike-to-cost-fortune-500-5-4-billion-insured-loss-range-of-540-million-to-1-08-billion).
 [^17]: CrowdStrike, *Falcon Content Update Remediation and Guidance Hub* (2024). [crowdstrike.com](https://www.crowdstrike.com/falcon-content-update-remediation-and-guidance-hub/).
 [^18]: CrowdStrike, *Preliminary Post Incident Review — Falcon Content Update for Windows Hosts* (2024). [crowdstrike.com](https://www.crowdstrike.com/en-us/blog/falcon-content-update-preliminary-post-incident-report/).
-[^19]: GitHub, *Dependabot documentation*. [docs.github.com](https://docs.github.com/en/code-security/dependabot).
-[^20]: CISA, *Alert AA20-352A: Advanced Persistent Threat Compromise of Government Agencies, Critical Infrastructure, and Private Sector Organizations* (2020). [cisa.gov](https://www.cisa.gov/news-events/cybersecurity-advisories/aa20-352a).
-[^21]: npm, *kik, left-pad, and npm* (2016). [blog.npmjs.org](https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm).
-[^22]: The Register, *How one developer just broke Node, Babel and thousands of projects in 11 lines of JavaScript* (2016). [theregister.com](https://www.theregister.com/2016/03/23/npm_left_pad_chaos/).
-[^23]: DORA, *Accelerate State of DevOps Report 2019* (2019). [dora.dev](https://dora.dev/research/2019/dora-report/).
-[^24]: Nicole Forsgren, Jez Humble, and Gene Kim, *Accelerate: The Science of Lean Software and DevOps* (IT Revolution Press, 2018). [itrevolution.com](https://itrevolution.com/product/accelerate/).
-[^25]: DORA, *DORA's software delivery metrics: the four keys*. [dora.dev](https://dora.dev/guides/dora-metrics-four-keys/).
-[^26]: Robert L. Glass, *Frequently Forgotten Fundamental Facts about Software Engineering* (IEEE Software, 2001). [doi.org](https://doi.org/10.1109/MS.2001.922739).
-[^27]: Michael Feathers, *Working Effectively with Legacy Code* (Prentice Hall, 2004). [informit.com](https://www.informit.com/store/working-effectively-with-legacy-code-9780131177055).
-[^28]: Martin Fowler, *Catalog of Refactorings*. [refactoring.com](https://refactoring.com/catalog/).
-[^29]: Ward Cunningham, *The WyCash Portfolio Management System* (OOPSLA experience report, 1992). [c2.com](http://c2.com/doc/oopsla92.html).
-[^30]: Martin Fowler, *StranglerFigApplication* (2004). [martinfowler.com](https://martinfowler.com/bliki/StranglerFigApplication.html).
-[^31]: OWASP Foundation, community references for the scanner families:
+[^19]: OWASP Foundation, community references for the scanner families:
 [Source Code Analysis Tools (SAST)](https://owasp.org/www-community/Source_Code_Analysis_Tools),
 [Vulnerability Scanning Tools (DAST)](https://owasp.org/www-community/Vulnerability_Scanning_Tools),
 and [Component Analysis (SCA)](https://owasp.org/www-community/Component_Analysis).
-[^32]: OpenSSF, *SLSA — Supply-chain Levels for Software Artifacts*. [slsa.dev](https://slsa.dev/).
-[^33]: CISA, *Software Bill of Materials (SBOM)*. [cisa.gov/sbom](https://www.cisa.gov/sbom).
+[^20]: GitHub, *Dependabot documentation*. [docs.github.com](https://docs.github.com/en/code-security/dependabot).
+[^21]: CISA, *Alert AA20-352A: Advanced Persistent Threat Compromise of Government Agencies, Critical Infrastructure, and Private Sector Organizations* (2020). [cisa.gov](https://www.cisa.gov/news-events/cybersecurity-advisories/aa20-352a).
+[^22]: npm, *kik, left-pad, and npm* (2016). [blog.npmjs.org](https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm).
+[^23]: The Register, *How one developer just broke Node, Babel and thousands of projects in 11 lines of JavaScript* (2016). [theregister.com](https://www.theregister.com/2016/03/23/npm_left_pad_chaos/).
+[^24]: OpenSSF, *SLSA — Supply-chain Levels for Software Artifacts*. [slsa.dev](https://slsa.dev/).
+[^25]: CISA, *Software Bill of Materials (SBOM)*. [cisa.gov/sbom](https://www.cisa.gov/sbom).
+[^26]: DORA, *Accelerate State of DevOps Report 2019* (2019). [dora.dev](https://dora.dev/research/2019/dora-report/).
+[^27]: Nicole Forsgren, Jez Humble, and Gene Kim, *Accelerate: The Science of Lean Software and DevOps* (IT Revolution Press, 2018). [itrevolution.com](https://itrevolution.com/product/accelerate/).
+[^28]: DORA, *DORA's software delivery metrics: the four keys*. [dora.dev](https://dora.dev/guides/dora-metrics-four-keys/).
+[^29]: Robert L. Glass, *Frequently Forgotten Fundamental Facts about Software Engineering* (IEEE Software, 2001). [doi.org](https://doi.org/10.1109/MS.2001.922739).
+[^30]: Michael Feathers, *Working Effectively with Legacy Code* (Prentice Hall, 2004). [informit.com](https://www.informit.com/store/working-effectively-with-legacy-code-9780131177055).
+[^31]: Martin Fowler, *Catalog of Refactorings*. [refactoring.com](https://refactoring.com/catalog/).
+[^32]: Ward Cunningham, *The WyCash Portfolio Management System* (OOPSLA experience report, 1992). [c2.com](http://c2.com/doc/oopsla92.html).
+[^33]: Martin Fowler, *StranglerFigApplication* (2004). [martinfowler.com](https://martinfowler.com/bliki/StranglerFigApplication.html).
 
 ---
 

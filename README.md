@@ -1,7 +1,5 @@
 # Software Engineering: An Open Body of Knowledge
 
-**A free, living body of knowledge for software engineering.**
-
 *First public edition, July 2026.*
 
 This is a free, openly‑licensed, continuously maintained book that teaches the
