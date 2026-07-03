@@ -1,0 +1,49 @@
+/* PDF-only additions layered on top of epub.css (Chrome print-to-pdf). */
+
+@page {
+  size: Letter;
+  margin: 22mm 19mm;
+}
+
+body {
+  font-size: 11pt;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Full-bleed cover page (injected by build-epubs.sh). */
+.pdf-cover {
+  page-break-after: always;
+  text-align: center;
+}
+.pdf-cover img {
+  max-width: 78%;
+  margin: 0 auto;
+}
+
+h1 {
+  page-break-before: always;
+}
+.pdf-cover + h1,
+h1:first-of-type {
+  page-break-before: avoid;
+}
+
+pre, blockquote, table, figure {
+  page-break-inside: avoid;
+}
+h1, h2, h3 {
+  page-break-after: avoid;
+}
+
+a {
+  color: inherit;
+}
+
+nav#TOC {
+  page-break-after: always;
+}
+nav#TOC a {
+  text-decoration: none;
+}

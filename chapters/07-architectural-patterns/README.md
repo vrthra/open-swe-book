@@ -208,27 +208,32 @@ flowchart LR
 In the clinic scheduler, the waiting-room display must redraw when an appointment's
 status changes:
 
-```python
-class Appointment:
-  def __init__(self, status="booked"):
-    self.status = status
-    self._observers = []
+```go
+type Observer func(*Appointment)
 
-  def subscribe(self, observer):
-    self._observers.append(observer)
+type Appointment struct {
+	Status    string
+	observers []Observer
+}
 
-  def set_status(self, new_status):
-    self.status = new_status
-    for obs in self._observers:      # any object with update() will do
-      obs.update(self)
+func (a *Appointment) Subscribe(observer Observer) {
+	a.observers = append(a.observers, observer)
+}
 
-class WaitingRoomDisplay:
-  def update(self, appointment):
-    print(f"display: appointment is now {appointment.status}")
+func (a *Appointment) SetStatus(newStatus string) {
+	a.Status = newStatus
+	for _, notify := range a.observers { // any Observer func will do
+		notify(a)
+	}
+}
 
-appt = Appointment()
-appt.subscribe(WaitingRoomDisplay())
-appt.set_status("arrived")               # prints: display: appointment is now arrived
+func main() {
+	appt := &Appointment{Status: "booked"}
+	appt.Subscribe(func(a *Appointment) {
+		fmt.Println("display: appointment is now " + a.Status)
+	})
+	appt.SetStatus("arrived") // prints: display: appointment is now arrived
+}
 ```
 
 ```java
@@ -284,32 +289,27 @@ appt.subscribe(waitingRoomDisplay);
 appt.setStatus("arrived");               // prints: display: appointment is now arrived
 ```
 
-```go
-type Observer func(*Appointment)
+```python
+class Appointment:
+  def __init__(self, status="booked"):
+    self.status = status
+    self._observers = []
 
-type Appointment struct {
-	Status    string
-	observers []Observer
-}
+  def subscribe(self, observer):
+    self._observers.append(observer)
 
-func (a *Appointment) Subscribe(observer Observer) {
-	a.observers = append(a.observers, observer)
-}
+  def set_status(self, new_status):
+    self.status = new_status
+    for obs in self._observers:      # any object with update() will do
+      obs.update(self)
 
-func (a *Appointment) SetStatus(newStatus string) {
-	a.Status = newStatus
-	for _, notify := range a.observers { // any Observer func will do
-		notify(a)
-	}
-}
+class WaitingRoomDisplay:
+  def update(self, appointment):
+    print(f"display: appointment is now {appointment.status}")
 
-func main() {
-	appt := &Appointment{Status: "booked"}
-	appt.Subscribe(func(a *Appointment) {
-		fmt.Println("display: appointment is now " + a.Status)
-	})
-	appt.SetStatus("arrived") // prints: display: appointment is now arrived
-}
+appt = Appointment()
+appt.subscribe(WaitingRoomDisplay())
+appt.set_status("arrived")               # prints: display: appointment is now arrived
 ```
 
 ```ruby
@@ -408,16 +408,17 @@ the model changes, it notifies its views, and each view re-reads the model and r
 This is why editing data in one place updates every view of it automatically.
 
 ```mermaid
-flowchart LR
+flowchart TD
     U((User))
+    V["View<br/>renders model"]
     C["Controller<br/>interprets input"]
     M["Model<br/>data + business rules"]
-    V["View<br/>renders model"]
-    U -->|"gestures (clicks, keys)"| C
-    C -->|"updates state"| M
-    M -.->|"notify change (observer)"| V
+    U ~~~ V
     V -->|"reads state"| M
     V -->|"shows"| U
+    U -->|"gestures<br/>(clicks, keys)"| C
+    C -->|"updates state"| M
+    M -.->|"notify change (observer)"| V
     classDef mvc fill:#eef,stroke:#66a,color:#000;
     class C,M,V mvc;
 ```
@@ -461,13 +462,16 @@ should show — moves it back under test.
 In the clinic app's invoice list, a fat view buries the overdue rule where no unit test
 reaches it:
 
-```python
-class InvoiceWidget:
-  def render(self, invoice, today):
-    text = invoice.patient_name
-    if not invoice.paid and (today - invoice.sent_on).days > 30:
-      text += " — OVERDUE"         # a business rule, trapped on screen
-    return text
+```go
+type InvoiceWidget struct{}
+
+func (w InvoiceWidget) Render(invoice Invoice, today time.Time) string {
+	text := invoice.PatientName
+	if !invoice.Paid && today.Sub(invoice.SentOn).Hours() > 30*24 {
+		text += " — OVERDUE" // a business rule, trapped on screen
+	}
+	return text
+}
 ```
 
 ```java
@@ -496,16 +500,13 @@ class InvoiceWidget {
 }
 ```
 
-```go
-type InvoiceWidget struct{}
-
-func (w InvoiceWidget) Render(invoice Invoice, today time.Time) string {
-	text := invoice.PatientName
-	if !invoice.Paid && today.Sub(invoice.SentOn).Hours() > 30*24 {
-		text += " — OVERDUE" // a business rule, trapped on screen
-	}
-	return text
-}
+```python
+class InvoiceWidget:
+  def render(self, invoice, today):
+    text = invoice.patient_name
+    if not invoice.paid and (today - invoice.sent_on).days > 30:
+      text += " — OVERDUE"         # a business rule, trapped on screen
+    return text
 ```
 
 ```ruby
@@ -522,17 +523,24 @@ end
 
 The humble version moves the rule into a view-model and leaves the view nothing to decide:
 
-```python
-def is_overdue(invoice, today):          # the rule, extracted where tests reach it
-  return not invoice.paid and (today - invoice.sent_on).days > 30
+```go
+// the rule, extracted where tests reach it
+func isOverdue(invoice Invoice, today time.Time) bool {
+	return !invoice.Paid && today.Sub(invoice.SentOn).Hours() > 30*24
+}
 
-def invoice_view_model(invoice, today):
-  badge = " — OVERDUE" if is_overdue(invoice, today) else ""
-  return {"text": invoice.patient_name + badge}
+type InvoiceViewModel struct{ Text string }
 
-class InvoiceWidget:
-  def render(self, vm):                # maps a precomputed field to a widget
-    return vm["text"]
+func invoiceViewModel(invoice Invoice, today time.Time) InvoiceViewModel {
+	badge := ""
+	if isOverdue(invoice, today) {
+		badge = " — OVERDUE"
+	}
+	return InvoiceViewModel{Text: invoice.PatientName + badge}
+}
+
+// the view maps a precomputed field to a widget
+func (w InvoiceWidget) Render(vm InvoiceViewModel) string { return vm.Text }
 ```
 
 ```java
@@ -572,24 +580,17 @@ class InvoiceWidget {
 }
 ```
 
-```go
-// the rule, extracted where tests reach it
-func isOverdue(invoice Invoice, today time.Time) bool {
-	return !invoice.Paid && today.Sub(invoice.SentOn).Hours() > 30*24
-}
+```python
+def is_overdue(invoice, today):          # the rule, extracted where tests reach it
+  return not invoice.paid and (today - invoice.sent_on).days > 30
 
-type InvoiceViewModel struct{ Text string }
+def invoice_view_model(invoice, today):
+  badge = " — OVERDUE" if is_overdue(invoice, today) else ""
+  return {"text": invoice.patient_name + badge}
 
-func invoiceViewModel(invoice Invoice, today time.Time) InvoiceViewModel {
-	badge := ""
-	if isOverdue(invoice, today) {
-		badge = " — OVERDUE"
-	}
-	return InvoiceViewModel{Text: invoice.PatientName + badge}
-}
-
-// the view maps a precomputed field to a widget
-func (w InvoiceWidget) Render(vm InvoiceViewModel) string { return vm.Text }
+class InvoiceWidget:
+  def render(self, vm):                # maps a precomputed field to a widget
+    return vm["text"]
 ```
 
 ```ruby
@@ -611,9 +612,13 @@ end
 
 The extracted rule now tests in two lines, with no widget in sight:
 
-```python
-def test_unpaid_31_days_is_overdue():
-  assert is_overdue(Invoice("Ana", sent_on=date(2026, 6, 1), paid=False), date(2026, 7, 2))
+```go
+func TestUnpaid31DaysIsOverdue(t *testing.T) {
+	ana := Invoice{"Ana", time.Date(2026, 6, 1, 0, 0, 0, 0, time.UTC), false}
+	if !isOverdue(ana, time.Date(2026, 7, 2, 0, 0, 0, 0, time.UTC)) {
+		t.Error("unpaid invoice sent 31 days ago should be overdue")
+	}
+}
 ```
 
 ```java
@@ -630,13 +635,9 @@ function testUnpaid31DaysIsOverdue() {
 }
 ```
 
-```go
-func TestUnpaid31DaysIsOverdue(t *testing.T) {
-	ana := Invoice{"Ana", time.Date(2026, 6, 1, 0, 0, 0, 0, time.UTC), false}
-	if !isOverdue(ana, time.Date(2026, 7, 2, 0, 0, 0, 0, time.UTC)) {
-		t.Error("unpaid invoice sent 31 days ago should be overdue")
-	}
-}
+```python
+def test_unpaid_31_days_is_overdue():
+  assert is_overdue(Invoice("Ana", sent_on=date(2026, 6, 1), paid=False), date(2026, 7, 2))
 ```
 
 ```ruby
@@ -686,10 +687,20 @@ filters communicate *only* through pipes and share no other state, a filter know
 about what comes before or after it; it only knows the shape of the data on its pipes.
 
 ```mermaid
-flowchart LR
-    Src[(Source)] --> P1[/pipe/] --> F1[Filter: split] --> P2[/pipe/] --> F2[Filter: transform] --> P3[/pipe/] --> F3[Filter: aggregate] --> P4[/pipe/] --> Sink[(Sink)]
+flowchart TD
+    subgraph R1 [" "]
+        direction LR
+        Src[(Source)] -->|pipe| F1["Filter: split"] -->|pipe| F2["Filter: transform"]
+    end
+    subgraph R2 [" "]
+        direction LR
+        F3["Filter: aggregate"] -->|pipe| Sink[(Sink)]
+    end
+    R1 -->|pipe| R2
     classDef f fill:#efe,stroke:#6a6,color:#000;
     class F1,F2,F3 f;
+    style R1 fill:none,stroke:none
+    style R2 fill:none,stroke:none
 ```
 
 **A real example.** The Unix shell pipeline is the canonical case: six independent
@@ -872,27 +883,32 @@ lets you test client behavior that is nearly impossible to trigger against the r
 thing, such as "what does the UI do when the server returns a 500?" Twenty lines of
 standard library answer that question for the clinic client:
 
-```python
-import http.server, threading, urllib.error, urllib.request
+```go
+package main
 
-class AlwaysFail(http.server.BaseHTTPRequestHandler):
-  def do_GET(self):
-    self.send_error(500)
-  def log_message(self, *_):           # keep test output clean
-    pass
+import (
+	"io"
+	"net/http"
+	"net/http/httptest"
+)
 
-def fetch_appointments(base_url):
-  try:
-    with urllib.request.urlopen(base_url + "/appointments") as resp:
-      return resp.read()
-  except urllib.error.HTTPError:
-    return []                        # fallback: empty schedule, not a crash
+func alwaysFail(w http.ResponseWriter, _ *http.Request) { http.Error(w, "boom", 500) }
+func fetchAppointments(baseURL string) []byte {
+	resp, err := http.Get(baseURL + "/appointments")
+	if err != nil || resp.StatusCode >= 400 {
+		return nil // fallback: empty schedule, not a crash
+	}
+	body, _ := io.ReadAll(resp.Body)
+	return body
+}
 
-stub = http.server.HTTPServer(("127.0.0.1", 0), AlwaysFail)
-threading.Thread(target=stub.serve_forever, daemon=True).start()
-
-assert fetch_appointments(f"http://127.0.0.1:{stub.server_port}") == []
-stub.shutdown()
+func main() {
+	stub := httptest.NewServer(http.HandlerFunc(alwaysFail))
+	defer stub.Close()
+	if len(fetchAppointments(stub.URL)) != 0 {
+		panic("client should fall back to an empty schedule on 500")
+	}
+}
 ```
 
 ```java
@@ -935,32 +951,27 @@ stub.listen(0, "127.0.0.1", async () => {
 });
 ```
 
-```go
-package main
+```python
+import http.server, threading, urllib.error, urllib.request
 
-import (
-	"io"
-	"net/http"
-	"net/http/httptest"
-)
+class AlwaysFail(http.server.BaseHTTPRequestHandler):
+  def do_GET(self):
+    self.send_error(500)
+  def log_message(self, *_):           # keep test output clean
+    pass
 
-func alwaysFail(w http.ResponseWriter, _ *http.Request) { http.Error(w, "boom", 500) }
-func fetchAppointments(baseURL string) []byte {
-	resp, err := http.Get(baseURL + "/appointments")
-	if err != nil || resp.StatusCode >= 400 {
-		return nil // fallback: empty schedule, not a crash
-	}
-	body, _ := io.ReadAll(resp.Body)
-	return body
-}
+def fetch_appointments(base_url):
+  try:
+    with urllib.request.urlopen(base_url + "/appointments") as resp:
+      return resp.read()
+  except urllib.error.HTTPError:
+    return []                        # fallback: empty schedule, not a crash
 
-func main() {
-	stub := httptest.NewServer(http.HandlerFunc(alwaysFail))
-	defer stub.Close()
-	if len(fetchAppointments(stub.URL)) != 0 {
-		panic("client should fall back to an empty schedule on 500")
-	}
-}
+stub = http.server.HTTPServer(("127.0.0.1", 0), AlwaysFail)
+threading.Thread(target=stub.serve_forever, daemon=True).start()
+
+assert fetch_appointments(f"http://127.0.0.1:{stub.server_port}") == []
+stub.shutdown()
 ```
 
 ```ruby
@@ -1155,8 +1166,8 @@ interfaces:
   observer pattern applied at the scale of whole features.
 
 ```mermaid
-flowchart TD
-    Core["Shared platform / reference architecture<br/>(all commonalities)"]
+flowchart LR
+    Core["Shared platform /<br/>reference architecture<br/>(all commonalities)"]
     VP1{{"Variation point:<br/>payment"}}
     VP2{{"Variation point:<br/>region rules"}}
     VP3{{"Variation point:<br/>video calling"}}

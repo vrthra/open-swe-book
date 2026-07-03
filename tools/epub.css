@@ -77,3 +77,14 @@ img, svg {
 }
 
 hr { border: none; border-top: 1px solid #c9c9d1; margin: 1.6em 20%; }
+
+/* Sources / footnotes: number inline with its citation, compact list. */
+div.footnote-definition p {
+  font-size: 0.88em;
+  margin: 0.4em 0;
+  text-indent: -1.1em;
+  padding-left: 1.1em;   /* hanging indent: wrapped lines align after the number */
+}
+div.footnote-definition sup {
+  font-weight: bold;
+}

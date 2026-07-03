@@ -84,39 +84,6 @@ only the answer.
 11. **[analysis]** *Write a characterization test.* You inherit this undocumented,
     untested function, which production code calls from several places:
 
-    ```python
-    def norm_code(s, strict=False):
-      if s is None:
-        return "" if not strict else None
-      s = s.strip().upper().replace("-", "")
-      if len(s) > 8:
-        s = s[:8]
-      if strict and not s.isalnum():
-        raise ValueError(s)
-      return s or ("" if not strict else None)
-    ```
-
-    ```java
-    static String normCode(String s, boolean strict) {
-      if (s == null) return strict ? null : "";
-      s = s.strip().toUpperCase().replace("-", "");
-      if (s.length() > 8) s = s.substring(0, 8);
-      boolean alnum = !s.isEmpty() && s.chars().allMatch(Character::isLetterOrDigit);
-      if (strict && !alnum) throw new IllegalArgumentException(s);
-      return s.isEmpty() ? (strict ? null : "") : s;
-    }
-    ```
-
-    ```javascript
-    function normCode(s, strict = false) {
-      if (s === null) return strict ? null : "";
-      s = s.trim().toUpperCase().replaceAll("-", "");
-      if (s.length > 8) s = s.slice(0, 8);
-      if (strict && !/^[\p{L}\p{N}]+$/u.test(s)) throw new RangeError(s);
-      return s || (strict ? null : "");
-    }
-    ```
-
     ```go
     func normCode(s *string, strict bool) (*string, error) { // nil plays Python's None
     	if s == nil {
@@ -143,6 +110,39 @@ only the answer.
     	}
     	return s != ""
     }
+    ```
+
+    ```java
+    static String normCode(String s, boolean strict) {
+      if (s == null) return strict ? null : "";
+      s = s.strip().toUpperCase().replace("-", "");
+      if (s.length() > 8) s = s.substring(0, 8);
+      boolean alnum = !s.isEmpty() && s.chars().allMatch(Character::isLetterOrDigit);
+      if (strict && !alnum) throw new IllegalArgumentException(s);
+      return s.isEmpty() ? (strict ? null : "") : s;
+    }
+    ```
+
+    ```javascript
+    function normCode(s, strict = false) {
+      if (s === null) return strict ? null : "";
+      s = s.trim().toUpperCase().replaceAll("-", "");
+      if (s.length > 8) s = s.slice(0, 8);
+      if (strict && !/^[\p{L}\p{N}]+$/u.test(s)) throw new RangeError(s);
+      return s || (strict ? null : "");
+    }
+    ```
+
+    ```python
+    def norm_code(s, strict=False):
+      if s is None:
+        return "" if not strict else None
+      s = s.strip().upper().replace("-", "")
+      if len(s) > 8:
+        s = s[:8]
+      if strict and not s.isalnum():
+        raise ValueError(s)
+      return s or ("" if not strict else None)
     ```
 
     ```ruby

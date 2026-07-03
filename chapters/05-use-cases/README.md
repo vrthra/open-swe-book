@@ -315,24 +315,32 @@ error handling and your tests will have to enforce.
 The failure guarantee is testable before any real bank or dispenser exists — drop the
 authorization link at step 8 and assert the postcondition word for word:
 
-```python
-class LostLinkBank:                         # the fake — the link drops at step 8
-  debits = []
-  def authorize(self, amount): raise ConnectionError("link lost")
+```go
+package main
 
-class Atm:
-  dispensed = 0
-  def dispense(self, amount): self.dispensed += amount
+import "errors"
 
-def withdraw(atm, bank, amount):            # steps 8–11 of the basic flow
-  try: bank.authorize(amount)
-  except ConnectionError: return          # B1 — cancel, return the card
-  atm.dispense(amount)
-  bank.debits.append(amount)
+type LostLinkBank struct{ debits []int }           // the fake — the link drops at step 8
+func (b *LostLinkBank) authorize(amount int) error { return errors.New("link lost") }
 
-atm, bank = Atm(), LostLinkBank()
-withdraw(atm, bank, 200)
-assert atm.dispensed == 0 and bank.debits == []  # the failure postcondition, verbatim
+type Atm struct{ dispensed int }   // cash actually dispensed
+func (a *Atm) dispense(amount int) { a.dispensed += amount }
+
+func withdraw(atm *Atm, bank *LostLinkBank, amount int) { // steps 8–11 of the basic flow
+	if err := bank.authorize(amount); err != nil {
+		return // B1 — cancel, return the card
+	}
+	atm.dispense(amount)
+	bank.debits = append(bank.debits, amount)
+}
+
+func main() {
+	atm, bank := &Atm{}, &LostLinkBank{}
+	withdraw(atm, bank, 200)
+	if atm.dispensed != 0 || len(bank.debits) != 0 { // the failure postcondition, verbatim
+		panic("failure postcondition violated")
+	}
+}
 ```
 
 ```java
@@ -387,32 +395,24 @@ withdraw(atm, bank, 200);
 assert(atm.dispensed === 0 && bank.debits.length === 0);
 ```
 
-```go
-package main
+```python
+class LostLinkBank:                         # the fake — the link drops at step 8
+  debits = []
+  def authorize(self, amount): raise ConnectionError("link lost")
 
-import "errors"
+class Atm:
+  dispensed = 0
+  def dispense(self, amount): self.dispensed += amount
 
-type LostLinkBank struct{ debits []int }           // the fake — the link drops at step 8
-func (b *LostLinkBank) authorize(amount int) error { return errors.New("link lost") }
+def withdraw(atm, bank, amount):            # steps 8–11 of the basic flow
+  try: bank.authorize(amount)
+  except ConnectionError: return          # B1 — cancel, return the card
+  atm.dispense(amount)
+  bank.debits.append(amount)
 
-type Atm struct{ dispensed int }   // cash actually dispensed
-func (a *Atm) dispense(amount int) { a.dispensed += amount }
-
-func withdraw(atm *Atm, bank *LostLinkBank, amount int) { // steps 8–11 of the basic flow
-	if err := bank.authorize(amount); err != nil {
-		return // B1 — cancel, return the card
-	}
-	atm.dispense(amount)
-	bank.debits = append(bank.debits, amount)
-}
-
-func main() {
-	atm, bank := &Atm{}, &LostLinkBank{}
-	withdraw(atm, bank, 200)
-	if atm.dispensed != 0 || len(bank.debits) != 0 { // the failure postcondition, verbatim
-		panic("failure postcondition violated")
-	}
-}
+atm, bank = Atm(), LostLinkBank()
+withdraw(atm, bank, 200)
+assert atm.dispensed == 0 and bank.debits == []  # the failure postcondition, verbatim
 ```
 
 ```ruby

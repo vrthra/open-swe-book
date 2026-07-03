@@ -1,14 +1,14 @@
 // Language tabs for multi-language code examples.
 //
 // Authoring convention: write 2-5 CONSECUTIVE fenced code blocks in the canonical
-// order python, java, javascript, go, ruby (any subset, no other blocks between
+// (alphabetical) order go, java, javascript, python, ruby (any subset, no other blocks between
 // them). At page load this script groups such runs into a tabbed widget. On
 // print.html (and therefore in the EPUB pipeline, which renders that page) the
 // blocks stay stacked in order, so every language remains visible in print.
 (() => {
     if (window.location.pathname.endsWith('print.html')) return;
 
-    const LANGS = ['python', 'java', 'javascript', 'go', 'ruby'];
+    const LANGS = ['go', 'java', 'javascript', 'python', 'ruby'];
     const NAME = {
         python: 'Python', java: 'Java', javascript: 'JavaScript',
         go: 'Go', ruby: 'Ruby',

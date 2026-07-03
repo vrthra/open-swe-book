@@ -127,17 +127,28 @@ the three cases you already thought of.
 With **Hypothesis**, Python's property-based testing library, both properties become one
 test run against hundreds of generated lists:
 
-```python
-from hypothesis import given, strategies as st
+```go
+// rapid generates the inputs: go get pgregory.net/rapid
+func median(xs []int) int {
+	ys := slices.Clone(xs)
+	slices.Sort(ys)
+	return ys[len(ys)/2] // middle element (upper median)
+}
 
-def median(xs):
-  return sorted(xs)[len(xs) // 2]          # middle element (upper median)
-
-@given(st.lists(st.integers(), min_size=1))
-def test_median_properties(xs):
-  m = median(xs)
-  assert m == median(list(reversed(xs)))   # order independence
-  assert m in xs                           # the median is one of the inputs
+func TestMedianProperties(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		xs := rapid.SliceOfN(rapid.Int(), 1, -1).Draw(t, "xs")
+		m := median(xs)
+		rev := slices.Clone(xs)
+		slices.Reverse(rev)
+		if m != median(rev) { // order independence
+			t.Errorf("median depends on order: %v", xs)
+		}
+		if !slices.Contains(xs, m) { // the median is one of the inputs
+			t.Errorf("median %d not in %v", m, xs)
+		}
+	})
+}
 ```
 
 ```java
@@ -179,28 +190,17 @@ fc.assert(
 );
 ```
 
-```go
-// rapid generates the inputs: go get pgregory.net/rapid
-func median(xs []int) int {
-	ys := slices.Clone(xs)
-	slices.Sort(ys)
-	return ys[len(ys)/2] // middle element (upper median)
-}
+```python
+from hypothesis import given, strategies as st
 
-func TestMedianProperties(t *testing.T) {
-	rapid.Check(t, func(t *rapid.T) {
-		xs := rapid.SliceOfN(rapid.Int(), 1, -1).Draw(t, "xs")
-		m := median(xs)
-		rev := slices.Clone(xs)
-		slices.Reverse(rev)
-		if m != median(rev) { // order independence
-			t.Errorf("median depends on order: %v", xs)
-		}
-		if !slices.Contains(xs, m) { // the median is one of the inputs
-			t.Errorf("median %d not in %v", m, xs)
-		}
-	})
-}
+def median(xs):
+  return sorted(xs)[len(xs) // 2]          # middle element (upper median)
+
+@given(st.lists(st.integers(), min_size=1))
+def test_median_properties(xs):
+  m = median(xs)
+  assert m == median(list(reversed(xs)))   # order independence
+  assert m in xs                           # the median is one of the inputs
 ```
 
 ```ruby
@@ -243,9 +243,12 @@ the tool mutates the guard
 Rerun the suite: no test ever passes a zero price, so every test still passes and the
 mutant **survives**. The survivor names the missing test precisely:
 
-```python
-def test_free_item_allowed():
-  assert apply_discount(0.0, 50) == 0.0    # kills the `price <= 0` mutant
+```go
+func TestFreeItemAllowed(t *testing.T) { // kills the `price <= 0` mutant
+	if got, err := ApplyDiscount(0.0, 50); err != nil || got != 0.0 {
+		t.Errorf("got %v, %v; want 0.0", got, err)
+	}
+}
 ```
 
 ```java
@@ -260,12 +263,9 @@ test("free item allowed", () => {
 });
 ```
 
-```go
-func TestFreeItemAllowed(t *testing.T) { // kills the `price <= 0` mutant
-	if got, err := ApplyDiscount(0.0, 50); err != nil || got != 0.0 {
-		t.Errorf("got %v, %v; want 0.0", got, err)
-	}
-}
+```python
+def test_free_item_allowed():
+  assert apply_discount(0.0, 50) == 0.0    # kills the `price <= 0` mutant
 ```
 
 ```ruby
@@ -303,15 +303,21 @@ one).
 Each double below stands in for the `discounts` dependency of `PriceService` (§9.2.2) —
 the stub feeds the unit a canned percent and nothing more:
 
-```python
-class StubCatalog:
-  def price_of(self, item): return 12.0        # every item costs 12.0
+```go
+type StubCatalog struct{}
 
-class StubDiscounts:
-  def percent_for(self, item): return 25       # canned answer, whatever the item
+func (StubCatalog) PriceOf(item string) float64 { return 12.0 } // every item costs 12.0
 
-svc = PriceService(StubCatalog(), StubDiscounts())
-assert svc.quote("mug") == 9.0                   # 12.0 * (1 - 0.25)
+type StubDiscounts struct{}
+
+func (StubDiscounts) PercentFor(item string) float64 { return 25 } // canned answer
+
+func TestStubFeedsCannedPercent(t *testing.T) {
+	svc := NewPriceService(StubCatalog{}, StubDiscounts{})
+	if got, err := svc.Quote("mug"); err != nil || got != 9.0 {
+		t.Errorf("got %v, %v; want 9.0", got, err) // 12.0 * (1 - 0.25)
+	}
+}
 ```
 
 ```java
@@ -340,21 +346,15 @@ const svc = new PriceService(new StubCatalog(), new StubDiscounts());
 assert.equal(svc.quote("mug"), 9.0);             // 12.0 * (1 - 0.25)
 ```
 
-```go
-type StubCatalog struct{}
+```python
+class StubCatalog:
+  def price_of(self, item): return 12.0        # every item costs 12.0
 
-func (StubCatalog) PriceOf(item string) float64 { return 12.0 } // every item costs 12.0
+class StubDiscounts:
+  def percent_for(self, item): return 25       # canned answer, whatever the item
 
-type StubDiscounts struct{}
-
-func (StubDiscounts) PercentFor(item string) float64 { return 25 } // canned answer
-
-func TestStubFeedsCannedPercent(t *testing.T) {
-	svc := NewPriceService(StubCatalog{}, StubDiscounts{})
-	if got, err := svc.Quote("mug"); err != nil || got != 9.0 {
-		t.Errorf("got %v, %v; want 9.0", got, err) // 12.0 * (1 - 0.25)
-	}
-}
+svc = PriceService(StubCatalog(), StubDiscounts())
+assert svc.quote("mug") == 9.0                   # 12.0 * (1 - 0.25)
 ```
 
 ```ruby
@@ -372,16 +372,21 @@ raise unless svc.quote("mug") == 9.0             # 12.0 * (1 - 0.25)
 
 The mock also records the interaction, so the test can assert on *how* the unit used it:
 
-```python
-class MockDiscounts:
-  def __init__(self): self.calls = []
-  def percent_for(self, item):
-    self.calls.append(item)
-    return 25
+```go
+type MockDiscounts struct{ calls []string }
 
-mock = MockDiscounts()
-PriceService(StubCatalog(), mock).quote("mug")
-assert mock.calls == ["mug"]                     # called exactly once, with "mug"
+func (m *MockDiscounts) PercentFor(item string) float64 {
+	m.calls = append(m.calls, item)
+	return 25
+}
+
+func TestMockRecordsInteraction(t *testing.T) {
+	mock := &MockDiscounts{}
+	NewPriceService(StubCatalog{}, mock).Quote("mug")
+	if !slices.Equal(mock.calls, []string{"mug"}) { // called exactly once, with "mug"
+		t.Errorf("calls = %v; want [mug]", mock.calls)
+	}
+}
 ```
 
 ```java
@@ -412,21 +417,16 @@ new PriceService(new StubCatalog(), mock).quote("mug");
 assert.deepEqual(mock.calls, ["mug"]);           // called exactly once, with "mug"
 ```
 
-```go
-type MockDiscounts struct{ calls []string }
+```python
+class MockDiscounts:
+  def __init__(self): self.calls = []
+  def percent_for(self, item):
+    self.calls.append(item)
+    return 25
 
-func (m *MockDiscounts) PercentFor(item string) float64 {
-	m.calls = append(m.calls, item)
-	return 25
-}
-
-func TestMockRecordsInteraction(t *testing.T) {
-	mock := &MockDiscounts{}
-	NewPriceService(StubCatalog{}, mock).Quote("mug")
-	if !slices.Equal(mock.calls, []string{"mug"}) { // called exactly once, with "mug"
-		t.Errorf("calls = %v; want [mug]", mock.calls)
-	}
-}
+mock = MockDiscounts()
+PriceService(StubCatalog(), mock).quote("mug")
+assert mock.calls == ["mug"]                     # called exactly once, with "mug"
 ```
 
 ```ruby
@@ -447,14 +447,21 @@ raise unless mock.calls == ["mug"]               # called exactly once, with "mu
 And the fake actually works — a dict stands in for the discount database, so any lookup
 behaves the way the real component would:
 
-```python
-class FakeDiscounts:
-  def __init__(self, table): self.table = dict(table)      # in-memory stand-in
-  def percent_for(self, item): return self.table.get(item, 0)
+```go
+// FakeDiscounts reads an in-memory table; a missing item means no discount (0).
+type FakeDiscounts struct{ table map[string]float64 }
 
-svc = PriceService(StubCatalog(), FakeDiscounts({"mug": 25}))
-assert svc.quote("mug") == 9.0
-assert svc.quote("bowl") == 12.0                 # unknown item: no discount
+func (f FakeDiscounts) PercentFor(item string) float64 { return f.table[item] }
+
+func TestFakeBehavesLikeRealTable(t *testing.T) {
+	svc := NewPriceService(StubCatalog{}, FakeDiscounts{map[string]float64{"mug": 25}})
+	if got, _ := svc.Quote("mug"); got != 9.0 {
+		t.Errorf("mug: got %v; want 9.0", got)
+	}
+	if got, _ := svc.Quote("bowl"); got != 12.0 { // unknown item: no discount
+		t.Errorf("bowl: got %v; want 12.0", got)
+	}
+}
 ```
 
 ```java
@@ -480,21 +487,14 @@ assert.equal(svc.quote("mug"), 9.0);
 assert.equal(svc.quote("bowl"), 12.0);           // unknown item: no discount
 ```
 
-```go
-// FakeDiscounts reads an in-memory table; a missing item means no discount (0).
-type FakeDiscounts struct{ table map[string]float64 }
+```python
+class FakeDiscounts:
+  def __init__(self, table): self.table = dict(table)      # in-memory stand-in
+  def percent_for(self, item): return self.table.get(item, 0)
 
-func (f FakeDiscounts) PercentFor(item string) float64 { return f.table[item] }
-
-func TestFakeBehavesLikeRealTable(t *testing.T) {
-	svc := NewPriceService(StubCatalog{}, FakeDiscounts{map[string]float64{"mug": 25}})
-	if got, _ := svc.Quote("mug"); got != 9.0 {
-		t.Errorf("mug: got %v; want 9.0", got)
-	}
-	if got, _ := svc.Quote("bowl"); got != 12.0 { // unknown item: no discount
-		t.Errorf("bowl: got %v; want 12.0", got)
-	}
-}
+svc = PriceService(StubCatalog(), FakeDiscounts({"mug": 25}))
+assert svc.quote("mug") == 9.0
+assert svc.quote("bowl") == 12.0                 # unknown item: no discount
 ```
 
 ```ruby
@@ -513,14 +513,17 @@ fast because they touch no network or disk, precise because a failure points at 
 and stable because they do not break when an unrelated part of the system changes. Here is
 a unit under test and a small suite:
 
-```python
-def apply_discount(price, percent):
-  """Reduce price by percent (0..100). Raises ValueError on bad input."""
-  if price < 0:
-    raise ValueError("price must be non-negative")
-  if percent < 0 or percent > 100:
-    raise ValueError("percent must be in 0..100")
-  return round(price * (1 - percent / 100), 2)
+```go
+// ApplyDiscount reduces price by percent (0..100). Returns an error on bad input.
+func ApplyDiscount(price, percent float64) (float64, error) {
+	if price < 0 {
+		return 0, errors.New("price must be non-negative")
+	}
+	if percent < 0 || percent > 100 {
+		return 0, errors.New("percent must be in 0..100")
+	}
+	return math.Round(price*(1-percent/100)*100) / 100, nil
+}
 ```
 
 ```java
@@ -542,17 +545,14 @@ function applyDiscount(price, percent) {
 }
 ```
 
-```go
-// ApplyDiscount reduces price by percent (0..100). Returns an error on bad input.
-func ApplyDiscount(price, percent float64) (float64, error) {
-	if price < 0 {
-		return 0, errors.New("price must be non-negative")
-	}
-	if percent < 0 || percent > 100 {
-		return 0, errors.New("percent must be in 0..100")
-	}
-	return math.Round(price*(1-percent/100)*100) / 100, nil
-}
+```python
+def apply_discount(price, percent):
+  """Reduce price by percent (0..100). Raises ValueError on bad input."""
+  if price < 0:
+    raise ValueError("price must be non-negative")
+  if percent < 0 or percent > 100:
+    raise ValueError("percent must be in 0..100")
+  return round(price * (1 - percent / 100), 2)
 ```
 
 ```ruby
@@ -564,15 +564,31 @@ def apply_discount(price, percent)
 end
 ```
 
-```python
-def test_no_discount():        assert apply_discount(100.0, 0)   == 100.0
-def test_half_off():           assert apply_discount(100.0, 50)  == 50.0
-def test_rounds_to_cents():    assert apply_discount(9.99, 10)   == 8.99
-def test_full_discount():      assert apply_discount(40.0, 100)  == 0.0
-def test_rejects_bad_percent():
-  import pytest
-  with pytest.raises(ValueError):
-    apply_discount(100.0, 150)
+```go
+func TestApplyDiscount(t *testing.T) {
+	cases := []struct {
+		name                 string
+		price, percent, want float64
+	}{
+		{"no discount", 100.0, 0, 100.0},
+		{"half off", 100.0, 50, 50.0},
+		{"rounds to cents", 9.99, 10, 8.99},
+		{"full discount", 40.0, 100, 0.0},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			if got, err := ApplyDiscount(c.price, c.percent); err != nil || got != c.want {
+				t.Errorf("got %v, %v; want %v", got, err, c.want)
+			}
+		})
+	}
+}
+
+func TestRejectsBadPercent(t *testing.T) {
+	if _, err := ApplyDiscount(100.0, 150); err == nil {
+		t.Error("want error for percent 150, got nil")
+	}
+}
 ```
 
 ```java
@@ -603,31 +619,15 @@ test("rejects bad percent", () => {
 });
 ```
 
-```go
-func TestApplyDiscount(t *testing.T) {
-	cases := []struct {
-		name                 string
-		price, percent, want float64
-	}{
-		{"no discount", 100.0, 0, 100.0},
-		{"half off", 100.0, 50, 50.0},
-		{"rounds to cents", 9.99, 10, 8.99},
-		{"full discount", 40.0, 100, 0.0},
-	}
-	for _, c := range cases {
-		t.Run(c.name, func(t *testing.T) {
-			if got, err := ApplyDiscount(c.price, c.percent); err != nil || got != c.want {
-				t.Errorf("got %v, %v; want %v", got, err, c.want)
-			}
-		})
-	}
-}
-
-func TestRejectsBadPercent(t *testing.T) {
-	if _, err := ApplyDiscount(100.0, 150); err == nil {
-		t.Error("want error for percent 150, got nil")
-	}
-}
+```python
+def test_no_discount():        assert apply_discount(100.0, 0)   == 100.0
+def test_half_off():           assert apply_discount(100.0, 50)  == 50.0
+def test_rounds_to_cents():    assert apply_discount(9.99, 10)   == 8.99
+def test_full_discount():      assert apply_discount(40.0, 100)  == 0.0
+def test_rejects_bad_percent():
+  import pytest
+  with pytest.raises(ValueError):
+    apply_discount(100.0, 150)
 ```
 
 ```ruby
@@ -671,16 +671,20 @@ testing** exercises the *interfaces and interactions* between units, growing the
 a pair of collaborators up toward whole subsystems. This is where mismatched assumptions,
 wrong data formats, and protocol errors surface.
 
-```python
-class PriceService:
-  def __init__(self, catalog, discounts):
-    self.catalog = catalog          # unit A: name -> base price
-    self.discounts = discounts      # unit B: name -> percent off
+```go
+type Catalog interface{ PriceOf(item string) float64 }
+type Discounts interface{ PercentFor(item string) float64 }
 
-  def quote(self, item):
-    base = self.catalog.price_of(item)
-    pct = self.discounts.percent_for(item)
-    return apply_discount(base, pct)
+type PriceService struct {
+	catalog   Catalog   // unit A: name -> base price
+	discounts Discounts // unit B: name -> percent off
+}
+
+func (s PriceService) Quote(item string) (float64, error) {
+	base := s.catalog.PriceOf(item)
+	pct := s.discounts.PercentFor(item)
+	return ApplyDiscount(base, pct)
+}
 ```
 
 ```java
@@ -716,20 +720,16 @@ class PriceService {
 }
 ```
 
-```go
-type Catalog interface{ PriceOf(item string) float64 }
-type Discounts interface{ PercentFor(item string) float64 }
+```python
+class PriceService:
+  def __init__(self, catalog, discounts):
+    self.catalog = catalog          # unit A: name -> base price
+    self.discounts = discounts      # unit B: name -> percent off
 
-type PriceService struct {
-	catalog   Catalog   // unit A: name -> base price
-	discounts Discounts // unit B: name -> percent off
-}
-
-func (s PriceService) Quote(item string) (float64, error) {
-	base := s.catalog.PriceOf(item)
-	pct := s.discounts.PercentFor(item)
-	return ApplyDiscount(base, pct)
-}
+  def quote(self, item):
+    base = self.catalog.price_of(item)
+    pct = self.discounts.percent_for(item)
+    return apply_discount(base, pct)
 ```
 
 ```ruby
@@ -751,12 +751,16 @@ A unit test of `PriceService.quote` would *mock* `catalog` and `discounts`. An
 **integration test** instead wires the real (or fake) catalog and discount components
 together and checks that their contract holds end to end:
 
-```python
-def test_quote_integrates_catalog_and_discounts():
-  catalog = Catalog({"mug": 12.0})
-  discounts = Discounts({"mug": 25})
-  svc = PriceService(catalog, discounts)
-  assert svc.quote("mug") == 9.0     # 12.0 * (1 - 0.25)
+```go
+func TestQuoteIntegratesCatalogAndDiscounts(t *testing.T) {
+	catalog := MapCatalog{"mug": 12.0}
+	discounts := MapDiscounts{"mug": 25}
+	svc := PriceService{catalog, discounts}
+	got, err := svc.Quote("mug")
+	if err != nil || got != 9.0 { // 12.0 * (1 - 0.25)
+		t.Errorf("got %v, %v; want 9.0", got, err)
+	}
+}
 ```
 
 ```java
@@ -786,16 +790,12 @@ test("quote integrates catalog and discounts", () => {
 });
 ```
 
-```go
-func TestQuoteIntegratesCatalogAndDiscounts(t *testing.T) {
-	catalog := MapCatalog{"mug": 12.0}
-	discounts := MapDiscounts{"mug": 25}
-	svc := PriceService{catalog, discounts}
-	got, err := svc.Quote("mug")
-	if err != nil || got != 9.0 { // 12.0 * (1 - 0.25)
-		t.Errorf("got %v, %v; want 9.0", got, err)
-	}
-}
+```python
+def test_quote_integrates_catalog_and_discounts():
+  catalog = Catalog({"mug": 12.0})
+  discounts = Discounts({"mug": 25})
+  svc = PriceService(catalog, discounts)
+  assert svc.quote("mug") == 9.0     # 12.0 * (1 - 0.25)
 ```
 
 ```ruby
@@ -923,16 +923,19 @@ with two outgoing edges; a merge is a node with two incoming edges. The CFG make
 
 Consider a function that classifies a number and, for positive numbers, sums 1..n:
 
-```python
-def classify_and_sum(n):        # node 1  (entry)
-  if n < 0:                   # node 2  (decision)
-    return "negative"       # node 3
-  total = 0                   # node 4
-  i = 1                       # node 4
-  while i <= n:               # node 5  (decision)
-    total += i              # node 6
-    i += 1                  # node 6
-  return f"sum={total}"       # node 7  (exit)
+```go
+func ClassifyAndSum(n int) string { // node 1  (entry)
+	if n < 0 { // node 2  (decision)
+		return "negative" // node 3
+	}
+	total := 0   // node 4
+	i := 1       // node 4
+	for i <= n { // node 5  (decision)
+		total += i // node 6
+		i++        // node 6
+	}
+	return fmt.Sprintf("sum=%d", total) // node 7  (exit)
+}
 ```
 
 ```java
@@ -965,19 +968,16 @@ function classifyAndSum(n) {  // node 1  (entry)
 }
 ```
 
-```go
-func ClassifyAndSum(n int) string { // node 1  (entry)
-	if n < 0 { // node 2  (decision)
-		return "negative" // node 3
-	}
-	total := 0   // node 4
-	i := 1       // node 4
-	for i <= n { // node 5  (decision)
-		total += i // node 6
-		i++        // node 6
-	}
-	return fmt.Sprintf("sum=%d", total) // node 7  (exit)
-}
+```python
+def classify_and_sum(n):        # node 1  (entry)
+  if n < 0:                   # node 2  (decision)
+    return "negative"       # node 3
+  total = 0                   # node 4
+  i = 1                       # node 4
+  while i <= n:               # node 5  (decision)
+    total += i              # node 6
+    i += 1                  # node 6
+  return f"sum={total}"       # node 7  (exit)
 ```
 
 ```ruby
@@ -1136,11 +1136,14 @@ The boundary values to test:
 
 Six boundary tests. Watch them do their job. Suppose a developer wrote the guard as:
 
-```python
-def set_volume(level):
-  if not isinstance(level, int) or level < 1 or level >= 100:   # BUG: >= should be >
-    raise ValueError("level must be 1..100")
-  _apply(level)
+```go
+func SetVolume(level int) error {
+	if level < 1 || level >= 100 { // BUG: >= should be >
+		return errors.New("level must be 1..100")
+	}
+	apply(level)
+	return nil
+}
 ```
 
 ```java
@@ -1160,14 +1163,11 @@ function setVolume(level) {
 }
 ```
 
-```go
-func SetVolume(level int) error {
-	if level < 1 || level >= 100 { // BUG: >= should be >
-		return errors.New("level must be 1..100")
-	}
-	apply(level)
-	return nil
-}
+```python
+def set_volume(level):
+  if not isinstance(level, int) or level < 1 or level >= 100:   # BUG: >= should be >
+    raise ValueError("level must be 1..100")
+  _apply(level)
 ```
 
 ```ruby

@@ -51,16 +51,18 @@ answer.
 
 9. **[analysis]** *Draw a CFG and give branch-coverage tests.* Consider:
 
-   ```python
-   def fizzbuzz(n):
-     if n % 15 == 0:
-       return "FizzBuzz"
-     elif n % 3 == 0:
-       return "Fizz"
-     elif n % 5 == 0:
-       return "Buzz"
-     else:
-       return str(n)
+   ```go
+   func fizzbuzz(n int) string {
+   	if n%15 == 0 {
+   		return "FizzBuzz"
+   	} else if n%3 == 0 {
+   		return "Fizz"
+   	} else if n%5 == 0 {
+   		return "Buzz"
+   	} else {
+   		return strconv.Itoa(n)
+   	}
+   }
    ```
 
    ```java
@@ -91,18 +93,16 @@ answer.
    }
    ```
 
-   ```go
-   func fizzbuzz(n int) string {
-   	if n%15 == 0 {
-   		return "FizzBuzz"
-   	} else if n%3 == 0 {
-   		return "Fizz"
-   	} else if n%5 == 0 {
-   		return "Buzz"
-   	} else {
-   		return strconv.Itoa(n)
-   	}
-   }
+   ```python
+   def fizzbuzz(n):
+     if n % 15 == 0:
+       return "FizzBuzz"
+     elif n % 3 == 0:
+       return "Fizz"
+     elif n % 5 == 0:
+       return "Buzz"
+     else:
+       return str(n)
    ```
 
    ```ruby

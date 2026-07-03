@@ -51,18 +51,21 @@ reason.
    one or two of these an ordinary automated linter or type checker would likely have caught on
    its own, and which require a *human* reviewer who understands intent.
 
-   ```python
-   # Applies a discount code to a shopping cart and returns the new total.
-   def apply_discount(cart, code):
-     total = 0
-     for item in cart.items:
-       total = total + item.price * item.quantity
-     discount = discounts.lookup(code)        # returns None if code is unknown
-     total = total - total * discount.percent / 100
-     if total < 0:
-       total == 0
-     cart.total = total
-     return total
+   ```go
+   // Applies a discount code to a shopping cart and returns the new total.
+   func applyDiscount(cart *Cart, code string) float64 {
+   	total := 0.0
+   	for _, item := range cart.Items {
+   		total = total + item.Price*float64(item.Quantity)
+   	}
+   	discount := discounts.Lookup(code) // returns nil if code is unknown
+   	total = total - total*discount.Percent/100
+   	if total < 0 {
+   		math.Max(total, 0)
+   	}
+   	cart.Total = total
+   	return total
+   }
    ```
 
    ```java
@@ -99,21 +102,18 @@ reason.
    }
    ```
 
-   ```go
-   // Applies a discount code to a shopping cart and returns the new total.
-   func applyDiscount(cart *Cart, code string) float64 {
-   	total := 0.0
-   	for _, item := range cart.Items {
-   		total = total + item.Price*float64(item.Quantity)
-   	}
-   	discount := discounts.Lookup(code) // returns nil if code is unknown
-   	total = total - total*discount.Percent/100
-   	if total < 0 {
-   		math.Max(total, 0)
-   	}
-   	cart.Total = total
-   	return total
-   }
+   ```python
+   # Applies a discount code to a shopping cart and returns the new total.
+   def apply_discount(cart, code):
+     total = 0
+     for item in cart.items:
+       total = total + item.price * item.quantity
+     discount = discounts.lookup(code)        # returns None if code is unknown
+     total = total - total * discount.percent / 100
+     if total < 0:
+       total == 0
+     cart.total = total
+     return total
    ```
 
    ```ruby

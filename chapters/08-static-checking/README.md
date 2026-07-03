@@ -102,11 +102,11 @@ among other things, a story of a team that never conducted an honest retrospecti
 assumptions about software reliability.[^1]
 
 ```mermaid
-flowchart LR
+flowchart TD
     D["Discovery review<br/>(early, broad)"] --> DD["Deep-dive review<br/>(focused, deep)"]
-    DD --> Build[Build the system]
+    DD --> Build["Build the system"]
     Build --> R["Retrospective review<br/>(after, learning)"]
-    R -.feeds next design.-> D
+    R -. "learning feeds<br/>the next design" .-> D
     classDef rev fill:#eef,stroke:#66a,color:#000;
     class D,DD,R rev;
 ```
@@ -340,13 +340,22 @@ different question. It helps to know the categories so you can assemble the righ
   can never reach a user. Here a price arrives as a string and flows into arithmetic — Python
   runs it without complaint and produces a nonsense total:
 
-  ```python
-  def line_total(price: float, quantity: int) -> float:
-    return price * quantity
+  ```go
+  package main
 
-  price = "9.99"              # read from a CSV row, still a string
-  total = line_total(price, 3)
-  print(total)                # no crash: prints 9.999.999.99
+  import "fmt"
+
+  func lineTotal(price float64, quantity int) float64 {
+  	return price * float64(quantity)
+  }
+
+  func main() {
+  	price := "9.99" // read from a CSV row, still a string
+  	total := lineTotal(price, 3)
+  	fmt.Println(total) // never runs: go build rejects the call
+  }
+
+  // cannot use price (variable of type string) as float64 value in argument to lineTotal
   ```
 
   ```java
@@ -381,22 +390,13 @@ different question. It helps to know the categories so you can assemble the righ
   // TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
   ```
 
-  ```go
-  package main
+  ```python
+  def line_total(price: float, quantity: int) -> float:
+    return price * quantity
 
-  import "fmt"
-
-  func lineTotal(price float64, quantity int) float64 {
-  	return price * float64(quantity)
-  }
-
-  func main() {
-  	price := "9.99" // read from a CSV row, still a string
-  	total := lineTotal(price, 3)
-  	fmt.Println(total) // never runs: go build rejects the call
-  }
-
-  // cannot use price (variable of type string) as float64 value in argument to lineTotal
+  price = "9.99"              # read from a CSV row, still a string
+  total = line_total(price, 3)
+  print(total)                # no crash: prints 9.999.999.99
   ```
 
   ```ruby
@@ -433,18 +433,24 @@ different question. It helps to know the categories so you can assemble the righ
   is built to do. This exporter closes its file on the normal path but leaks it on the error
   path:
 
-  ```python
-  def export_prices(catalog, discounts, path):
-    out = open(path, "w")
-    out.write("item,price\n")
-    for item, price in sorted(catalog.items()):
-      pct = discounts.percent_for(item)
-      if pct < 0 or pct > 100:
-        return None                 # error path: `out` is never closed
-      final = round(price * (1 - pct / 100), 2)
-      out.write(f"{item},{final}\n")
-    out.close()
-    return path
+  ```go
+  func exportPrices(catalog map[string]float64, disc *Discounts, path string) string {
+  	out, _ := os.Create(path)
+  	out.WriteString("item,price\n")
+  	for _, item := range slices.Sorted(maps.Keys(catalog)) {
+  		pct := disc.PercentFor(item)
+  		if pct < 0 || pct > 100 {
+  			return "" // error path: `out` is never closed
+  		}
+  		final := math.Round(catalog[item]*(1-float64(pct)/100)*100) / 100
+  		fmt.Fprintf(out, "%s,%g\n", item, final)
+  	}
+  	out.Close()
+  	return path
+  }
+
+  // go vet has no unclosed-file check and stays silent; GoLand's resource-leak
+  // inspection walks every path and flags the early return that skips Close.
   ```
 
   ```java
@@ -487,24 +493,18 @@ different question. It helps to know the categories so you can assemble the righ
   //   Warning: Closing file descriptor 20 on garbage collection
   ```
 
-  ```go
-  func exportPrices(catalog map[string]float64, disc *Discounts, path string) string {
-  	out, _ := os.Create(path)
-  	out.WriteString("item,price\n")
-  	for _, item := range slices.Sorted(maps.Keys(catalog)) {
-  		pct := disc.PercentFor(item)
-  		if pct < 0 || pct > 100 {
-  			return "" // error path: `out` is never closed
-  		}
-  		final := math.Round(catalog[item]*(1-float64(pct)/100)*100) / 100
-  		fmt.Fprintf(out, "%s,%g\n", item, final)
-  	}
-  	out.Close()
-  	return path
-  }
-
-  // go vet has no unclosed-file check and stays silent; GoLand's resource-leak
-  // inspection walks every path and flags the early return that skips Close.
+  ```python
+  def export_prices(catalog, discounts, path):
+    out = open(path, "w")
+    out.write("item,price\n")
+    for item, price in sorted(catalog.items()):
+      pct = discounts.percent_for(item)
+      if pct < 0 or pct > 100:
+        return None                 # error path: `out` is never closed
+      final = round(price * (1 - pct / 100), 2)
+      out.write(f"{item},{final}\n")
+    out.close()
+    return path
   ```
 
   ```ruby

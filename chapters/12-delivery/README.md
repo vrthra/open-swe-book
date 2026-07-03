@@ -251,18 +251,22 @@ diligent person might perform and become *gates no change can skip*. A typical p
 runs stages in increasing order of cost, failing fast on the cheap ones:
 
 ```mermaid
-flowchart LR
-    C["Commit pushed<br/>to trunk"] --> B["Build<br/>(compile, resolve<br/>dependencies)"]
-    B --> S["Static checks<br/>(linters, analyzers,<br/>type checks — Ch. 8)"]
-    S --> U["Unit tests<br/>(fast, thousands)"]
-    U --> I["Integration tests<br/>(slower, fewer)"]
-    I --> E["End-to-end tests<br/>(slowest, fewest)"]
-    E --> A[("Versioned artifact<br/>ready to deploy")]
+flowchart TD
+    C["Commit pushed to trunk"] --> B["Build<br/>(compile, resolve dependencies)"]
+    B --> S["Static checks<br/>(linters, analyzers, type checks — Ch. 8)"]
+    S --> T
+    subgraph T ["Tests, in pyramid order"]
+        direction LR
+        U["Unit tests<br/>(fast, thousands)"] --> I["Integration tests<br/>(slower, fewer)"]
+        I --> E["End-to-end tests<br/>(slowest, fewest)"]
+    end
+    T --> A[("Versioned artifact<br/>ready to deploy")]
     B -. "fail → notify, stop" .-> C
     S -. fail .-> C
-    U -. fail .-> C
     classDef stage fill:#eef,stroke:#66a,color:#000;
+    classDef band fill:#ffffde,stroke:#aaaa33,color:#000;
     class B,S,U,I,E stage;
+    class T band;
 ```
 
 Take the stages in order. The **build** proves the change even compiles and its
@@ -408,18 +412,28 @@ environment to pay for.
 
 In the clinic scheduler, both are one conditional — only the predicate changes:
 
-```python
-from zlib import crc32
+```go
+type Flags struct {
+	NewScheduler    bool
+	NewSchedulerPct uint32
+}
 
-def scheduler_page(user_id, flags):
-  if flags["new_scheduler"]:                        # release flag: one bit, everyone
-    return render_new(user_id)
-  return render_old(user_id)
+func schedulerPage(userID string, flags Flags) string {
+	if flags.NewScheduler { // release flag: one bit, everyone
+		return renderNew(userID)
+	}
+	return renderOld(userID)
+}
 
-def scheduler_page_rollout(user_id, flags):           # same conditional, new predicate
-  if crc32(user_id.encode()) % 100 < flags["new_scheduler_pct"]:  # stable bucket 0..99
-    return render_new(user_id)
-  return render_old(user_id)
+// same conditional, new predicate: FNV-1a gives a stable bucket 0..99
+func schedulerPageRollout(userID string, flags Flags) string {
+	h := fnv.New32a()
+	h.Write([]byte(userID))
+	if h.Sum32()%100 < flags.NewSchedulerPct {
+		return renderNew(userID)
+	}
+	return renderOld(userID)
+}
 ```
 
 ```java
@@ -466,28 +480,18 @@ function schedulerPageRollout(userId, flags) {       // same conditional, new pr
 }
 ```
 
-```go
-type Flags struct {
-	NewScheduler    bool
-	NewSchedulerPct uint32
-}
+```python
+from zlib import crc32
 
-func schedulerPage(userID string, flags Flags) string {
-	if flags.NewScheduler { // release flag: one bit, everyone
-		return renderNew(userID)
-	}
-	return renderOld(userID)
-}
+def scheduler_page(user_id, flags):
+  if flags["new_scheduler"]:                        # release flag: one bit, everyone
+    return render_new(user_id)
+  return render_old(user_id)
 
-// same conditional, new predicate: FNV-1a gives a stable bucket 0..99
-func schedulerPageRollout(userID string, flags Flags) string {
-	h := fnv.New32a()
-	h.Write([]byte(userID))
-	if h.Sum32()%100 < flags.NewSchedulerPct {
-		return renderNew(userID)
-	}
-	return renderOld(userID)
-}
+def scheduler_page_rollout(user_id, flags):           # same conditional, new predicate
+  if crc32(user_id.encode()) % 100 < flags["new_scheduler_pct"]:  # stable bucket 0..99
+    return render_new(user_id)
+  return render_old(user_id)
 ```
 
 ```ruby
@@ -863,19 +867,30 @@ step. One commit should refactor *or* fix, never ambiguously both.
 Applied to a fee-code lookup inherited with the clinic scheduler, the loop leaves this
 trail:
 
-```python
-def legacy_fee_code(visit_type):                    # inherited: no docs, no tests
-  return {"exam": "E10", "lab": "L20", "vaccine": "V30"}.get(visit_type, "E10")
+```go
+func legacyFeeCode(visitType string) string { // inherited: no docs, no tests
+	codes := map[string]string{"exam": "E10", "lab": "L20", "vaccine": "V30"}
+	return cmp.Or(codes[visitType], "E10")
+}
 
-def test_probe_unknown_type():
-  assert legacy_fee_code("phone") == "XXX"        # deliberately wrong
-# FAILED: AssertionError: assert 'E10' == 'XXX'
+func TestProbeUnknownType(t *testing.T) {
+	if got := legacyFeeCode("phone"); got != "XXX" { // deliberately wrong
+		t.Errorf(`legacyFeeCode("phone") = %q, want "XXX"`, got)
+	}
+}
+// FAILED: legacyFeeCode("phone") = "E10", want "XXX"
 
-def test_unknown_type_bills_as_exam():              # observed value, promoted
-  assert legacy_fee_code("phone") == "E10"
+func TestUnknownTypeBillsAsExam(t *testing.T) { // observed value, promoted
+	if got := legacyFeeCode("phone"); got != "E10" {
+		t.Errorf("got %q", got)
+	}
+}
 
-def test_empty_type_bills_as_exam():                # edge probe: pinned, bug or not
-  assert legacy_fee_code("") == "E10"
+func TestEmptyTypeBillsAsExam(t *testing.T) { // edge probe: pinned, bug or not
+	if got := legacyFeeCode(""); got != "E10" {
+		t.Errorf("got %q", got)
+	}
+}
 ```
 
 ```java
@@ -927,30 +942,19 @@ test("empty type bills as exam", () => {            // edge probe: pinned, bug o
 });
 ```
 
-```go
-func legacyFeeCode(visitType string) string { // inherited: no docs, no tests
-	codes := map[string]string{"exam": "E10", "lab": "L20", "vaccine": "V30"}
-	return cmp.Or(codes[visitType], "E10")
-}
+```python
+def legacy_fee_code(visit_type):                    # inherited: no docs, no tests
+  return {"exam": "E10", "lab": "L20", "vaccine": "V30"}.get(visit_type, "E10")
 
-func TestProbeUnknownType(t *testing.T) {
-	if got := legacyFeeCode("phone"); got != "XXX" { // deliberately wrong
-		t.Errorf(`legacyFeeCode("phone") = %q, want "XXX"`, got)
-	}
-}
-// FAILED: legacyFeeCode("phone") = "E10", want "XXX"
+def test_probe_unknown_type():
+  assert legacy_fee_code("phone") == "XXX"        # deliberately wrong
+# FAILED: AssertionError: assert 'E10' == 'XXX'
 
-func TestUnknownTypeBillsAsExam(t *testing.T) { // observed value, promoted
-	if got := legacyFeeCode("phone"); got != "E10" {
-		t.Errorf("got %q", got)
-	}
-}
+def test_unknown_type_bills_as_exam():              # observed value, promoted
+  assert legacy_fee_code("phone") == "E10"
 
-func TestEmptyTypeBillsAsExam(t *testing.T) { // edge probe: pinned, bug or not
-	if got := legacyFeeCode(""); got != "E10" {
-		t.Errorf("got %q", got)
-	}
-}
+def test_empty_type_bills_as_exam():                # edge probe: pinned, bug or not
+  assert legacy_fee_code("") == "E10"
 ```
 
 ```ruby
@@ -1031,18 +1035,22 @@ travel together into a single type that can then attract the behavior that uses 
 
 The clinic scheduler's booking check shows two of those smells at once:
 
-```python
-def can_book(patient, slot, booked_today):
-  if patient is not None:
-    if slot.open:
-      if booked_today < 8:
-        return True
-      else:
-        return False
-    else:
-      return False
-  else:
-    return False
+```go
+func canBook(patient *Patient, slot Slot, bookedToday int) bool {
+	if patient != nil {
+		if slot.Open {
+			if bookedToday < 8 {
+				return true
+			} else {
+				return false
+			}
+		} else {
+			return false
+		}
+	} else {
+		return false
+	}
+}
 ```
 
 ```java
@@ -1081,22 +1089,18 @@ function canBook(patient, slot, bookedToday) {
 }
 ```
 
-```go
-func canBook(patient *Patient, slot Slot, bookedToday int) bool {
-	if patient != nil {
-		if slot.Open {
-			if bookedToday < 8 {
-				return true
-			} else {
-				return false
-			}
-		} else {
-			return false
-		}
-	} else {
-		return false
-	}
-}
+```python
+def can_book(patient, slot, booked_today):
+  if patient is not None:
+    if slot.open:
+      if booked_today < 8:
+        return True
+      else:
+        return False
+    else:
+      return False
+  else:
+    return False
 ```
 
 ```ruby
@@ -1120,15 +1124,18 @@ end
 Replace the magic `8` with a named constant, run the suite, flatten the nesting with
 guard clauses, run it again — the tests stay green after each move:
 
-```python
-MAX_DAILY_BOOKINGS = 8
+```go
+const maxDailyBookings = 8
 
-def can_book(patient, slot, booked_today):
-  if patient is None:
-    return False
-  if not slot.open:
-    return False
-  return booked_today < MAX_DAILY_BOOKINGS
+func canBook(patient *Patient, slot Slot, bookedToday int) bool {
+	if patient == nil {
+		return false
+	}
+	if !slot.Open {
+		return false
+	}
+	return bookedToday < maxDailyBookings
+}
 ```
 
 ```java
@@ -1151,18 +1158,15 @@ function canBook(patient, slot, bookedToday) {
 }
 ```
 
-```go
-const maxDailyBookings = 8
+```python
+MAX_DAILY_BOOKINGS = 8
 
-func canBook(patient *Patient, slot Slot, bookedToday int) bool {
-	if patient == nil {
-		return false
-	}
-	if !slot.Open {
-		return false
-	}
-	return bookedToday < maxDailyBookings
-}
+def can_book(patient, slot, booked_today):
+  if patient is None:
+    return False
+  if not slot.open:
+    return False
+  return booked_today < MAX_DAILY_BOOKINGS
 ```
 
 ```ruby

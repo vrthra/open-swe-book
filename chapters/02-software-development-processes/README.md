@@ -140,13 +140,13 @@ weeks, that produces a potentially shippable increment of the product.[^4] Every
 Scrum exists to plan a sprint, keep it on track, ship its result, and learn from it.
 
 ```mermaid
-flowchart LR
+flowchart TD
     PB[(Product Backlog)] -->|Sprint Planning| SB[(Sprint Backlog)]
     SB --> S{{Sprint<br/>1–4 weeks}}
-    S -->|Daily Scrum each day| S
-    S --> INC[Potentially shippable<br/>increment]
-    INC -->|Sprint Review| PB
+    S <-->|each day| DS([Daily Scrum])
+    S --> INC[Potentially shippable increment]
     INC -->|Sprint Retrospective| S
+    INC -->|Sprint Review| PB
     classDef art fill:#eef,stroke:#66a,color:#000;
     class PB,SB art;
 ```
@@ -294,12 +294,18 @@ test guards against breakage (*refactor*). Repeat in minutes-long cycles.[^9]
 One turn of this loop on the clinic app's appointment slots starts *red* — running these
 tests fails with a `NameError`, because `slots_overlap` does not exist yet:
 
-```python
-def test_overlapping_slots_conflict():
-  assert slots_overlap(("09:00", "09:30"), ("09:15", "09:45"))
+```go
+func TestOverlappingSlotsConflict(t *testing.T) {
+	if !slotsOverlap([2]string{"09:00", "09:30"}, [2]string{"09:15", "09:45"}) {
+		t.Error("want overlapping slots to conflict")
+	}
+}
 
-def test_back_to_back_slots_do_not_conflict():
-  assert not slots_overlap(("09:00", "09:30"), ("09:30", "10:00"))
+func TestBackToBackSlotsDoNotConflict(t *testing.T) {
+	if slotsOverlap([2]string{"09:00", "09:30"}, [2]string{"09:30", "10:00"}) {
+		t.Error("want back-to-back slots not to conflict")
+	}
+}
 ```
 
 ```java
@@ -330,18 +336,12 @@ test("back-to-back slots do not conflict", () => {
 });
 ```
 
-```go
-func TestOverlappingSlotsConflict(t *testing.T) {
-	if !slotsOverlap([2]string{"09:00", "09:30"}, [2]string{"09:15", "09:45"}) {
-		t.Error("want overlapping slots to conflict")
-	}
-}
+```python
+def test_overlapping_slots_conflict():
+  assert slots_overlap(("09:00", "09:30"), ("09:15", "09:45"))
 
-func TestBackToBackSlotsDoNotConflict(t *testing.T) {
-	if slotsOverlap([2]string{"09:00", "09:30"}, [2]string{"09:30", "10:00"}) {
-		t.Error("want back-to-back slots not to conflict")
-	}
-}
+def test_back_to_back_slots_do_not_conflict():
+  assert not slots_overlap(("09:00", "09:30"), ("09:30", "10:00"))
 ```
 
 ```ruby
@@ -360,9 +360,10 @@ end
 
 The least code that makes both tests pass turns the run *green*:
 
-```python
-def slots_overlap(a, b):
-  return a[0] < b[1] and b[0] < a[1]
+```go
+func slotsOverlap(a, b [2]string) bool {
+	return a[0] < b[1] && b[0] < a[1]
+}
 ```
 
 ```java
@@ -377,10 +378,9 @@ function slotsOverlap(a, b) {
 }
 ```
 
-```go
-func slotsOverlap(a, b [2]string) bool {
-	return a[0] < b[1] && b[0] < a[1]
-}
+```python
+def slots_overlap(a, b):
+  return a[0] < b[1] and b[0] < a[1]
 ```
 
 ```ruby
@@ -733,12 +733,15 @@ other models share.
 Shape Up runs in three phases that overlap across the calendar:
 
 ```mermaid
-flowchart LR
-    S["Shaping<br/>(senior generalists, off-cycle):<br/>rough · solved · bounded → a pitch"]
-      --> B["Betting<br/>(betting table, during cool-down):<br/>fund a few pitches, no backlog"]
-    B --> U["Building<br/>(one team, whole 6-week cycle):<br/>get one piece done · map scopes · hill charts"]
-    U --> C["Cool-down<br/>(2 weeks): bugs, ideas,<br/>and the next betting table"]
-    C --> B
+flowchart TD
+    C["Cool-down (2 weeks)<br/>bugs, ideas, and the<br/>next betting table"]
+    S["Shaping (off-cycle,<br/>senior generalists)<br/>rough · solved · bounded<br/>→ a pitch"]
+    B["Betting (betting table,<br/>during cool-down)<br/>fund a few pitches,<br/>no backlog"]
+    U["Building (one team,<br/>whole 6-week cycle)<br/>get one piece done ·<br/>map scopes · hill charts"]
+    S --> B
+    C -->|"bets for the<br/>next cycle"| B
+    B --> U
+    U --> C
 ```
 
 **Shaping (what to build, and how much it's worth).** Before any team is committed, senior

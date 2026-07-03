@@ -46,13 +46,13 @@ form the team can act on, and **validate** that what you specified is actually w
 need — which surfaces new needs and misunderstandings, sending you around again.
 
 ```mermaid
-flowchart LR
+flowchart TD
     E[Elicit<br/>talk to stakeholders] --> A[Analyze<br/>organize, resolve conflicts]
     A --> S[Specify<br/>stories, features, scenarios]
     S --> V[Validate<br/>demos, reviews, prototypes]
-    V -->|new needs, corrections| E
-    V -.->|approved for now| B[Build]
-    B -.->|working software reveals more| E
+    V -->|new needs,<br/>corrections| E
+    V -.->|approved<br/>for now| B[Build]
+    B -.->|working software<br/>reveals more| E
     classDef c fill:#eef,stroke:#66a,color:#000;
     class E,A,S,V c;
 ```
@@ -116,15 +116,15 @@ because they are easy to state vaguely ("it should be fast") and hard to state t
 an argument.[^1]
 
 ```mermaid
-flowchart TD
+flowchart LR
     R[Requirement] --> F[Functional<br/>what it does]
     R --> Q[Quality / non-functional<br/>how well it does it]
-    F --> F1["'Mark appointment arrived'"]
-    F --> F2["'Send reminder 24h before'"]
-    Q --> Q1["Performance: p95 < 1s"]
-    Q --> Q2["Security: no PHI in logs"]
-    Q --> Q3["Usability: check-in in 3 taps"]
-    Q --> Q4["Availability: 99.9% uptime"]
+    F --> F1["'Mark appointment<br/>arrived'"]
+    F --> F2["'Send reminder<br/>24h before'"]
+    Q --> Q1["Performance:<br/>p95 < 1s"]
+    Q --> Q2["Security:<br/>no PHI in logs"]
+    Q --> Q3["Usability:<br/>check-in in 3 taps"]
+    Q --> Q4["Availability:<br/>99.9% uptime"]
     classDef f fill:#efe,stroke:#6a6,color:#000;
     classDef q fill:#fee,stroke:#a66,color:#000;
     class F,F1,F2 f;
@@ -441,28 +441,31 @@ With behave, each scenario line binds by exact text to a **step definition** —
 function that calls the clinic app (`check_in`, `open_visit`) and asserts what the user
 would see:
 
-```python
-from behave import given, when, then
+```go
+var patient Patient
+var visit Visit
 
-@given("a checked-in patient flagged for an interpreter")
-def flagged(context):
-  context.patient = check_in(interpreter=True)
+func flagged()    { patient = checkIn(true) }
+func notFlagged() { patient = checkIn(false) }
+func opens()      { visit = openVisit(patient) }
 
-@given("a checked-in patient with no interpreter flag")
-def not_flagged(context):
-  context.patient = check_in(interpreter=False)
+func bannerShown() error { return wantBanners("interpreter needed") }
+func noBanner() error    { return wantBanners() }
 
-@when("the clinician opens the visit")
-def opens(context):
-  context.visit = open_visit(context.patient)
+func wantBanners(exp ...string) error {
+	if slices.Equal(visit.banners, exp) {
+		return nil
+	}
+	return fmt.Errorf("banners = %v, want %v", visit.banners, exp)
+}
 
-@then('an "interpreter needed" banner is shown')
-def banner_shown(context):
-  assert "interpreter needed" in context.visit["banners"]
-
-@then("no interpreter banner is shown")
-def no_banner(context):
-  assert not context.visit["banners"]
+func InitializeScenario(sc *godog.ScenarioContext) {
+	sc.Given(`^a checked-in patient flagged for an interpreter$`, flagged)
+	sc.Given(`^a checked-in patient with no interpreter flag$`, notFlagged)
+	sc.When(`^the clinician opens the visit$`, opens)
+	sc.Then(`^an "interpreter needed" banner is shown$`, bannerShown)
+	sc.Then(`^no interpreter banner is shown$`, noBanner)
+}
 ```
 
 ```java
@@ -516,31 +519,28 @@ Then("no interpreter banner is shown", function () {
 });
 ```
 
-```go
-var patient Patient
-var visit Visit
+```python
+from behave import given, when, then
 
-func flagged()    { patient = checkIn(true) }
-func notFlagged() { patient = checkIn(false) }
-func opens()      { visit = openVisit(patient) }
+@given("a checked-in patient flagged for an interpreter")
+def flagged(context):
+  context.patient = check_in(interpreter=True)
 
-func bannerShown() error { return wantBanners("interpreter needed") }
-func noBanner() error    { return wantBanners() }
+@given("a checked-in patient with no interpreter flag")
+def not_flagged(context):
+  context.patient = check_in(interpreter=False)
 
-func wantBanners(exp ...string) error {
-	if slices.Equal(visit.banners, exp) {
-		return nil
-	}
-	return fmt.Errorf("banners = %v, want %v", visit.banners, exp)
-}
+@when("the clinician opens the visit")
+def opens(context):
+  context.visit = open_visit(context.patient)
 
-func InitializeScenario(sc *godog.ScenarioContext) {
-	sc.Given(`^a checked-in patient flagged for an interpreter$`, flagged)
-	sc.Given(`^a checked-in patient with no interpreter flag$`, notFlagged)
-	sc.When(`^the clinician opens the visit$`, opens)
-	sc.Then(`^an "interpreter needed" banner is shown$`, bannerShown)
-	sc.Then(`^no interpreter banner is shown$`, noBanner)
-}
+@then('an "interpreter needed" banner is shown')
+def banner_shown(context):
+  assert "interpreter needed" in context.visit["banners"]
+
+@then("no interpreter banner is shown")
+def no_banner(context):
+  assert not context.visit["banners"]
 ```
 
 ```ruby
@@ -774,16 +774,16 @@ features and stories at the leaves.[^13] The tree makes the *rationale* of your 
 serves it.
 
 ```mermaid
-flowchart TD
-    G[Goal: run the clinic efficiently<br/>and safely] --> G1[Reduce no-shows]
-    G --> G2[Speed up patient throughput]
-    G --> G3[Protect patient privacy]
-    G1 --> S1[Send appointment reminders]
-    G1 --> S2[Maintain a waitlist to fill gaps]
-    G2 --> S3[One-tap check-in]
-    G2 --> S4[Pre-visit insurance verification]
-    G3 --> S5[Role-based access control]
-    G3 --> S6[No patient identifiers in logs]
+flowchart LR
+    G[Goal: run the clinic<br/>efficiently and safely] --> G1[Reduce<br/>no-shows]
+    G --> G2[Speed up patient<br/>throughput]
+    G --> G3[Protect patient<br/>privacy]
+    G1 --> S1[Send appointment<br/>reminders]
+    G1 --> S2[Maintain a waitlist<br/>to fill gaps]
+    G2 --> S3[One-tap<br/>check-in]
+    G2 --> S4[Pre-visit insurance<br/>verification]
+    G3 --> S5[Role-based<br/>access control]
+    G3 --> S6[No patient identifiers<br/>in logs]
     classDef top fill:#eef,stroke:#66a,color:#000;
     classDef leaf fill:#efe,stroke:#6a6,color:#000;
     class G top;
@@ -849,17 +849,17 @@ thinking: instead of imagining a random hack, you decompose the attacker's goal 
 sure every branch is defended.
 
 ```mermaid
-flowchart TD
-    A[Attacker goal:<br/>read patient record<br/>without authorization] --> B[Steal a valid login]
-    A --> C[Bypass access control]
-    A --> D[Read data at rest]
-    B --> B1[Phish a clerk's password]
-    B --> B2[Reuse a leaked password]
-    B --> B3[Steal an unexpired session token]
-    C --> C1[Exploit missing role check<br/>on record API]
-    C --> C2[Tamper with patient ID in URL<br/>-IDOR-]
-    D --> D1[Read unencrypted database backup]
-    D --> D2[Find PHI in application logs]
+flowchart LR
+    A[Attacker goal:<br/>read patient record<br/>without authorization] --> B[Steal a<br/>valid login]
+    A --> C[Bypass<br/>access control]
+    A --> D[Read data<br/>at rest]
+    B --> B1[Phish a clerk's<br/>password]
+    B --> B2[Reuse a leaked<br/>password]
+    B --> B3[Steal an unexpired<br/>session token]
+    C --> C1[Exploit missing role<br/>check on record API]
+    C --> C2["Tamper with patient<br/>ID in URL (IDOR)"]
+    D --> D1[Read unencrypted<br/>database backup]
+    D --> D2[Find PHI in<br/>application logs]
     classDef root fill:#fee,stroke:#a33,color:#000;
     class A root;
 ```

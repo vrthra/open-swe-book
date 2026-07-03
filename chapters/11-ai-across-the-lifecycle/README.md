@@ -47,11 +47,13 @@ The book's four cross-cutting pressures do not go away — AI just shifts them:
 questions differ at each:
 
 ```mermaid
-flowchart LR
+flowchart BT
     A["Autocomplete<br/>(line/block suggestions)"] --> B["Chat assistant<br/>(ask, explain, refactor)"]
     B --> C["In-IDE agent<br/>(multi-file edits, runs tools)"]
-    C --> D["Autonomous agent<br/>(takes an issue → opens a PR)"]
+    C --> D["Autonomous agent<br/>(takes an issue →<br/>opens a PR)"]
     D --> E["Multi-agent swarm<br/>(planner + workers + critics)"]
+    classDef rung fill:#eef,stroke:#66a,color:#000;
+    class A,B,C,D,E rung;
 ```
 
 As you climb the ladder, the human's job moves from *typing* toward *specifying,
@@ -209,15 +211,25 @@ Chapter 9's `apply_discount` makes the failure concrete: suppose the billing spe
 half-cent prices round *up*, while the generated code reaches for Python's `round` —
 banker's rounding — and the generated test asserts whatever the code already returns.
 
-```python
-def apply_discount(price, percent):     # AI-generated: Python round() = banker's rounding
-  return round(price * (1 - percent / 100), 2)
+```go
+package main
 
-def test_half_off():                    # AI-generated: asserts the code's own behavior
-  assert apply_discount(10.25, 50) == 5.12
+import "fmt"
 
-test_half_off()                         # passes — and every line of the unit is covered
-print(apply_discount(10.25, 50))        # 5.12; the billing spec says 5.13 (half up)
+func applyDiscount(price, percent float64) string { // AI-generated: %.2f rounds ties
+	return fmt.Sprintf("%.2f", price*(1-percent/100)) // to even — banker's rounding
+}
+
+func testHalfOff() { // AI-generated: asserts the code's own behavior
+	if applyDiscount(10.25, 50) != "5.12" {
+		panic("testHalfOff failed")
+	}
+}
+
+func main() {
+	testHalfOff()                         // passes — and every line of the unit is covered
+	fmt.Println(applyDiscount(10.25, 50)) // 5.12; the billing spec says 5.13 (half up)
+}
 ```
 
 ```java
@@ -256,25 +268,15 @@ testHalfOff();                           // passes — and every line of the uni
 console.log(applyDiscount(17.15, 50));   // 8.57; the billing spec says 8.58 (half up)
 ```
 
-```go
-package main
+```python
+def apply_discount(price, percent):     # AI-generated: Python round() = banker's rounding
+  return round(price * (1 - percent / 100), 2)
 
-import "fmt"
+def test_half_off():                    # AI-generated: asserts the code's own behavior
+  assert apply_discount(10.25, 50) == 5.12
 
-func applyDiscount(price, percent float64) string { // AI-generated: %.2f rounds ties
-	return fmt.Sprintf("%.2f", price*(1-percent/100)) // to even — banker's rounding
-}
-
-func testHalfOff() { // AI-generated: asserts the code's own behavior
-	if applyDiscount(10.25, 50) != "5.12" {
-		panic("testHalfOff failed")
-	}
-}
-
-func main() {
-	testHalfOff()                         // passes — and every line of the unit is covered
-	fmt.Println(applyDiscount(10.25, 50)) // 5.12; the billing spec says 5.13 (half up)
-}
+test_half_off()                         # passes — and every line of the unit is covered
+print(apply_discount(10.25, 50))        # 5.12; the billing spec says 5.13 (half up)
 ```
 
 ```ruby

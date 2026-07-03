@@ -15,7 +15,7 @@ import base64
 import re
 import sys
 
-LANGS = ["python", "java", "javascript", "go", "ruby"]
+LANGS = ["go", "java", "javascript", "python", "ruby"]
 NAME = {"python": "Python", "java": "Java", "javascript": "JavaScript",
         "go": "Go", "ruby": "Ruby"}
 
@@ -88,6 +88,29 @@ def mathjax_to_tex(body: str) -> str:
     return body
 
 
+def fix_footnotes(body: str) -> str:
+    """mdBook footnotes: defs render as <div><sup>N</sup><p>text</p></div>
+    (breaking the line after the number in EPUB) and use bare numeric ids that
+    REPEAT in every chapter of print.html, cross-wiring links. Inline each
+    definition and scope ids/refs per chapter (h1-delimited segment)."""
+    segs = re.split(r"(?=<h1\b)", body)
+    out = []
+    for c, seg in enumerate(segs):
+        seg = re.sub(
+            r'<div class="footnote-definition" id="([\w-]+)">\s*'
+            r'<sup class="footnote-definition-label">([^<]+)</sup>\s*'
+            r"<p>(.*?)</p>\s*</div>",
+            lambda m: (f'<div class="footnote-definition" id="fn{c}-{m.group(1)}">'
+                       f"<p><sup>{m.group(2)}</sup> {m.group(3)}</p></div>"),
+            seg, flags=re.S)
+        seg = re.sub(
+            r'(<sup class="footnote-reference"><a href="#)([\w-]+)(">)',
+            lambda m: f"{m.group(1)}fn{c}-{m.group(2)}{m.group(3)}",
+            seg)
+        out.append(seg)
+    return "".join(out)
+
+
 def drop_web_sections(body: str) -> str:
     """Remove site-only front-page sections from the EPUB (build instructions,
     HTML table of contents, repo how-to, and the EPUB download links)."""
@@ -139,6 +162,7 @@ def main() -> None:
     t = open(path, encoding="utf-8").read()
     body = re.search(r"<main>(.*)</main>", t, re.S).group(1)
     body = mathjax_to_tex(body)
+    body = fix_footnotes(body)
     body = re.sub(r"<script\b.*?</script>", "", body, flags=re.S)
     body = re.sub(r'<div class="buttons">.*?</div>', "", body, flags=re.S)
     body = re.sub(r"<button[^>]*>.*?</button>", "", body, flags=re.S)

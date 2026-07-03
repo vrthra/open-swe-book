@@ -1,9 +1,10 @@
 name: release-epubs
 
-# Tag a version (e.g. `git tag v2026.07 && git push --tags`) and this builds
-# the five per-language EPUB editions and publishes them as release assets.
-# Stable download URLs (always the newest release):
+# Tag a version (e.g. `git tag v2026.07.1 && git push --tags`) and this builds
+# the five per-language EPUB editions plus a PDF twin of each, and publishes
+# all ten as release assets. Stable download URLs (always the newest release):
 #   https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-python.epub
+#   https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-python.pdf
 on:
   push:
     tags: ["v*"]
@@ -29,7 +30,7 @@ jobs:
       - name: Install pandoc
         run: sudo apt-get update -q && sudo apt-get install -y -q pandoc
 
-      - name: Build the five EPUB editions
+      - name: Build the five EPUB editions and their PDF twins
         env:
           EPUB_OUT: ${{ github.workspace }}/dist
           CHROME_FLAGS: --no-sandbox
@@ -42,6 +43,6 @@ jobs:
         run: |
           gh release create "$GITHUB_REF_NAME" \
             --title "Software Engineering: An Open Body of Knowledge $GITHUB_REF_NAME" \
-            --notes "EPUB editions of [swebook.org](https://www.swebook.org) — one per code-example language. Prose is identical across editions." \
-            --verify-tag dist/*.epub \
-          || gh release upload "$GITHUB_REF_NAME" dist/*.epub --clobber
+            --notes "EPUB and PDF editions of [swebook.org](https://www.swebook.org) — one per code-example language. Prose is identical across editions." \
+            --verify-tag dist/*.epub dist/*.pdf \
+          || gh release upload "$GITHUB_REF_NAME" dist/*.epub dist/*.pdf --clobber

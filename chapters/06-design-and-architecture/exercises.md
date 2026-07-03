@@ -32,24 +32,32 @@ Mermaid block is fine — the thinking is what is graded.
 
 6. **[analysis]** Read the following code and critique its coupling and cohesion.
 
-   ```python
-   LAST_TOTAL = 0.0                          # read by Checkout and Receipt
+   ```go
+   var lastTotal = 0.0 // read by Checkout and Receipt
 
-   class PriceEngine:
-     def compute(self, cart, is_b2b):
-       global LAST_TOTAL
-       cart._items.sort(key=lambda i: i["qty"])
-       total = 0.0
-       for item in cart._items:
-         if is_b2b:
-           total += item["wholesale"] * item["qty"] * 0.9
-         else:
-           total += item["retail"] * item["qty"]
-       LAST_TOTAL = total
+   type Item struct {
+   	Qty               int
+   	Retail, Wholesale float64
+   }
+   type Cart struct{ items []Item } // unexported — meant to be Cart's secret
 
-   class Receipt:
-     def render(self):
-       return f"Total: ${LAST_TOTAL:.2f}"
+   type PriceEngine struct{}
+
+   func (PriceEngine) Compute(cart *Cart, isB2B bool) {
+   	slices.SortFunc(cart.items, func(a, b Item) int { return a.Qty - b.Qty })
+   	total := 0.0
+   	for _, item := range cart.items {
+   		if isB2B {
+   			total += item.Wholesale * float64(item.Qty) * 0.9
+   		} else {
+   			total += item.Retail * float64(item.Qty)
+   		}
+   	}
+   	lastTotal = total
+   }
+
+   // The receipt, adapted to a plain function in Go — still reads the package global.
+   func RenderReceipt() string { return fmt.Sprintf("Total: $%.2f", lastTotal) }
    ```
 
    ```java
@@ -101,32 +109,24 @@ Mermaid block is fine — the thinking is what is graded.
    }
    ```
 
-   ```go
-   var lastTotal = 0.0 // read by Checkout and Receipt
+   ```python
+   LAST_TOTAL = 0.0                          # read by Checkout and Receipt
 
-   type Item struct {
-   	Qty               int
-   	Retail, Wholesale float64
-   }
-   type Cart struct{ items []Item } // unexported — meant to be Cart's secret
+   class PriceEngine:
+     def compute(self, cart, is_b2b):
+       global LAST_TOTAL
+       cart._items.sort(key=lambda i: i["qty"])
+       total = 0.0
+       for item in cart._items:
+         if is_b2b:
+           total += item["wholesale"] * item["qty"] * 0.9
+         else:
+           total += item["retail"] * item["qty"]
+       LAST_TOTAL = total
 
-   type PriceEngine struct{}
-
-   func (PriceEngine) Compute(cart *Cart, isB2B bool) {
-   	slices.SortFunc(cart.items, func(a, b Item) int { return a.Qty - b.Qty })
-   	total := 0.0
-   	for _, item := range cart.items {
-   		if isB2B {
-   			total += item.Wholesale * float64(item.Qty) * 0.9
-   		} else {
-   			total += item.Retail * float64(item.Qty)
-   		}
-   	}
-   	lastTotal = total
-   }
-
-   // The receipt, adapted to a plain function in Go — still reads the package global.
-   func RenderReceipt() string { return fmt.Sprintf("Total: $%.2f", lastTotal) }
+   class Receipt:
+     def render(self):
+       return f"Total: ${LAST_TOTAL:.2f}"
    ```
 
    ```ruby

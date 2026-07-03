@@ -75,18 +75,25 @@ The chapters group into arcs:
 
 Every code example in the book is provided in **Python, Java, JavaScript, Go, and
 Ruby**, behind language tabs — pick your language once and the whole site follows
-(or open any page with `?lang=go` to pre-select one). Python appears first because it
-reads closest to pseudocode. Each snippet also lives in [`code/`](code/) as a runnable
-file with a test, executed by continuous integration on every change.
+(or open any page with `?lang=go` to pre-select one). Each snippet also lives in
+[`code/`](code/) as a runnable file with a test, executed by continuous integration on
+every change.
 
-The book is also available as an **EPUB**, one edition per language — identical prose,
-your language's code — published with each tagged release:
+The book is also available as an **EPUB and a PDF**, one edition per language —
+identical prose, published with each tagged release:
 
+EPUB:
 [Python](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-python.epub) ·
 [Java](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-java.epub) ·
 [JavaScript](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-javascript.epub) ·
 [Go](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-go.epub) ·
 [Ruby](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-ruby.epub)
+&nbsp;&nbsp;PDF:
+[Python](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-python.pdf) ·
+[Java](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-java.pdf) ·
+[JavaScript](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-javascript.pdf) ·
+[Go](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-go.pdf) ·
+[Ruby](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-ruby.pdf)
 
 All editions, including past versions, are on the
 [releases page](https://github.com/tghastings/open-swe-book/releases).

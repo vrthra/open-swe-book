@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build per-language EPUB editions: identical prose, one language of code.
+# Build per-language EPUB + PDF editions: identical prose, one language of code.
 #   tools/build-epubs.sh                 -> the five single-language editions
 #   tools/build-epubs.sh go              -> just the Go edition
 #   tools/build-epubs.sh all             -> one edition with every language stacked
@@ -30,7 +30,7 @@ run_pandoc() {  # run_pandoc <in-html> <out-epub> <edition-description> <title> 
       --epub-cover-image "$5" \
       --epub-embed-font fonts/Inconsolata-latin.woff2
   else
-    docker run --rm -v "$OUT:/data" -v "$BOOK_DIR:/book" pandoc/core \
+    docker run --rm --user "$(id -u):$(id -g)" -v "$OUT:/data" -v "$BOOK_DIR:/book" pandoc/core \
       "/data/$1" -o "/data/$2" "${args[@]}" \
       --css /book/tools/epub.css --highlight-style /book/tools/onelight.theme \
       --epub-cover-image "/book/$5" \
@@ -68,5 +68,40 @@ for lang in $LANGS; do
   fi
   run_pandoc "filtered-$lang.html" "$name" "$edition" "$title" "$cover"
   echo "built: $name"
+
+  # PDF twin: same filtered HTML through pandoc standalone HTML (same One
+  # Light highlighting + MathML), cover page injected, printed by Chrome.
+  html="$OUT/pdf-$lang.html"
+  if command -v pandoc >/dev/null; then
+    pandoc "$OUT/filtered-$lang.html" -o "$html" -s -f html+tex_math_dollars --mathml \
+      --metadata title="$title" --toc --toc-depth=2 \
+      --highlight-style tools/onelight.theme \
+      --css "file://$BOOK_DIR/tools/epub.css" --css "file://$BOOK_DIR/tools/pdf.css"
+  else
+    docker run --rm --user "$(id -u):$(id -g)" -v "$OUT:/data" -v "$BOOK_DIR:/book" pandoc/core \
+      "/data/filtered-$lang.html" -o "/data/pdf-$lang.html" -s \
+      -f html+tex_math_dollars --mathml \
+      --metadata title="$title" --toc --toc-depth=2 \
+      --highlight-style /book/tools/onelight.theme \
+      --css "file://$BOOK_DIR/tools/epub.css" --css "file://$BOOK_DIR/tools/pdf.css"
+  fi
+  python3 - "$html" "$BOOK_DIR/$cover" "$BOOK_DIR" <<'PY'
+import sys, re
+p, cover, book = sys.argv[1], sys.argv[2], sys.argv[3]
+t = open(p, encoding="utf-8").read()
+t = re.sub(r"(<body[^>]*>)",
+           r'\1<div class="pdf-cover"><img src="file://' + cover + '"/></div>',
+           t, count=1)
+font = ('<style>@font-face{font-family:"Inconsolata";font-weight:200 900;'
+        'src:url("file://' + book + '/fonts/Inconsolata-latin.woff2")'
+        ' format("woff2")}</style>')
+t = t.replace("</head>", font + "</head>", 1)
+open(p, "w", encoding="utf-8").write(t)
+PY
+  "$CHROME" --headless --disable-gpu ${CHROME_FLAGS:-} \
+    --print-to-pdf="$OUT/${name%.epub}.pdf" --no-pdf-header-footer \
+    --virtual-time-budget=20000 "file://$html" 2>/dev/null
+  rm -f "$html"
+  echo "built: ${name%.epub}.pdf"
 done
 rm -f "$OUT"/rendered.html "$OUT"/filtered-*.html

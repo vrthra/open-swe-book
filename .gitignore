@@ -18,3 +18,6 @@ scratch/
 epubs/
 .epub-build/
 tools/covers/
+
+# One-shot verification builds (mdbook build -d .verify)
+.verify/

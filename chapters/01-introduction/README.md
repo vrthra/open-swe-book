@@ -355,10 +355,10 @@ code second, but from Chapter 2 onward nearly every code-shaped idea is also sho
 short, runnable example — and each example appears in five languages: **Python, Java,
 JavaScript, Go, and Ruby**, behind a row of tabs. Pick your language once and every
 example on every page follows; you can also open any page with `?lang=go` (or `java`,
-`javascript`, `ruby`) in the address bar to pre-select one. Python is the tab you see
-first because its syntax sits closest to pseudocode — it reads well even if you have
-never written a line of it — and because a first course rarely has one language everyone
-shares.
+`javascript`, `ruby`) in the address bar to pre-select one. The tabs run alphabetically,
+and Python is selected until you choose otherwise, because its syntax sits closest to
+pseudocode — it reads well even if you have never written a line of it — and a first
+course rarely has one language everyone shares.
 
 The other four are worth your attention even so, because some lessons only appear in the
 contrast: information hiding looks different as a Java interface, a Go implicit

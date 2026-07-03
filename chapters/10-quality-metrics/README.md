@@ -465,10 +465,16 @@ The relationship is a small hierarchy: process improvements *cause* product impr
 top-line customer metric to fall.
 
 ```mermaid
-flowchart LR
-    P[Process improvement<br/>reviews, tests, root-cause] --> D[Product improvement<br/>higher DRE]
-    D --> Q["Customer quality metric<br/>severity-weighted CFDs / 1k installs"]
+flowchart TD
+    P["Process improvement"] -- causes --> D["Product improvement"]
+    D -- causes --> Q["Customer quality metric falls<br/>severity-weighted CFDs<br/>per 1k installs"]
+    P -. measured by .- PM["defect-injection rate,<br/>review coverage,<br/>escaped-defect<br/>root-cause mix"]
+    D -. measured by .- DM["DRE"]
+    classDef sub fill:#eef,stroke:#66a,color:#000;
+    classDef met fill:#ffd,stroke:#bb8,color:#000;
     classDef top fill:#efe,stroke:#6a6,color:#000;
+    class P,D sub;
+    class PM,DM met;
     class Q top;
 ```
 
@@ -635,16 +641,32 @@ $\sigma^2 = 342/11 \approx 31.1$.)
 
 You can check the arithmetic with the standard library's `statistics` module:
 
-```python
-import statistics
+```go
+package main
 
-cfds = [2, 4, 5, 5, 7, 8, 9, 10, 12, 14, 23]
+import (
+	"fmt"
+	"math"
+)
 
-s = statistics.stdev(cfds)       # divides by n - 1 (Bessel's correction)
-sigma = statistics.pstdev(cfds)  # divides by n
+func main() {
+	cfds := []float64{2, 4, 5, 5, 7, 8, 9, 10, 12, 14, 23}
+	mean := 0.0
+	for _, x := range cfds {
+		mean += x
+	}
+	mean /= float64(len(cfds))
+	ss := 0.0 // sum of squared deviations from the mean
+	for _, x := range cfds {
+		ss += (x - mean) * (x - mean)
+	}
 
-print(f"s     = {s:.2f}")      # 5.85 — matches the hand computation
-print(f"sigma = {sigma:.2f}")  # 5.58
+	s := math.Sqrt(ss / float64(len(cfds)-1)) // divides by n - 1 (Bessel)
+	sigma := math.Sqrt(ss / float64(len(cfds)))
+
+	fmt.Printf("s     = %.2f\n", s)     // 5.85 — matches the hand computation
+	fmt.Printf("sigma = %.2f\n", sigma) // 5.58
+}
 ```
 
 ```java
@@ -680,32 +702,16 @@ console.log(`s     = ${s.toFixed(2)}`);     // 5.85 — matches the hand computa
 console.log(`sigma = ${sigma.toFixed(2)}`); // 5.58
 ```
 
-```go
-package main
+```python
+import statistics
 
-import (
-	"fmt"
-	"math"
-)
+cfds = [2, 4, 5, 5, 7, 8, 9, 10, 12, 14, 23]
 
-func main() {
-	cfds := []float64{2, 4, 5, 5, 7, 8, 9, 10, 12, 14, 23}
-	mean := 0.0
-	for _, x := range cfds {
-		mean += x
-	}
-	mean /= float64(len(cfds))
-	ss := 0.0 // sum of squared deviations from the mean
-	for _, x := range cfds {
-		ss += (x - mean) * (x - mean)
-	}
+s = statistics.stdev(cfds)       # divides by n - 1 (Bessel's correction)
+sigma = statistics.pstdev(cfds)  # divides by n
 
-	s := math.Sqrt(ss / float64(len(cfds)-1)) // divides by n - 1 (Bessel)
-	sigma := math.Sqrt(ss / float64(len(cfds)))
-
-	fmt.Printf("s     = %.2f\n", s)     // 5.85 — matches the hand computation
-	fmt.Printf("sigma = %.2f\n", sigma) // 5.58
-}
+print(f"s     = {s:.2f}")      # 5.85 — matches the hand computation
+print(f"sigma = {sigma:.2f}")  # 5.58
 ```
 
 ```ruby

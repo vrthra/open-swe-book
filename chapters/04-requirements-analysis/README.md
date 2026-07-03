@@ -462,15 +462,15 @@ Two lesser categories round out the model: **Indifferent** (customers don't care
 *dislike* it — one person's helpful automation is another's loss of control).
 
 ```mermaid
-graph LR
-    subgraph Kano["Kano model: satisfaction vs. how well a feature is delivered"]
-        direction LR
+graph TD
+    subgraph Kano["Kano model"]
+        direction TB
         A["Delighters<br/>absent: neutral<br/>present: delight<br/>(curve shoots up)"]
         P["Performance<br/>linear: more is better<br/>(straight diagonal)"]
         M["Must-be<br/>absent: fury<br/>present: neutral<br/>(curve saturates)"]
     end
-    A -. "invest here to<br/>differentiate" .-> P
-    P -. "compete here<br/>on degree" .-> M
+    A -. "invest here to differentiate" .-> P
+    P -. "compete here on degree" .-> M
     M -. "never skip these" .-> A
     classDef k fill:#eef,stroke:#66a,color:#000;
     class A,P,M k;
@@ -591,17 +591,23 @@ Now watch the diseconomy of scale bite. Double the size to **KLOC = 40**:
 Python redoes the arithmetic at full precision — the hand math rounded 20^0.05 to 1.16,
 which is why its 55.7 comes out as 55.8 here:
 
-```python
-def effort(kloc, a=2.4, b=1.05):          # Basic COCOMO, organic
-  return a * kloc ** b
+```go
+package main
 
-def schedule(e):
-  return 2.5 * e ** 0.38                # calendar months
+import (
+	"fmt"
+	"math"
+)
 
-e20, e40 = effort(20), effort(40)
-print(f"20 KLOC: {e20:5.1f} person-months, {schedule(e20):.1f} months")
-print(f"40 KLOC: {e40:5.1f} person-months, {schedule(e40):.1f} months")
-print(f"doubling factor: {e40 / e20:.2f}")
+func effort(kloc float64) float64 { return 2.4 * math.Pow(kloc, 1.05) } // organic
+func schedule(e float64) float64  { return 2.5 * math.Pow(e, 0.38) }    // calendar months
+
+func main() {
+	e20, e40 := effort(20), effort(40)
+	fmt.Printf("20 KLOC: %5.1f person-months, %.1f months\n", e20, schedule(e20))
+	fmt.Printf("40 KLOC: %5.1f person-months, %.1f months\n", e40, schedule(e40))
+	fmt.Printf("doubling factor: %.2f\n", e40/e20)
+}
 ```
 
 ```java
@@ -637,23 +643,17 @@ console.log(row(40, e40));
 console.log(`doubling factor: ${(e40 / e20).toFixed(2)}`);
 ```
 
-```go
-package main
+```python
+def effort(kloc, a=2.4, b=1.05):          # Basic COCOMO, organic
+  return a * kloc ** b
 
-import (
-	"fmt"
-	"math"
-)
+def schedule(e):
+  return 2.5 * e ** 0.38                # calendar months
 
-func effort(kloc float64) float64 { return 2.4 * math.Pow(kloc, 1.05) } // organic
-func schedule(e float64) float64  { return 2.5 * math.Pow(e, 0.38) }    // calendar months
-
-func main() {
-	e20, e40 := effort(20), effort(40)
-	fmt.Printf("20 KLOC: %5.1f person-months, %.1f months\n", e20, schedule(e20))
-	fmt.Printf("40 KLOC: %5.1f person-months, %.1f months\n", e40, schedule(e40))
-	fmt.Printf("doubling factor: %.2f\n", e40/e20)
-}
+e20, e40 = effort(20), effort(40)
+print(f"20 KLOC: {e20:5.1f} person-months, {schedule(e20):.1f} months")
+print(f"40 KLOC: {e40:5.1f} person-months, {schedule(e40):.1f} months")
+print(f"doubling factor: {e40 / e20:.2f}")
 ```
 
 ```ruby

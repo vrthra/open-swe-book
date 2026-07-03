@@ -61,10 +61,13 @@ continuum of decisions at different scales**, and architecture is simply its coa
 most consequential end.
 
 ```mermaid
-flowchart LR
-    A["Architecture<br/>(system-wide, expensive to change)"] --> B["High-level design<br/>(subsystems, module boundaries)"]
-    B --> C["Detailed design<br/>(class responsibilities, interfaces)"]
-    C --> D["Implementation<br/>(algorithms, data structures)"]
+flowchart TD
+    A["Architecture<br/>(system#8209;wide,&nbsp;expensive&nbsp;to&nbsp;change)"] -- constrains --> B["High-level design<br/>(subsystems,&nbsp;module&nbsp;boundaries)"]
+    B -. realized by .-> A
+    B -- constrains --> C["Detailed design<br/>(class&nbsp;responsibilities,&nbsp;interfaces)"]
+    C -. realized by .-> B
+    C -- constrains --> D["Implementation<br/>(algorithms,&nbsp;data&nbsp;structures)"]
+    D -. realized by .-> C
     classDef s fill:#eef,stroke:#66a,color:#000;
     class A,B,C,D s;
 ```
@@ -160,27 +163,31 @@ change because it was, in fact, hidden.
 
 Here is that module, its secret — records live in a JSON file — behind the interface.
 
-```python
-import json, os
+```go
+type User struct{ ID, Name string }
+type UserStore interface { // the promise, spelled out as a type
+	Find(id string) User
+	Save(record User)
+}
 
-class UserStore:
-  def __init__(self, path):
-    self._path = path                     # the secret: a JSON file
+type FileStore struct{ dir string } // the secret: one small file per user
+func (s FileStore) Find(id string) User {
+	name, _ := os.ReadFile(s.dir + "/" + id)
+	return User{id, string(name)}
+}
+func (s FileStore) Save(record User) {
+	os.WriteFile(s.dir+"/"+record.ID, []byte(record.Name), 0o644)
+}
 
-  def find(self, id):
-    return self._load().get(id)
+// MemStore never says "implements UserStore" — Go interfaces are satisfied implicitly.
+type MemStore map[string]User          // the new secret: an in-memory table
+func (s MemStore) Find(id string) User { return s[id] }
+func (s MemStore) Save(record User)    { s[record.ID] = record }
 
-  def save(self, record):
-    users = self._load()
-    users[record["id"]] = record
-    with open(self._path, "w") as f:
-      json.dump(users, f)
-
-  def _load(self):
-    if not os.path.exists(self._path):
-      return {}
-    with open(self._path) as f:
-      return json.load(f)
+for _, store := range []UserStore{FileStore{os.TempDir()}, MemStore{}} {
+	store.Save(User{ID: "u7", Name: "Dana"})
+	fmt.Println(store.Find("u7").Name) // Dana — the identical caller, untouched
+}
 ```
 
 ```java
@@ -239,31 +246,27 @@ for (const store of [new UserStore("users.json"), new MemoryUserStore()]) {
 }
 ```
 
-```go
-type User struct{ ID, Name string }
-type UserStore interface { // the promise, spelled out as a type
-	Find(id string) User
-	Save(record User)
-}
+```python
+import json, os
 
-type FileStore struct{ dir string } // the secret: one small file per user
-func (s FileStore) Find(id string) User {
-	name, _ := os.ReadFile(s.dir + "/" + id)
-	return User{id, string(name)}
-}
-func (s FileStore) Save(record User) {
-	os.WriteFile(s.dir+"/"+record.ID, []byte(record.Name), 0o644)
-}
+class UserStore:
+  def __init__(self, path):
+    self._path = path                     # the secret: a JSON file
 
-// MemStore never says "implements UserStore" — Go interfaces are satisfied implicitly.
-type MemStore map[string]User          // the new secret: an in-memory table
-func (s MemStore) Find(id string) User { return s[id] }
-func (s MemStore) Save(record User)    { s[record.ID] = record }
+  def find(self, id):
+    return self._load().get(id)
 
-for _, store := range []UserStore{FileStore{os.TempDir()}, MemStore{}} {
-	store.Save(User{ID: "u7", Name: "Dana"})
-	fmt.Println(store.Find("u7").Name) // Dana — the identical caller, untouched
-}
+  def save(self, record):
+    users = self._load()
+    users[record["id"]] = record
+    with open(self._path, "w") as f:
+      json.dump(users, f)
+
+  def _load(self):
+    if not os.path.exists(self._path):
+      return {}
+    with open(self._path) as f:
+      return json.load(f)
 ```
 
 ```ruby
@@ -294,16 +297,11 @@ end
 
 When the file becomes the bottleneck, the secret changes and the promise does not.
 
-```python
-class UserStore:
-  def __init__(self):
-    self._records = {}                    # the new secret: an in-memory table
-
-  def find(self, id):
-    return self._records.get(id)
-
-  def save(self, record):
-    self._records[record["id"]] = record
+```go
+// MemStore never says "implements UserStore" — Go interfaces are satisfied implicitly.
+type MemStore map[string]User          // the new secret: an in-memory table
+func (s MemStore) Find(id string) User { return s[id] }
+func (s MemStore) Save(record User)    { s[record.ID] = record }
 ```
 
 ```java
@@ -322,11 +320,16 @@ class MemoryUserStore {                 // the new secret: an in-memory table.
 }
 ```
 
-```go
-// MemStore never says "implements UserStore" — Go interfaces are satisfied implicitly.
-type MemStore map[string]User          // the new secret: an in-memory table
-func (s MemStore) Find(id string) User { return s[id] }
-func (s MemStore) Save(record User)    { s[record.ID] = record }
+```python
+class UserStore:
+  def __init__(self):
+    self._records = {}                    # the new secret: an in-memory table
+
+  def find(self, id):
+    return self._records.get(id)
+
+  def save(self, record):
+    self._records[record["id"]] = record
 ```
 
 ```ruby
@@ -339,9 +342,9 @@ end
 
 A caller that relied only on the promise runs unchanged against either version.
 
-```python
-store.save({"id": "u7", "name": "Dana"})
-assert store.find("u7")["name"] == "Dana"
+```go
+store.Save(User{ID: "u7", Name: "Dana"})
+fmt.Println(store.Find("u7").Name) // Dana
 ```
 
 ```java
@@ -354,9 +357,9 @@ store.save({ id: "u7", name: "Dana" });
 assert.strictEqual(store.find("u7").name, "Dana");
 ```
 
-```go
-store.Save(User{ID: "u7", Name: "Dana"})
-fmt.Println(store.Find("u7").Name) // Dana
+```python
+store.save({"id": "u7", "name": "Dana"})
+assert store.find("u7")["name"] == "Dana"
 ```
 
 ```ruby
@@ -808,32 +811,28 @@ structure rather than merely wished for on a slide.
 In code, the inversion is small: the application layer owns the `Transport` interface, and
 the real transport and a test fake both conform to it from below.
 
-```python
-from typing import Protocol
+```go
+type Transport interface { // owned by the application layer
+	Deliver(to, body string)
+}
 
-class Transport(Protocol):                 # owned by the application layer
-  def deliver(self, to: str, body: str) -> None: ...
+type MessageRouter struct{ transport Transport } // sees only the interface
+func (r MessageRouter) Route(message map[string]string) {
+	r.transport.Deliver(message["to"], message["body"])
+}
 
-class MessageRouter:                       # application code sees only the interface
-  def __init__(self, transport: Transport):
-    self._transport = transport
+type WebSocketTransport struct{ sock io.Writer } // infrastructure, conforming from below
+func (t WebSocketTransport) Deliver(to, body string) {
+	t.sock.Write([]byte(to + ":" + body))
+}
 
-  def route(self, message: dict) -> None:
-    self._transport.deliver(message["to"], message["body"])
+// FakeTransport never says "implements Transport" — satisfying it is enough.
+type FakeTransport struct{ sent []string }       // a two-line test double
+func (t *FakeTransport) Deliver(to, body string) { t.sent = append(t.sent, to+":"+body) }
 
-class WebSocketTransport:                  # infrastructure, conforming from below
-  def __init__(self, socket):
-    self._socket = socket
-
-  def deliver(self, to: str, body: str) -> None:
-    self._socket.send(f"{to}:{body}".encode())
-
-class FakeTransport(list):                 # a two-line test double
-  def deliver(self, to, body): self.append((to, body))
-
-fake = FakeTransport()
-MessageRouter(fake).route({"to": "dana", "body": "you are on call"})
-assert fake == [("dana", "you are on call")]
+fake := &FakeTransport{}
+MessageRouter{fake}.Route(map[string]string{"to": "dana", "body": "you are on call"})
+fmt.Println(fake.sent) // [dana:you are on call]
 ```
 
 ```java
@@ -882,28 +881,32 @@ new MessageRouter(fake).route({ to: "dana", body: "you are on call" });
 assert.deepStrictEqual([...fake], [["dana", "you are on call"]]);
 ```
 
-```go
-type Transport interface { // owned by the application layer
-	Deliver(to, body string)
-}
+```python
+from typing import Protocol
 
-type MessageRouter struct{ transport Transport } // sees only the interface
-func (r MessageRouter) Route(message map[string]string) {
-	r.transport.Deliver(message["to"], message["body"])
-}
+class Transport(Protocol):                 # owned by the application layer
+  def deliver(self, to: str, body: str) -> None: ...
 
-type WebSocketTransport struct{ sock io.Writer } // infrastructure, conforming from below
-func (t WebSocketTransport) Deliver(to, body string) {
-	t.sock.Write([]byte(to + ":" + body))
-}
+class MessageRouter:                       # application code sees only the interface
+  def __init__(self, transport: Transport):
+    self._transport = transport
 
-// FakeTransport never says "implements Transport" — satisfying it is enough.
-type FakeTransport struct{ sent []string }       // a two-line test double
-func (t *FakeTransport) Deliver(to, body string) { t.sent = append(t.sent, to+":"+body) }
+  def route(self, message: dict) -> None:
+    self._transport.deliver(message["to"], message["body"])
 
-fake := &FakeTransport{}
-MessageRouter{fake}.Route(map[string]string{"to": "dana", "body": "you are on call"})
-fmt.Println(fake.sent) // [dana:you are on call]
+class WebSocketTransport:                  # infrastructure, conforming from below
+  def __init__(self, socket):
+    self._socket = socket
+
+  def deliver(self, to: str, body: str) -> None:
+    self._socket.send(f"{to}:{body}".encode())
+
+class FakeTransport(list):                 # a two-line test double
+  def deliver(self, to, body): self.append((to, body))
+
+fake = FakeTransport()
+MessageRouter(fake).route({"to": "dana", "body": "you are on call"})
+assert fake == [("dana", "you are on call")]
 ```
 
 ```ruby
