@@ -1,0 +1,46 @@
+name: release-epubs
+
+# Tag a version (e.g. `git tag v2026.07 && git push --tags`) and this builds
+# the five per-language EPUB editions and publishes them as release assets.
+# Stable download URLs (always the newest release):
+#   https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-python.epub
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install mdBook + mdbook-mermaid
+        run: |
+          MDBOOK_VERSION="0.4.40"
+          MERMAID_VERSION="0.14.0"
+          curl -sSL "https://github.com/rust-lang/mdBook/releases/download/v${MDBOOK_VERSION}/mdbook-v${MDBOOK_VERSION}-x86_64-unknown-linux-gnu.tar.gz" \
+            | tar -xz --directory=/usr/local/bin
+          curl -sSL "https://github.com/badboy/mdbook-mermaid/releases/download/v${MERMAID_VERSION}/mdbook-mermaid-v${MERMAID_VERSION}-x86_64-unknown-linux-gnu.tar.gz" \
+            | tar -xz --directory=/usr/local/bin
+
+      - name: Install pandoc
+        run: sudo apt-get update -q && sudo apt-get install -y -q pandoc
+
+      - name: Build the five EPUB editions
+        env:
+          EPUB_OUT: ${{ github.workspace }}/dist
+          CHROME_FLAGS: --no-sandbox
+        run: bash tools/build-epubs.sh
+
+      - name: Publish as release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            --title "Software Engineering: An Open Body of Knowledge $GITHUB_REF_NAME" \
+            --notes "EPUB editions of [swebook.org](https://www.swebook.org) — one per code-example language. Prose is identical across editions." \
+            --verify-tag dist/*.epub \
+          || gh release upload "$GITHUB_REF_NAME" dist/*.epub --clobber

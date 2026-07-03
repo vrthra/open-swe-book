@@ -80,13 +80,16 @@ reads closest to pseudocode. Each snippet also lives in [`code/`](code/) as a ru
 file with a test, executed by continuous integration on every change.
 
 The book is also available as an **EPUB**, one edition per language — identical prose,
-your language's code — rebuilt automatically on every change:
+your language's code — published with each tagged release:
 
-[Python](epub/swebook-python.epub) ·
-[Java](epub/swebook-java.epub) ·
-[JavaScript](epub/swebook-javascript.epub) ·
-[Go](epub/swebook-go.epub) ·
-[Ruby](epub/swebook-ruby.epub)
+[Python](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-python.epub) ·
+[Java](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-java.epub) ·
+[JavaScript](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-javascript.epub) ·
+[Go](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-go.epub) ·
+[Ruby](https://github.com/tghastings/open-swe-book/releases/latest/download/swebook-ruby.epub)
+
+All editions, including past versions, are on the
+[releases page](https://github.com/tghastings/open-swe-book/releases).
 
 ## Table of contents
 
