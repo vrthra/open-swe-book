@@ -12,8 +12,13 @@
 Usage: epub-lang-filter.py rendered.html [all|python|...|ruby] [version]
 """
 import base64
+import hashlib
+import os
 import re
+import shutil
+import subprocess
 import sys
+import tempfile
 
 LANGS = ["go", "java", "javascript", "python", "ruby"]
 NAME = {"python": "Python", "java": "Java", "javascript": "JavaScript",
@@ -29,13 +34,57 @@ def fix_svg_xml(svg: str) -> str:
     return svg
 
 
+def rasterize_svg(svg: str) -> str:
+    """Render an SVG to a 2x PNG with headless Chrome and return the file path.
+    Mermaid labels are HTML inside foreignObject sized against Chrome's font
+    metrics; e-readers substitute fonts inside the frozen boxes and clip
+    letters. Rasterizing with the same engine freezes layout AND glyphs.
+    Cached by content hash across editions (RASTER_DIR)."""
+    cache = os.environ.get("RASTER_DIR") or os.path.join(
+        tempfile.gettempdir(), "swebook-raster")
+    os.makedirs(cache, exist_ok=True)
+    vb = re.search(r'viewBox="[-\d. ]*? ([\d.]+) ([\d.]+)"', svg)
+    w = int(float(vb.group(1))) + 2 if vb else 900
+    h = int(float(vb.group(2))) + 2 if vb else 600
+    key = hashlib.md5(svg.encode()).hexdigest()[:16]
+    png = os.path.join(cache, f"{key}.png")
+    if not os.path.exists(png):
+        chrome = os.environ.get("CHROME_BIN") or shutil.which(
+            "google-chrome-stable") or shutil.which("google-chrome") \
+            or shutil.which("chromium")
+        html = os.path.join(cache, f"{key}.html")
+        open(html, "w", encoding="utf-8").write(
+            '<!DOCTYPE html><html><head><meta charset="utf-8">'
+            "<style>*{margin:0;padding:0}body{background:#fff}</style>"
+            f"</head><body>{svg}</body></html>")
+        flags = os.environ.get("CHROME_FLAGS", "").split()
+        subprocess.run(
+            [chrome, "--headless", "--disable-gpu", "--hide-scrollbars",
+             *flags, "--force-device-scale-factor=2", f"--screenshot={png}",
+             f"--window-size={w},{h}", "--virtual-time-budget=2000",
+             f"file://{html}"],
+            check=True, capture_output=True)
+        os.remove(html)
+    return png
+
+
 def mermaid_to_img(m: re.Match) -> str:
     s = re.search(r"<svg\b.*</svg>", m.group(1), re.S)
     if not s:
         return m.group(0)
     svg = fix_svg_xml(s.group(0))
-    b = base64.b64encode(svg.encode()).decode()
-    return f'<p><img src="data:image/svg+xml;base64,{b}" alt="diagram"/></p>'
+    vb = re.search(r'viewBox="[-\d. ]*? ([\d.]+)', svg)
+    width = int(float(vb.group(1))) if vb else 800
+    try:
+        png = rasterize_svg(svg)
+        # relative to the filtered html (both live under EPUB_OUT) so the path
+        # resolves identically for native pandoc, dockerized pandoc (/data
+        # mount), and Chrome's PDF print
+        rel = f".raster/{os.path.basename(png)}"
+        return f'<p><img src="{rel}" width="{width}" alt="diagram"/></p>'
+    except Exception:
+        b = base64.b64encode(svg.encode()).decode()
+        return f'<p><img src="data:image/svg+xml;base64,{b}" alt="diagram"/></p>'
 
 
 def lang_of(block: str):

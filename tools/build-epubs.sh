@@ -17,6 +17,8 @@ export SWEBOOK_VERSION="$VERSION"
 
 CHROME="${CHROME_BIN:-$(command -v google-chrome-stable || command -v google-chrome \
   || command -v chromium-browser || command -v chromium)}"
+export CHROME_BIN="$CHROME"
+export RASTER_DIR="$OUT/.raster"   # diagram PNG cache shared across editions
 
 run_pandoc() {  # run_pandoc <in-html> <out-epub> <edition-description> <title> <cover>
   local args=(-f html+tex_math_dollars --mathml
@@ -44,9 +46,24 @@ if command -v mdbook >/dev/null; then
 else
   docker run --rm -v "$BOOK_DIR:/book" se-book-mdbook mdbook build -d "/book/$BUILD"
 fi
+# Force the LIGHT theme for the render: headless Chrome reports dark-mode
+# preference, which would bake dark-theme colors into every diagram SVG.
+# (.epub-build may be root-owned from the docker build, so the wrapper lives
+# in $OUT with a <base> pointing back at the build dir.)
+python3 - "$BOOK_DIR/$BUILD" "$OUT" <<'PY'
+import sys
+d, out = sys.argv[1], sys.argv[2]
+t = open(f"{d}/print.html", encoding="utf-8").read()
+t = t.replace("<head>",
+              f'<head><base href="file://{d}/">'
+              '<script>try{localStorage.setItem("mdbook-theme","light")}'
+              "catch(e){}</script>", 1)
+open(f"{out}/print-light.html", "w", encoding="utf-8").write(t)
+PY
 "$CHROME" --headless --disable-gpu ${CHROME_FLAGS:-} --dump-dom \
   --virtual-time-budget=30000 \
-  "file://$BOOK_DIR/$BUILD/print.html" > "$OUT/rendered.html"
+  "file://$OUT/print-light.html" > "$OUT/rendered.html"
+rm -f "$OUT/print-light.html"
 
 # 2. Covers (regenerated every run: they carry the version).
 LANGS="${1:-python java javascript go ruby}"
@@ -104,4 +121,4 @@ PY
   rm -f "$html"
   echo "built: ${name%.epub}.pdf"
 done
-rm -f "$OUT"/rendered.html "$OUT"/filtered-*.html
+rm -rf "$OUT"/rendered.html "$OUT"/filtered-*.html "$OUT"/.raster

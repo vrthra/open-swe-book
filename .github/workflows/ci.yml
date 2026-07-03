@@ -3,6 +3,7 @@ name: build-and-deploy
 on:
   push:
     branches: [main]
+    tags: ["v*"]   # version tags redeploy the site so the footer shows the exact tag
   pull_request:
     branches: [main]
 
@@ -15,7 +16,7 @@ permissions:
 # leaving two "github-pages" artifacts behind (the cause of the
 # "Multiple artifacts named github-pages" deploy error).
 concurrency:
-  group: pages-${{ github.ref }}
+  group: pages   # one group for branch AND tag builds — they must not race
   cancel-in-progress: true
 
 jobs:
@@ -59,7 +60,7 @@ jobs:
   # Deploy the single artifact (only from main).
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     environment:
       name: github-pages
