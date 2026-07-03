@@ -3,18 +3,20 @@
 #   line_total_type_fault.rb:21: Expected `Float` but found `String("9.99")`
 #   for argument `price` https://srb.help/7002
 # typed: true
-require "sorbet-runtime"
 
-# Runner boilerplate (trimmed from the book fence): sorbet-runtime normally
-# ALSO enforces sigs at runtime and would raise TypeError at the call below;
-# silence that handler here to show what untyped Ruby does with the fault.
-T::Configuration.call_validation_error_handler = ->(signature, opts) {}
-
-extend T::Sig
-
-sig { params(price: Float, quantity: Integer).returns(Float) }
-def line_total(price, quantity)
-  price * quantity
+# Runner boilerplate (trimmed from the book fence): with sorbet-runtime
+# installed, sigs are ALSO enforced at runtime and would raise TypeError at
+# the call below, so that handler is silenced to show what untyped Ruby does.
+# Without the gem (e.g. in CI) the demonstration is identical — the sig is a
+# static-checker annotation, and plain Ruby never sees it.
+begin
+  require "sorbet-runtime"
+  T::Configuration.call_validation_error_handler = ->(signature, opts) {}
+  extend T::Sig
+  sig { params(price: Float, quantity: Integer).returns(Float) }
+  def line_total(price, quantity) = price * quantity
+rescue LoadError
+  def line_total(price, quantity) = price * quantity
 end
 
 price = "9.99"              # read from a CSV row, still a string

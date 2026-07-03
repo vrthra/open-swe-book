@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 1600px; height: 2560px; }
+  body {
+    background: #141322;
+    background-image:
+      radial-gradient(ellipse 1400px 900px at 50% -200px, rgba(74, 144, 226, 0.28), transparent),
+      radial-gradient(ellipse 1200px 800px at 50% 2700px, {{ACCENT}}33, transparent);
+    color: #eef1f8;
+    font-family: Georgia, "Liberation Serif", serif;
+    display: flex;
+    flex-direction: column;
+    padding: 170px 140px 150px;
+  }
+  .rule {
+    width: 220px; height: 6px; background: {{ACCENT}}; border-radius: 3px;
+    margin-bottom: 90px;
+  }
+  h1 {
+    font-size: 148px; line-height: 1.12; font-weight: normal;
+    letter-spacing: 0.5px; margin-bottom: 60px;
+  }
+  .subtitle {
+    font-size: 68px; line-height: 1.3; font-style: italic; color: #aebadd;
+    margin-bottom: 110px;
+  }
+  .badge {
+    align-self: flex-start;
+    font-family: "DejaVu Sans Mono", monospace;
+    font-size: 46px; color: #141322; background: {{ACCENT}};
+    padding: 18px 44px; border-radius: 46px; font-weight: bold;
+  }
+  .spacer { flex: 1; }
+  .meta { border-top: 2px solid rgba(174, 186, 221, 0.35); padding-top: 56px; }
+  .author { font-size: 62px; margin-bottom: 22px; }
+  .edition { font-size: 40px; color: #8f9bbf; }
+  .brace {
+    position: absolute; right: 110px; top: 45%;
+    font-family: "DejaVu Sans Mono", monospace;
+    font-size: 560px; color: {{ACCENT}}; opacity: 0.16; line-height: 1;
+  }
+</style>
+</head>
+<body>
+  <div class="rule"></div>
+  <h1>Software<br>Engineering</h1>
+  <div class="subtitle">An Open Body of Knowledge</div>
+  <div class="badge">{{LANG}} edition</div>
+  <div class="brace">{&nbsp;}</div>
+  <div class="spacer"></div>
+  <div class="meta">
+    <div class="author">Thomas Hastings</div>
+    <div class="edition">First public edition &middot; July 2026 &middot; swebook.org</div>
+  </div>
+</body>
+</html>

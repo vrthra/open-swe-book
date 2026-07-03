@@ -77,8 +77,16 @@ Every code example in the book is provided in **Python, Java, JavaScript, Go, an
 Ruby**, behind language tabs — pick your language once and the whole site follows
 (or open any page with `?lang=go` to pre-select one). Python appears first because it
 reads closest to pseudocode. Each snippet also lives in [`code/`](code/) as a runnable
-file with a test, executed by continuous integration on every change, and the EPUB
-editions come one per language with identical prose.
+file with a test, executed by continuous integration on every change.
+
+The book is also available as an **EPUB**, one edition per language — identical prose,
+your language's code — rebuilt automatically on every change:
+
+[Python](epub/swebook-python.epub) ·
+[Java](epub/swebook-java.epub) ·
+[JavaScript](epub/swebook-javascript.epub) ·
+[Go](epub/swebook-go.epub) ·
+[Ruby](epub/swebook-ruby.epub)
 
 ## Table of contents
 

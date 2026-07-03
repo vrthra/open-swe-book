@@ -43,6 +43,62 @@ def lang_of(block: str):
     return m.group(1) if m else None
 
 
+def strip_tagged(body: str, is_target) -> str:
+    """Remove whole elements whose OPENING tag satisfies is_target(tag_html).
+    Depth-tracked scan over span/div tags only (MathJax markup is spans/divs)."""
+    out = []
+    i = 0
+    tag = re.compile(r"<(/?)(span|div)\b[^>]*>", re.I)
+    while True:
+        m = tag.search(body, i)
+        if not m:
+            out.append(body[i:])
+            break
+        if m.group(1) or not is_target(m.group(0)):
+            out.append(body[i:m.end()])
+            i = m.end()
+            continue
+        # opening tag of a target element: skip to its matching close
+        out.append(body[i:m.start()])
+        depth = 1
+        j = m.end()
+        while depth:
+            n = tag.search(body, j)
+            if not n:
+                j = len(body)
+                break
+            j = n.end()
+            if n.group(2).lower() == m.group(2).lower():
+                depth += -1 if n.group(1) else 1
+        i = j
+    return "".join(out)
+
+
+def mathjax_to_tex(body: str) -> str:
+    """Replace MathJax v2 rendering with the original TeX so pandoc can emit
+    MathML: drop rendered/preview nodes, then unwrap the math/tex scripts."""
+    body = strip_tagged(body, lambda t: 'class="MathJax' in t or "MathJax_Preview" in t
+                        or "MathJax_Display" in t)
+    body = re.sub(
+        r'<script type="math/tex; mode=display"[^>]*>(.*?)</script>',
+        lambda m: "<p>$$" + m.group(1) + "$$</p>", body, flags=re.S)
+    body = re.sub(
+        r'<script type="math/tex"[^>]*>(.*?)</script>',
+        lambda m: "$" + m.group(1) + "$", body, flags=re.S)
+    return body
+
+
+def drop_web_sections(body: str) -> str:
+    """Remove site-only front-page sections from the EPUB (build instructions,
+    HTML table of contents, repo how-to, and the EPUB download links)."""
+    for sec in ("building-the-book", "table-of-contents", "how-to-use-this-repository"):
+        body = re.sub(
+            r'<h2[^>]*id="' + sec + r'"[^>]*>.*?(?=<h2\b|\Z)', "", body, flags=re.S)
+    body = re.sub(r"<p>(?:(?!</p>).)*epub/swebook-(?:(?!</p>).)*</p>", "", body,
+                  flags=re.S)
+    return body
+
+
 def filter_language(body: str, target: str) -> str:
     # Tokenize <pre> elements without crossing </pre>, then group exactly the
     # way tabs.js does: a group starts at a tab-language block and extends
@@ -81,17 +137,21 @@ def main() -> None:
     path, target = sys.argv[1], (sys.argv[2] if len(sys.argv) > 2 else "all")
     t = open(path, encoding="utf-8").read()
     body = re.search(r"<main>(.*)</main>", t, re.S).group(1)
+    body = mathjax_to_tex(body)
     body = re.sub(r"<script\b.*?</script>", "", body, flags=re.S)
+    body = re.sub(r'<div class="buttons">.*?</div>', "", body, flags=re.S)
     body = re.sub(r"<button[^>]*>.*?</button>", "", body, flags=re.S)
+    body = drop_web_sections(body)
     body = re.sub(r'<pre class="mermaid"[^>]*>(.*?)</pre>', mermaid_to_img,
                   body, flags=re.S)
     if target != "all":
         body = filter_language(body, target)
+    # pandoc's highlighter keys on a bare language class ("python"), not
+    # highlight.js's "language-python hljs" form
+    body = re.sub(r'<code class="language-(\w+)[^"]*"', r'<code class="\1"', body)
     print('<!DOCTYPE html><html><head><meta charset="utf-8">'
           "<title>Software Engineering: An Open Body of Knowledge</title>"
-          "<style>svg,img{max-width:100%;height:auto} pre{white-space:pre-wrap}"
-          " table,th,td{border:1px solid #888;border-collapse:collapse;"
-          "padding:4px}</style></head><body>" + body + "</body></html>")
+          "</head><body>" + body + "</body></html>")
 
 
 if __name__ == "__main__":

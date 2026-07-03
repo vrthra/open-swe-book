@@ -37,6 +37,15 @@ jobs:
       - name: Build the book
         run: mdbook build
 
+      - name: Install pandoc
+        run: sudo apt-get update -q && sudo apt-get install -y -q pandoc
+
+      - name: Build per-language EPUBs into the site
+        env:
+          EPUB_OUT: ${{ github.workspace }}/book-output/epub
+          CHROME_FLAGS: --no-sandbox
+        run: bash tools/build-epubs.sh
+
       - name: Check internal Markdown links
         uses: lycheeverse/lychee-action@v2
         with:
