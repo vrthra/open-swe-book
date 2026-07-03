@@ -24,6 +24,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history so git describe sees version tags
+
+      - name: Stamp build version into the sidebar
+        run: |
+          V="$(git describe --tags --always)"
+          echo "build version: $V"
+          sed -i "s/const VERSION = \"dev\"/const VERSION = \"${V}\"/" version.js
 
       - name: Install mdBook + mdbook-mermaid
         run: |

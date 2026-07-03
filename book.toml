@@ -19,7 +19,7 @@ edit-url-template = "https://github.com/tghastings/open-swe-book/edit/main/{path
 site-url = "/"
 smart-punctuation = true
 mathjax-support = true
-additional-js = ["mermaid.min.js", "mermaid-init.js", "subsections.js", "tabs.js"]
+additional-js = ["mermaid.min.js", "mermaid-init.js", "subsections.js", "tabs.js", "version.js"]
 additional-css = ["custom.css"]
 
 [output.html.fold]

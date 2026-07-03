@@ -33,6 +33,7 @@ jobs:
         env:
           EPUB_OUT: ${{ github.workspace }}/dist
           CHROME_FLAGS: --no-sandbox
+          SWEBOOK_VERSION: ${{ github.ref_name }}
         run: bash tools/build-epubs.sh
 
       - name: Publish as release assets

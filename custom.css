@@ -165,6 +165,7 @@ pre.mermaid svg {
 /* the panel is part of the card: no own margins or rounding */
 .lang-tabs pre {
   margin: 0;
+  border-radius: 0;
 }
 .lang-tabs pre > code {
   border-radius: 0;
@@ -224,6 +225,10 @@ pre.mermaid svg {
   background: #141322;
   color: #94b4c4;
 }
+:is(.navy, .coal, .ayu) pre.has-ln {
+  background: #141322;
+  color: #94b4c4;   /* the gutter inherits code foreground, dimmed by opacity */
+}
 :is(.navy, .coal, .ayu) :is(.hljs-comment, .hljs-quote) {
   color: #45898c;
   font-style: italic;
@@ -281,6 +286,10 @@ pre.mermaid svg {
    themes/OneLight.json — the Atom One Light port): bg #FAFAFA, fg #383A42. */
 :is(.light, .rust) pre code.hljs,
 :is(.light, .rust) code.hljs {
+  background: #fafafa;
+  color: #383a42;
+}
+:is(.light, .rust) pre.has-ln {
   background: #fafafa;
   color: #383a42;
 }
@@ -351,19 +360,20 @@ pre.mermaid svg {
 pre.has-ln {
   display: flex;
   overflow: visible;
+  border-radius: 5px;   /* the pre carries the block background now */
 }
 pre.has-ln > .code-ln {
   flex: 0 0 auto;
   user-select: none;
   -webkit-user-select: none;
-  text-align: right;
+  text-align: center;   /* centered between the block edge and the rule */
   white-space: pre;
   opacity: 0.45;
   /* mirror mdBook's pre > code metrics exactly so gutter rows align */
   font-family: var(--mono-font);
   font-size: var(--code-font-size);
   line-height: 1.5;
-  padding: 1rem 0.8em 1rem 0;
+  padding: 1rem 0.7em;
   margin-right: 0.9em;
   border-right: 1px solid color-mix(in srgb, currentColor 25%, transparent);
 }
@@ -405,4 +415,17 @@ pre > code {
   :root {
     --code-font-size: 0.85em;
   }
+}
+
+/* Build-version line (version.js): bottom of the sidebar index. */
+#sidebar .site-version {
+  margin: 1.6em 0.5em 0.8em;
+  padding-top: 0.8em;
+  border-top: 1px solid color-mix(in srgb, var(--sidebar-fg, #888) 25%, transparent);
+  font-size: 0.85em;
+  opacity: 0.55;
+  color: var(--sidebar-fg);
+}
+#sidebar .site-version a {
+  color: inherit;
 }

@@ -12,13 +12,15 @@ BOOK_DIR="$PWD"
 OUT="${EPUB_OUT:-$PWD/epubs}"
 BUILD=".epub-build"
 mkdir -p "$OUT"
+VERSION="${SWEBOOK_VERSION:-$(git describe --tags --always 2>/dev/null || echo dev)}"
+export SWEBOOK_VERSION="$VERSION"
 
 CHROME="${CHROME_BIN:-$(command -v google-chrome-stable || command -v google-chrome \
   || command -v chromium-browser || command -v chromium)}"
 
 run_pandoc() {  # run_pandoc <in-html> <out-epub> <edition-description> <title> <cover>
   local args=(-f html+tex_math_dollars --mathml
-    --metadata title="$4"
+    --metadata title="$4" --metadata identifier="org.swebook.$2.$VERSION"
     --metadata author="Thomas Hastings" --metadata lang=en
     --metadata rights="CC BY-SA 4.0 (prose); MIT (code)"
     --metadata description="$3" --toc --toc-depth=2 --split-level=1)
@@ -46,24 +48,22 @@ fi
   --virtual-time-budget=30000 \
   "file://$BOOK_DIR/$BUILD/print.html" > "$OUT/rendered.html"
 
-# 2. Covers (skipped for langs whose cover already exists in tools/covers/).
+# 2. Covers (regenerated every run: they carry the version).
 LANGS="${1:-python java javascript go ruby}"
-mkdir -p tools/covers
 for lang in $LANGS; do
-  [ "$lang" = all ] || [ -f "tools/covers/cover-$lang.png" ] \
-    || bash tools/make-covers.sh covers "$lang"
+  [ "$lang" = all ] || bash tools/make-covers.sh covers "$lang"
 done
 
 # 3. Per-language filter + pandoc.
 TITLE="Software Engineering: An Open Body of Knowledge"
 declare -A PRETTY=([python]=Python [java]=Java [javascript]=JavaScript [go]=Go [ruby]=Ruby)
 for lang in $LANGS; do
-  python3 tools/epub-lang-filter.py "$OUT/rendered.html" "$lang" > "$OUT/filtered-$lang.html"
+  python3 tools/epub-lang-filter.py "$OUT/rendered.html" "$lang" "$VERSION" > "$OUT/filtered-$lang.html"
   if [ "$lang" = all ]; then
     name="swebook.epub"; edition="First public edition, all languages"
     title="$TITLE"; cover="tools/covers/cover-python.png"
   else
-    name="swebook-$lang.epub"; edition="First public edition, ${PRETTY[$lang]} code examples"
+    name="swebook-$lang.epub"; edition="First public edition, ${PRETTY[$lang]} code examples ($VERSION)"
     title="$TITLE (${PRETTY[$lang]} Edition)"; cover="tools/covers/cover-$lang.png"
   fi
   run_pandoc "filtered-$lang.html" "$name" "$edition" "$title" "$cover"

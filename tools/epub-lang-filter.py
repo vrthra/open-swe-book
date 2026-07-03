@@ -9,7 +9,7 @@
   (python, java, javascript, go, ruby); falls back to the run's first block
   (Python) with a caption when the target is missing.
 
-Usage: epub-lang-filter.py rendered.html [all|python|java|javascript|go|ruby]
+Usage: epub-lang-filter.py rendered.html [all|python|...|ruby] [version]
 """
 import base64
 import re
@@ -135,6 +135,7 @@ def filter_language(body: str, target: str) -> str:
 
 def main() -> None:
     path, target = sys.argv[1], (sys.argv[2] if len(sys.argv) > 2 else "all")
+    version = sys.argv[3] if len(sys.argv) > 3 else ""
     t = open(path, encoding="utf-8").read()
     body = re.search(r"<main>(.*)</main>", t, re.S).group(1)
     body = mathjax_to_tex(body)
@@ -149,6 +150,9 @@ def main() -> None:
     # pandoc's highlighter keys on a bare language class ("python"), not
     # highlight.js's "language-python hljs" form
     body = re.sub(r'<code class="language-(\w+)[^"]*"', r'<code class="\1"', body)
+    if version:
+        body += ('<hr/><p><em>Software Engineering: An Open Body of Knowledge'
+                 " &middot; build " + version + "</em></p>")
     print('<!DOCTYPE html><html><head><meta charset="utf-8">'
           "<title>Software Engineering: An Open Body of Knowledge</title>"
           "</head><body>" + body + "</body></html>")

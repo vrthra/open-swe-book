@@ -17,6 +17,7 @@ declare -A ACCENT=([python]="#4b8bbe" [java]="#f89820" [javascript]="#f0db4f" \
 for lang in "${LANGS[@]}"; do
   html="$(mktemp --suffix=.html)"
   sed -e "s/{{LANG}}/${NAME[$lang]}/g" -e "s/{{ACCENT}}/${ACCENT[$lang]}/g" \
+    -e "s/{{VERSION}}/${SWEBOOK_VERSION:-dev}/g" \
     cover-template.html > "$html"
   "$CHROME" --headless --disable-gpu ${CHROME_FLAGS:-} \
     --screenshot="$OUTDIR/cover-$lang.png" --window-size=1600,2560 \
