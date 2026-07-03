@@ -60,10 +60,10 @@ declare -A PRETTY=([python]=Python [java]=Java [javascript]=JavaScript [go]=Go [
 for lang in $LANGS; do
   python3 tools/epub-lang-filter.py "$OUT/rendered.html" "$lang" "$VERSION" > "$OUT/filtered-$lang.html"
   if [ "$lang" = all ]; then
-    name="swebook.epub"; edition="First public edition, all languages"
+    name="swebook.epub"; edition="First Edition, all languages"
     title="$TITLE"; cover="tools/covers/cover-python.png"
   else
-    name="swebook-$lang.epub"; edition="First public edition, ${PRETTY[$lang]} code examples ($VERSION)"
+    name="swebook-$lang.epub"; edition="First Edition, ${PRETTY[$lang]} code examples ($VERSION)"
     title="$TITLE (${PRETTY[$lang]} Edition)"; cover="tools/covers/cover-$lang.png"
   fi
   run_pandoc "filtered-$lang.html" "$name" "$edition" "$title" "$cover"
