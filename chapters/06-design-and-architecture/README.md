@@ -161,7 +161,8 @@ remote service. Because callers never learned how records are stored, you can sw
 files to a database without touching a single caller. The hidden decision was free to
 change because it was, in fact, hidden.
 
-Here is that module, its secret — records live in a JSON file — behind the interface.
+Here is that module, its secret — how the records are laid out on disk — behind the
+interface. (Each listing names its exact secret in a comment.)
 
 ```go
 type User struct{ ID, Name string }
@@ -295,7 +296,7 @@ end
 end
 ```
 
-When the file becomes the bottleneck, the secret changes and the promise does not.
+When disk storage becomes the bottleneck, the secret changes and the promise does not.
 
 ```go
 // MemStore never says "implements UserStore" — Go interfaces are satisfied implicitly.
@@ -808,8 +809,9 @@ those same abstractions from below. Swapping the database becomes a change confi
 module — exactly the "make likely changes cheap" property from §6.1.3, realized in the code
 structure rather than merely wished for on a slide.
 
-In code, the inversion is small: the application layer owns the `Transport` interface, and
-the real transport and a test fake both conform to it from below.
+In code, the inversion is small: the application layer owns the definition of what a
+transport must do — deliver a body to a recipient — and the real transport and a test fake
+both conform to it from below.
 
 ```go
 type Transport interface { // owned by the application layer

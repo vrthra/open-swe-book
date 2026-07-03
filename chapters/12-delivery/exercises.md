@@ -85,7 +85,7 @@ only the answer.
     untested function, which production code calls from several places:
 
     ```go
-    func normCode(s *string, strict bool) (*string, error) { // nil plays Python's None
+    func normCode(s *string, strict bool) (*string, error) { // nil = missing input
     	if s == nil {
     		if strict {
     			return nil, nil
@@ -102,7 +102,7 @@ only the answer.
     	return &t, nil
     }
 
-    func isAlnum(s string) bool { // Python's isalnum: nonempty, all letters/digits
+    func isAlnum(s string) bool { // alnum check: nonempty, all letters/digits
     	for _, r := range s {
     		if !unicode.IsLetter(r) && !unicode.IsDigit(r) {
     			return false
@@ -155,8 +155,9 @@ only the answer.
     end
     ```
 
-    (a) Following §12.6.2, write a suite of characterization tests (pytest or similar)
-    that pins the current behavior for at least six input classes, including `None`,
+    (a) Following §12.6.2, write a suite of characterization tests, in your language's
+    test framework, that pins the current behavior for at least six input classes,
+    including a missing value (`None`, `null`, or `nil`, whichever your tab uses),
     empty string, whitespace-only, over-length, hyphenated, and a non-alphanumeric input
     under both `strict` values. (b) Identify one behavior your probing reveals that looks
     like a bug, and explain — citing §12.6.2 — why you should pin it rather than fix it

@@ -44,8 +44,8 @@ reason.
    defects. Compute the true positives, false positives, and false negatives, then compute the
    tool's precision and recall. In one sentence, say whether you'd trust this tool and why.
 
-9. **[analysis]** **Perform a code review.** Read the function below — it is real Python and
-   parses as written, so you can also run a linter or type checker over it. List every defect
+9. **[analysis]** **Perform a code review.** Read the function below — the defects are real,
+   and you can point a linter or type checker at it as well as your own eyes. List every defect
    and concern you would raise as a reviewer, and for each, label
    whether it is about *correctness*, *intent/design*, or *style/clarity*. Then state which
    one or two of these an ordinary automated linter or type checker would likely have caught on

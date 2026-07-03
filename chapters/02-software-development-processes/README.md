@@ -291,8 +291,9 @@ You write a small automated test for behavior that does not exist yet and watch 
 you write the least code that makes it pass (*green*). Then you improve the design while the
 test guards against breakage (*refactor*). Repeat in minutes-long cycles.[^9]
 
-One turn of this loop on the clinic app's appointment slots starts *red* — running these
-tests fails with a `NameError`, because `slots_overlap` does not exist yet:
+One turn of this loop on the clinic app's appointment slots starts *red* — the slot-overlap
+function does not exist yet, so the test run fails before a single assertion is checked
+(each language reports the missing function in its own way; see the comment in the code):
 
 ```go
 func TestOverlappingSlotsConflict(t *testing.T) {
@@ -306,6 +307,8 @@ func TestBackToBackSlotsDoNotConflict(t *testing.T) {
 		t.Error("want back-to-back slots not to conflict")
 	}
 }
+
+// Red: `go test` fails to build — undefined: slotsOverlap.
 ```
 
 ```java
@@ -321,6 +324,7 @@ class SlotsOverlapTest {
     assertFalse(slotsOverlap("09:00", "09:30", "09:30", "10:00"));
   }
 }
+// Red: fails to compile — "cannot find symbol: slotsOverlap".
 ```
 
 ```javascript
@@ -334,6 +338,8 @@ test("overlapping slots conflict", () => {
 test("back-to-back slots do not conflict", () => {
   assert.ok(!slotsOverlap(["09:00", "09:30"], ["09:30", "10:00"]));
 });
+
+// Red: each test fails with "ReferenceError: slotsOverlap is not defined".
 ```
 
 ```python
@@ -342,6 +348,8 @@ def test_overlapping_slots_conflict():
 
 def test_back_to_back_slots_do_not_conflict():
   assert not slots_overlap(("09:00", "09:30"), ("09:30", "10:00"))
+
+# Red: each test errors with "NameError: name 'slots_overlap' is not defined".
 ```
 
 ```ruby
@@ -356,6 +364,8 @@ class TestSlotsOverlap < Minitest::Test
     refute slots_overlap(["09:00", "09:30"], ["09:30", "10:00"])
   end
 end
+
+# Red: each test errors with NoMethodError — undefined method `slots_overlap`.
 ```
 
 The least code that makes both tests pass turns the run *green*:

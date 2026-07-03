@@ -496,6 +496,7 @@ def scheduler_page_rollout(user_id, flags):           # same conditional, new pr
 
 ```ruby
 require "zlib" # CRC-32: stable, and the same buckets as the Python version
+# in production, an open-source flag library like Flipper would manage flag state
 
 def scheduler_page(user_id, flags)
   if flags["new_scheduler"]                          # release flag: one bit, everyone
@@ -514,8 +515,8 @@ end
 
 How does a flip actually reach production? In real systems the flag's *state* lives
 outside the code, in a flag-management service — LaunchDarkly and Unleash are common
-platforms; Flipper is an open-source Ruby flag library — while the application's
-SDK keeps a local, in-memory copy of every flag rule. Evaluation happens locally in
+platforms, and open-source flag libraries exist for every major language — while the
+application's SDK keeps a local, in-memory copy of every flag rule. Evaluation happens locally in
 microseconds, so the hot path never waits on a network call; changes stream to the SDKs
 within seconds of someone flipping the toggle.[^12] And the failure mode is designed in
 advance: if the flag service becomes unreachable, SDKs keep serving the last

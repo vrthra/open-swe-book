@@ -639,7 +639,7 @@ at the boxplot's IQR alongside it. (If these eleven values were the entire popul
 rather than a sample, you would divide by $n = 11$ to get the population variance
 $\sigma^2 = 342/11 \approx 31.1$.)
 
-You can check the arithmetic with the standard library's `statistics` module:
+You can check the arithmetic in code:
 
 ```go
 package main
@@ -712,6 +712,9 @@ sigma = statistics.pstdev(cfds)  # divides by n
 
 print(f"s     = {s:.2f}")      # 5.85 — matches the hand computation
 print(f"sigma = {sigma:.2f}")  # 5.58
+
+# Warning: NumPy's np.std() defaults to ddof=0 and silently gives the population
+# version (5.58 here); pass ddof=1 when your data are a sample.
 ```
 
 ```ruby
@@ -727,8 +730,8 @@ puts format('s     = %.2f', s)      # 5.85 — matches the hand computation
 puts format('sigma = %.2f', sigma)  # 5.58
 ```
 
-One warning: NumPy's `np.std()` defaults to `ddof=0` and silently gives you the population
-version (5.58 here); pass `ddof=1` when your data are a sample.
+One warning: statistics libraries differ on which divisor they use by default — before you
+trust a library's output, check whether it computes the sample or the population version.
 
 ### 10.7.2 Discrete Probability Distribution
 

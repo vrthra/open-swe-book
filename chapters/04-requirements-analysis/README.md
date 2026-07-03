@@ -588,10 +588,10 @@ Now watch the diseconomy of scale bite. Double the size to **KLOC = 40**:
 > = 40 × e^(0.05 × 3.69) = 40 × e^0.184 ≈ 40 × 1.202 = 48.1.
 > **Effort ≈ 2.4 × 48.1 ≈ 115.4 person-months.**
 
-Python redoes the arithmetic at full precision — the hand math rounded 20^0.05 to 1.16,
-which is why its 55.7 comes out as 55.8 here:
+The code redoes the arithmetic at full precision:
 
 ```go
+// full precision: the hand math rounded 20^0.05 to 1.16, so its 55.7 prints as 55.8
 package main
 
 import (
@@ -611,6 +611,7 @@ func main() {
 ```
 
 ```java
+// full precision: the hand math rounded 20^0.05 to 1.16, so its 55.7 prints as 55.8
 public class CocomoBasic {
   static double effort(double kloc) {          // Basic COCOMO, organic
     return 2.4 * Math.pow(kloc, 1.05);
@@ -630,6 +631,7 @@ public class CocomoBasic {
 ```
 
 ```javascript
+// full precision: the hand math rounded 20^0.05 to 1.16, so its 55.7 prints as 55.8
 const effort = (kloc, a = 2.4, b = 1.05) => a * kloc ** b; // Basic COCOMO, organic
 const schedule = (e) => 2.5 * e ** 0.38;                   // calendar months
 
@@ -644,6 +646,7 @@ console.log(`doubling factor: ${(e40 / e20).toFixed(2)}`);
 ```
 
 ```python
+# full precision: the hand math rounded 20^0.05 to 1.16, so its 55.7 prints as 55.8
 def effort(kloc, a=2.4, b=1.05):          # Basic COCOMO, organic
   return a * kloc ** b
 
@@ -657,6 +660,7 @@ print(f"doubling factor: {e40 / e20:.2f}")
 ```
 
 ```ruby
+# full precision: the hand math rounded 20^0.05 to 1.16, so its 55.7 prints as 55.8
 def effort(kloc, a: 2.4, b: 1.05) # Basic COCOMO, organic
   a * kloc**b
 end

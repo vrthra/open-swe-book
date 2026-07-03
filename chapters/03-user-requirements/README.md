@@ -432,16 +432,17 @@ Feature: Interpreter alerts
 ```
 
 > **Why it matters.** The same words that specify the requirement can *run* as an
-> automated test. Tools such as **Cucumber**, **behave** (Python), **SpecFlow**/**Reqnroll**
-> (.NET), and **Jest‑Cucumber** map each `Given`/`When`/`Then` step to code, turning the
+> automated test. Every mainstream language has a BDD framework — the Cucumber family,
+> among others — that maps each `Given`/`When`/`Then` step to code, turning the
 > scenario into an **executable specification**.[^11] Write the scenarios with the customer,
 > and they double as your **acceptance tests** (Chapter 9, [§9.2.3](../09-testing/#923-functional-system-and-acceptance-testing)).
 
-With behave, each scenario line binds by exact text to a **step definition** — a Python
-function that calls the clinic app (`check_in`, `open_visit`) and asserts what the user
-would see:
+Your BDD framework binds each scenario line to a **step definition** — a function that
+calls the clinic app and asserts what the user would see (each tab below names its
+framework in its imports or comments):
 
 ```go
+// godog step definitions; regexps below bind each step to a function
 var patient Patient
 var visit Visit
 
@@ -521,6 +522,7 @@ Then("no interpreter banner is shown", function () {
 
 ```python
 from behave import given, when, then
+# behave matches each scenario line to its step by exact text
 
 @given("a checked-in patient flagged for an interpreter")
 def flagged(context):
@@ -544,6 +546,7 @@ def no_banner(context):
 ```
 
 ```ruby
+# cucumber-ruby step definitions, loaded from features/step_definitions/
 Given('a checked-in patient flagged for an interpreter') do
   @patient = check_in(interpreter: true)
 end

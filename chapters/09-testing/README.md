@@ -124,7 +124,7 @@ throw thousands of generated inputs at the function without hand-computing each 
 often the difference between a suite that finds real defects and one that only confirms
 the three cases you already thought of.
 
-With **Hypothesis**, Python's property-based testing library, both properties become one
+With a property-based testing tool — every ecosystem has one — both properties become one
 test run against hundreds of generated lists:
 
 ```go
@@ -152,6 +152,7 @@ func TestMedianProperties(t *testing.T) {
 ```
 
 ```java
+// jqwik generates the inputs: add the net.jqwik:jqwik dependency
 import java.util.*;
 import net.jqwik.api.*;
 import net.jqwik.api.constraints.NotEmpty;
@@ -174,6 +175,7 @@ class MedianProperties {
 ```
 
 ```javascript
+// fast-check generates the inputs: npm install fast-check
 const fc = require("fast-check");
 
 function median(xs) {
@@ -191,6 +193,7 @@ fc.assert(
 ```
 
 ```python
+# Hypothesis generates the inputs: pip install hypothesis
 from hypothesis import given, strategies as st
 
 def median(xs):
@@ -204,6 +207,7 @@ def test_median_properties(xs):
 ```
 
 ```ruby
+# PropCheck generates the inputs: gem install prop_check
 require "prop_check"
 G = PropCheck::Generators
 
@@ -237,7 +241,7 @@ The **mutation score** — mutants killed divided by mutants generated — grade
 suite's defect-detecting strength in a way coverage never can. Better, every survivor is
 *actionable*: it points at a specific line where an assertion is weak or missing.
 
-Watch it work on `apply_discount`, the worked example you will meet in §9.2.1. Suppose
+Watch it work on the discount function, the worked example you will meet in §9.2.1. Suppose
 the tool mutates the guard
 `price < 0` into `price <= 0`, so a price of exactly zero is now (wrongly) rejected.
 Rerun the suite: no test ever passes a zero price, so every test still passes and the
@@ -276,8 +280,8 @@ end
 
 Add it, rerun, and the mutant dies — and, not coincidentally, you have just written the
 boundary-value test (§9.4.2) your suite was missing. Mature tools exist in every
-ecosystem: **mutmut** for Python, **PIT** for Java, **Stryker** for JavaScript and
-TypeScript.
+ecosystem: **go-mutesting** for Go, **PIT** for Java, **Stryker** for JavaScript and
+TypeScript, **mutmut** for Python, **mutant** for Ruby.
 
 > **Pitfall — mutation testing is expensive.** Each mutant means rerunning the suite, and
 > a modest module can generate hundreds of mutants, so a full run can take hours. Do not
@@ -444,8 +448,8 @@ PriceService.new(StubCatalog.new, mock).quote("mug")
 raise unless mock.calls == ["mug"]               # called exactly once, with "mug"
 ```
 
-And the fake actually works — a dict stands in for the discount database, so any lookup
-behaves the way the real component would:
+And the fake actually works — an in-memory table stands in for the discount database, so
+any lookup behaves the way the real component would:
 
 ```go
 // FakeDiscounts reads an in-memory table; a missing item means no discount (0).
@@ -666,7 +670,7 @@ enforcing on every test you write:[^4]
 ### 9.2.2 Integration Testing
 
 Units that each pass in isolation can still fail *together* — one returns meters where the
-other expects feet, one returns `null` where the other never checks. **Integration
+other expects feet, one returns a null value where the other never checks. **Integration
 testing** exercises the *interfaces and interactions* between units, growing the scope from
 a pair of collaborators up toward whole subsystems. This is where mismatched assumptions,
 wrong data formats, and protocol errors surface.
@@ -747,7 +751,7 @@ class PriceService
 end
 ```
 
-A unit test of `PriceService.quote` would *mock* `catalog` and `discounts`. An
+A unit test of `PriceService`'s quote method would *mock* `catalog` and `discounts`. An
 **integration test** instead wires the real (or fake) catalog and discount components
 together and checks that their contract holds end to end:
 
@@ -811,7 +815,7 @@ class TestPriceServiceIntegration < Minitest::Test
 end
 ```
 
-If `Discounts` returned a *fraction* (0.25) while `apply_discount` expects a *percentage*
+If `Discounts` returned a *fraction* (0.25) while the discount function expects a *percentage*
 (25), every unit test could pass while this integration test correctly fails. That
 interface mismatch is the defect class unit tests are blind to.
 
@@ -1020,7 +1024,7 @@ exist.
 The CFG also gives you a number worth knowing. **Cyclomatic complexity** is the count of
 a function's decision points plus one — equivalently, for a graph with $E$ edges and $N$
 nodes, $E - N + 2$.[^11] It measures how many independent paths thread the function, and so
-roughly how many tests branch coverage will demand. For `classify_and_sum`: two decisions
+roughly how many tests branch coverage will demand. For the function above: two decisions
 (nodes 2 and 5), so complexity $2 + 1 = 3$; or count the graph above, $E = 9$, $N = 8$,
 $9 - 8 + 2 = 3$. Conventional bands for reading the number: **1–10** is simple, readily
 testable code; **11–20** is moderately complex; **21–50** is risky; above **50** is
@@ -1032,8 +1036,8 @@ treatment for the hot spots it finds.[^13]
 
 ### 9.3.2 Control-Flow Coverage Criteria
 
-Three classic criteria form a hierarchy of increasing strength. We work each one on
-`classify_and_sum`.
+Three classic criteria form a hierarchy of increasing strength. We work each one on the
+classify-and-sum function from §9.3.1.
 
 **Statement coverage** requires every node (statement) to be executed by at least one
 test. What set of inputs runs every node? Node 3 needs `n < 0`; nodes 4–7 need `n >= 0`;
@@ -1067,7 +1071,7 @@ that covers every statement can still fail to take the "loop body never executes
 > ask *which* coverage — the gap between these two is where real defects hide.
 
 **Path coverage** requires every *distinct path* from entry to exit to be executed. Count
-the paths in `classify_and_sum`:
+the paths in the classify-and-sum function:
 
 - The `n < 0` path (through node 3): **1** path.
 - The `n >= 0` paths differ by how many times the loop runs: 0 iterations, 1 iteration, 2
@@ -1181,7 +1185,7 @@ end
 
 The equivalence-class test with representative `55` passes (it is happily accepted), and
 so would `250` (rejected) and `-3` (rejected). The defect hides at the top edge. But the
-boundary test `set_volume(100)` **fails** — the code rejects a value the spec says is
+boundary test at level `100` **fails** — the code rejects a value the spec says is
 valid — pinpointing the `>=`/`>` mistake. This is the payoff: boundary values find the
 single most common category of numeric defect, and they cost only a few extra tests on top
 of equivalence classes.

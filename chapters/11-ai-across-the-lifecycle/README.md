@@ -207,9 +207,10 @@ test encodes *what the model thinks correct behavior is* — which may simply mi
 misunderstanding also baked into the generated code. Coverage numbers can look great while
 the tests assert the wrong thing.
 
-Chapter 9's `apply_discount` makes the failure concrete: suppose the billing spec says
-half-cent prices round *up*, while the generated code reaches for Python's `round` —
-banker's rounding — and the generated test asserts whatever the code already returns.
+Chapter 9's discount example makes the failure concrete: suppose the billing spec says
+half-cent prices round *up*, while the generated code trips a language-specific rounding
+or representation trap — named in each variant's leading comment — and the generated test
+asserts whatever the code already returns.
 
 ```go
 package main
@@ -293,8 +294,9 @@ puts apply_discount(10.25, 50)          # 5.12; the billing spec says 5.13 (half
 ```
 
 Coverage looked great; the oracle was wrong. The suite agrees with the code because both
-encode the same rounding rule, and only a reviewer who knows the billing spec can see that
-`5.125` should have become `5.13`.
+encode the same mistake, and only a reviewer who knows the billing spec can see that the
+last cent rounded the wrong way — each variant's final print line shows the value the
+spec required.
 
 - **Human owns:** the **oracle** — the specification of correct behavior — and the coverage
   *criteria* that decide when testing is enough (statement/branch/MC/DC, §9.3–9.5).

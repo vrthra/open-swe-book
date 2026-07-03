@@ -337,8 +337,7 @@ different question. It helps to know the categories so you can assemble the righ
   and it rejects whole classes of defect before the program ever runs. Bolt-on type checkers
   bring the same guarantees to dynamically typed languages — for example, gradual type checkers
   for Python and JavaScript-family code. A type error caught at compile time is a failure that
-  can never reach a user. Here a price arrives as a string and flows into arithmetic — Python
-  runs it without complaint and produces a nonsense total:
+  can never reach a user. Here a price arrives as a string and flows into arithmetic:
 
   ```go
   package main
@@ -397,6 +396,7 @@ different question. It helps to know the categories so you can assemble the righ
   price = "9.99"              # read from a CSV row, still a string
   total = line_total(price, 3)
   print(total)                # no crash: prints 9.999.999.99
+  # mypy: Argument 1 to "line_total" has incompatible type "str"; expected "float"
   ```
 
   ```ruby
@@ -414,11 +414,8 @@ different question. It helps to know the categories so you can assemble the righ
   # srb tc: Expected `Float` but found `String("9.99")` for argument `price`
   ```
 
-  `mypy` rejects the same six lines before they ever run:
-
-  ```text
-  line_total.py:5: error: Argument 1 to "line_total" has incompatible type "str"; expected "float"  [arg-type]
-  ```
+  In each fence, the trailing comment quotes its checker's actual verdict — the same fault,
+  caught before the code ever runs.
 
 - **Linters** flag stylistic issues, suspicious constructs, and small correctness hazards:
   unused variables, shadowed names, missing `break` in a switch, comparison that is always
@@ -505,6 +502,7 @@ different question. It helps to know the categories so you can assemble the righ
       out.write(f"{item},{final}\n")
     out.close()
     return path
+  # pylint: R1732: Consider using 'with' for resource-allocating operations
   ```
 
   ```ruby
@@ -523,17 +521,12 @@ different question. It helps to know the categories so you can assemble the righ
   # rubocop: C: Style/AutoResourceCleanup: Use the block version of File.open.
   ```
 
-  Even a general-purpose linter flags the fragile acquisition, and a path-sensitive analyzer
-  reports the leaking path itself:
-
-  ```text
-  export_prices.py:2:10: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
-  ```
-
-  The `open` on line 2 and the `return` on line 7 are the guilty pair. They sit five lines
-  apart here and are often a screen or more apart in production code — a human tracing every
-  path by eye misses the one that skips the `close`, while the analyzer walks each path
-  mechanically.
+  The closing comment in each fence shows how the leak surfaces for that language — a linter
+  flagging the fragile acquisition, a path-sensitive analyzer reporting the leaking path
+  itself, or a runtime warning when the abandoned handle is finally collected. The acquisition
+  and the early return are the guilty pair. They sit a few lines apart here and are often a
+  screen or more apart in production code — a human tracing every path by eye misses the one
+  that skips the `close`, while an analyzer walks each path mechanically.
 
 - **Bug-pattern finders** encode a catalog of known-bad code shapes and scan for them:
   ignoring a method's return value that must be checked, comparing strings with reference

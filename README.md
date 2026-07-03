@@ -75,7 +75,7 @@ The chapters group into arcs:
 
 Every code example in the book is provided in **Python, Java, JavaScript, Go, and
 Ruby**, behind language tabs — pick your language once and the whole site follows
-(or open any page with `?lang=go` to pre-select one). Each snippet also lives in
+(or open any page with [`?lang=go`](?lang=go) to pre-select one). Each snippet also lives in
 [`code/`](code/) as a runnable file with a test, executed by continuous integration on
 every change.
 

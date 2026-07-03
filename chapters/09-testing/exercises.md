@@ -127,7 +127,8 @@ answer.
 
 10. **[analysis]** *Derive boundary values.* A spec states: *`assign_grade(score)` accepts
     an integer `0..100`; it returns `"A"` for `90..100`, `"B"` for `80..89`, `"C"` for
-    `70..79`, and `"F"` for `0..69`; any score outside `0..100` raises `ValueError`.* (a)
+    `70..79`, and `"F"` for `0..69`; any score outside `0..100` is rejected with an
+    error.* (a)
     List the equivalence classes (valid and invalid). (b) For every boundary in the spec,
     give the below/at/above triple of values and the expected result for each. (c) Then
     write a buggy one-line guard or comparison (e.g., `>=` vs `>`) and identify exactly
@@ -141,7 +142,7 @@ answer.
     decision needs a different count). (d) State, for each test in your final set, which
     condition(s) it helps prove independent.
 
-12. **[analysis]** *Path counting.* For the `classify_and_sum` function in §9.3.1, you
+12. **[analysis]** *Path counting.* For the classify-and-sum function in §9.3.1, you
     argued full path coverage is impossible. Now take a *loop-free* function with three
     independent `if` statements in sequence (write one — e.g., applying three optional
     surcharges). (a) How many distinct paths does it have? (b) How many tests for branch

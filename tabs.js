@@ -15,6 +15,13 @@
     };
     const KEY = 'swebook-lang';
 
+    // Persist ?lang= immediately — even on pages with no tab groups (front
+    // page, curriculum) — so a ?lang= link works from anywhere on the site.
+    const fromUrl = new URLSearchParams(window.location.search).get('lang');
+    if (LANGS.includes(fromUrl)) {
+        try { localStorage.setItem(KEY, fromUrl); } catch (e) { /* private mode */ }
+    }
+
     const langOf = (pre) => {
         const code = pre.querySelector(':scope > code');
         if (!code) return null;
@@ -99,12 +106,9 @@
         widgets.push({ tabs, panes: group });
     });
 
-    // ?lang=go (any tab language) selects that language site-wide: the choice
-    // is stored, so it survives navigation to pages without the parameter.
-    const fromUrl = new URLSearchParams(window.location.search).get('lang');
     let saved = null;
     try { saved = localStorage.getItem(KEY); } catch (e) { /* private mode */ }
-    select(LANGS.includes(fromUrl) ? fromUrl : (LANGS.includes(saved) ? saved : 'python'));
+    select(LANGS.includes(fromUrl) ? fromUrl : (LANGS.includes(saved) ? saved : 'ruby'));
 
 
 // Line-number gutters for every fenced code block (not mermaid diagrams).

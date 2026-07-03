@@ -337,7 +337,7 @@ appt.set_status("arrived")               # prints: display: appointment is now a
 ```
 
 Nowhere does `Appointment` name a concrete observer type — it iterates whatever
-subscribed and calls `update` on each.
+subscribed and invokes each one's notification callback.
 
 **Participants.** The **subject** (or *observable*) owns the state and the subscriber
 list. The **observer** (or *subscriber*) implements the callback that runs on change. The
@@ -610,7 +610,7 @@ class InvoiceWidget
 end
 ```
 
-The extracted rule now tests in two lines, with no widget in sight:
+The extracted rule now tests in a few short lines, with no widget in sight:
 
 ```go
 func TestUnpaid31DaysIsOverdue(t *testing.T) {
@@ -636,7 +636,7 @@ function testUnpaid31DaysIsOverdue() {
 ```
 
 ```python
-def test_unpaid_31_days_is_overdue():
+def test_unpaid_31_days_is_overdue():   # the whole test: two lines
   assert is_overdue(Invoice("Ana", sent_on=date(2026, 6, 1), paid=False), date(2026, 7, 2))
 ```
 
@@ -880,8 +880,8 @@ do not want to mutate, or may be a paid third-party API. A test server implement
 enough of the protocol to exercise the client's behavior — you can program it to return
 specific responses, simulate errors and timeouts, and record what the client sent. This
 lets you test client behavior that is nearly impossible to trigger against the real
-thing, such as "what does the UI do when the server returns a 500?" Twenty lines of
-standard library answer that question for the clinic client:
+thing, such as "what does the UI do when the server returns a 500?" A short stub built
+from nothing but the standard library answers that question for the clinic client:
 
 ```go
 package main
@@ -953,6 +953,7 @@ stub.listen(0, "127.0.0.1", async () => {
 
 ```python
 import http.server, threading, urllib.error, urllib.request
+# stub server, client, and failing-path check: about twenty lines of stdlib
 
 class AlwaysFail(http.server.BaseHTTPRequestHandler):
   def do_GET(self):

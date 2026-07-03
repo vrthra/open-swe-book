@@ -252,9 +252,11 @@ pre.mermaid svg {
 :is(.navy, .coal, .ayu) .hljs-literal {
   color: #b3e27c;
 }
-:is(.navy, .coal, .ayu) :is(.hljs-variable, .hljs-template-variable, .hljs-params) {
+:is(.navy, .coal, .ayu) :is(.hljs-variable, .hljs-template-variable) {
   color: #b4dae9;
 }
+/* params stay the base code color: hljs wraps whole ruby/js argument lists in
+   a params span, and tinting it washes out entire lines */
 :is(.navy, .coal, .ayu) :is(.hljs-attr, .hljs-attribute) {
   color: #b3e4c2;
 }
@@ -374,13 +376,13 @@ pre.has-ln > .code-ln {
   font-size: var(--code-font-size);
   line-height: 1.5;
   padding: 1rem 0.7em;
-  margin-right: 0.9em;
   border-right: 1px solid color-mix(in srgb, currentColor 25%, transparent);
 }
 pre.has-ln > code {
   flex: 1 1 auto;
   min-width: 0;
   overflow-x: auto;
+  padding-left: 0.75em;   /* single small gap after the gutter rule */
 }
 
 /* No visible scrollbars on code blocks (content stays scrollable). */
@@ -428,4 +430,12 @@ pre > code {
 }
 #sidebar .site-version a {
   color: inherit;
+}
+
+/* Inline code inside a link must LOOK like a link — the One Light / Radical
+   code colors above otherwise override mdBook's link tint entirely. */
+:is(.light, .rust, .navy, .coal, .ayu) a > code.hljs {
+  color: var(--links);
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }

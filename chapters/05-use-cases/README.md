@@ -313,7 +313,7 @@ advance, what must remain true even when things go wrong — precisely the invar
 error handling and your tests will have to enforce.
 
 The failure guarantee is testable before any real bank or dispenser exists — drop the
-authorization link at step 8 and assert the postcondition word for word:
+authorization link at step 8 and check the postcondition, word for word:
 
 ```go
 package main
