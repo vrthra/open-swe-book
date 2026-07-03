@@ -150,7 +150,7 @@ for the pessimistic case and your fastest (26) for the optimistic one.
 
 So you tell the sponsor "10 to 16 weeks, most likely 12" — a defensible statement backed by
 data, not a heroic promise of an exact day. As sprints complete, velocity data accumulates,
-the range narrows, and the forecast sharpens. This is the whole game: **plan with what you
+the range narrows, and the forecast sharpens. That is estimation in one sentence: **plan with what you
 know now, and re-plan every iteration as reality corrects you.**
 
 > **Pitfall.** Velocity is a *planning* measure, never a *performance* target. The moment a
@@ -228,8 +228,7 @@ An estimate from one person is a guess. An estimate from a group *if you gather 
 markedly better, because different people see different risks: the database expert knows
 about the migration, the front-end developer knows the UI is fiddly, the tester knows the
 edge cases. The trick is to combine their knowledge **without** letting the loudest or most
-senior person anchor everyone else. The following techniques are engineered to do exactly
-that.
+senior person anchor everyone else. The following techniques are built to do just that.
 
 ### 4.3.1 Wideband Delphi and Planning Poker
 
@@ -315,8 +314,8 @@ powerful buckets.[^11] The capital letters spell the name; the lowercase o's are
   fight for these, but they can wait for the next release if forced.
 - **Could have.** Desirable, low-cost, nice — the first to be dropped when time runs short.
   These are your *scope buffer*.
-- **Won't have (this time).** Explicitly out of scope *for now*. Writing these down is not
-  giving up; it is preventing scope creep and quietly promising to revisit them.
+- **Won't have (this time).** Explicitly out of scope *for now*. Writing these down
+  prevents scope creep and records a promise to revisit them later.
 
 | Requirement                          | MoSCoW      | Why                                        |
 |--------------------------------------|-------------|--------------------------------------------|
@@ -358,8 +357,8 @@ clinic backlog ranked:
 The ranking is instructive. SMS reminders have the *highest raw value* (8), yet they place
 third, because they cost as much value as they deliver. Humble PDF export, worth only 4,
 outranks them: it is cheap enough that its value-per-point is higher. **This is the core
-insight of value/cost analysis — the best next thing to build is rarely the flashiest;
-it is the one with the best return on effort.**
+insight of value/cost analysis — the best next thing to build is the one with the best
+return on effort, and it is rarely the flashiest.**
 
 ### 4.4.3 Balancing Value, Cost, and Risk
 
@@ -383,7 +382,8 @@ adds a *bonus* for retiring risk early:
 > **weighted priority = (value + risk) ÷ cost**
 
 Adding risk to the numerator deliberately *pulls dangerous work forward* — you want to face
-it now, not last. Re-ranking the backlog with a risk column:
+it now, not last. Re-ranking the backlog with a risk column — the low-value multi-language
+row has dropped off the short list, and a new payment-integration request has arrived:
 
 | Feature             | Value | Risk | Cost | (V+R) ÷ Cost | Rank |
 |---------------------|------:|-----:|-----:|-------------:|-----:|
@@ -493,8 +493,8 @@ out** — but never chase Delighters while a Must-be is still broken.
 Kano's subtlest insight is that categories **decay over time**.[^14] Yesterday's delighter is
 today's expectation and tomorrow's basic requirement. A front-facing camera on a phone was
 once an *attractive* surprise; then, as every phone had one, it became a *performance*
-feature (megapixels mattered); now it is a *must-be* — ship a phone without one and you have
-not a novelty but a defect.
+feature (megapixels mattered); now it is a *must-be* — ship a phone without one and customers
+will call it a defect.
 
 The clinic app's SMS reminders followed the same arc. A decade ago, an automated text was a
 delighter. Today patients *expect* it; its absence generates complaints. It has aged from
@@ -587,6 +587,95 @@ Now watch the diseconomy of scale bite. Double the size to **KLOC = 40**:
 > 40^1.05 = 40 × 40^0.05 = 40 × e^(0.05 × ln 40)
 > = 40 × e^(0.05 × 3.69) = 40 × e^0.184 ≈ 40 × 1.202 = 48.1.
 > **Effort ≈ 2.4 × 48.1 ≈ 115.4 person-months.**
+
+Python redoes the arithmetic at full precision — the hand math rounded 20^0.05 to 1.16,
+which is why its 55.7 comes out as 55.8 here:
+
+```python
+def effort(kloc, a=2.4, b=1.05):          # Basic COCOMO, organic
+  return a * kloc ** b
+
+def schedule(e):
+  return 2.5 * e ** 0.38                # calendar months
+
+e20, e40 = effort(20), effort(40)
+print(f"20 KLOC: {e20:5.1f} person-months, {schedule(e20):.1f} months")
+print(f"40 KLOC: {e40:5.1f} person-months, {schedule(e40):.1f} months")
+print(f"doubling factor: {e40 / e20:.2f}")
+```
+
+```java
+public class CocomoBasic {
+  static double effort(double kloc) {          // Basic COCOMO, organic
+    return 2.4 * Math.pow(kloc, 1.05);
+  }
+
+  static double schedule(double e) {
+    return 2.5 * Math.pow(e, 0.38);            // calendar months
+  }
+
+  public static void main(String[] args) {
+    double e20 = effort(20), e40 = effort(40);
+    System.out.printf("20 KLOC: %5.1f person-months, %.1f months%n", e20, schedule(e20));
+    System.out.printf("40 KLOC: %5.1f person-months, %.1f months%n", e40, schedule(e40));
+    System.out.printf("doubling factor: %.2f%n", e40 / e20);
+  }
+}
+```
+
+```javascript
+const effort = (kloc, a = 2.4, b = 1.05) => a * kloc ** b; // Basic COCOMO, organic
+const schedule = (e) => 2.5 * e ** 0.38;                   // calendar months
+
+const row = (kloc, e) =>
+  `${kloc} KLOC: ${e.toFixed(1).padStart(5)} person-months, ` +
+  `${schedule(e).toFixed(1)} months`;
+
+const [e20, e40] = [effort(20), effort(40)];
+console.log(row(20, e20));
+console.log(row(40, e40));
+console.log(`doubling factor: ${(e40 / e20).toFixed(2)}`);
+```
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+func effort(kloc float64) float64 { return 2.4 * math.Pow(kloc, 1.05) } // organic
+func schedule(e float64) float64  { return 2.5 * math.Pow(e, 0.38) }    // calendar months
+
+func main() {
+	e20, e40 := effort(20), effort(40)
+	fmt.Printf("20 KLOC: %5.1f person-months, %.1f months\n", e20, schedule(e20))
+	fmt.Printf("40 KLOC: %5.1f person-months, %.1f months\n", e40, schedule(e40))
+	fmt.Printf("doubling factor: %.2f\n", e40/e20)
+}
+```
+
+```ruby
+def effort(kloc, a: 2.4, b: 1.05) # Basic COCOMO, organic
+  a * kloc**b
+end
+
+def schedule(effort)
+  2.5 * effort**0.38 # calendar months
+end
+
+e20, e40 = effort(20), effort(40)
+puts format('20 KLOC: %5.1f person-months, %.1f months', e20, schedule(e20))
+puts format('40 KLOC: %5.1f person-months, %.1f months', e40, schedule(e40))
+puts format('doubling factor: %.2f', e40 / e20)
+```
+
+```text
+20 KLOC:  55.8 person-months, 11.5 months
+40 KLOC: 115.4 person-months, 15.2 months
+doubling factor: 2.07
+```
 
 Doubling the code (20 → 40 KLOC) raised effort from ~56 to ~115 person-months — a factor of
 **2.07**, not 2.0. The extra 7% is the exponent *b* = 1.05 at work; on an *embedded* project

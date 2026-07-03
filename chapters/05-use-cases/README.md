@@ -38,9 +38,9 @@ writing.
 ### 5.1.1 Actors and Goals Outline a System
 
 An **actor** is any entity *outside* the system that interacts with it to accomplish
-something. The most important word in that sentence is *outside*. An actor is not a piece
-of your software; it is a role played by someone or something that sits across the
-system's boundary and exchanges information with it. When you name the actors, you are
+something. The most important word in that sentence is *outside*. An actor is a role
+played by someone or something that sits across the system's boundary and exchanges
+information with it; nothing inside your own software qualifies. When you name the actors, you are
 implicitly drawing that boundary — deciding what is "the system" and what is the world it
 serves.
 
@@ -62,7 +62,7 @@ Actors come in two broad kinds, and the distinction matters:[^1]
 
 A **goal** is what the primary actor wants the interaction to achieve — stated as a
 result in the world, not as a feature of the software. "Withdraw cash" is a goal.
-"Click the withdraw button" is not; it is a step toward a goal, and phrasing goals as UI
+"Click the withdraw button" is merely a step toward one, and phrasing goals as UI
 actions bakes premature design decisions into requirements. A good test: a goal should
 still make sense if you replaced the entire user interface. People withdrew cash from
 human tellers long before ATMs existed; the goal outlived the implementation, and so
@@ -186,7 +186,7 @@ location in a flow where such optional behavior can be attached.[^4] It is a lab
 basic flow declares "here is a place where things may branch," and one or more extending
 use cases (§5.5.3) plug in at that label.
 
-Extension points shine when the extra behavior is genuinely optional and conceptually
+Extension points shine when the extra behavior is optional and conceptually
 separate. In the ATM, after the amount is confirmed but before cash is dispensed, you
 might declare an extension point named `AmountConfirmed`. A separate use case, *Assess
 Withdrawal Fee* — relevant only for out-of-network cards — hooks onto that point. The core
@@ -229,7 +229,7 @@ exactly which step you were on.
 
 ## 5.3 Writing Use Cases
 
-Vocabulary in hand, the practical question is how to actually produce good use cases. The
+Vocabulary in hand, the practical question is how to produce good use cases. The
 answer has two parts: a **template** that gives every use case the same skeleton, and a
 **discipline** for filling that skeleton in — writing steps at the right level and building
 the document up in the right order.
@@ -311,6 +311,135 @@ guarantee is often the more important: "no money out without a matching debit" i
 the bank cares about far more than the happy path. Writing both forces you to decide, in
 advance, what must remain true even when things go wrong — precisely the invariant your
 error handling and your tests will have to enforce.
+
+The failure guarantee is testable before any real bank or dispenser exists — drop the
+authorization link at step 8 and assert the postcondition word for word:
+
+```python
+class LostLinkBank:                         # the fake — the link drops at step 8
+  debits = []
+  def authorize(self, amount): raise ConnectionError("link lost")
+
+class Atm:
+  dispensed = 0
+  def dispense(self, amount): self.dispensed += amount
+
+def withdraw(atm, bank, amount):            # steps 8–11 of the basic flow
+  try: bank.authorize(amount)
+  except ConnectionError: return          # B1 — cancel, return the card
+  atm.dispense(amount)
+  bank.debits.append(amount)
+
+atm, bank = Atm(), LostLinkBank()
+withdraw(atm, bank, 200)
+assert atm.dispensed == 0 and bank.debits == []  # the failure postcondition, verbatim
+```
+
+```java
+public class FailureGuarantee {
+  static class LostLinkBank {               // the fake — the link drops at step 8
+    java.util.List<Integer> debits = new java.util.ArrayList<>();
+    void authorize(int amount) { throw new IllegalStateException("link lost"); }
+  }
+  static class Atm {
+    int dispensed = 0;
+    void dispense(int amount) { dispensed += amount; }
+  }
+  static void withdraw(Atm atm, LostLinkBank bank, int amount) {  // steps 8–11
+    try { bank.authorize(amount); }
+    catch (IllegalStateException e) { return; }  // B1 — cancel, return the card
+    atm.dispense(amount);
+    bank.debits.add(amount);
+  }
+  public static void main(String[] args) {  // run with java -ea (assertions on)
+    Atm atm = new Atm();
+    LostLinkBank bank = new LostLinkBank();
+    withdraw(atm, bank, 200);
+    // the failure postcondition, verbatim
+    assert atm.dispensed == 0 && bank.debits.isEmpty();
+  }
+}
+```
+
+```javascript
+const assert = require("node:assert");
+
+class LostLinkBank {                        // the fake — the link drops at step 8
+  debits = [];
+  authorize(amount) { throw new Error("link lost"); }
+}
+
+class Atm {
+  dispensed = 0;
+  dispense(amount) { this.dispensed += amount; }
+}
+
+function withdraw(atm, bank, amount) {      // steps 8–11 of the basic flow
+  try { bank.authorize(amount); }
+  catch { return; }                         // B1 — cancel, return the card
+  atm.dispense(amount);
+  bank.debits.push(amount);
+}
+
+const atm = new Atm(), bank = new LostLinkBank();
+withdraw(atm, bank, 200);
+// the failure postcondition, verbatim
+assert(atm.dispensed === 0 && bank.debits.length === 0);
+```
+
+```go
+package main
+
+import "errors"
+
+type LostLinkBank struct{ debits []int }           // the fake — the link drops at step 8
+func (b *LostLinkBank) authorize(amount int) error { return errors.New("link lost") }
+
+type Atm struct{ dispensed int }   // cash actually dispensed
+func (a *Atm) dispense(amount int) { a.dispensed += amount }
+
+func withdraw(atm *Atm, bank *LostLinkBank, amount int) { // steps 8–11 of the basic flow
+	if err := bank.authorize(amount); err != nil {
+		return // B1 — cancel, return the card
+	}
+	atm.dispense(amount)
+	bank.debits = append(bank.debits, amount)
+}
+
+func main() {
+	atm, bank := &Atm{}, &LostLinkBank{}
+	withdraw(atm, bank, 200)
+	if atm.dispensed != 0 || len(bank.debits) != 0 { // the failure postcondition, verbatim
+		panic("failure postcondition violated")
+	}
+}
+```
+
+```ruby
+class LostLinkBank                          # the fake — the link drops at step 8
+  attr_reader :debits
+  def initialize = @debits = []
+  def authorize(amount) = raise(IOError, "link lost")
+end
+
+class Atm
+  attr_reader :dispensed
+  def initialize = @dispensed = 0
+  def dispense(amount) = @dispensed += amount
+end
+
+def withdraw(atm, bank, amount)             # steps 8–11 of the basic flow
+  bank.authorize(amount)
+  atm.dispense(amount)
+  bank.debits << amount
+rescue IOError                              # B1 — cancel, return the card
+end
+
+atm, bank = Atm.new, LostLinkBank.new
+withdraw(atm, bank, 200)
+# the failure postcondition, verbatim
+raise "postcondition violated" unless atm.dispensed == 0 && bank.debits.empty?
+```
 
 ### 5.3.2 From Actor Intentions to System Interactions
 
@@ -422,7 +551,8 @@ flowchart LR
 ```
 
 Read that diagram as an index, not a specification. It tells you the `Cardholder` has
-three goals, that `Withdraw Cash` and `Check Balance` both depend on `Authenticate
+three goals (`Deposit Funds`, the fourth goal in §5.1.1's actor–goal list, is omitted
+here to keep the diagram readable), that `Withdraw Cash` and `Check Balance` both depend on `Authenticate
 Cardholder` (the dashed `«include»` arrows), and that `Assess Withdrawal Fee` optionally
 attaches to `Withdraw Cash` (the `«extend»` arrow). It does *not* tell you what happens on
 a wrong PIN — for that you read the text. A common and costly mistake is to encode control
@@ -450,7 +580,7 @@ an organizing device *inside* one document, going nowhere else. When the basic f
 otherwise spell out the same five steps in three places, you factor them into a subflow —
 say, `Print Receipt` — and refer to it by name where needed.
 
-Subflows earn their place when a flow gets long or repeats itself. "Then perform *Print
+Use a subflow when a flow gets long or repeats itself. "Then perform *Print
 Receipt*" reads better than five inlined steps, and if the receipt process changes you edit
 it in one spot. But keep subflows *local*: the moment a chunk of behavior is wanted by a
 *different* use case, a subflow is the wrong tool and you reach for `«include»` instead.
@@ -462,7 +592,7 @@ use cases invoke. When use case A `«include»`s use case B, it means "at this p
 performs all of B, then continues."[^4] It is textual composition across use-case boundaries —
 the same idea as calling a shared function, raised to the level of requirements.
 
-Use `«include»` when several use cases genuinely share a stretch of behavior. Both
+Use `«include»` when several use cases share the same stretch of behavior. Both
 `Withdraw Cash` and `Check Balance` begin by authenticating the cardholder; rather than
 copy the PIN-entry-and-validation steps into each, you extract them into an
 `Authenticate Cardholder` use case and have both includers invoke it:
@@ -480,18 +610,18 @@ runs every time the base one reaches that point; inclusion is not optional.
 
 An **extend** relationship is the mirror image of include. Where include is
 *mandatory behavior pulled out of* a base use case, extend is *optional behavior added
-onto* one — and, crucially, the base use case does not know its extender exists. When use
+onto* one — and the base use case does not know its extender exists. When use
 case E `«extend»`s use case A at extension point P, it means "*if* E's condition holds when
 A reaches point P, then E's steps run; otherwise A proceeds unchanged."[^4] The base flow is
 complete and sensible on its own; the extension is an optional overlay.
 
-This is exactly the `AmountConfirmed` extension point from §5.2.2. `Withdraw Cash` is a
+This is the `AmountConfirmed` extension point from §5.2.2. `Withdraw Cash` is a
 complete, correct use case with no fee logic in it at all. The *Assess Withdrawal Fee*
 use case extends it at `AmountConfirmed`, contributing its steps only when the card is
 out-of-network. If tomorrow the bank drops all fees, you delete one extending use case and
 never touch `Withdraw Cash`.
 
-The direction of dependency is the whole point, and it is worth stating plainly:[^4]
+The direction of dependency matters enough to state plainly:[^4]
 
 - With **include**, the *base* names the *included* use case ("Withdraw includes
   Authenticate"). The base depends on the shared part.
@@ -529,7 +659,7 @@ validate it and designers stay free to build it well. Third, **structure only to
 duplication**: use subflows, `«include»`, and `«extend»` to share behavior, and use the
 diagram only to map the terrain, never reaching for a mechanism you do not need.
 
-Use cases are not the end of requirements work; they are the handoff to design. Because a
+Use cases are the handoff from requirements work to design. Because a
 use case names its actors, its data, and its every branch, it feeds directly into the
 domain model and architecture of Chapter 6, and its alternative flows and postconditions
 become ready-made scenarios for the tests of Chapter 9. Written well, a use case is the

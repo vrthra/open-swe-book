@@ -30,13 +30,132 @@ Mermaid block is fine — the thinking is what is graded.
    cause, and propose a re-decomposition into cohesive modules. State the responsibility of
    each new module in a single "and"-free sentence.
 
-6. **[analysis]** Read the following description and critique its coupling and cohesion.
-   *"The `PriceEngine` reads its input by directly modifying the `cart` object's private
-   `items` list, computes a total, stores it in a global variable `LAST_TOTAL` that the
-   `Checkout` and `Receipt` modules both read, and takes a boolean flag `isB2B` that selects
-   between two completely different pricing algorithms."* Identify each coupling type present
-   (there are at least three), explain the concrete risk of each, and rewrite the design in a
-   paragraph so that the modules communicate through data coupling and depend on interfaces.
+6. **[analysis]** Read the following code and critique its coupling and cohesion.
+
+   ```python
+   LAST_TOTAL = 0.0                          # read by Checkout and Receipt
+
+   class PriceEngine:
+     def compute(self, cart, is_b2b):
+       global LAST_TOTAL
+       cart._items.sort(key=lambda i: i["qty"])
+       total = 0.0
+       for item in cart._items:
+         if is_b2b:
+           total += item["wholesale"] * item["qty"] * 0.9
+         else:
+           total += item["retail"] * item["qty"]
+       LAST_TOTAL = total
+
+   class Receipt:
+     def render(self):
+       return f"Total: ${LAST_TOTAL:.2f}"
+   ```
+
+   ```java
+   class Globals { static double lastTotal = 0.0; }  // read by Checkout and Receipt
+
+   class Item { int qty; double retail, wholesale; }
+   class Cart { List<Item> items = new ArrayList<>(); }  // internals, not an interface
+
+   class PriceEngine {
+     void compute(Cart cart, boolean isB2b) {
+       cart.items.sort(Comparator.comparingInt(i -> i.qty));  // sorts another object's data
+       double total = 0.0;
+       for (Item item : cart.items) {
+         if (isB2b) {
+           total += item.wholesale * item.qty * 0.9;
+         } else {
+           total += item.retail * item.qty;
+         }
+       }
+       Globals.lastTotal = total;
+     }
+   }
+
+   class Receipt {
+     String render() { return String.format("Total: $%.2f", Globals.lastTotal); }
+   }
+   ```
+
+   ```javascript
+   let lastTotal = 0.0;                      // read by Checkout and Receipt
+
+   class PriceEngine {
+     compute(cart, isB2b) {
+       cart._items.sort((a, b) => a.qty - b.qty);  // reaches into Cart's internals
+       let total = 0.0;
+       for (const item of cart._items) {
+         if (isB2b) {
+           total += item.wholesale * item.qty * 0.9;
+         } else {
+           total += item.retail * item.qty;
+         }
+       }
+       lastTotal = total;
+     }
+   }
+
+   class Receipt {
+     render() { return `Total: $${lastTotal.toFixed(2)}`; }
+   }
+   ```
+
+   ```go
+   var lastTotal = 0.0 // read by Checkout and Receipt
+
+   type Item struct {
+   	Qty               int
+   	Retail, Wholesale float64
+   }
+   type Cart struct{ items []Item } // unexported — meant to be Cart's secret
+
+   type PriceEngine struct{}
+
+   func (PriceEngine) Compute(cart *Cart, isB2B bool) {
+   	slices.SortFunc(cart.items, func(a, b Item) int { return a.Qty - b.Qty })
+   	total := 0.0
+   	for _, item := range cart.items {
+   		if isB2B {
+   			total += item.Wholesale * float64(item.Qty) * 0.9
+   		} else {
+   			total += item.Retail * float64(item.Qty)
+   		}
+   	}
+   	lastTotal = total
+   }
+
+   // The receipt, adapted to a plain function in Go — still reads the package global.
+   func RenderReceipt() string { return fmt.Sprintf("Total: $%.2f", lastTotal) }
+   ```
+
+   ```ruby
+   $last_total = 0.0                      # read by Checkout and Receipt
+
+   class PriceEngine
+     def compute(cart, is_b2b)
+       items = cart.instance_variable_get(:@items)  # digs into Cart's internals
+       items.sort_by! { |i| i[:qty] }
+       total = 0.0
+       items.each do |item|
+         if is_b2b
+           total += item[:wholesale] * item[:qty] * 0.9
+         else
+           total += item[:retail] * item[:qty]
+         end
+       end
+       $last_total = total
+     end
+   end
+
+   class Receipt
+     def render = format("Total: $%.2f", $last_total)
+   end
+   ```
+
+   Identify each coupling type present (there are at least three), explain the concrete
+   risk of each, and rewrite the design in a paragraph so that the modules communicate
+   through data coupling and depend on interfaces.
 
 7. **[analysis]** Draw a UML **class diagram** for a small library-loan system with these
    facts: a `Member` may have zero or more `Loan`s; each `Loan` is for exactly one `BookCopy`

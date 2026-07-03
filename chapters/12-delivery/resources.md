@@ -8,7 +8,7 @@ where known. Each entry notes its license or access terms; when in doubt, check 
 
 - 📄 **SEC Release No. 34-70694 — In the Matter of Knight Capital Americas LLC** (October
   2013) — [sec.gov](https://www.sec.gov/litigation/admin/2013/34-70694.pdf). The
-  enforcement order behind §12.3.4's first case study: the reused flag, the eighth server,
+  enforcement order behind §12.3.5's first case study: the reused flag, the eighth server,
   the 97 unheeded alerts, and the rollback that made things worse are all findings in this
   document. Read it — it is short, plainly written, and the definitive corrective to the
   folklore versions. *License: U.S. government work, public domain.*
@@ -103,10 +103,27 @@ where known. Each entry notes its license or access terms; when in doubt, check 
   The canonical long-form article behind §12.2: mainline commits, self-testing builds,
   broken-build discipline, and the ten-minute build. *Access: free to read; ©
   martinfowler.com.*
-- 📘 **Martin Fowler — "DeploymentPipeline", "BlueGreenDeployment", "CanaryRelease", and
-  "FeatureToggle"** — [martinfowler.com/bliki](https://martinfowler.com/bliki/). Short,
-  precise entries (the feature-toggle article, by Pete Hodgson, covers the flag-hygiene
-  discipline of §12.3.2). *Access: free to read.*
+- 📘 **Pete Hodgson — "Feature Toggles (aka Feature Flags)"** —
+  [martinfowler.com/articles/feature-toggles.html](https://martinfowler.com/articles/feature-toggles.html).
+  The definitive long-form treatment behind §12.3.3: toggle categories (release, ops,
+  experiment, permission), lifespans, implementation patterns, and toggle-debt hygiene.
+  *Access: free to read; © martinfowler.com.*
+- 📘 **Martin Fowler — "DeploymentPipeline", "BlueGreenDeployment", and "CanaryRelease"**
+  — [martinfowler.com/bliki](https://martinfowler.com/bliki/). Short, precise entries on
+  the deployment strategies of §12.3.2. *Access: free to read.*
+- 📄 **Ross Harmes (Flickr) — "Flipping Out"** (2009) —
+  [code.flickr.net](https://code.flickr.net/2009/12/02/flipping-out/). The post that
+  popularized the *feature flipper*: trunk-only development, flags, and multiple deploys
+  a day, years before the tooling industry existed (§12.3.3). *Access: free to read.*
+- 📄 **Chuck Rossi (Facebook Engineering) — "Rapid release at massive scale"** (2017) —
+  [engineering.fb.com](https://engineering.fb.com/2017/08/31/web/rapid-release-at-massive-scale/).
+  How Facebook's quasi-continuous release uses the Gatekeeper flag system to roll out
+  code and features independently (§12.3.3). *Access: free to read.*
+- 🛠 **OpenFeature** — [openfeature.dev](https://openfeature.dev/). The CNCF-incubating,
+  vendor-neutral feature-flag API (§12.3.3); pairs with open-source flag backends such as
+  [Unleash](https://docs.getunleash.io/guides/feature-flag-best-practices) and GitHub's
+  [Flipper](https://github.com/flippercloud/flipper) for Ruby. *License: Apache-2.0
+  (OpenFeature); vendor docs free to read.*
 - 📄 **Minimum CD** — [minimumcd.org](https://minimumcd.org/). A community-maintained,
   vendor-neutral statement of the *minimum* practices that constitute continuous delivery
   — a useful checklist for auditing your own pipeline against §12.2–12.3. *License: CC

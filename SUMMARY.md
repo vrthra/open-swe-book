@@ -63,7 +63,7 @@
 
 # Practice
 
-- [Appendix A: A Team Project](chapters/appendix-a-team-project/README.md)
+- [Appendix A: The Team Project](chapters/appendix-a-team-project/README.md)
   - [Running the Project on Two-Week Sprints](chapters/appendix-a-team-project/two-week-sprints.md)
   - [Project Exercises](chapters/appendix-a-team-project/exercises.md)
   - [Open Resources](chapters/appendix-a-team-project/resources.md)

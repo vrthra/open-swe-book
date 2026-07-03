@@ -44,24 +44,93 @@ reason.
    defects. Compute the true positives, false positives, and false negatives, then compute the
    tool's precision and recall. In one sentence, say whether you'd trust this tool and why.
 
-9. **[analysis]** **Perform a code review.** Read the function below (pseudocode close to
-   Python). List every defect and concern you would raise as a reviewer, and for each, label
+9. **[analysis]** **Perform a code review.** Read the function below — it is real Python and
+   parses as written, so you can also run a linter or type checker over it. List every defect
+   and concern you would raise as a reviewer, and for each, label
    whether it is about *correctness*, *intent/design*, or *style/clarity*. Then state which
    one or two of these an ordinary automated linter or type checker would likely have caught on
    its own, and which require a *human* reviewer who understands intent.
 
-   ```
+   ```python
    # Applies a discount code to a shopping cart and returns the new total.
    def apply_discount(cart, code):
-       total = 0
-       for item in cart.items:
-           total = total + item.price * item.quantity
-       discount = discounts.lookup(code)        # returns None if code is unknown
-       total = total - total * discount.percent / 100
-       if total < 0:
-           total == 0
-       cart.total = total
-       return total
+     total = 0
+     for item in cart.items:
+       total = total + item.price * item.quantity
+     discount = discounts.lookup(code)        # returns None if code is unknown
+     total = total - total * discount.percent / 100
+     if total < 0:
+       total == 0
+     cart.total = total
+     return total
+   ```
+
+   ```java
+   // Applies a discount code to a shopping cart and returns the new total.
+   static double applyDiscount(Cart cart, String code) {
+     double total = 0;
+     for (Item item : cart.items) {
+       total = total + item.price * item.quantity;
+     }
+     Discount discount = discounts.lookup(code);  // returns null if code is unknown
+     total = total - total * discount.percent / 100;
+     if (total < 0) {
+       Math.max(total, 0);
+     }
+     cart.total = total;
+     return total;
+   }
+   ```
+
+   ```javascript
+   // Applies a discount code to a shopping cart and returns the new total.
+   function applyDiscount(cart, code) {
+     let total = 0;
+     for (const item of cart.items) {
+       total = total + item.price * item.quantity;
+     }
+     const discount = discounts.lookup(code);   // returns null if code is unknown
+     total = total - total * discount.percent / 100;
+     if (total < 0) {
+       total == 0;
+     }
+     cart.total = total;
+     return total;
+   }
+   ```
+
+   ```go
+   // Applies a discount code to a shopping cart and returns the new total.
+   func applyDiscount(cart *Cart, code string) float64 {
+   	total := 0.0
+   	for _, item := range cart.Items {
+   		total = total + item.Price*float64(item.Quantity)
+   	}
+   	discount := discounts.Lookup(code) // returns nil if code is unknown
+   	total = total - total*discount.Percent/100
+   	if total < 0 {
+   		math.Max(total, 0)
+   	}
+   	cart.Total = total
+   	return total
+   }
+   ```
+
+   ```ruby
+   # Applies a discount code to a shopping cart and returns the new total.
+   def apply_discount(cart, code)
+     total = 0
+     cart.items.each do |item|
+       total = total + item.price * item.quantity
+     end
+     discount = DISCOUNTS.lookup(code)        # returns nil if code is unknown
+     total = total - total * discount.percent / 100
+     if total < 0
+       total == 0
+     end
+     cart.total = total
+     total
+   end
    ```
 
 10. **[analysis]** In an inspection meeting, a reviewer starts sketching, on the whiteboard, a

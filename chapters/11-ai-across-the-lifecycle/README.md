@@ -12,9 +12,9 @@
 The headline claim of the moment is that AI writes the code now. The more useful claim is
 this: **AI changes where the hard part lives.** For decades the bottleneck was *producing*
 correct code fast enough. As producing gets cheap, the bottleneck moves to *deciding what
-to build* and *proving it works* — which are exactly the activities this book has been
-teaching. The engineer who internalized Chapters 1–10 is not made obsolete by agents; they
-are the person best positioned to *direct* them.
+to build* and *proving it works* — which are the very activities this book has been
+teaching. The engineer who internalized Chapters 1–10 is the person best positioned to
+*direct* the agents.
 
 ## 11.1 What AI Changes — and What It Doesn't
 
@@ -179,8 +179,8 @@ output produced faster than humans can vet it.[^11]
 > **Pitfall.** A 2023 controlled study found developers with an AI assistant wrote
 > *less secure* code while being *more confident* it was secure — a false sense of
 > safety.[^12]
-> Static analysis and human review are not optional overhead in the AI era; they are the
-> brakes that make the speed usable.
+> In the AI era, static analysis and human review are the brakes that make the speed
+> usable.
 
 - **Human owns:** deciding *intent and trust* (does this change do what we meant?), and
   keeping review standards from eroding under volume. Precision/recall trade-offs for
@@ -204,6 +204,95 @@ But the deepest problem in testing survives untouched: the **oracle problem**. A
 test encodes *what the model thinks correct behavior is* — which may simply mirror a
 misunderstanding also baked into the generated code. Coverage numbers can look great while
 the tests assert the wrong thing.
+
+Chapter 9's `apply_discount` makes the failure concrete: suppose the billing spec says
+half-cent prices round *up*, while the generated code reaches for Python's `round` —
+banker's rounding — and the generated test asserts whatever the code already returns.
+
+```python
+def apply_discount(price, percent):     # AI-generated: Python round() = banker's rounding
+  return round(price * (1 - percent / 100), 2)
+
+def test_half_off():                    # AI-generated: asserts the code's own behavior
+  assert apply_discount(10.25, 50) == 5.12
+
+test_half_off()                         # passes — and every line of the unit is covered
+print(apply_discount(10.25, 50))        # 5.12; the billing spec says 5.13 (half up)
+```
+
+```java
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+public class OracleProblem {
+  static double applyDiscount(double price, double percent) {
+    return BigDecimal.valueOf(price * (1 - percent / 100))  // AI-generated: HALF_EVEN
+        .setScale(2, RoundingMode.HALF_EVEN).doubleValue(); // = banker's rounding
+  }
+
+  static void testHalfOff() {  // AI-generated: asserts the code's own behavior
+    if (applyDiscount(10.25, 50) != 5.12) throw new AssertionError();
+  }
+
+  public static void main(String[] args) {
+    testHalfOff();  // passes — and every line of the unit is covered
+    System.out.println(applyDiscount(10.25, 50)); // 5.12; the billing spec says 5.13
+  }
+}
+```
+
+```javascript
+const assert = require("node:assert");
+
+function applyDiscount(price, percent) {  // AI-generated: toFixed(2) rounds the stored
+  return Number((price * (1 - percent / 100)).toFixed(2)); // double: 8.575 is 8.5749…
+}
+
+function testHalfOff() {                  // AI-generated: asserts the code's own behavior
+  assert.strictEqual(applyDiscount(17.15, 50), 8.57);
+}
+
+testHalfOff();                           // passes — and every line of the unit is covered
+console.log(applyDiscount(17.15, 50));   // 8.57; the billing spec says 8.58 (half up)
+```
+
+```go
+package main
+
+import "fmt"
+
+func applyDiscount(price, percent float64) string { // AI-generated: %.2f rounds ties
+	return fmt.Sprintf("%.2f", price*(1-percent/100)) // to even — banker's rounding
+}
+
+func testHalfOff() { // AI-generated: asserts the code's own behavior
+	if applyDiscount(10.25, 50) != "5.12" {
+		panic("testHalfOff failed")
+	}
+}
+
+func main() {
+	testHalfOff()                         // passes — and every line of the unit is covered
+	fmt.Println(applyDiscount(10.25, 50)) // 5.12; the billing spec says 5.13 (half up)
+}
+```
+
+```ruby
+def apply_discount(price, percent)      # AI-generated: format %.2f rounds ties to
+  format("%.2f", price * (1 - percent / 100.0))  # even — banker's rounding
+end
+
+def test_half_off                       # AI-generated: asserts the code's own behavior
+  raise "test failed" unless apply_discount(10.25, 50) == "5.12"
+end
+
+test_half_off                           # passes — and every line of the unit is covered
+puts apply_discount(10.25, 50)          # 5.12; the billing spec says 5.13 (half up)
+```
+
+Coverage looked great; the oracle was wrong. The suite agrees with the code because both
+encode the same rounding rule, and only a reviewer who knows the billing spec can see that
+`5.125` should have become `5.13`.
 
 - **Human owns:** the **oracle** — the specification of correct behavior — and the coverage
   *criteria* that decide when testing is enough (statement/branch/MC/DC, §9.3–9.5).
@@ -357,7 +446,7 @@ Synthesizing the evidence and the manifesto into working advice:
 AI does not repeal the four pressures of software engineering; it *relocates* their weight.
 Producing code gets cheaper, so **deciding what to build and proving it works** — the
 subject of every chapter in this book — becomes the differentiator. The disciplines you
-learned are not made quaint by agents; they are promoted. Requirements become the prompt.
+learned are promoted, not made quaint. Requirements become the prompt.
 Specifications become the constitution. Tests and reviews become the trust layer over a
 firehose of generated code. Metrics become the proof that an *outcome*, not just an output,
 was delivered.

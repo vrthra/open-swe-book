@@ -71,6 +71,15 @@ The chapters group into arcs:
   goal (Chapters 8–9 for quality practices, 12 for CI/CD); chapters cross-reference the
   earlier ideas they depend on.
 
+## Code examples in five languages
+
+Every code example in the book is provided in **Python, Java, JavaScript, Go, and
+Ruby**, behind language tabs — pick your language once and the whole site follows
+(or open any page with `?lang=go` to pre-select one). Python appears first because it
+reads closest to pseudocode. Each snippet also lives in [`code/`](code/) as a runnable
+file with a test, executed by continuous integration on every change, and the EPUB
+editions come one per language with identical prose.
+
 ## Table of contents
 
 Use the sidebar for the full linked table of contents (chapters and sections), or jump in:
@@ -88,7 +97,7 @@ Use the sidebar for the full linked table of contents (chapters and sections), o
 11. [Software Engineering in the Age of AI](chapters/11-ai-across-the-lifecycle/) — how AI reshapes every lifecycle stage, the productivity/quality/security evidence, and the o16g Outcome Engineering manifesto.
 12. [Delivery: CI/CD, DevOps, and Evolution](chapters/12-delivery/) — SaaS and the cloud, CI pipelines, continuous deployment (the Knight Capital and CrowdStrike case studies), security pipelines, DORA metrics, legacy code and technical debt.
 
-- [Appendix A: A Team Project](chapters/appendix-a-team-project/) — proposal, sprint and status reports, team reviews, and final-report templates.
+- [Appendix A: The Team Project](chapters/appendix-a-team-project/) — proposal, sprint and status reports, team reviews, and final-report templates.
 
 ## How to use this repository
 
@@ -106,29 +115,49 @@ Use the sidebar for the full linked table of contents (chapters and sections), o
 ## Building the book
 
 The chapters are plain Markdown and render on GitHub as‑is. To build a browsable
-website or PDF with [`mdBook`](https://rust-lang.github.io/mdBook/):
+website with [`mdBook`](https://rust-lang.github.io/mdBook/) (for a PDF, print the
+site's built-in print page from your browser):
 
 ```bash
-cargo install mdbook          # one-time
-mdbook serve                  # live preview at http://localhost:3000
-mdbook build                  # outputs static site to ./book-output
+cargo install mdbook mdbook-mermaid   # one-time
+mdbook serve                          # live preview at http://localhost:3000
+mdbook build                          # outputs static site to ./book-output
 ```
 
 `SUMMARY.md` is the mdBook table of contents; `book.toml` holds configuration.
 
 ## How this book was made (AI assistance)
 
-This book was drafted with substantial help from an AI assistant (Anthropic's Claude)
-working under the author's direction: the author set the scope, chapter progression, and
-course alignment, supplied source material and corrections, fact-checked claims against
-the primary sources cited in each chapter's *Open Resources* page, and edited the prose.
-The author reviews and stands behind the content. If you find an error, please
-[open an issue](https://github.com/tghastings/open-swe-book/issues) — whoever, human or
-model, introduced it.
+This book was written in collaboration with an AI assistant (Anthropic's Claude) under
+the author's direction. The author set the scope, chapter progression, and course
+alignment; supplied source material and corrections; fact-checked claims against the
+primary sources cited in each chapter's *Open Resources* page; and edited the prose
+throughout. The author has reviewed, and stands behind, every chapter. If you find an
+error, please [open an issue](https://github.com/tghastings/open-swe-book/issues),
+regardless of how it was introduced.
 
-Chapter 11 of this book teaches that professional AI use means disclosing the
-assistance, verifying the output, and owning the result. This note is that standard
-applied to the book itself.
+Chapter 11 teaches that professional AI use means disclosing the assistance, verifying
+the output, and owning the result. This note applies that standard to the book itself.
+
+## About the author
+
+**Thomas Hastings** teaches software engineering at the University of Colorado Colorado
+Springs. This book started as part of his combined undergraduate and graduate course,
+CS 4300/5300. He also serves as an assistant professor (reservist) at the United States
+Air Force Academy, where he teaches in the Department of Computer and Cyber Sciences.
+He earned his Ph.D. in Engineering and M.Eng. in Software Engineering from UCCS, and
+his B.S. from Colorado Christian University. His research focuses on open-source
+software security and software supply chains, including the continuous verification of
+components.
+
+The focus on testing, delivery, and running code in this book comes from real-world
+experience. Thomas has worked as a software engineer for over twenty years and is
+currently at Amazon Web Services. He keeps this book as an open, ongoing project. The
+views in this book are his own and do not reflect those of his employers.
+
+Links: [Google Scholar](https://scholar.google.com/citations?user=8iQ6Jt0AAAAJ) ·
+[tom.hastings.dev](https://tom.hastings.dev) ·
+[GitHub](https://github.com/tghastings)
 
 ## Citing this book
 
@@ -165,7 +194,9 @@ A single chapter (adjust `title`, `chapter`, and `url`):
 ```
 
 The `\url` in `note` needs `\usepackage{url}` (or `hyperref`) in your LaTeX preamble;
-with `biblatex` you can move it to a `urldate`/`addendum` field instead.
+with `biblatex` you can move it to a `urldate`/`addendum` field instead. If you use a
+classic BibTeX style (`plain`, `plainnat`), swap `@inbook` for `@incollection` — those
+styles ignore `booktitle` inside `@inbook`.
 
 ## License
 

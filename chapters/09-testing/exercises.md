@@ -53,14 +53,70 @@ answer.
 
    ```python
    def fizzbuzz(n):
-       if n % 15 == 0:
-           return "FizzBuzz"
-       elif n % 3 == 0:
-           return "Fizz"
-       elif n % 5 == 0:
-           return "Buzz"
-       else:
-           return str(n)
+     if n % 15 == 0:
+       return "FizzBuzz"
+     elif n % 3 == 0:
+       return "Fizz"
+     elif n % 5 == 0:
+       return "Buzz"
+     else:
+       return str(n)
+   ```
+
+   ```java
+   static String fizzbuzz(int n) {
+     if (n % 15 == 0) {
+       return "FizzBuzz";
+     } else if (n % 3 == 0) {
+       return "Fizz";
+     } else if (n % 5 == 0) {
+       return "Buzz";
+     } else {
+       return String.valueOf(n);
+     }
+   }
+   ```
+
+   ```javascript
+   function fizzbuzz(n) {
+     if (n % 15 === 0) {
+       return "FizzBuzz";
+     } else if (n % 3 === 0) {
+       return "Fizz";
+     } else if (n % 5 === 0) {
+       return "Buzz";
+     } else {
+       return String(n);
+     }
+   }
+   ```
+
+   ```go
+   func fizzbuzz(n int) string {
+   	if n%15 == 0 {
+   		return "FizzBuzz"
+   	} else if n%3 == 0 {
+   		return "Fizz"
+   	} else if n%5 == 0 {
+   		return "Buzz"
+   	} else {
+   		return strconv.Itoa(n)
+   	}
+   }
+   ```
+
+   ```ruby
+   def fizzbuzz(n)
+     if n % 15 == 0
+       "FizzBuzz"
+     elsif n % 3 == 0
+       "Fizz"
+     elsif n % 5 == 0
+       "Buzz"
+     else
+       n.to_s
+     end
+   end
    ```
 
    (a) Draw the control-flow graph (Mermaid or by hand), labeling each decision node and

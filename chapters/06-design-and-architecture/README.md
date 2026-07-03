@@ -51,7 +51,7 @@ helper function takes two arguments or three is a local matter you can change on
 afternoon and no one else will notice. Whether the system stores state in a single shared
 database or gives each service its own store is a decision that, once made and built upon,
 may take a year and a rewrite to reverse. **Architectural decisions are the ones that are
-expensive to change** — which is precisely why they deserve thought before, not after.
+expensive to change** — and that is why they deserve thought before, not after.
 
 ### 6.1.2 Design Includes Architecture
 
@@ -89,7 +89,7 @@ working at the *wrong* level of detail for the decision at hand. Jump to pixel�
 mockups or fully fleshed‑out classes too early and you make expensive commitments before
 you understand the problem — and you rob the people downstream of the judgment that is
 their job. Stay too vague ("redesign the reports section") and there is no shared object to
-reason about, so scope quietly explodes. Basecamp's *Shape Up* names a useful target
+reason about, so scope balloons unnoticed. Basecamp's *Shape Up* names a useful target
 between these failures: a design should be **rough** (visibly unfinished, so it invites
 change), **solved** (the main elements and their connections are worked out, not hand‑waved),
 and **bounded** (it states what is explicitly *out* of scope).[^2]
@@ -119,7 +119,7 @@ Concretely, a good architecture tends to have these properties.
   usually be met by many structures, but quality requirements rule most of them out.
 - **It makes likely changes cheap.** No architecture makes *every* change cheap; that is
   impossible, because reducing the cost of one kind of change usually raises the cost of
-  another. The art is to predict which changes are likely and arrange the walls so those
+  another. The trick is to predict which changes are likely and arrange the walls so those
   changes stay local. An architecture that isolates the parts most likely to change — the
   user interface, the tax rules, the payment provider — earns its keep for years.
 - **It can be understood.** An architecture that no one on the team can hold in their head
@@ -149,7 +149,7 @@ A **module** is a unit of software with a boundary: a set of things it provides 
 rest of the system and a set of things it keeps to itself. The value of a module comes
 almost entirely from what it *hides*.
 
-**Information hiding** is the discipline of designing each module around a decision — often
+**Information hiding** is the practice of designing each module around a decision — often
 a design decision likely to change — and hiding that decision behind an interface, so that
 the rest of the system depends on the *interface* and not on the decision.[^5] The classic
 example: a module that stores user records should expose operations like `find(id)` and
@@ -158,6 +158,212 @@ remote service. Because callers never learned how records are stored, you can sw
 files to a database without touching a single caller. The hidden decision was free to
 change because it was, in fact, hidden.
 
+Here is that module, its secret — records live in a JSON file — behind the interface.
+
+```python
+import json, os
+
+class UserStore:
+  def __init__(self, path):
+    self._path = path                     # the secret: a JSON file
+
+  def find(self, id):
+    return self._load().get(id)
+
+  def save(self, record):
+    users = self._load()
+    users[record["id"]] = record
+    with open(self._path, "w") as f:
+      json.dump(users, f)
+
+  def _load(self):
+    if not os.path.exists(self._path):
+      return {}
+    with open(self._path) as f:
+      return json.load(f)
+```
+
+```java
+interface UserStore {                          // the promise, spelled out as a type
+  User find(String id);
+  void save(User record);
+}
+record User(String id, String name) {}
+record FileUserStore(Path dir) implements UserStore { // the secret: one file per user
+  public User find(String id) {
+    try { return new User(id, Files.readString(dir.resolve(id))); }
+    catch (IOException e) { return null; }     // unknown id — no such file
+  }
+  public void save(User record) {
+    try { Files.writeString(dir.resolve(record.id()), record.name()); }
+    catch (IOException e) { throw new UncheckedIOException(e); }
+  }
+}
+
+class MemoryUserStore implements UserStore {   // the new secret: an in-memory table
+  private final Map<String, User> records = new HashMap<>();
+  public User find(String id) { return records.get(id); }
+  public void save(User record) { records.put(record.id(), record); }
+}
+
+UserStore store = new FileUserStore(dir);   // or new MemoryUserStore() — can't tell
+store.save(new User("u7", "Dana"));         // the identical caller, untouched
+System.out.println(store.find("u7").name()); // Dana
+```
+
+```javascript
+const fs = require("node:fs"), assert = require("node:assert");
+
+class UserStore {                       // the secret: a JSON file
+  constructor(path) { this.path = path; }
+  find(id) { return this.load()[id]; }
+  save(record) {
+    const users = { ...this.load(), [record.id]: record };
+    fs.writeFileSync(this.path, JSON.stringify(users));
+  }
+  load() {
+    if (!fs.existsSync(this.path)) return {};
+    return JSON.parse(fs.readFileSync(this.path, "utf8"));
+  }
+}
+
+class MemoryUserStore {                 // the new secret: an in-memory table.
+  constructor() { this.records = {}; }  // No interface to declare — any object
+  find(id) { return this.records[id]; } // shaped like find/save will do.
+  save(record) { this.records[record.id] = record; }
+}
+
+for (const store of [new UserStore("users.json"), new MemoryUserStore()]) {
+  store.save({ id: "u7", name: "Dana" });        // the identical caller, untouched
+  assert.strictEqual(store.find("u7").name, "Dana");
+}
+```
+
+```go
+type User struct{ ID, Name string }
+type UserStore interface { // the promise, spelled out as a type
+	Find(id string) User
+	Save(record User)
+}
+
+type FileStore struct{ dir string } // the secret: one small file per user
+func (s FileStore) Find(id string) User {
+	name, _ := os.ReadFile(s.dir + "/" + id)
+	return User{id, string(name)}
+}
+func (s FileStore) Save(record User) {
+	os.WriteFile(s.dir+"/"+record.ID, []byte(record.Name), 0o644)
+}
+
+// MemStore never says "implements UserStore" — Go interfaces are satisfied implicitly.
+type MemStore map[string]User          // the new secret: an in-memory table
+func (s MemStore) Find(id string) User { return s[id] }
+func (s MemStore) Save(record User)    { s[record.ID] = record }
+
+for _, store := range []UserStore{FileStore{os.TempDir()}, MemStore{}} {
+	store.Save(User{ID: "u7", Name: "Dana"})
+	fmt.Println(store.Find("u7").Name) // Dana — the identical caller, untouched
+}
+```
+
+```ruby
+require "json"
+
+class UserStore                        # the secret: a JSON file
+  def initialize(path) = @path = path
+  def find(id) = load[id]
+  def save(record)
+    File.write(@path, JSON.dump(load.merge(record["id"] => record)))
+  end
+  private def load
+    File.exist?(@path) ? JSON.parse(File.read(@path)) : {}
+  end
+end
+
+class MemoryUserStore                  # the new secret: an in-memory table.
+  def initialize = @records = {}       # There is no interface to declare or
+  def find(id) = @records[id]          # implement — any object that answers
+  def save(record) = @records[record["id"]] = record   # find/save will do.
+end
+
+[UserStore.new("users.json"), MemoryUserStore.new].each do |store|
+  store.save({ "id" => "u7", "name" => "Dana" })  # the identical caller, untouched
+  raise unless store.find("u7")["name"] == "Dana"
+end
+```
+
+When the file becomes the bottleneck, the secret changes and the promise does not.
+
+```python
+class UserStore:
+  def __init__(self):
+    self._records = {}                    # the new secret: an in-memory table
+
+  def find(self, id):
+    return self._records.get(id)
+
+  def save(self, record):
+    self._records[record["id"]] = record
+```
+
+```java
+class MemoryUserStore implements UserStore {   // the new secret: an in-memory table
+  private final Map<String, User> records = new HashMap<>();
+  public User find(String id) { return records.get(id); }
+  public void save(User record) { records.put(record.id(), record); }
+}
+```
+
+```javascript
+class MemoryUserStore {                 // the new secret: an in-memory table.
+  constructor() { this.records = {}; }  // No interface to declare — any object
+  find(id) { return this.records[id]; } // shaped like find/save will do.
+  save(record) { this.records[record.id] = record; }
+}
+```
+
+```go
+// MemStore never says "implements UserStore" — Go interfaces are satisfied implicitly.
+type MemStore map[string]User          // the new secret: an in-memory table
+func (s MemStore) Find(id string) User { return s[id] }
+func (s MemStore) Save(record User)    { s[record.ID] = record }
+```
+
+```ruby
+class MemoryUserStore                  # the new secret: an in-memory table.
+  def initialize = @records = {}       # There is no interface to declare or
+  def find(id) = @records[id]          # implement — any object that answers
+  def save(record) = @records[record["id"]] = record   # find/save will do.
+end
+```
+
+A caller that relied only on the promise runs unchanged against either version.
+
+```python
+store.save({"id": "u7", "name": "Dana"})
+assert store.find("u7")["name"] == "Dana"
+```
+
+```java
+store.save(new User("u7", "Dana"));
+System.out.println(store.find("u7").name()); // Dana
+```
+
+```javascript
+store.save({ id: "u7", name: "Dana" });
+assert.strictEqual(store.find("u7").name, "Dana");
+```
+
+```go
+store.Save(User{ID: "u7", Name: "Dana"})
+fmt.Println(store.Find("u7").Name) // Dana
+```
+
+```ruby
+store.save({ "id" => "u7", "name" => "Dana" })
+raise unless store.find("u7")["name"] == "Dana"
+```
+
 **Encapsulation** is the mechanism that enforces information hiding: the language keeps
 the private parts of a module unreachable from outside, so that clients *cannot* accidentally
 depend on internals even if they wanted to. A field marked `private`, a function not
@@ -165,8 +371,8 @@ exported from its file, a class whose only public surface is a small set of meth
 are encapsulation. Information hiding is the *intent* ("callers should not know how records
 are stored"); encapsulation is the *enforcement* ("and the compiler will stop them").
 
-The reason this matters is not tidiness. It is that **a module's interface is a promise,
-and its implementation is a secret.** As long as you keep the promise, you may change the
+The reason this matters is not tidiness. **A module's interface is a promise, and its
+implementation is a secret.** As long as you keep the promise, you may change the
 secret freely, and no one who relied only on the promise can break. The size of the promise
 you make — the "surface area" of the interface — is therefore the size of the commitment
 you can never quietly walk back. Small, deliberate interfaces are small, deliberate
@@ -175,7 +381,7 @@ public method is a hostage to fortune.
 
 > **Principle.** Design each module around a secret. Ask "what decision does this module
 > hide, such that if that decision changed, only this module would change?" A module that
-> hides nothing is not a module; it is just a place where code happens to sit.
+> hides nothing is just a place where code happens to sit.
 
 ### 6.2.2 Coupling and Cohesion
 
@@ -184,7 +390,7 @@ decomposition is good: **coupling** between modules and **cohesion** within each
 
 **Coupling** is the strength of the dependency between two modules — how much one must know
 about the other, and how badly a change to one ripples into the other. You want it **low**.
-Coupling is not binary; it comes in kinds, and the kinds form a ladder from worst to best.[^7]
+It also comes in kinds, and the kinds form a ladder from worst to best.[^7]
 Knowing the ladder lets you diagnose *why* a dependency hurts, not just that it does.
 
 - **Content coupling (worst).** One module reaches inside another and manipulates its
@@ -234,8 +440,8 @@ coupling). Chasing one gets you the other.
 
 ### 6.2.3 Design Guidelines for Modules
 
-The two measures above become actionable through a handful of guidelines. None is a law;
-each is a heuristic that pays off far more often than not.
+The two measures above become actionable through a handful of guidelines. Treat them as
+heuristics rather than laws: each pays off far more often than not.
 
 1. **Give each module one responsibility.** You should be able to state a module's job in a
    single sentence with no "and." This is the *single responsibility* idea, and it is
@@ -260,8 +466,9 @@ each is a heuristic that pays off far more often than not.
    over-engineering, its own kind of accidental complexity).
 
 Several of these guidelines circulate in industry under memorable names, and you should
-recognize them when colleagues use them. The best-known bundle is **SOLID**, five
-object-oriented design principles whose initials spell the mnemonic:[^8]
+recognize them when colleagues use them. The best-known bundle is **SOLID** — five
+object-oriented design principles Robert C. Martin catalogued,[^8] later named for their
+initials:
 
 - **S — Single responsibility:** guideline 1 above — one stateable job per module.
 - **O — Open-closed:** a module should be **open for extension, closed for
@@ -278,8 +485,8 @@ object-oriented design principles whose initials spell the mnemonic:[^8]
   implementations, and never let stable policy depend on volatile detail.
 
 A companion rule with its own name is **DRY — Don't Repeat Yourself**: every piece of
-knowledge in the system should have a single, authoritative representation.[^11] The problem
-with duplicated logic is not the wasted keystrokes; it is that a future change must now be
+knowledge in the system should have a single, authoritative representation.[^11] With
+duplicated logic, the wasted keystrokes are the least of it: a future change must now be
 found and fixed in two places, and eventually someone will fix only one.
 
 > **Comments deserve design too.** Write comments *with* the code, not afterward — a
@@ -354,8 +561,8 @@ real content of the diagram, and they are the subject of the next section.
 
 ### 6.3.2 Relationships between Classes
 
-The lines in a class diagram are not decoration; each *shape* means something precise about
-how two classes are connected and how tightly.[^12] Getting them right is how a diagram
+The lines in a class diagram carry precise meanings — each *shape* tells you how two
+classes are connected and how tightly.[^12] Getting them right is how a diagram
 communicates coupling.
 
 - **Association** (a plain solid line) says two classes are connected: objects of one
@@ -382,7 +589,7 @@ communicates coupling.
 (exactly one), `0..*` or `*` (zero or more), `1..*` (one or more), `0..1` (optional). In
 the diagram above, `Conversation "1" *-- "0..*" Message` reads "one conversation is composed
 of zero or more messages, and each message belongs to exactly one conversation."
-Multiplicities are not pedantry: `1` versus `0..1` versus `0..*` is often the difference
+Multiplicities matter: `1` versus `0..1` versus `0..*` is often the difference
 between a null-pointer bug, a missing foreign key, and a correct schema.
 
 > **Pitfall.** Do not agonize over aggregation versus composition in every diagram — even
@@ -411,7 +618,7 @@ flowchart TB
     LOG["Logical View<br/>functionality; classes,<br/>responsibilities<br/>(end user)"]
     DEV["Development View<br/>code organization;<br/>modules, packages, layers<br/>(programmer)"]
     PROC["Process View<br/>runtime; processes,<br/>threads, concurrency<br/>(integrator)"]
-    PHYS["Physical View<br/>deployment; nodes,<br/>networks, hardware<br/>(operations)"]
+    PHYS["Physical View<br/>deployment; nodes,<br/>networks, hardware<br/>(system engineers)"]
     SC --- LOG
     SC --- DEV
     SC --- PROC
@@ -581,7 +788,7 @@ flowchart TB
     class WEB,CONV,USERS,MODEL,TRANSPORT,PERSIST m;
 ```
 
-Two things about this hierarchy are worth internalizing. First, **the domain model depends
+Two things stand out in this hierarchy. First, **the domain model depends
 on nothing below it.** The `domain-model` module — the classes from §6.3 — knows nothing
 about databases or WebSockets. That is deliberate: the domain is the most stable, most
 valuable part of the system, so it must not be dragged along when a volatile detail changes.
@@ -598,6 +805,130 @@ those same abstractions from below. Swapping the database becomes a change confi
 module — exactly the "make likely changes cheap" property from §6.1.3, realized in the code
 structure rather than merely wished for on a slide.
 
+In code, the inversion is small: the application layer owns the `Transport` interface, and
+the real transport and a test fake both conform to it from below.
+
+```python
+from typing import Protocol
+
+class Transport(Protocol):                 # owned by the application layer
+  def deliver(self, to: str, body: str) -> None: ...
+
+class MessageRouter:                       # application code sees only the interface
+  def __init__(self, transport: Transport):
+    self._transport = transport
+
+  def route(self, message: dict) -> None:
+    self._transport.deliver(message["to"], message["body"])
+
+class WebSocketTransport:                  # infrastructure, conforming from below
+  def __init__(self, socket):
+    self._socket = socket
+
+  def deliver(self, to: str, body: str) -> None:
+    self._socket.send(f"{to}:{body}".encode())
+
+class FakeTransport(list):                 # a two-line test double
+  def deliver(self, to, body): self.append((to, body))
+
+fake = FakeTransport()
+MessageRouter(fake).route({"to": "dana", "body": "you are on call"})
+assert fake == [("dana", "you are on call")]
+```
+
+```java
+interface Transport {                        // owned by the application layer
+  void deliver(String to, String body);
+}
+record MessageRouter(Transport transport) {  // application code sees only the interface
+  void route(Map<String, String> message) {
+    transport.deliver(message.get("to"), message.get("body"));
+  }
+}
+record WebSocketTransport(OutputStream socket) implements Transport { // infrastructure,
+  public void deliver(String to, String body) {                      // from below
+    try { socket.write((to + ":" + body).getBytes()); }
+    catch (IOException e) { throw new UncheckedIOException(e); }
+  }
+}
+class FakeTransport extends ArrayList<String> implements Transport { // a two-line double
+  public void deliver(String to, String body) { add(to + ":" + body); }
+}
+
+var fake = new FakeTransport();
+new MessageRouter(fake).route(Map.of("to", "dana", "body", "you are on call"));
+System.out.println(fake); // [dana:you are on call]
+```
+
+```javascript
+const assert = require("node:assert");
+
+class MessageRouter {                  // application code sees only the deliver() shape
+  constructor(transport) { this.transport = transport; }
+  route(message) { this.transport.deliver(message.to, message.body); }
+}
+
+class WebSocketTransport {             // infrastructure, conforming from below.
+  constructor(socket) { this.socket = socket; }      // No Transport type to declare —
+  deliver(to, body) { this.socket.send(`${to}:${body}`); } // any deliver()-shaped
+}                                                          // object will do.
+
+class FakeTransport extends Array {    // a two-line test double
+  deliver(to, body) { this.push([to, body]); }
+}
+
+const fake = new FakeTransport();
+new MessageRouter(fake).route({ to: "dana", body: "you are on call" });
+assert.deepStrictEqual([...fake], [["dana", "you are on call"]]);
+```
+
+```go
+type Transport interface { // owned by the application layer
+	Deliver(to, body string)
+}
+
+type MessageRouter struct{ transport Transport } // sees only the interface
+func (r MessageRouter) Route(message map[string]string) {
+	r.transport.Deliver(message["to"], message["body"])
+}
+
+type WebSocketTransport struct{ sock io.Writer } // infrastructure, conforming from below
+func (t WebSocketTransport) Deliver(to, body string) {
+	t.sock.Write([]byte(to + ":" + body))
+}
+
+// FakeTransport never says "implements Transport" — satisfying it is enough.
+type FakeTransport struct{ sent []string }       // a two-line test double
+func (t *FakeTransport) Deliver(to, body string) { t.sent = append(t.sent, to+":"+body) }
+
+fake := &FakeTransport{}
+MessageRouter{fake}.Route(map[string]string{"to": "dana", "body": "you are on call"})
+fmt.Println(fake.sent) // [dana:you are on call]
+```
+
+```ruby
+class MessageRouter                    # application code sees only the deliver method
+  def initialize(transport) = @transport = transport
+  def route(message) = @transport.deliver(message["to"], message["body"])
+end
+
+class WebSocketTransport               # infrastructure, conforming from below.
+  def initialize(socket) = @socket = socket        # No Transport type to declare —
+  def deliver(to, body) = @socket.write("#{to}:#{body}")  # any object that answers
+end                                                       # deliver will do.
+
+class FakeTransport < Array            # a two-line test double
+  def deliver(to, body) = push([to, body])
+end
+
+fake = FakeTransport.new
+MessageRouter.new(fake).route({ "to" => "dana", "body" => "you are on call" })
+raise unless fake == [["dana", "you are on call"]]
+```
+
+The `MessageRouter` can now be exercised in a test without opening a socket — the same
+substitution that lets the team change transports later.
+
 ## 6.6 Conclusion
 
 Architecture is what you get when you make the expensive decisions on purpose. Its core is a
@@ -610,7 +941,7 @@ the 4+1 views let you *describe* the system to different audiences without drown
 them; and an architecture document makes the whole thing *durable* — a decision the team can
 respect instead of a story only one person remembers.
 
-Two ideas are worth carrying into the rest of the book. First, architecture serves *quality
+Carry two ideas into the rest of the book. First, architecture serves *quality
 requirements*: you choose a structure to buy performance, availability, security, or —
 above all — cheap change, and you pay for it consciously in the qualities you did not
 choose. Second, architecture is only real to the extent that the code obeys it; a drawn

@@ -4,7 +4,7 @@
 > requirements, design for change, review code, test thoroughly. This chapter asks a
 > different question: *how do you know whether it worked?* Opinions about quality are
 > cheap and contradictory. Measurement replaces "I think the build got better" with "the
-> defect-removal efficiency rose from 82% to 91%, and here is the confidence interval."
+> defect-removal efficiency rose from 84% to 91%, and here is the confidence interval."
 > This is the most quantitative chapter in the book. We build the statistical toolkit —
 > scales of measurement, boxplots, variance, distributions, confidence intervals, and
 > linear regression — and we ground every formula in a small dataset we carry from start
@@ -38,10 +38,10 @@ everything abstract that follows.
 An **attribute** is a property of some entity you care about: the *size* of a module,
 the *duration* of a build, the *effort* to fix a bug, the *satisfaction* of a customer.
 A **metric** (more precisely, a *measure*) is a rule that assigns a number or symbol to
-an attribute so that the assignment preserves something true about the world. That last
-clause is the whole game. If module A really is more complex than module B, then a valid
+an attribute so that the assignment preserves something true about the world. Everything rides on
+that last clause. If module A really is more complex than module B, then a valid
 complexity metric must assign A a larger number than B. When the numbers stop tracking
-the reality, the metric has failed, no matter how precisely it is computed.
+the reality, the metric has failed, no matter how carefully it is computed.
 
 Measurement theory names three entities you should keep distinct:
 
@@ -74,8 +74,8 @@ measuring. A useful metric passes several tests at once:
    decision it informs. A metric that needs a week of manual effort per release will not
    survive contact with a deadline.
 4. **Robust against gaming.** The moment a metric becomes a target for people's
-   incentives, they optimize the metric rather than the goal. This is **Goodhart's Law**,
-   and it is not a footnote — it is the single most common way metrics programs go wrong.[^1]
+   incentives, they optimize the metric rather than the goal. This is **Goodhart's Law** —
+   the single most common way metrics programs go wrong.[^1]
 
 > **Pitfall.** Reward developers for "lines of code written" and you will get more, longer,
 > more duplicated code. Reward testers for "number of bugs found" and you will get a flood
@@ -155,14 +155,14 @@ characteristics — functional suitability, performance efficiency, compatibilit
 interaction capability, reliability, security, maintainability, flexibility, and safety —
 each subdivided further. (The widely cited 2011 edition had eight, with *usability* and
 *portability* where the current edition has *interaction capability* and *flexibility*;
-taxonomies get revised, which is itself a lesson about measurement.)[^3] You do not need to
-memorize the taxonomy; you need the habit it encodes: *before you measure quality, say
+taxonomies get revised, which is itself a lesson about measurement.)[^3] Memorizing the
+taxonomy matters less than the habit it encodes: *before you measure quality, say
 which quality.*
 
 > **Principle.** There is no single "quality score." Different stakeholders optimize
 > different forms of quality, and improving one can degrade another (heavy security
 > hardening can hurt usability). State which form you mean, whose viewpoint it takes, and
-> why it matters — exactly the discipline GQM enforces.
+> why it matters — the discipline GQM enforces.
 
 ### 10.2.2 Measuring Customer Support
 
@@ -194,7 +194,7 @@ attribute measured across many entities, like our eleven defect counts. A **biva
 data set pairs two attributes per entity (module size *and* defect count), which is what
 regression needs. Before you compute a single statistic, look at the data. A number
 summary can hide a shape; a picture reveals it. The rest of §10.3 covers displays for
-*categorical* structure and *schedules*; §10.6 covers displays for *dispersion*.
+*categorical* structure, *schedules*, and *uncertainty*; §10.6 covers displays for *dispersion*.
 
 ### 10.3.2 Scales of Measurement
 
@@ -281,7 +281,7 @@ gantt
 
 Read it the way a manager does: the *Measure* tasks run in parallel at the start; nothing
 in *Improve* can begin until *Set target DRE* finishes; and *Re-measure* cannot start
-until *Add integration tests* is done, making the review-test-remeasure chain the
+until *Add integration tests* is done, making the analyze-test-remeasure chain the
 critical path. If any task on that chain slips, the whole quarter slips. Gantt charts are
 about *time and dependency*, not quantity — which is what distinguishes them from bar
 charts.
@@ -290,7 +290,7 @@ charts.
 
 The progress charts most teams use — a **burndown** of remaining tasks, or a "percent
 done" bar — share a blind spot: they measure *quantity remaining* and silently assume you
-already know all the work. But the riskiest work is exactly the work you *haven't figured
+already know all the work. But the riskiest work is the work you *haven't figured
 out yet*, and a task list often *grows* as you discover what a problem really involves. A
 burndown that ticks down looks reassuring right up until the unknown you never listed
 blows up the schedule.
@@ -380,7 +380,7 @@ is the share your internal nets caught.
 DRE can also be computed *per phase* to show where defects leak through. If a phase
 receives defects, removes some, and passes the rest downstream, its **phase DRE** is
 defects removed in the phase divided by defects present when the phase began. Low phase
-DRE for, say, code review tells you *where* to invest. Two cautions make DRE honest.
+DRE for, say, code review tells you *where* to invest. Two cautions keep DRE trustworthy.
 First, you only know $D_{\text{after}}$ after enough time has passed — DRE for a release
 is provisional until its defects have had time to surface (often you fix a measurement
 window, like six months). Second, DRE rewards finding your own bugs, so it resists the
@@ -633,6 +633,97 @@ at the boxplot's IQR alongside it. (If these eleven values were the entire popul
 rather than a sample, you would divide by $n = 11$ to get the population variance
 $\sigma^2 = 342/11 \approx 31.1$.)
 
+You can check the arithmetic with the standard library's `statistics` module:
+
+```python
+import statistics
+
+cfds = [2, 4, 5, 5, 7, 8, 9, 10, 12, 14, 23]
+
+s = statistics.stdev(cfds)       # divides by n - 1 (Bessel's correction)
+sigma = statistics.pstdev(cfds)  # divides by n
+
+print(f"s     = {s:.2f}")      # 5.85 — matches the hand computation
+print(f"sigma = {sigma:.2f}")  # 5.58
+```
+
+```java
+public class BesselStdev {
+  public static void main(String[] args) {
+    double[] cfds = {2, 4, 5, 5, 7, 8, 9, 10, 12, 14, 23};
+
+    double mean = 0;
+    for (double x : cfds) mean += x;
+    mean /= cfds.length;
+    double ss = 0;  // sum of squared deviations from the mean
+    for (double x : cfds) ss += (x - mean) * (x - mean);
+
+    double s = Math.sqrt(ss / (cfds.length - 1));  // divides by n - 1 (Bessel)
+    double sigma = Math.sqrt(ss / cfds.length);    // divides by n
+
+    System.out.printf("s     = %.2f%n", s);      // 5.85 — matches the hand computation
+    System.out.printf("sigma = %.2f%n", sigma);  // 5.58
+  }
+}
+```
+
+```javascript
+const cfds = [2, 4, 5, 5, 7, 8, 9, 10, 12, 14, 23];
+
+const mean = cfds.reduce((sum, x) => sum + x, 0) / cfds.length;
+const ss = cfds.reduce((sum, x) => sum + (x - mean) ** 2, 0);
+
+const s = Math.sqrt(ss / (cfds.length - 1)); // divides by n - 1 (Bessel's correction)
+const sigma = Math.sqrt(ss / cfds.length);   // divides by n
+
+console.log(`s     = ${s.toFixed(2)}`);     // 5.85 — matches the hand computation
+console.log(`sigma = ${sigma.toFixed(2)}`); // 5.58
+```
+
+```go
+package main
+
+import (
+	"fmt"
+	"math"
+)
+
+func main() {
+	cfds := []float64{2, 4, 5, 5, 7, 8, 9, 10, 12, 14, 23}
+	mean := 0.0
+	for _, x := range cfds {
+		mean += x
+	}
+	mean /= float64(len(cfds))
+	ss := 0.0 // sum of squared deviations from the mean
+	for _, x := range cfds {
+		ss += (x - mean) * (x - mean)
+	}
+
+	s := math.Sqrt(ss / float64(len(cfds)-1)) // divides by n - 1 (Bessel)
+	sigma := math.Sqrt(ss / float64(len(cfds)))
+
+	fmt.Printf("s     = %.2f\n", s)     // 5.85 — matches the hand computation
+	fmt.Printf("sigma = %.2f\n", sigma) // 5.58
+}
+```
+
+```ruby
+cfds = [2, 4, 5, 5, 7, 8, 9, 10, 12, 14, 23]
+
+mean = cfds.sum.to_f / cfds.length
+ss = cfds.sum { |x| (x - mean)**2 }
+
+s = Math.sqrt(ss / (cfds.length - 1)) # divides by n - 1 (Bessel's correction)
+sigma = Math.sqrt(ss / cfds.length)   # divides by n
+
+puts format('s     = %.2f', s)      # 5.85 — matches the hand computation
+puts format('sigma = %.2f', sigma)  # 5.58
+```
+
+One warning: NumPy's `np.std()` defaults to `ddof=0` and silently gives you the population
+version (5.58 here); pass `ddof=1` when your data are a sample.
+
 ### 10.7.2 Discrete Probability Distribution
 
 To reason about data you *have not yet seen*, you need a model of how values occur: a
@@ -729,7 +820,7 @@ practical rule follows directly:
 
 ### 10.8.1 Definition of Confidence Interval
 
-A sample mean is a single guess; a **confidence interval** is an honest guess *with error
+A sample mean is a single guess; a **confidence interval** is a guess *with error
 bars*. It is a range, computed from your sample, that is likely to contain the true
 population mean. A **95% confidence interval** is built by a procedure that, over many
 repeated samples, brackets the true mean 95% of the time.
@@ -801,12 +892,12 @@ $$
 $$
 
 Now interpret Northwind's result. The "before" quarter's true mean CFD rate plausibly lies
-anywhere from about 5 to 13 defects per release. If the "after" quarter's mean of, say, 4.8
-falls *below* this interval — and the after-interval likewise excludes the before-mean —
+anywhere from about 5 to 13 defects per release. If the "after" quarter's mean of, say, 4.5
+raw defects per release falls *below* this interval — and the after-interval likewise excludes the before-mean —
 the improvement is unlikely to be noise, and you can report it as real with quantified
-confidence. If the intervals overlap heavily, the honest conclusion is "we cannot yet
+confidence. If the intervals overlap heavily, the right conclusion is "we cannot yet
 distinguish the improvement from ordinary release-to-release variation; collect more data."
-That is exactly the discipline §10.5.4 demanded: a confidence interval turns "quality
+That is what §10.5.4 demanded: a confidence interval turns "quality
 improved" from a hope into a defensible finding — or an honest *not yet*.
 
 > **Principle.** Never report a before/after change without a confidence interval or an
@@ -901,7 +992,7 @@ the range of your data. Check the fit by residuals:
 | 8  | 13 | 14 | $-1$ |
 | 10 | 18 | 17 | $+1$ |
 
-The residuals sum to zero (they always do for OLS) and are small. The **sum of squared
+The residuals sum to zero (they always do with an intercept) and are small. The **sum of squared
 errors** is $\text{SSE} = 0^2+1^2+(-1)^2+(-1)^2+1^2 = 4$. To judge fit, compare it to the
 total variation $\text{SST} = \sum(y_i-\bar y)^2 = 36+4+1+4+49 = 94$. The
 **coefficient of determination** is
@@ -944,9 +1035,8 @@ Used well, metrics close the loop that began in Chapter 1: they tell you, with e
 rather than opinion, whether your requirements, design, reviews, and tests are actually
 producing software that works — and whether it is getting better. Used badly, they become
 theater: dashboards no one reads, targets everyone games, averages that hide the story.
-The difference is not statistical sophistication. It is the discipline to start from a
-goal, to say what you mean by quality, and to never report a change without its error
-bars.
+The difference is discipline, not statistical sophistication: start from a goal, say
+what you mean by quality, and never report a change without its error bars.
 
 ---
 

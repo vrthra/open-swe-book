@@ -80,7 +80,7 @@ language. A handful of recurring challenges account for most requirements failur
 - **The unstated obvious.** Stakeholders omit what is obvious *to them*. "Of course the
   system must handle two clinicians sharing a patient" goes unsaid — until it breaks.
 - **Solutions masquerading as needs.** As above, users hand you designs. Accept them
-  uncritically and you inherit their blind spots.
+  uncritically and you inherit everything the user overlooked.
 - **Conflicting stakeholders.** The front desk wants speed; compliance wants audit trails;
   the sponsor wants low cost. These pull in different directions, and no phrasing makes the
   conflict disappear. Someone must *decide*, and requirements work makes the conflict
@@ -93,7 +93,7 @@ language. A handful of recurring challenges account for most requirements failur
 
 None of these are solved by working harder at the same technique. They are managed by
 *combining* techniques — interviews plus observation plus prototypes plus review — so that
-each one's blind spot is covered by another's strength.
+what one misses another catches.
 
 ### 3.1.3 Kinds of Requirements
 
@@ -191,8 +191,8 @@ are domains where it is exactly right. When the cost of a late change is enormou
 system is safety‑critical — avionics, medical devices, spacecraft, systems bound by a
 regulatory certification — you *cannot* "ship and see." You must reason carefully about the
 requirements up front, because a failure in the field is catastrophic and a change after
-certification is ruinously expensive. In those worlds, a rigorous specification is not
-bureaucracy; it is the cheapest place to catch a life‑threatening mistake.
+certification is ruinously expensive. In those worlds, a rigorous specification is the
+cheapest place to catch a life‑threatening mistake.
 
 Most real projects blend the two: a stable, carefully specified core (the things that must
 not be wrong) surrounded by an agile, iterative shell (the things you will learn by trying).
@@ -232,40 +232,40 @@ There is no single technique that reaches all three kinds of needs, so skilled t
 triangulate. Each of the main methods has a characteristic strength and a matching blind
 spot:
 
-- **Interviews.** Direct and flexible; great for stated needs and stakeholder goals. Blind
-  spot: people rationalize and misremember what they actually do. What people *say* they do
-  and what they *do* often differ.
+- **Interviews.** Direct and flexible; great for stated needs and stakeholder goals.
+  Weakness: people rationalize and misremember what they actually do. What people *say*
+  they do and what they *do* often differ.
 - **Observation (contextual inquiry).**[^4] Watch users do the real task in their real
   environment. Superb for tacit and implied needs — you see the sticky note on the monitor,
-  the workaround, the double‑entry no one mentioned. Blind spot: expensive, and observation
+  the workaround, the double‑entry no one mentioned. Weakness: expensive, and observation
   can change behavior.
 - **Surveys.** Cheap at scale; good for prioritizing among *known* options and quantifying
-  how common a need is. Blind spot: useless for discovering needs you did not already think
+  how common a need is. Weakness: useless for discovering needs you did not already think
   to ask about.
 - **Prototypes and demos.** Show something concrete and watch the reaction. The single best
   tool for latent needs, because a person who cannot describe what they want can almost
-  always react to what is in front of them. Blind spot: users may fixate on the prototype's
+  always react to what is in front of them. Weakness: users may fixate on the prototype's
   incidental choices.
 - **Brainstorming (blue-sky sessions).** Gather many stakeholders and think big: during
   the session, *no idea is ruled out or criticized*, and everything is captured — the goal
   is quantity first, judgment second, because premature filtering kills the unusual idea
   that turns out to matter. Keep the focus on the core of what the software is supposed to
   do, then reconvene later, with cooler heads, to filter and prioritize what the session
-  produced. Blind spot: without that second, critical pass, a brainstorm yields a wish
+  produced. Weakness: without that second, critical pass, a brainstorm yields a wish
   list, not requirements.
 - **Role play.** A developer *pretends to be the software* while the customer walks
   through using it: "I'd click here… no, it should already show today's schedule." The
   customer's instructions — and especially their corrections — are requirements spoken
   aloud. Write everything down during the session, then split the notes afterward into
-  requirements and open questions. Blind spot: you only exercise the workflows the
+  requirements and open questions. Weakness: you only exercise the workflows the
   customer thinks to perform.
 - **Studying existing systems and data.** Support tickets, competitor products, and usage
   logs are elicitation gold — they are records of real needs and real friction, unfiltered
   by anyone's memory.
 
-The lesson is not to pick the "best" method but to *combine* them so each covers another's
-weakness: interview to form hypotheses, observe to correct them, prototype to discover what
-you missed, and survey to prioritize what you found.
+The lesson is to *combine* methods rather than pick a single "best" one, so that each
+covers another's weakness: interview to form hypotheses, observe to correct them, prototype
+to discover what you missed, and survey to prioritize what you found.
 
 > **Case study.** A team building the clinic scheduler interviewed front‑desk staff, who
 > asked for faster search. Only when the team *watched* a morning rush did they see the
@@ -366,10 +366,10 @@ For example:
 > *As a* front‑desk clerk, *I want* to flag a patient as "needs interpreter," *so that*
 > the clinician is prepared before the visit begins.
 
-Each clause earns its place. The **role** keeps you honest about *who* benefits, and forces
+Each clause has a job. The **role** keeps you honest about *who* benefits, and forces
 you to notice when a story serves no real user. The **capability** states the behavior. The
 **so that** clause is the most important and most often omitted: it captures the *why*, the
-underlying goal, which is exactly what §3.1 said you must reach past the solution to find.
+underlying goal that §3.1 said you must reach past the solution to find.
 When a story's benefit clause is vague or circular ("...so that I can flag patients"), it is
 a warning that no one understands why the feature exists — and a feature no one can justify
 is a feature to cut.
@@ -437,6 +437,134 @@ Feature: Interpreter alerts
 > scenario into an **executable specification**.[^11] Write the scenarios with the customer,
 > and they double as your **acceptance tests** (Chapter 9, [§9.2.3](../09-testing/#923-functional-system-and-acceptance-testing)).
 
+With behave, each scenario line binds by exact text to a **step definition** — a Python
+function that calls the clinic app (`check_in`, `open_visit`) and asserts what the user
+would see:
+
+```python
+from behave import given, when, then
+
+@given("a checked-in patient flagged for an interpreter")
+def flagged(context):
+  context.patient = check_in(interpreter=True)
+
+@given("a checked-in patient with no interpreter flag")
+def not_flagged(context):
+  context.patient = check_in(interpreter=False)
+
+@when("the clinician opens the visit")
+def opens(context):
+  context.visit = open_visit(context.patient)
+
+@then('an "interpreter needed" banner is shown')
+def banner_shown(context):
+  assert "interpreter needed" in context.visit["banners"]
+
+@then("no interpreter banner is shown")
+def no_banner(context):
+  assert not context.visit["banners"]
+```
+
+```java
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+public class InterpreterSteps {
+  Patient patient;
+  Visit visit;
+
+  @Given("a checked-in patient flagged for an interpreter")
+  public void flagged() { patient = checkIn(true); }
+
+  @Given("a checked-in patient with no interpreter flag")
+  public void notFlagged() { patient = checkIn(false); }
+
+  @When("the clinician opens the visit")
+  public void opens() { visit = openVisit(patient); }
+
+  @Then("an \"interpreter needed\" banner is shown")
+  public void bannerShown() { assert visit.banners().contains("interpreter needed"); }
+
+  @Then("no interpreter banner is shown")
+  public void noBanner() { assert visit.banners().isEmpty(); }
+}
+```
+
+```javascript
+const assert = require("node:assert");
+const { Given, When, Then } = require("@cucumber/cucumber");
+
+Given("a checked-in patient flagged for an interpreter", function () {
+  this.patient = checkIn({ interpreter: true });
+});
+
+Given("a checked-in patient with no interpreter flag", function () {
+  this.patient = checkIn({ interpreter: false });
+});
+
+When("the clinician opens the visit", function () {
+  this.visit = openVisit(this.patient);
+});
+
+Then('an "interpreter needed" banner is shown', function () {
+  assert.ok(this.visit.banners.includes("interpreter needed"));
+});
+
+Then("no interpreter banner is shown", function () {
+  assert.equal(this.visit.banners.length, 0);
+});
+```
+
+```go
+var patient Patient
+var visit Visit
+
+func flagged()    { patient = checkIn(true) }
+func notFlagged() { patient = checkIn(false) }
+func opens()      { visit = openVisit(patient) }
+
+func bannerShown() error { return wantBanners("interpreter needed") }
+func noBanner() error    { return wantBanners() }
+
+func wantBanners(exp ...string) error {
+	if slices.Equal(visit.banners, exp) {
+		return nil
+	}
+	return fmt.Errorf("banners = %v, want %v", visit.banners, exp)
+}
+
+func InitializeScenario(sc *godog.ScenarioContext) {
+	sc.Given(`^a checked-in patient flagged for an interpreter$`, flagged)
+	sc.Given(`^a checked-in patient with no interpreter flag$`, notFlagged)
+	sc.When(`^the clinician opens the visit$`, opens)
+	sc.Then(`^an "interpreter needed" banner is shown$`, bannerShown)
+	sc.Then(`^no interpreter banner is shown$`, noBanner)
+}
+```
+
+```ruby
+Given('a checked-in patient flagged for an interpreter') do
+  @patient = check_in(interpreter: true)
+end
+
+Given('a checked-in patient with no interpreter flag') do
+  @patient = check_in(interpreter: false)
+end
+
+When('the clinician opens the visit') do
+  @visit = open_visit(@patient)
+end
+
+Then('an "interpreter needed" banner is shown') do
+  expect(@visit[:banners]).to include('interpreter needed')
+end
+
+Then('no interpreter banner is shown') do
+  expect(@visit[:banners]).to be_empty
+end
+```
+
 A few guidelines for good scenarios: keep them **declarative** (describe *what*, not which
 buttons to click); use **one** `When` per scenario (multiple actions usually means you have
 multiple scenarios); cover the **happy path and the important alternatives** (mirroring the
@@ -493,8 +621,8 @@ ambiguity is unacceptable. Using the right form for each need is itself a skill.
 
 A **scenario** tells a concrete story of a specific person using the system to accomplish a
 goal, step by step, in a specific situation. Where a user story is a one‑line promise, a
-scenario is a narrative — and that narrative form is exactly what you need to expose the
-gaps, branches, and human realities that terse formats hide.
+scenario is a narrative — and that narrative form exposes the gaps, branches, and human
+realities that terse formats hide.
 
 ### 3.5.1 Guidelines for User-Experience Scenarios
 
@@ -678,8 +806,8 @@ hard decisions live. Two relationships matter most:
   high‑value and should rise in priority — you get more for the same cost.
 - **Conflict.** One goal *works against* another. "Speed up check‑in" pushes toward fewer
   confirmation steps; "protect patient privacy" and "avoid mis‑identification" push toward
-  *more* verification. You cannot maximize both. This is not a failure of analysis; it is
-  the real tension the stakeholders live with, now made visible.
+  *more* verification. You cannot maximize both. The tension is real — the stakeholders
+  live with it — and the analysis has done its job by making it visible.
 
 ```mermaid
 flowchart LR
@@ -766,8 +894,8 @@ otherwise miss:
   Estimate each attack's *cost to the attacker* and *damage to you*, and invest where cheap
   attacks meet high damage first.
 
-> **Pitfall.** Security is not a feature you add at the end; it is a set of requirements you
-> discover by asking a different question. A team that only elicits from cooperative users
+> **Pitfall.** Security is a set of requirements you discover by asking a different
+> question, not a feature you add at the end. A team that only elicits from cooperative users
 > will ship a system that does exactly what good people want — and exactly what bad people
 > want, too. Build one attack tree per critical asset *while* you write your user stories,
 > not after your first breach.
@@ -783,8 +911,8 @@ real needs, and it never fully terminates, because working software teaches user
 actually want.
 
 The techniques compound. You **classify** needs (stated, implied, latent) and **elicit**
-them by triangulating interviews, observation, prototypes, and data — because each method's
-blind spot is another's strength. You **write** them in the right form for each job: user
+them by triangulating interviews, observation, prototypes, and data — because each method
+reaches needs the others cannot. You **write** them in the right form for each job: user
 stories with the *as a…I want…so that* template and the INVEST qualities for discoverable,
 user‑facing behavior; features for the roadmap; scenarios when a concrete narrative is the
 only thing that exposes the missing steps; explicit, measurable statements for quality

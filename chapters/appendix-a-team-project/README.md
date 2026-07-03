@@ -67,7 +67,7 @@ does not.
 lightweight set of roles that maps onto the process in Chapter 2:
 
 - A **coordinator** (or Scrum-style facilitator) who runs standups, keeps the board
-  honest, and unblocks people. This is not a boss; it is a servant role that rotates well.
+  honest, and unblocks people. It is a servant job that rotates well, not a boss.
 - A **customer liaison** who owns the relationship with your real user, schedules the
   conversations, and speaks for the user when the team debates priorities (Chapters 3–4).
 - An **architecture/integration owner** who keeps the pieces fitting together and guards
@@ -84,8 +84,7 @@ fast questions (chat), an *asynchronous* one of record for decisions (issues, a 
 doc, or pull-request discussion), and a *recurring* meeting — even fifteen minutes twice a
 week — where each person answers the three standup questions: what I finished, what I am
 doing next, what is blocking me. Write decisions down where the whole team can find them
-later. An architecture chosen in a hallway and remembered by one person is not an
-architecture; it is a liability.
+later. An architecture chosen in a hallway and remembered by one person is a liability.
 
 > **Pitfall.** The most common failure mode is silent divergence: two people build against
 > different assumptions for a week because neither surfaced a question. Cheap, frequent
@@ -101,7 +100,7 @@ Project Aristotle, a multi-year study of 180 of its own teams, found psychologic
 safety the most important of the dynamics that set effective teams apart — ahead of who
 was on them.[^3] Its absence has recognizable symptoms: standups where everyone is silently "fine,"
 deadlines that arrive with surprises because nobody said they were behind, one teammate
-quietly redoing others' work instead of raising the issue. You build it with concrete
+redoing others' work instead of raising the issue. You build it with concrete
 habits, not slogans. Whoever is leading admits their own mistakes *first*, which licenses
 everyone else's honesty. Thank people for surfacing bad news early — early is exactly
 when bad news is cheap, and the thanks is what makes it happen again. And critique the
@@ -124,7 +123,7 @@ a status makes contribution impossible to fake or to overlook), so that "who is 
 is a matter of record rather than resentment. If a genuine imbalance persists after you
 have raised it directly, escalate to your instructor *early* rather than absorbing it into
 a bitter final week. Most course rubrics — including the final report in this appendix —
-include an individual-contribution component precisely so that fair effort is recognized
+include an individual-contribution component so that fair effort is recognized
 and free-riding is not.
 
 > **Tip.** Keep a shared, running log of who did what, updated weekly, not reconstructed
@@ -266,7 +265,7 @@ things a user came for, and does them correctly.
 Getting from skeleton to viable is the main building phase, and it is where the whole book
 comes together. You will flesh out the modules behind the interfaces the skeleton
 established. You will apply architectural patterns (Chapter 7) where they earn their
-keep — and resist them where they do not. Crucially, you will now be **testing in earnest**
+keep — and resist them where they do not. Above all, you will now be **testing in earnest**
 (Chapter 9): the features a user depends on need black-box tests derived from their
 requirements and enough white-box coverage that you can change code without fear. A viable
 system without tests is not viable; it is a demo that will break the first time you touch
@@ -296,8 +295,8 @@ Use the same [status report template](../../templates/status-report.md), marked 
 The **final report and demo** (around week 14, with presentations in week 15) is where you
 deliver the finished system and step back to tell its whole story — as engineers, with
 evidence. It is both the capstone artifact and the primary thing you are assessed on,
-because it is where you demonstrate that you did not just produce software but *engineered*
-it.
+because it is where you demonstrate that you *engineered* the software rather than merely
+producing it.
 
 A comprehensive report ties the entire book together, with one section per major
 discipline. It should cover:
@@ -337,13 +336,12 @@ reported on with hand-waving. Use the
 ## A.6 Conclusion
 
 The team project is where this book stops being a set of ideas and becomes a way of
-working. The four deliverables — proposal, skeletal system, viable system, final report —
-are not bureaucratic checkpoints; each one forces a specific engineering discipline at the
-moment it matters most: commit to a real problem, prove the structure integrates, prove the
-value is usable, and account for the whole with evidence. Do them honestly and you will
-finish the semester not just having read about software engineering, but having *done* it —
-on a team, under changing requirements, at a scale that would have defeated improvisation.
-That experience, more than any exam, is what makes an engineer.
+working. Each of the four deliverables — proposal, skeletal system, viable system, final
+report — forces a specific engineering discipline at the moment it matters most: commit to
+a real problem, prove the structure integrates, prove the value is usable, and account for
+the whole with evidence. Do them honestly and you will finish the semester having *done*
+software engineering — on a team, under changing requirements, at a scale that would have
+defeated improvisation. That experience, more than any exam, is what makes an engineer.
 
 ---
 

@@ -1,0 +1,27 @@
+name: code-examples
+
+# Every code example in book/code/ must run (or, for the type-fault demos,
+# fail to compile with the documented error) in all five languages.
+on:
+  push:
+    paths: ["code/**", ".github/workflows/code-tests.yml"]
+  pull_request:
+    paths: ["code/**"]
+
+jobs:
+  run-all:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "22" }
+      - uses: actions/setup-go@v5
+        with: { go-version: "stable" }
+      - uses: actions/setup-java@v4
+        with: { distribution: "temurin", java-version: "25" }
+      - uses: ruby/setup-ruby@v1
+        with: { ruby-version: "3.3" }
+      - name: Run every example in every language
+        run: bash code/run-all.sh

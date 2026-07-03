@@ -37,11 +37,18 @@ costs you.*
    you would choose *today* and how your answer changes if only the email notification will
    ever exist.
 
-7. **[analysis]** Take the Unix pipeline `cat log | grep ERROR | sort | uniq -c`. Identify
-   the filters and the pipes. Then describe one transformation that the pipes-and-filters
-   structure makes *easy* (give the new pipeline) and one requirement that this structure
-   makes *awkward*, explaining why the awkwardness is inherent to the pattern rather than
-   to Unix.
+7. **[analysis]** Take the Unix pipeline
+
+   ```bash
+   cat log | grep ERROR | sort | uniq -c
+   ```
+
+   Identify the filters and the pipes. Then describe one transformation that the
+   pipes-and-filters structure makes *easy* (give the new pipeline) and one requirement
+   that this structure makes *awkward*, explaining why the awkwardness is inherent to the
+   pattern rather than to Unix. A fifteen-line sample log to experiment on lives at
+   [`code/ch07/data/access.log`](../../code/ch07/data/access.log) — its interesting lines
+   say `404` rather than `ERROR`, so adjust the `grep`.
 
 8. **[analysis]** A batch report currently runs every night over a file of the day's
    transactions. Product now wants results "within ten seconds of each transaction."

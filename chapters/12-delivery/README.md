@@ -42,8 +42,8 @@ the *vendor* controls, and users reach it over the network, usually through a br
 thin client. Nothing ships. That single change rearranges almost everything downstream.
 There is exactly one version in production, not a museum of old installs to support. The
 vendor sees real usage directly — logs, errors, performance — instead of hearing about it
-through support tickets. And because the vendor owns the machines, an update is no longer
-a request to thousands of customers; it is an internal operation that can happen at any
+through support tickets. And because the vendor owns the machines, an update is an
+internal operation rather than a request to thousands of customers: it can happen at any
 time, invisibly, many times a day.
 
 The pull toward SaaS is not only the vendor's. Users get real benefits from the same
@@ -52,8 +52,8 @@ device, not the work; several people can collaborate on the *same* data at once 
 emailing copies back and forth; and datasets that are large or constantly changing can
 live in one central, managed place rather than being squeezed onto whatever machine each
 user happens to own. For a whole class of applications — shared documents, shared
-calendars, anything with one truth that many people touch — the service model is not just
-cheaper to operate; it is a better product.
+calendars, anything with one truth that many people touch — the service model is both
+cheaper to operate and a better product.
 
 On the user's side of the wire, the near-universal thin client is the **browser**: a
 program every device already has, speaking a front-end stack of **HTML** for the
@@ -146,7 +146,7 @@ matters more than unit cost, and when a small team has no one to spare for opera
 > steady and predictable rather than spiky.[^3]<!-- -->[^4] And Amazon's own Prime Video team published an
 > account of cutting the cost of one audio/video monitoring service by roughly 90 percent —
 > by moving it *away* from a serverless, distributed-microservices design and back into a
-> monolith-style process.[^5] The lesson is not "the cloud is over"; it is that the cloud is a
+> monolith-style process.[^5] None of this means the cloud is over. The cloud is a
 > *cost-and-flexibility trade*, not an axiom. Elastic, uncertain load is where renting
 > wins; steady, predictable load is where owning wins. Run the numbers, not the fashion.
 
@@ -174,7 +174,7 @@ of running copies up and down with demand, restarting containers that crash or f
 checks, and attaching storage to containers that need it — the operational chores of
 §12.1.2's horizontal scaling, automated.
 
-Honesty requires a caveat: Kubernetes earns its considerable complexity at fleet scale.
+One caveat: Kubernetes earns its considerable complexity at fleet scale.
 For a small team — certainly for a class project — a single container on one host, or a
 platform-as-a-service that runs your container for you, delivers most of the benefit at a
 small fraction of the operational cost. Learn what Kubernetes is for; reach for it when
@@ -239,7 +239,7 @@ with time. Trunk-based development keeps divergence permanently small by constru
 Merging several times a day means each merge carries at most a few hours of divergence —
 small enough that conflicts are rare, and trivial when they occur. The obvious objection —
 "how do I commit work that isn't finished?" — has a standard answer you will meet in
-§12.3.2: hide unfinished work behind a **feature flag** so it can be *integrated* without
+§12.3.3: hide unfinished work behind a **feature flag** so it can be *integrated* without
 being *released*. Integration and release become independent decisions, which is one of
 the most useful separations in this whole chapter.
 
@@ -265,7 +265,7 @@ flowchart LR
     class B,S,U,I,E stage;
 ```
 
-Each stage earns its position. The **build** proves the change even compiles and its
+Take the stages in order. The **build** proves the change even compiles and its
 dependencies resolve — the cheapest possible check, so it runs first. **Static checks**
 run the automated analysis of Chapter 8
 ([§8.4](../08-static-checking/#84-automated-static-analysis)) — linters, type checkers,
@@ -314,10 +314,10 @@ stop until it does.
 
 ### 12.2.4 Keeping Pipelines Fast
 
-Pipeline speed is not a convenience; it is load-bearing. Developers are supposed to merge
+Pipeline speed is a hard constraint, not a convenience. Developers are supposed to merge
 several times a day and to *wait for green* before moving on. If the pipeline takes an
 hour, they will not wait — they will batch up bigger changes to amortize the wait,
-which re-creates precisely the large, risky merges CI exists to eliminate. A useful
+which re-creates the large, risky merges CI exists to eliminate. A useful
 target is roughly ten minutes from push to verdict for the merge-blocking stages.[^10]
 
 Achieving that is the testing pyramid of
@@ -326,9 +326,9 @@ as an engineering budget: push checks *down* the pyramid, where they are fast, a
 the slow end-to-end layer thin. Beyond that, run independent stages in parallel, cache
 dependencies and build outputs so unchanged parts are not rebuilt, and split the pipeline
 into a fast merge-blocking core plus deeper suites (full end-to-end runs, performance
-tests, long fuzzing) that run continuously against the trunk without holding up merges. A
-slow pipeline is not a tooling annoyance to live with; it is a process defect that quietly
-changes how your team behaves.
+tests, long fuzzing) that run continuously against the trunk without holding up merges.
+Treat a slow pipeline as a process defect that changes how your team behaves, not as a
+tooling annoyance to live with.
 
 ## 12.3 Continuous Deployment
 
@@ -354,7 +354,8 @@ undo.
 ### 12.3.2 Deployment Strategies
 
 However often you deploy, *how* you swap new code into a live system determines the blast
-radius when something is wrong. Three strategies dominate practice.
+radius when something is wrong. Two infrastructure-level strategies dominate practice; a
+third approach moves the switch into code, and it gets its own section (§12.3.3).
 
 **Blue-green deployment** runs two identical production environments. At any moment one
 (say, *blue*) serves all traffic while the other (*green*) sits idle. To release, you
@@ -375,19 +376,174 @@ with automated health checks gating each promotion and halting the rollout on re
 The essential idea is *progressive exposure*: no change reaches everyone until it has
 demonstrably survived contact with someone.
 
-**Feature flags** decouple deployment from release in code rather than in infrastructure.
-A **feature flag** (or *feature toggle*) is a runtime conditional that turns a code path
-on or off without redeploying. Flags are what make trunk-based development livable —
-unfinished work merges dark, disabled — and they enable per-user, per-tenant, or
-percentage rollouts of a single feature, plus instant disablement when a feature
-misbehaves: a **kill switch**. But flags are conditional logic multiplying in your
-codebase, and they demand hygiene. Every flag should have an owner, an intended lifespan,
-and a removal date; a retired flag's code — both the dead branch and the conditional —
-should be deleted promptly. A stale flag is dormant behavior sitting in production waiting
-for someone to trip it, a danger the first case study below turns from hypothetical to
-historical.
+### 12.3.3 Feature Flags: Decoupling Deploy from Release
 
-### 12.3.3 Rollback versus Roll-Forward
+Blue-green and canary deployments control exposure with *infrastructure* — routers,
+server pools, traffic slices. A **feature flag** (or *feature toggle*) moves the same
+control into *code*: a runtime conditional that turns a code path on or off without
+redeploying.[^11] Deploying and releasing become fully independent acts. A feature's code
+can sit in production for weeks, dark and disabled, while the team keeps merging; when
+the moment comes, "releasing" it is a configuration change that takes effect in seconds,
+and un-releasing it is the same change in reverse. This is the endpoint of §12.1.3's
+argument: release is no longer even a deployment decision — it is a bit you flip.
+
+Flags are also the standard answer to §12.2.1's objection ("how do I commit work that
+isn't finished?"): unfinished work merges to trunk dark and disabled, so integration
+stays continuous while release waits. In practice flags come in a few kinds with very
+different lifespans, and confusing them is where trouble starts:
+
+- **Release flags** hide work in progress until it is ready. They should live *days to
+  weeks* — a release flag whose feature has fully rolled out is a deletion you owe.
+- **Operational flags** — including the **kill switch** — guard risky paths so an
+  operator can disable a misbehaving feature instantly, without a deploy. These are
+  deliberately long-lived, few in number, and tested like the safety equipment they are.
+- **Experiment flags** split traffic between variants so you can *measure* a change
+  (the A/B tests your metrics chapter made honest — §10.5). They live exactly as long
+  as the experiment.
+
+Targeting is what makes flags more than an on/off switch: a flag can be on for one user,
+one tenant, or three percent of traffic — a **percentage rollout**, which is canary
+deployment's progressive-exposure idea (§12.3.2) implemented in code, with no second
+environment to pay for.
+
+In the clinic scheduler, both are one conditional — only the predicate changes:
+
+```python
+from zlib import crc32
+
+def scheduler_page(user_id, flags):
+  if flags["new_scheduler"]:                        # release flag: one bit, everyone
+    return render_new(user_id)
+  return render_old(user_id)
+
+def scheduler_page_rollout(user_id, flags):           # same conditional, new predicate
+  if crc32(user_id.encode()) % 100 < flags["new_scheduler_pct"]:  # stable bucket 0..99
+    return render_new(user_id)
+  return render_old(user_id)
+```
+
+```java
+class SchedulerFlags {
+  record Flags(boolean newScheduler, int newSchedulerPct) {}
+
+  static String schedulerPage(String userId, Flags flags) {
+    if (flags.newScheduler()) {                     // release flag: one bit, everyone
+      return renderNew(userId);
+    }
+    return renderOld(userId);
+  }
+
+  static String schedulerPageRollout(String userId, Flags flags) { // same conditional
+    // String.hashCode() is spec-fixed, so buckets are stable across JVMs — but they
+    // differ from the CRC-32 buckets the Python and Ruby variants compute
+    if (Math.floorMod(userId.hashCode(), 100) < flags.newSchedulerPct()) { // 0..99
+      return renderNew(userId);
+    }
+    return renderOld(userId);
+  }
+}
+```
+
+```javascript
+function bucket(userId) {                            // FNV-1a: stable, JS has no
+  let h = 0x811c9dc5;                                // built-in string hash
+  for (const ch of userId) h = Math.imul(h ^ ch.codePointAt(0), 0x01000193);
+  return (h >>> 0) % 100;
+}
+
+function schedulerPage(userId, flags) {
+  if (flags.newScheduler) {                          // release flag: one bit, everyone
+    return renderNew(userId);
+  }
+  return renderOld(userId);
+}
+
+function schedulerPageRollout(userId, flags) {       // same conditional, new predicate
+  if (bucket(userId) < flags.newSchedulerPct) {      // stable bucket 0..99
+    return renderNew(userId);
+  }
+  return renderOld(userId);
+}
+```
+
+```go
+type Flags struct {
+	NewScheduler    bool
+	NewSchedulerPct uint32
+}
+
+func schedulerPage(userID string, flags Flags) string {
+	if flags.NewScheduler { // release flag: one bit, everyone
+		return renderNew(userID)
+	}
+	return renderOld(userID)
+}
+
+// same conditional, new predicate: FNV-1a gives a stable bucket 0..99
+func schedulerPageRollout(userID string, flags Flags) string {
+	h := fnv.New32a()
+	h.Write([]byte(userID))
+	if h.Sum32()%100 < flags.NewSchedulerPct {
+		return renderNew(userID)
+	}
+	return renderOld(userID)
+}
+```
+
+```ruby
+require "zlib" # CRC-32: stable, and the same buckets as the Python version
+
+def scheduler_page(user_id, flags)
+  if flags["new_scheduler"]                          # release flag: one bit, everyone
+    return render_new(user_id)
+  end
+  render_old(user_id)
+end
+
+def scheduler_page_rollout(user_id, flags)           # same conditional, new predicate
+  if Zlib.crc32(user_id) % 100 < flags["new_scheduler_pct"] # stable bucket 0..99
+    return render_new(user_id)
+  end
+  render_old(user_id)
+end
+```
+
+How does a flip actually reach production? In real systems the flag's *state* lives
+outside the code, in a flag-management service — LaunchDarkly and Unleash are common
+platforms; Flipper is an open-source Ruby flag library — while the application's
+SDK keeps a local, in-memory copy of every flag rule. Evaluation happens locally in
+microseconds, so the hot path never waits on a network call; changes stream to the SDKs
+within seconds of someone flipping the toggle.[^12] And the failure mode is designed in
+advance: if the flag service becomes unreachable, SDKs keep serving the last
+configuration they saw — the flag system must never be the outage.[^13]
+
+The practice is older than the tooling. Flickr described running trunk-only development
+with flags and multiple deploys a day back in 2009, in the post that popularized the
+term *feature flipper*.[^14] Facebook's quasi-continuous release keeps many changes
+"behind our Gatekeeper system," rolling out code and features independently — "if we do
+find a problem, we can simply switch the gatekeeper off rather than revert back to a
+previous version or fix forward."[^15] That sentence is the next section's economics in
+miniature: the cheapest rollback is the one that is a config flip. And flag management
+has graduated from house hack to shared infrastructure — **OpenFeature**, a
+vendor-neutral flag API, is now a CNCF incubating project.[^16]
+
+None of this is free. Every long-lived flag doubles the configuration space your tests
+must consider — Chapter 9's combinatorial lesson (§9.6) applies directly, so test both
+states of any flag that will live past a sprint, and at least pairwise across flags that
+interact. And flags demand hygiene *because* they are so easy to add: every
+flag needs an owner, an intended lifespan, and a removal date, and a retired flag's code
+— both the dead branch and the conditional — must be deleted promptly. Stale flags are
+technical debt (§12.6) of an unusually dangerous kind: dormant behavior sitting in
+production, waiting for someone to trip it. The first case study below turned that danger
+from hypothetical to historical.
+
+> **Pitfall.** Never repurpose an existing flag to control new behavior. A flag's name
+> and its dormant code paths carry years of history you have not read — Knight
+> Capital's repurposed Power Peg flag (§12.3.5) is the canonical demonstration. Retire
+> the old flag, delete its dead code, and mint a new one; flag names are cheap, and the
+> alternative was not.
+
+### 12.3.4 Rollback versus Roll-Forward
 
 When a deployment goes wrong, you have two exits. **Rollback** returns production to the
 previous version; **roll-forward** ships a new fix on top of the broken state. Rollback is
@@ -402,7 +558,7 @@ crisis. And some changes cannot be rolled back at all (an irreversible data migr
 security fix you must not un-ship), which is why roll-forward speed — how fast your
 pipeline can carry a one-line fix to production — is itself a safety property.
 
-### 12.3.4 When Deployment Goes Wrong: Two Case Studies
+### 12.3.5 When Deployment Goes Wrong: Two Case Studies
 
 The two case studies below are, respectively, the strongest argument on record *for*
 deployment automation and the strongest argument that automation *alone* is not safety.
@@ -412,7 +568,7 @@ They are worth studying closely, and honestly, from the primary sources.
 > equity market makers in the United States. When the New York Stock Exchange launched its
 > Retail Liquidity Program, Knight updated SMARS — its automated order router — to
 > participate. What follows is drawn from the findings in the SEC's later enforcement
-> order (Release No. 34-70694, October 2013).[^11]
+> order (Release No. 34-70694, October 2013).[^17]
 >
 > The new code reused a **feature flag** that had previously activated "Power Peg,"
 > defunct order-routing functionality unused since 2003, whose dead code had been left in
@@ -435,7 +591,7 @@ They are worth studying closely, and honestly, from the primary sources.
 > the seven correct servers, which put the repurposed flag's old behavior in force on all
 > eight. There was no procedure for halting the system's aberrant activity and no
 > documented incident-response plan. The loss exceeded $460 million. Knight survived only
-> through an emergency investment and was merged away within a year;[^12] the SEC fined it
+> through an emergency investment[^18] and was merged away within a year; the SEC fined it
 > $12 million for violating market-access risk-control and related rules.
 >
 > A note on honesty: the SEC order is an enforcement action about risk controls, and the
@@ -453,7 +609,7 @@ They are worth studying closely, and honestly, from the primary sources.
 > forgiving place code can live. To respond to new threats quickly, CrowdStrike ships
 > "Rapid Response Content": threat-detection configuration delivered to all customers
 > through a fully automated global push. The account below follows CrowdStrike's own
-> external root-cause analysis, published in August 2024.[^13]
+> external root-cause analysis, published in August 2024.[^19]
 >
 > In February 2024, sensor version 7.11 added a new content type defined with twenty-one
 > input fields. The code that supplied those inputs provided twenty.
@@ -467,11 +623,11 @@ They are worth studying closely, and honestly, from the primary sources.
 >
 > The push was global and simultaneous. Within hours, roughly 8.5 million Windows
 > machines (Microsoft's estimate) were down: airlines (Delta alone canceled on the order
-> of 7,000 flights), hospitals, banks, broadcasters, emergency services.[^14]<!-- -->[^15] Damage
+> of 7,000 flights), hospitals, banks, broadcasters, emergency services.[^20]<!-- -->[^21] Damage
 > estimates ran into the billions — direct losses for the Fortune 500 alone were estimated
-> at $5.4 billion, only a fraction of it insured.[^16] Recovery was brutal precisely
+> at $5.4 billion, only a fraction of it insured.[^22] Recovery was brutal precisely
 > because the machines could not boot: in many cases a human had to start each machine in
-> safe mode and delete the file by hand.[^17]
+> safe mode and delete the file by hand.[^23]
 > CrowdStrike's committed remediations read like this chapter's outline: staged canary
 > rings for content, customer control over update cadence, a hardened validator, bounds
 > checking in the interpreter, and more diverse testing.
@@ -492,7 +648,7 @@ the same code. CrowdStrike shows what automation without staging costs: with a p
 distribution machine and no progressive rollout, one latent defect reached the whole
 world before anyone could react. Twelve years apart, the timelines rhyme — about
 forty-five minutes for Knight's loss, about eighty minutes from CrowdStrike's push to its
-reversion.[^18] Automation sets the *speed* of your outcomes; only progressive exposure and tested
+reversion.[^24] Automation sets the *speed* of your outcomes; only progressive exposure and tested
 recovery decide their *sign*.
 
 ## 12.4 Continuous Security Pipelines
@@ -516,7 +672,7 @@ outside, the way an adversary would: probing endpoints with malformed inputs, in
 payloads, and authentication bypasses, knowing nothing about the source. SAST and DAST
 are complementary the way white-box and black-box testing were in Chapter 9: SAST sees
 code paths DAST may never reach; DAST sees emergent, deployed behavior — server
-configuration, header mistakes, the composition of services — that no source scan can.[^19]
+configuration, header mistakes, the composition of services — that no source scan can.[^25]
 
 **Software composition analysis (SCA)** examines neither your code nor your running app
 but your *dependency manifest*: the inventory of third-party packages your build pulls
@@ -531,7 +687,7 @@ Because dependencies drift out of date on their own — vulnerabilities are disc
 versions you already ship — SCA cannot be a one-time gate; it must run continuously. The
 practical pattern is the **automated update bot** (GitHub's Dependabot is the archetype):
 a service that watches vulnerability databases and your manifests, and when a dependency
-needs bumping, *opens a pull request* that updates it.[^20] The elegance is in what happens
+needs bumping, *opens a pull request* that updates it.[^26] The elegance is in what happens
 next: your CI pipeline runs on that PR like any other, so the same suite that protects
 you from your own mistakes now proves the upgrade is safe to merge. The stronger your
 pipeline, the cheaper staying current becomes — one more return on the investment of
@@ -542,17 +698,17 @@ it downloads. Attackers have learned to poison the well — **typosquatting** pa
 whose names are one keystroke from a popular library, or compromising a legitimate
 package's maintainer account and publishing a malicious release. The 2020 SolarWinds
 attack planted malicious code inside a vendor's *build process*, so customers received a
-compromised product signed with authentic signatures;[^21] the 2016 left-pad incident
+compromised product signed with authentic signatures;[^27] the 2016 left-pad incident
 showed the fragility side, when the removal of an eleven-line package briefly broke
-builds across the industry.[^22]<!-- -->[^23] Defenses are accumulating — lockfiles that pin exact versions,
-cryptographic signing and provenance attestation for artifacts (the SLSA framework),[^24]
-and a **software bill of materials (SBOM)** enumerating everything inside a release[^25] — but the
+builds across the industry.[^28]<!-- -->[^29] Defenses are accumulating — lockfiles that pin exact versions,
+cryptographic signing and provenance attestation for artifacts (the SLSA framework),[^30]
+and a **software bill of materials (SBOM)** enumerating everything inside a release[^31] — but the
 first defense is the cultural one: treat adding a dependency as an engineering decision
 with a threat model, not a free lunch.
 
 ### 12.4.3 Secrets and Gate Placement
 
-One more scanner earns its place in every pipeline: **secrets scanning**, which searches
+One more scanner belongs in every pipeline: **secrets scanning**, which searches
 commits for credentials — API keys, tokens, passwords, private keys — before they enter
 history. A secret pushed to a repository must be treated as compromised the moment it
 lands, because git history is effectively permanent and harvesting bots scan public
@@ -577,7 +733,7 @@ programs fail by measuring what is easy instead of what matters. The delivery wo
 unusually good answer, produced by the **DORA** research program (DevOps Research and
 Assessment) — a multi-year academic effort, surveying tens of thousands of professionals,
 published in the annual *State of DevOps* reports and the book *Accelerate* (Forsgren,
-Humble, and Kim).[^26]<!-- -->[^27] Its core finding is a set of four outcome measures — the **four keys** —
+Humble, and Kim).[^32]<!-- -->[^33] Its core finding is a set of four outcome measures — the **four keys** —
 that jointly predict software-delivery performance:
 
 1. **Deployment frequency** — how often your team deploys to production.
@@ -585,12 +741,11 @@ that jointly predict software-delivery performance:
 3. **Change failure rate** — what fraction of deployments cause a failure in production
    (an incident, a rollback, a hotfix).
 4. **Failed-deployment recovery time** — when a deployment does cause a failure, how long
-   restoring service takes.[^28]
+   restoring service takes.[^34]
 
 Notice the shape: the first two measure **throughput** (how fast value moves), the second
 two measure **stability** (how safely it moves). All four are *outcomes* of your whole
-delivery system, not activities within it — which is exactly what makes them worth
-watching.
+delivery system, not activities within it — which is what makes them worth watching.
 
 ### 12.5.2 Why Paired Metrics Resist Gaming
 
@@ -604,7 +759,7 @@ deploy once a quarter after months of manual checking — and deployment frequen
 time collapse. Each pair is the other pair's counter-metric. A team can only improve all
 four *together* by actually getting better at delivery: smaller changes, stronger
 pipelines, faster recovery. There is no cheap move that improves the whole dashboard,
-which is precisely the property §10.1.2 said to look for.
+which is the property §10.1.2 said to look for.
 
 ### 12.5.3 What the Research Found
 
@@ -614,10 +769,10 @@ years, **elite** performers deploy on demand (many times per day) where **low** 
 deploy between once a month and once every six months; elite lead times are under a day
 against months; elite recovery times are under an hour against a week or more — differences
 of orders of magnitude on the throughput measures, with change failure rates
-lower as well.[^26]
+lower as well.[^32]
 
 Second — and this is the finding that overturned decades of folklore — **speed and
-stability correlate positively**.[^26] The traditional assumption was a trade-off: move fast
+stability correlate positively**.[^32] The traditional assumption was a trade-off: move fast
 *or* be careful. The data say the teams that deploy most often are *also* the teams that
 break production least and recover fastest. The mechanism should be familiar by now: high
 frequency forces small changes; small changes are easier to review
@@ -628,7 +783,7 @@ not the cautious choice — they are the risky one wearing caution's clothes.
 ### 12.5.4 Measuring Your Own Four Keys
 
 A student team can measure all four keys with data it already has, and the exercise is
-worth doing precisely because the numbers will be humbler than the elite benchmarks.
+worth doing because the numbers will be humbler than the elite benchmarks.
 Define "production" honestly — your deployed demo environment, or your instructor-facing
 release — then: **deployment frequency** is a count of deploy events per week, from your
 pipeline's history. **Lead time** is deploy timestamp minus commit timestamp, taken as a median
@@ -642,10 +797,9 @@ hides in.
 
 ## 12.6 Legacy Code, Refactoring, and Technical Debt
 
-Deployment is not the end of the story; it is the beginning of the longest phase of a
-successful system's life. Most professional effort goes not into new systems but into
-**evolving** ones that have been in production for years — and this section is about the
-code you will inherit.
+Deployment begins the longest phase of a successful system's life. Most professional
+effort goes into **evolving** systems that have been in production for years, not into
+building new ones — and this section is about the code you will inherit.
 
 The industry has names for that work. **Corrective maintenance** fixes defects.
 **Adaptive maintenance** responds to a changing environment — a new OS version, a
@@ -654,7 +808,7 @@ deprecated API, a new regulation — where the code did nothing wrong but the wo
 system for. And **preventative maintenance** — refactoring, debt paydown — improves
 structure now so that all the other kinds stay affordable later. The standard industry
 rule of thumb is that maintenance, taken together, consumes roughly 60 percent of a
-system's lifetime cost.[^29] Read that number again: the phase this book spent eleven chapters
+system's lifetime cost.[^35] Read that number again: the phase this book spent eleven chapters
 preparing you for is the *minority* of the money, which is reason enough to treat evolving
 code as the main event of an engineering career rather than the cleanup after it.
 
@@ -673,7 +827,7 @@ everyone is being careful. Breaking that spiral is a skill, and it starts with a
 inversion of the testing you learned in Chapter 9.
 
 The tests-first definition comes from Michael Feathers, whose *Working Effectively with
-Legacy Code* also names the only two ways there are to change legacy code.[^30] **Edit and
+Legacy Code* also names the only two ways there are to change legacy code.[^36] **Edit and
 pray**: study the code, make the change, look around manually for anything you broke,
 deploy, and hope. **Cover and modify**: first build tests that cover the code you must
 touch, then make the change and let the tests detect any behavior you altered without
@@ -695,8 +849,8 @@ output, and write that observation down as the expected value. The running syste
 becomes the oracle.
 
 This feels like cheating — you are asserting the code does whatever it does, bugs
-included. But the goal is not to verify correctness; it is to **pin down current
-behavior** so that your upcoming changes cannot alter it *unknowingly*. Users, and other
+included. But the test's job is to **pin down current behavior**, not to verify
+correctness, so that your upcoming changes cannot alter it *unknowingly*. Users, and other
 code, may well depend on the current behavior, strange corners and all. The practical
 loop: write a test with a deliberately wrong expected value, run it, read the actual
 value from the failure message, and promote that actual value into the assertion. Probe
@@ -706,14 +860,130 @@ exposes something that is plainly a bug, resist fixing it in the same breath: re
 finish building the net, and change behavior as its own deliberate, separately reviewed
 step. One commit should refactor *or* fix, never ambiguously both.
 
+Applied to a fee-code lookup inherited with the clinic scheduler, the loop leaves this
+trail:
+
+```python
+def legacy_fee_code(visit_type):                    # inherited: no docs, no tests
+  return {"exam": "E10", "lab": "L20", "vaccine": "V30"}.get(visit_type, "E10")
+
+def test_probe_unknown_type():
+  assert legacy_fee_code("phone") == "XXX"        # deliberately wrong
+# FAILED: AssertionError: assert 'E10' == 'XXX'
+
+def test_unknown_type_bills_as_exam():              # observed value, promoted
+  assert legacy_fee_code("phone") == "E10"
+
+def test_empty_type_bills_as_exam():                # edge probe: pinned, bug or not
+  assert legacy_fee_code("") == "E10"
+```
+
+```java
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.Test;
+import java.util.Map;
+
+class FeeCodeCharacterization {
+  static String legacyFeeCode(String visitType) {   // inherited: no docs, no tests
+    return Map.of("exam", "E10", "lab", "L20", "vaccine", "V30")
+        .getOrDefault(visitType, "E10");
+  }
+
+  @Test void probeUnknownType() {
+    assertEquals("XXX", legacyFeeCode("phone"));    // deliberately wrong
+  }
+  // FAILED: org.opentest4j.AssertionFailedError: expected: <XXX> but was: <E10>
+
+  @Test void unknownTypeBillsAsExam() {             // observed value, promoted
+    assertEquals("E10", legacyFeeCode("phone"));
+  }
+
+  @Test void emptyTypeBillsAsExam() {               // edge probe: pinned, bug or not
+    assertEquals("E10", legacyFeeCode(""));
+  }
+}
+```
+
+```javascript
+const test = require("node:test");
+const assert = require("node:assert/strict");
+
+function legacyFeeCode(visitType) {                 // inherited: no docs, no tests
+  return { exam: "E10", lab: "L20", vaccine: "V30" }[visitType] ?? "E10";
+}
+
+test("probe unknown type", () => {
+  assert.equal(legacyFeeCode("phone"), "XXX");      // deliberately wrong
+});
+// FAILED: AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+// 'E10' !== 'XXX'
+
+test("unknown type bills as exam", () => {          // observed value, promoted
+  assert.equal(legacyFeeCode("phone"), "E10");
+});
+
+test("empty type bills as exam", () => {            // edge probe: pinned, bug or not
+  assert.equal(legacyFeeCode(""), "E10");
+});
+```
+
+```go
+func legacyFeeCode(visitType string) string { // inherited: no docs, no tests
+	codes := map[string]string{"exam": "E10", "lab": "L20", "vaccine": "V30"}
+	return cmp.Or(codes[visitType], "E10")
+}
+
+func TestProbeUnknownType(t *testing.T) {
+	if got := legacyFeeCode("phone"); got != "XXX" { // deliberately wrong
+		t.Errorf(`legacyFeeCode("phone") = %q, want "XXX"`, got)
+	}
+}
+// FAILED: legacyFeeCode("phone") = "E10", want "XXX"
+
+func TestUnknownTypeBillsAsExam(t *testing.T) { // observed value, promoted
+	if got := legacyFeeCode("phone"); got != "E10" {
+		t.Errorf("got %q", got)
+	}
+}
+
+func TestEmptyTypeBillsAsExam(t *testing.T) { // edge probe: pinned, bug or not
+	if got := legacyFeeCode(""); got != "E10" {
+		t.Errorf("got %q", got)
+	}
+}
+```
+
+```ruby
+require "minitest/autorun"
+
+def legacy_fee_code(visit_type)                     # inherited: no docs, no tests
+  { "exam" => "E10", "lab" => "L20", "vaccine" => "V30" }.fetch(visit_type, "E10")
+end
+
+class TestFeeCode < Minitest::Test
+  def test_probe_unknown_type
+    assert_equal "XXX", legacy_fee_code("phone")    # deliberately wrong
+  end
+  # FAILED: Expected: "XXX"  Actual: "E10"
+
+  def test_unknown_type_bills_as_exam               # observed value, promoted
+    assert_equal "E10", legacy_fee_code("phone")
+  end
+
+  def test_empty_type_bills_as_exam                 # edge probe: pinned, bug or not
+    assert_equal "E10", legacy_fee_code("")
+  end
+end
+```
+
 Characterizing assumes you can find your way around, and with an inherited codebase that
 takes a deliberate workflow. Read what the previous team left behind first — the tests
 above all (a passing test is documentation that cannot drift out of date), then any design
 documents. On documentation, note the distinction: an architecture description
 ([§6.5](../06-design-and-architecture/#65-describing-system-architecture)) is the *formal*
 design artifact, but tests, commit history, and mockups are living *informal*
-documentation, and agile teams weight the informal kind heavily precisely because it stays
-closer to the code. Next, generate a class or dependency diagram — most languages have
+documentation, and agile teams weight the informal kind heavily because it stays closer
+to the code. Next, generate a class or dependency diagram — most languages have
 tools that extract one — to see the shape of the system before you dive into any single
 file. Then get the application and its test suite running *locally*, against a cloned or
 fixture copy of the database, before touching anything: a system you cannot run is a
@@ -734,7 +1004,7 @@ running the suite after every step. If the bar goes red, the *last* step is the 
 undo it and take a smaller one. Named, cataloged refactoring moves (Fowler's catalog is
 the standard reference) matter because each has known mechanics and known traps; a
 sequence of safe moves composes into a transformation you would never dare attempt as one
-leap.[^31]
+leap.[^37]
 
 Where should you aim the moves? **Code smells** are surface symptoms that *suggest* — not
 prove — a deeper design problem: a long method, a large class that does too many things, a
@@ -759,6 +1029,152 @@ change together; **replace temp with query**, turning a scattered computed varia
 one well-named method; and **introduce parameter object**, bundling arguments that always
 travel together into a single type that can then attract the behavior that uses it.
 
+The clinic scheduler's booking check shows two of those smells at once:
+
+```python
+def can_book(patient, slot, booked_today):
+  if patient is not None:
+    if slot.open:
+      if booked_today < 8:
+        return True
+      else:
+        return False
+    else:
+      return False
+  else:
+    return False
+```
+
+```java
+static boolean canBook(Patient patient, Slot slot, int bookedToday) {
+  if (patient != null) {
+    if (slot.open()) {
+      if (bookedToday < 8) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+```
+
+```javascript
+function canBook(patient, slot, bookedToday) {
+  if (patient !== null) {
+    if (slot.open) {
+      if (bookedToday < 8) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+```
+
+```go
+func canBook(patient *Patient, slot Slot, bookedToday int) bool {
+	if patient != nil {
+		if slot.Open {
+			if bookedToday < 8 {
+				return true
+			} else {
+				return false
+			}
+		} else {
+			return false
+		}
+	} else {
+		return false
+	}
+}
+```
+
+```ruby
+def can_book(patient, slot, booked_today)
+  if !patient.nil?
+    if slot.open
+      if booked_today < 8
+        true
+      else
+        false
+      end
+    else
+      false
+    end
+  else
+    false
+  end
+end
+```
+
+Replace the magic `8` with a named constant, run the suite, flatten the nesting with
+guard clauses, run it again — the tests stay green after each move:
+
+```python
+MAX_DAILY_BOOKINGS = 8
+
+def can_book(patient, slot, booked_today):
+  if patient is None:
+    return False
+  if not slot.open:
+    return False
+  return booked_today < MAX_DAILY_BOOKINGS
+```
+
+```java
+static final int MAX_DAILY_BOOKINGS = 8;
+
+static boolean canBook(Patient patient, Slot slot, int bookedToday) {
+  if (patient == null) return false;
+  if (!slot.open()) return false;
+  return bookedToday < MAX_DAILY_BOOKINGS;
+}
+```
+
+```javascript
+const MAX_DAILY_BOOKINGS = 8;
+
+function canBook(patient, slot, bookedToday) {
+  if (patient === null) return false;
+  if (!slot.open) return false;
+  return bookedToday < MAX_DAILY_BOOKINGS;
+}
+```
+
+```go
+const maxDailyBookings = 8
+
+func canBook(patient *Patient, slot Slot, bookedToday int) bool {
+	if patient == nil {
+		return false
+	}
+	if !slot.Open {
+		return false
+	}
+	return bookedToday < maxDailyBookings
+}
+```
+
+```ruby
+MAX_DAILY_BOOKINGS = 8
+
+def can_book(patient, slot, booked_today)
+  return false if patient.nil?
+  return false unless slot.open
+  booked_today < MAX_DAILY_BOOKINGS
+end
+```
+
 Legacy code adds a chicken-and-egg problem the catalog alone cannot solve: the worst code
 cannot be tested without refactoring (dependencies are hard-wired, everything talks to the
 database) and cannot be safely refactored without tests. The escape is a minimal set of
@@ -771,8 +1187,8 @@ the point where a test can grip, and no further.
 The economics underneath all of this has a name. **Technical debt** is the metaphor for
 the future cost incurred when you take a shortcut today: like financial debt, it lets you
 move faster *now* in exchange for **interest** — and the interest is that *every future
-change to that code costs more* than it would have.[^32] The metaphor's precision is its
-virtue. Debt is not simply "bad code"; it is a *deal*, and sometimes a good one.
+change to that code costs more* than it would have.[^38] The metaphor's precision is its
+virtue. Debt is a *deal*, not simply "bad code" — and sometimes the deal is a good one.
 **Deliberate debt** is a conscious trade — "we hard-code the tax rule to make the pilot;
 we log a ticket to generalize it" — the engineering equivalent of a startup loan, rational
 whenever learning fast matters more than building clean, *provided you track it and
@@ -798,7 +1214,7 @@ browser rewrite
 code that handles a thousand edge cases, you run two systems (one frozen, one imaginary)
 for the duration, and the new system's first real validation comes at the end, all at
 once. The delivery-era alternative is the **strangler fig** pattern, named for the fig
-that grows around a host tree, roots itself, and gradually replaces the host it envelops.[^33]
+that grows around a host tree, roots itself, and gradually replaces the host it envelops.[^39]
 You place an interception layer — a routing facade — in front of the legacy system, then
 peel off one capability at a time: build the new implementation, route that slice of
 traffic to it, verify it in production (a canary, §12.3.2, at the granularity of a
@@ -853,32 +1269,38 @@ to change for longer than anyone who built it expects.
 [^8]: Eric Brewer, *Towards Robust Distributed Systems* (PODC keynote, 2000). [people.eecs.berkeley.edu](https://people.eecs.berkeley.edu/~brewer/cs262b-2004/PODC-keynote.pdf).
 [^9]: Seth Gilbert and Nancy Lynch, *Brewer's Conjecture and the Feasibility of Consistent, Available, Partition-Tolerant Web Services* (ACM SIGACT News, 2002). [doi.org](https://doi.org/10.1145/564585.564601).
 [^10]: Martin Fowler, *Continuous Integration* (2006; revised 2024). [martinfowler.com](https://martinfowler.com/articles/continuousIntegration.html).
-[^11]: U.S. Securities and Exchange Commission, *In the Matter of Knight Capital Americas LLC*, Exchange Act Release No. 34-70694 (2013). [sec.gov](https://www.sec.gov/litigation/admin/2013/34-70694.pdf).
-[^12]: CNNMoney, *Knight Capital in $400 million rescue agreement* (2012). [money.cnn.com](https://web.archive.org/web/2013/https://money.cnn.com/2012/08/06/investing/knight-capital-agreement/index.htm).
-[^13]: CrowdStrike, *External Technical Root Cause Analysis — Channel File 291* (2024). [crowdstrike.com](https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf).
-[^14]: David Weston (Microsoft), *Helping our customers through the CrowdStrike outage* (2024). [blogs.microsoft.com](https://blogs.microsoft.com/blog/2024/07/20/helping-our-customers-through-the-crowdstrike-outage/).
-[^15]: Delta Air Lines, *Form 8-K* (October 2024). [sec.gov](https://www.sec.gov/Archives/edgar/data/27904/000168316824005369/delta_8k.htm).
-[^16]: Parametrix, *CrowdStrike to cost Fortune 500 $5.4 billion; insured loss range of $540 million to $1.08 billion* (2024). [parametrixinsurance.com](https://www.parametrixinsurance.com/in-the-news/crowdstrike-to-cost-fortune-500-5-4-billion-insured-loss-range-of-540-million-to-1-08-billion).
-[^17]: CrowdStrike, *Falcon Content Update Remediation and Guidance Hub* (2024). [crowdstrike.com](https://www.crowdstrike.com/falcon-content-update-remediation-and-guidance-hub/).
-[^18]: CrowdStrike, *Preliminary Post Incident Review — Falcon Content Update for Windows Hosts* (2024). [crowdstrike.com](https://www.crowdstrike.com/en-us/blog/falcon-content-update-preliminary-post-incident-report/).
-[^19]: OWASP Foundation, community references for the scanner families:
+[^11]: Pete Hodgson, *Feature Toggles (aka Feature Flags)* (martinfowler.com, 2017). [martinfowler.com](https://martinfowler.com/articles/feature-toggles.html).
+[^12]: LaunchDarkly, *A Deeper Look at LaunchDarkly Architecture* (documentation). [launchdarkly.com](https://launchdarkly.com/docs/tutorials/ld-arch-deep-dive).
+[^13]: Unleash, *11 best practices for building and scaling feature flag systems* (documentation). [docs.getunleash.io](https://docs.getunleash.io/guides/feature-flag-best-practices).
+[^14]: Ross Harmes (Flickr Engineering), *Flipping Out* (2009). [code.flickr.net](https://code.flickr.net/2009/12/02/flipping-out/).
+[^15]: Chuck Rossi (Facebook Engineering), *Rapid release at massive scale* (2017). [engineering.fb.com](https://engineering.fb.com/2017/08/31/web/rapid-release-at-massive-scale/).
+[^16]: OpenFeature, a CNCF incubating project since 2023. [openfeature.dev](https://openfeature.dev/).
+[^17]: U.S. Securities and Exchange Commission, *In the Matter of Knight Capital Americas LLC*, Exchange Act Release No. 34-70694 (2013). [sec.gov](https://www.sec.gov/litigation/admin/2013/34-70694.pdf).
+[^18]: CNNMoney, *Knight Capital in $400 million rescue agreement* (2012). [money.cnn.com](https://web.archive.org/web/2013/https://money.cnn.com/2012/08/06/investing/knight-capital-agreement/index.htm).
+[^19]: CrowdStrike, *External Technical Root Cause Analysis — Channel File 291* (2024). [crowdstrike.com](https://www.crowdstrike.com/wp-content/uploads/2024/08/Channel-File-291-Incident-Root-Cause-Analysis-08.06.2024.pdf).
+[^20]: David Weston (Microsoft), *Helping our customers through the CrowdStrike outage* (2024). [blogs.microsoft.com](https://blogs.microsoft.com/blog/2024/07/20/helping-our-customers-through-the-crowdstrike-outage/).
+[^21]: Delta Air Lines, *Form 8-K* (October 2024). [sec.gov](https://www.sec.gov/Archives/edgar/data/27904/000168316824005369/delta_8k.htm).
+[^22]: Parametrix, *CrowdStrike to cost Fortune 500 $5.4 billion; insured loss range of $540 million to $1.08 billion* (2024). [parametrixinsurance.com](https://www.parametrixinsurance.com/in-the-news/crowdstrike-to-cost-fortune-500-5-4-billion-insured-loss-range-of-540-million-to-1-08-billion).
+[^23]: CrowdStrike, *Falcon Content Update Remediation and Guidance Hub* (2024). [crowdstrike.com](https://www.crowdstrike.com/falcon-content-update-remediation-and-guidance-hub/).
+[^24]: CrowdStrike, *Preliminary Post Incident Review — Falcon Content Update for Windows Hosts* (2024). [crowdstrike.com](https://www.crowdstrike.com/en-us/blog/falcon-content-update-preliminary-post-incident-report/).
+[^25]: OWASP Foundation, community references for the scanner families:
 [Source Code Analysis Tools (SAST)](https://owasp.org/www-community/Source_Code_Analysis_Tools),
 [Vulnerability Scanning Tools (DAST)](https://owasp.org/www-community/Vulnerability_Scanning_Tools),
 and [Component Analysis (SCA)](https://owasp.org/www-community/Component_Analysis).
-[^20]: GitHub, *Dependabot documentation*. [docs.github.com](https://docs.github.com/en/code-security/dependabot).
-[^21]: CISA, *Alert AA20-352A: Advanced Persistent Threat Compromise of Government Agencies, Critical Infrastructure, and Private Sector Organizations* (2020). [cisa.gov](https://www.cisa.gov/news-events/cybersecurity-advisories/aa20-352a).
-[^22]: npm, *kik, left-pad, and npm* (2016). [blog.npmjs.org](https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm).
-[^23]: The Register, *How one developer just broke Node, Babel and thousands of projects in 11 lines of JavaScript* (2016). [theregister.com](https://www.theregister.com/2016/03/23/npm_left_pad_chaos/).
-[^24]: OpenSSF, *SLSA — Supply-chain Levels for Software Artifacts*. [slsa.dev](https://slsa.dev/).
-[^25]: CISA, *Software Bill of Materials (SBOM)*. [cisa.gov/sbom](https://www.cisa.gov/sbom).
-[^26]: DORA, *Accelerate State of DevOps Report 2019* (2019). [dora.dev](https://dora.dev/research/2019/dora-report/).
-[^27]: Nicole Forsgren, Jez Humble, and Gene Kim, *Accelerate: The Science of Lean Software and DevOps* (IT Revolution Press, 2018). [itrevolution.com](https://itrevolution.com/product/accelerate/).
-[^28]: DORA, *DORA's software delivery metrics: the four keys*. [dora.dev](https://dora.dev/guides/dora-metrics-four-keys/).
-[^29]: Robert L. Glass, *Frequently Forgotten Fundamental Facts about Software Engineering* (IEEE Software, 2001). [doi.org](https://doi.org/10.1109/MS.2001.922739).
-[^30]: Michael Feathers, *Working Effectively with Legacy Code* (Prentice Hall, 2004). [informit.com](https://www.informit.com/store/working-effectively-with-legacy-code-9780131177055).
-[^31]: Martin Fowler, *Catalog of Refactorings*. [refactoring.com](https://refactoring.com/catalog/).
-[^32]: Ward Cunningham, *The WyCash Portfolio Management System* (OOPSLA experience report, 1992). [c2.com](http://c2.com/doc/oopsla92.html).
-[^33]: Martin Fowler, *StranglerFigApplication* (2004). [martinfowler.com](https://martinfowler.com/bliki/StranglerFigApplication.html).
+[^26]: GitHub, *Dependabot documentation*. [docs.github.com](https://docs.github.com/en/code-security/dependabot).
+[^27]: CISA, *Alert AA20-352A: Advanced Persistent Threat Compromise of Government Agencies, Critical Infrastructure, and Private Sector Organizations* (2020). [cisa.gov](https://www.cisa.gov/news-events/cybersecurity-advisories/aa20-352a).
+[^28]: npm, *kik, left-pad, and npm* (2016). [blog.npmjs.org](https://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm).
+[^29]: The Register, *How one developer just broke Node, Babel and thousands of projects in 11 lines of JavaScript* (2016). [theregister.com](https://www.theregister.com/2016/03/23/npm_left_pad_chaos/).
+[^30]: OpenSSF, *SLSA — Supply-chain Levels for Software Artifacts*. [slsa.dev](https://slsa.dev/).
+[^31]: CISA, *Software Bill of Materials (SBOM)*. [cisa.gov/sbom](https://www.cisa.gov/sbom).
+[^32]: DORA, *Accelerate State of DevOps Report 2019* (2019). [dora.dev](https://dora.dev/research/2019/dora-report/).
+[^33]: Nicole Forsgren, Jez Humble, and Gene Kim, *Accelerate: The Science of Lean Software and DevOps* (IT Revolution Press, 2018). [itrevolution.com](https://itrevolution.com/product/accelerate/).
+[^34]: DORA, *DORA's software delivery metrics: the four keys*. [dora.dev](https://dora.dev/guides/dora-metrics-four-keys/).
+[^35]: Robert L. Glass, *Frequently Forgotten Fundamental Facts about Software Engineering* (IEEE Software, 2001). [doi.org](https://doi.org/10.1109/MS.2001.922739).
+[^36]: Michael Feathers, *Working Effectively with Legacy Code* (Prentice Hall, 2004). [informit.com](https://www.informit.com/store/working-effectively-with-legacy-code-9780131177055).
+[^37]: Martin Fowler, *Catalog of Refactorings*. [refactoring.com](https://refactoring.com/catalog/).
+[^38]: Ward Cunningham, *The WyCash Portfolio Management System* (OOPSLA experience report, 1992). [c2.com](http://c2.com/doc/oopsla92.html).
+[^39]: Martin Fowler, *StranglerFigApplication* (2004). [martinfowler.com](https://martinfowler.com/bliki/StranglerFigApplication.html).
 
 ---
 

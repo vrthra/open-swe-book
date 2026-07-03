@@ -33,7 +33,7 @@ slow-and-human to fast-and-automated.
 The earliest and cheapest place to catch a defect is before it is built. An **architecture
 review** is a structured examination of a system's design — its major components, their
 responsibilities, and the connections between them (Chapters 6–7) — conducted by people other
-than the designers. The goal is not to admire the diagram but to *stress it*: to ask the
+than the designers. The goal is to *stress* the diagram, not admire it: to ask the
 questions that the design's authors, being close to their own work, have stopped asking.
 
 Architecture reviews matter because architectural mistakes are the most expensive kind. A
@@ -41,8 +41,7 @@ poorly named variable is a five-minute fix in code review. A decision to route e
 through a single synchronous service, or to store money as a floating-point number, or to
 couple two modules that should have been independent, can require months of rework once the
 system is built around it. These decisions are made early, are hard to reverse, and constrain
-everything downstream — which is exactly why they deserve a dedicated review before code is
-written.
+everything downstream — so they deserve a dedicated review before code is written.
 
 ### 8.1.1 Guiding Principles for Architecture Reviews
 
@@ -80,7 +79,7 @@ Not all architecture reviews happen at the same time or ask the same questions. 
 distinguish three moments in a system's life, each with a different purpose.
 
 A **discovery review** happens *early*, when the design is still forming. Its aim is breadth:
-to map the landscape, name the major components, identify the big risks, and make sure no
+to map the problem space, name the major components, identify the big risks, and make sure no
 whole category of requirement (security, privacy, cost, operability) has been forgotten. A
 discovery review is exploratory and generative — you are trying to find the questions as much
 as answer them. The right output is a prioritized list of concerns and a set of deeper
@@ -97,7 +96,7 @@ leave until the risk is either resolved or explicitly accepted.
 A **retrospective review** happens *after* the system is built and running, and asks a
 different question entirely: *did the architecture actually deliver what we hoped?* Where did
 reality diverge from the design? Which assumptions held and which broke? A retrospective
-review is not about blame; it is about *learning*, both to guide the next iteration of this
+review is about *learning* rather than blame, both to guide the next iteration of this
 system and to make the *team* better at designing. The Therac-25 disaster from Chapter 1 is,
 among other things, a story of a team that never conducted an honest retrospective on its own
 assumptions about software reliability.[^1]
@@ -160,8 +159,8 @@ flowchart TD
 
 3. **Preparation.** Each reviewer examines the work product *individually and in advance*,
    noting suspected defects and questions. This is the phase where most defects are actually
-   found.[^6] The meeting does not exist to read the code for the first time; it exists to
-   consolidate what individual, focused reading has already turned up.
+   found.[^6] The meeting exists to consolidate what individual, focused reading has already
+   turned up, not to read the code for the first time.
 
 4. **Meeting.** The group convenes. The reader walks through the material (see the roles
    below), reviewers raise the issues they found in preparation, and the scribe records each
@@ -187,7 +186,8 @@ The feature that separates inspection from informal review is that inspection *m
 itself*. Because the process is repeatable, you can collect numbers and use them to tell
 whether the process is healthy — and the numbers are often surprising.
 
-> **Case study.** A team inspecting a mission-critical module tracks two quantities for every
+> **Case study.** *(A composite team, with illustrative numbers.)* A team inspecting a
+> mission-critical module tracks two quantities for every
 > inspection: the **preparation rate** (lines of code each reviewer read per hour before the
 > meeting) and the **defect density** (defects found per thousand lines). Over twenty
 > inspections they notice a strong pattern: when reviewers prepare at 500 lines per hour or
@@ -237,7 +237,7 @@ someone else is doing the careful reading.
 One person can sometimes hold two roles (the moderator often also scribes in a small team),
 but the *author should never* be the moderator or the reader of their own code — the entire
 value comes from other people examining it. If your "inspection" is just the author walking
-everyone through their own reasoning, you have recreated the blind spot you were trying to
+everyone through their own reasoning, you have recreated the very problem you were trying to
 escape.
 
 ## 8.3 Code Reviews: Check Intent and Trust
@@ -322,8 +322,8 @@ noticing that *every* code path closes a file handle, but computers are excellen
 **Automated static analysis** is the use of tools that examine source code (or compiled
 artifacts) *without running it* and report likely defects, style violations, or dangerous
 patterns. These tools run in seconds on every change, never get tired, and never skip the
-boring parts — which is exactly why they complement human review rather than competing with
-it. Let the machine catch the mechanical faults so the humans can spend their attention on
+boring parts — which is why they complement human review rather than competing with it.
+Let the machine catch the mechanical faults so the humans can spend their attention on
 intent and design.
 
 ### 8.4.1 A Variety of Static Checkers
@@ -337,7 +337,89 @@ different question. It helps to know the categories so you can assemble the righ
   and it rejects whole classes of defect before the program ever runs. Bolt-on type checkers
   bring the same guarantees to dynamically typed languages — for example, gradual type checkers
   for Python and JavaScript-family code. A type error caught at compile time is a failure that
-  can never reach a user.
+  can never reach a user. Here a price arrives as a string and flows into arithmetic — Python
+  runs it without complaint and produces a nonsense total:
+
+  ```python
+  def line_total(price: float, quantity: int) -> float:
+    return price * quantity
+
+  price = "9.99"              # read from a CSV row, still a string
+  total = line_total(price, 3)
+  print(total)                # no crash: prints 9.999.999.99
+  ```
+
+  ```java
+  public class LineTotal {
+    static double lineTotal(double price, int quantity) {
+      return price * quantity;
+    }
+
+    public static void main(String[] args) {
+      String price = "9.99";  // read from a CSV row, still a string
+      double total = lineTotal(price, 3);
+      System.out.println(total);  // never runs: javac rejects the call
+    }
+  }
+  // javac: argument mismatch; String cannot be converted to double
+  ```
+
+  ```javascript
+  // @ts-check
+  /**
+   * @param {number} price
+   * @param {number} quantity
+   * @returns {number}
+   */
+  function lineTotal(price, quantity) {
+    return price * quantity;
+  }
+
+  const price = "9.99";       // read from a CSV row, still a string
+  const total = lineTotal(price, 3);
+  console.log(total);         // no crash: JS coerces and prints 29.97
+  // TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
+  ```
+
+  ```go
+  package main
+
+  import "fmt"
+
+  func lineTotal(price float64, quantity int) float64 {
+  	return price * float64(quantity)
+  }
+
+  func main() {
+  	price := "9.99" // read from a CSV row, still a string
+  	total := lineTotal(price, 3)
+  	fmt.Println(total) // never runs: go build rejects the call
+  }
+
+  // cannot use price (variable of type string) as float64 value in argument to lineTotal
+  ```
+
+  ```ruby
+  # typed: true
+  extend T::Sig
+
+  sig { params(price: Float, quantity: Integer).returns(Float) }
+  def line_total(price, quantity)
+    price * quantity
+  end
+
+  price = "9.99"              # read from a CSV row, still a string
+  total = line_total(price, 3)
+  puts total                  # untyped Ruby prints 9.999.999.99, no crash
+  # srb tc: Expected `Float` but found `String("9.99")` for argument `price`
+  ```
+
+  `mypy` rejects the same six lines before they ever run:
+
+  ```text
+  line_total.py:5: error: Argument 1 to "line_total" has incompatible type "str"; expected "float"  [arg-type]
+  ```
+
 - **Linters** flag stylistic issues, suspicious constructs, and small correctness hazards:
   unused variables, shadowed names, missing `break` in a switch, comparison that is always
   true. Individually minor, these findings keep a codebase consistent and readable, and they
@@ -348,7 +430,111 @@ different question. It helps to know the categories so you can assemble the righ
   closed on another, a value that can be null reaching a dereference, tainted user input
   flowing into a database query (a SQL-injection risk). These are the checks humans are worst
   at, because they require mentally simulating every execution path — exactly what a machine
-  does tirelessly.
+  is built to do. This exporter closes its file on the normal path but leaks it on the error
+  path:
+
+  ```python
+  def export_prices(catalog, discounts, path):
+    out = open(path, "w")
+    out.write("item,price\n")
+    for item, price in sorted(catalog.items()):
+      pct = discounts.percent_for(item)
+      if pct < 0 or pct > 100:
+        return None                 # error path: `out` is never closed
+      final = round(price * (1 - pct / 100), 2)
+      out.write(f"{item},{final}\n")
+    out.close()
+    return path
+  ```
+
+  ```java
+  static String exportPrices(Map<String, Double> catalog, Discounts discounts,
+      String path) throws IOException {
+    Writer out = new FileWriter(path);
+    out.write("item,price\n");
+    for (String item : new TreeMap<>(catalog).keySet()) {
+      int pct = discounts.percentFor(item);
+      if (pct < 0 || pct > 100) {
+        return null;                // error path: `out` is never closed
+      }
+      double net = Math.round(catalog.get(item) * (1 - pct / 100.0) * 100) / 100.0;
+      out.write(item + "," + net + "\n");
+    }
+    out.close();
+    return path;
+  }
+  // SpotBugs: M B OS: exportPrices(Map, Discounts, String) may fail to close stream
+  ```
+
+  ```javascript
+  const fs = require("node:fs/promises");
+
+  async function exportPrices(catalog, discounts, path) {
+    const out = await fs.open(path, "w");
+    await out.write("item,price\n");
+    for (const item of Object.keys(catalog).sort()) {
+      const pct = discounts.percentFor(item);
+      if (pct < 0 || pct > 100) {
+        return null;                // error path: `out` is never closed
+      }
+      const final = Math.round(catalog[item] * (1 - pct / 100) * 100) / 100;
+      await out.write(`${item},${final}\n`);
+    }
+    await out.close();
+    return path;
+  }
+  // node, when the abandoned handle is finally garbage-collected:
+  //   Warning: Closing file descriptor 20 on garbage collection
+  ```
+
+  ```go
+  func exportPrices(catalog map[string]float64, disc *Discounts, path string) string {
+  	out, _ := os.Create(path)
+  	out.WriteString("item,price\n")
+  	for _, item := range slices.Sorted(maps.Keys(catalog)) {
+  		pct := disc.PercentFor(item)
+  		if pct < 0 || pct > 100 {
+  			return "" // error path: `out` is never closed
+  		}
+  		final := math.Round(catalog[item]*(1-float64(pct)/100)*100) / 100
+  		fmt.Fprintf(out, "%s,%g\n", item, final)
+  	}
+  	out.Close()
+  	return path
+  }
+
+  // go vet has no unclosed-file check and stays silent; GoLand's resource-leak
+  // inspection walks every path and flags the early return that skips Close.
+  ```
+
+  ```ruby
+  def export_prices(catalog, discounts, path)
+    out = File.open(path, "w")
+    out.write("item,price\n")
+    catalog.sort.each do |item, price|
+      pct = discounts.percent_for(item)
+      return nil if pct < 0 || pct > 100    # error path: `out` is never closed
+      final = (price * (1 - pct / 100.0)).round(2)
+      out.write("#{item},#{final}\n")
+    end
+    out.close
+    path
+  end
+  # rubocop: C: Style/AutoResourceCleanup: Use the block version of File.open.
+  ```
+
+  Even a general-purpose linter flags the fragile acquisition, and a path-sensitive analyzer
+  reports the leaking path itself:
+
+  ```text
+  export_prices.py:2:10: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
+  ```
+
+  The `open` on line 2 and the `return` on line 7 are the guilty pair. They sit five lines
+  apart here and are often a screen or more apart in production code — a human tracing every
+  path by eye misses the one that skips the `close`, while the analyzer walks each path
+  mechanically.
+
 - **Bug-pattern finders** encode a catalog of known-bad code shapes and scan for them:
   ignoring a method's return value that must be checked, comparing strings with reference
   equality, integer overflow in a size calculation, a lock acquired without a matching

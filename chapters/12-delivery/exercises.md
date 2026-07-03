@@ -18,7 +18,7 @@ only the answer.
    "any server can answer any request," and one standard place to move it.
 
 3. **[warm‑up]** A teammate says "we don't need rollback — we'll just fix forward, our
-   pipeline is fast." Using §12.3.3, give one situation where roll-forward is genuinely the
+   pipeline is fast." Using §12.3.4, give one situation where roll-forward is genuinely the
    only option and one where an untested reliance on it would be dangerous.
 
 4. **[warm‑up]** For each scanner family in §12.4 — SAST, DAST, SCA, secrets scanning —
@@ -61,7 +61,7 @@ only the answer.
    what your plan's worst-case blast radius is, and compare it to a blue-green switch of
    100% of traffic.
 
-8. **[analysis]** *Knight versus CrowdStrike.* Using only the facts in §12.3.4, write a
+8. **[analysis]** *Knight versus CrowdStrike.* Using only the facts in §12.3.5, write a
    structured comparison of the two incidents: for each, identify (a) the latent defect
    and how long it lay dormant, (b) the deployment-process failure that activated or
    spread it, (c) the missing safeguard that would have bounded the damage, and (d) the
@@ -86,14 +86,73 @@ only the answer.
 
     ```python
     def norm_code(s, strict=False):
-        if s is None:
-            return "" if not strict else None
-        s = s.strip().upper().replace("-", "")
-        if len(s) > 8:
-            s = s[:8]
-        if strict and not s.isalnum():
-            raise ValueError(s)
-        return s or ("" if not strict else None)
+      if s is None:
+        return "" if not strict else None
+      s = s.strip().upper().replace("-", "")
+      if len(s) > 8:
+        s = s[:8]
+      if strict and not s.isalnum():
+        raise ValueError(s)
+      return s or ("" if not strict else None)
+    ```
+
+    ```java
+    static String normCode(String s, boolean strict) {
+      if (s == null) return strict ? null : "";
+      s = s.strip().toUpperCase().replace("-", "");
+      if (s.length() > 8) s = s.substring(0, 8);
+      boolean alnum = !s.isEmpty() && s.chars().allMatch(Character::isLetterOrDigit);
+      if (strict && !alnum) throw new IllegalArgumentException(s);
+      return s.isEmpty() ? (strict ? null : "") : s;
+    }
+    ```
+
+    ```javascript
+    function normCode(s, strict = false) {
+      if (s === null) return strict ? null : "";
+      s = s.trim().toUpperCase().replaceAll("-", "");
+      if (s.length > 8) s = s.slice(0, 8);
+      if (strict && !/^[\p{L}\p{N}]+$/u.test(s)) throw new RangeError(s);
+      return s || (strict ? null : "");
+    }
+    ```
+
+    ```go
+    func normCode(s *string, strict bool) (*string, error) { // nil plays Python's None
+    	if s == nil {
+    		if strict {
+    			return nil, nil
+    		}
+    		return new(string), nil // ""
+    	}
+    	t := strings.ReplaceAll(strings.ToUpper(strings.TrimSpace(*s)), "-", "")
+    	if len(t) > 8 {
+    		t = t[:8]
+    	}
+    	if strict && !isAlnum(t) {
+    		return nil, fmt.Errorf("invalid code: %q", t)
+    	}
+    	return &t, nil
+    }
+
+    func isAlnum(s string) bool { // Python's isalnum: nonempty, all letters/digits
+    	for _, r := range s {
+    		if !unicode.IsLetter(r) && !unicode.IsDigit(r) {
+    			return false
+    		}
+    	}
+    	return s != ""
+    }
+    ```
+
+    ```ruby
+    def norm_code(s, strict: false)
+      return strict ? nil : "" if s.nil?
+      s = s.strip.upcase.delete("-")
+      s = s[0, 8] if s.length > 8
+      raise ArgumentError, s if strict && s !~ /\A[[:alnum:]]+\z/
+      s.empty? ? (strict ? nil : "") : s
+    end
     ```
 
     (a) Following §12.6.2, write a suite of characterization tests (pytest or similar)

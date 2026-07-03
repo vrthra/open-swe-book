@@ -117,6 +117,68 @@ pre.mermaid svg {
   overflow-x: auto;
 }
 
+/* Language tabs (tabs.js): adjacent python/java/javascript/go/ruby fences group
+   into one widget — a single card: toolbar-style tab strip on top, code panel
+   below, one border around the whole thing (the Stripe/Docusaurus pattern).
+   Sizes in em (html { font-size: 62.5% } makes rem treacherous). */
+.lang-tabs {
+  margin: 1.4em 0;
+  border: 1px solid var(--table-border-color, rgba(140, 150, 170, 0.45));
+  border-radius: 0.6em;
+  overflow: hidden;
+}
+.lang-tab-bar {
+  display: flex;
+  gap: 0.2em;
+  flex-wrap: wrap;
+  padding: 0.3em 0.6em 0;
+  background: var(--sidebar-bg);
+  border-bottom: 1px solid var(--table-border-color, rgba(140, 150, 170, 0.45));
+}
+.lang-tab-bar button {
+  font-family: inherit;
+  font-size: 0.8em;
+  font-weight: 500;
+  padding: 0.55em 1.1em;
+  cursor: pointer;
+  color: var(--sidebar-fg, var(--fg));
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  opacity: 0.6;
+  transition: opacity 0.12s ease, border-color 0.12s ease;
+}
+.lang-tab-bar button:hover {
+  opacity: 0.95;
+}
+.lang-tab-bar button.active {
+  opacity: 1;
+  font-weight: 600;
+  color: var(--sidebar-active, #4a90e2);
+  border-bottom-color: var(--sidebar-active, #4a90e2);
+}
+.lang-tab-bar button:focus-visible {
+  outline: 2px solid var(--sidebar-active, #4a90e2);
+  outline-offset: -2px;
+  border-radius: 0.3em;
+}
+/* the panel is part of the card: no own margins or rounding */
+.lang-tabs pre {
+  margin: 0;
+}
+.lang-tabs pre > code {
+  border-radius: 0;
+}
+@media print {
+  /* Browser-printed pages show every language, stacked. */
+  .lang-tabs pre {
+    display: block !important;
+  }
+  .lang-tab-bar {
+    display: none;
+  }
+}
+
 /* When printing, keep diagrams inside the paper width and give tables
    visible separators (screen theme colors don't print reliably). */
 @media print {
@@ -149,5 +211,198 @@ pre.mermaid svg {
   .subsection-item a.subsection-link:hover,
   .subsection-item a.subsection-link.active-sub {
     background: rgba(74, 144, 226, 0.14);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Radical code highlighting for the dark themes (navy, coal, ayu).
+   Palette from the Radical VS Code theme (github.com/dhedgecock/radical-vscode,
+   dist/Radical.json): bg #141322, fg #94b4c4, neon pink/cyan/mint accents.
+   Light themes keep mdBook's default highlight scheme. */
+:is(.navy, .coal, .ayu) pre code.hljs,
+:is(.navy, .coal, .ayu) code.hljs {
+  background: #141322;
+  color: #94b4c4;
+}
+:is(.navy, .coal, .ayu) :is(.hljs-comment, .hljs-quote) {
+  color: #45898c;
+  font-style: italic;
+}
+:is(.navy, .coal, .ayu) :is(.hljs-string, .hljs-regexp) {
+  color: #a9fef7;
+}
+:is(.navy, .coal, .ayu) :is(.hljs-keyword, .hljs-selector-tag, .hljs-doctag) {
+  color: #d5358f;
+}
+:is(.navy, .coal, .ayu) :is(.hljs-built_in, .hljs-title, .hljs-title.function_) {
+  color: #8ce1e7;
+}
+:is(.navy, .coal, .ayu) :is(.hljs-type, .hljs-title.class_, .hljs-class .hljs-title) {
+  color: #ec99f7;
+  font-style: italic;
+}
+:is(.navy, .coal, .ayu) .hljs-number {
+  color: #e5fca6;
+}
+:is(.navy, .coal, .ayu) .hljs-literal {
+  color: #b3e27c;
+}
+:is(.navy, .coal, .ayu) :is(.hljs-variable, .hljs-template-variable, .hljs-params) {
+  color: #b4dae9;
+}
+:is(.navy, .coal, .ayu) :is(.hljs-attr, .hljs-attribute) {
+  color: #b3e4c2;
+}
+:is(.navy, .coal, .ayu) :is(.hljs-tag, .hljs-name, .hljs-section, .hljs-symbol, .hljs-bullet) {
+  color: #fe8da5;
+}
+:is(.navy, .coal, .ayu) :is(.hljs-meta, .hljs-meta .hljs-keyword) {
+  color: #f37ab0;
+}
+:is(.navy, .coal, .ayu) .hljs-operator {
+  color: #fb4293;
+}
+:is(.navy, .coal, .ayu) .hljs-addition {
+  color: #b3e4c2;
+}
+:is(.navy, .coal, .ayu) .hljs-deletion {
+  color: #fb4293;
+}
+:is(.navy, .coal, .ayu) .hljs-emphasis {
+  font-style: italic;
+}
+:is(.navy, .coal, .ayu) .hljs-strong {
+  font-weight: bold;
+}
+
+/* ---------------------------------------------------------------------------
+   One Light code highlighting for the light themes (light, rust).
+   Palette from the One Light VS Code theme (github.com/akamud/vscode-theme-onelight,
+   themes/OneLight.json — the Atom One Light port): bg #FAFAFA, fg #383A42. */
+:is(.light, .rust) pre code.hljs,
+:is(.light, .rust) code.hljs {
+  background: #fafafa;
+  color: #383a42;
+}
+:is(.light, .rust) :is(.hljs-comment, .hljs-quote) {
+  color: #a0a1a7;
+  font-style: italic;
+}
+:is(.light, .rust) :is(.hljs-doctag, .hljs-keyword, .hljs-formula) {
+  color: #a626a4;
+}
+:is(.light, .rust) :is(.hljs-section, .hljs-name, .hljs-selector-tag, .hljs-deletion, .hljs-subst) {
+  color: #e45649;
+}
+:is(.light, .rust) .hljs-literal {
+  color: #0184bb;
+}
+:is(.light, .rust) :is(.hljs-string, .hljs-regexp, .hljs-addition, .hljs-attribute, .hljs-meta .hljs-string) {
+  color: #50a14f;
+}
+:is(.light, .rust) :is(.hljs-attr, .hljs-variable, .hljs-template-variable, .hljs-type, .hljs-selector-class, .hljs-selector-attr, .hljs-selector-pseudo, .hljs-number) {
+  color: #986801;
+}
+:is(.light, .rust) :is(.hljs-symbol, .hljs-bullet, .hljs-link, .hljs-meta, .hljs-selector-id, .hljs-title) {
+  color: #4078f2;
+}
+:is(.light, .rust) :is(.hljs-built_in, .hljs-title.class_, .hljs-class .hljs-title) {
+  color: #c18401;
+}
+:is(.light, .rust) .hljs-emphasis {
+  font-style: italic;
+}
+:is(.light, .rust) .hljs-strong {
+  font-weight: bold;
+}
+
+/* ---------------------------------------------------------------------------
+   Code typography and block chrome: Inconsolata (self-hosted, OFL — see
+   fonts/OFL-Inconsolata.txt), line-number gutters (added by tabs.js), and
+   hidden scrollbars (blocks still scroll by trackpad/keyboard if oversized). */
+@font-face {
+  font-family: "Inconsolata";
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("fonts/Inconsolata-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Inconsolata";
+  font-style: normal;
+  font-weight: 200 900;
+  font-display: swap;
+  src: url("fonts/Inconsolata-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+/* mdBook's code rule uses var(--mono-font) with !important — override the var. */
+:root {
+  --mono-font: "Inconsolata", "Source Code Pro", Consolas, monospace;
+}
+
+/* Line-number gutter: tabs.js inserts <span class="code-ln"> as the first
+   child of each fenced <pre> (mermaid and print.html excluded). The gutter
+   sits outside <code>, so mdBook's copy button never copies the numbers. */
+pre.has-ln {
+  display: flex;
+  overflow: visible;
+}
+pre.has-ln > .code-ln {
+  flex: 0 0 auto;
+  user-select: none;
+  -webkit-user-select: none;
+  text-align: right;
+  white-space: pre;
+  opacity: 0.45;
+  /* mirror mdBook's pre > code metrics exactly so gutter rows align */
+  font-family: var(--mono-font);
+  font-size: var(--code-font-size);
+  line-height: 1.5;
+  padding: 1rem 0.8em 1rem 0;
+  margin-right: 0.9em;
+  border-right: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+}
+pre.has-ln > code {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+}
+
+/* No visible scrollbars on code blocks (content stays scrollable). */
+pre, pre > code {
+  scrollbar-width: none;
+}
+pre::-webkit-scrollbar, pre > code::-webkit-scrollbar {
+  display: none;
+}
+
+/* Compact code: tabs render two columns wide (Go is tab-indented by gofmt). */
+pre, pre > code {
+  tab-size: 2;
+}
+
+/* Readable code: slightly larger Inconsolata, editor-like line height, and
+   soft wrap instead of horizontal scrolling (snippets are kept under ~90
+   columns, so wrapping is rare; when it happens, nothing is hidden). */
+:root {
+  --code-font-size: 0.95em;
+}
+pre > code {
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  line-height: 1.5;
+}
+@media (max-width: 700px) {
+  /* On phones, trade the gutter for column width. */
+  pre.has-ln > .code-ln {
+    display: none;
+  }
+  :root {
+    --code-font-size: 0.85em;
   }
 }

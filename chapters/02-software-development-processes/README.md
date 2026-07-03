@@ -92,8 +92,8 @@ statements.[^2] In each, both sides have worth, but the left is valued *more*:
 - **Customer collaboration** over contract negotiation.
 - **Responding to change** over following a plan.
 
-Read carefully, this is not anti-planning or anti-documentation; it is a statement about
-what to trust when they conflict. If your beautiful plan and your working software
+Read carefully: this is a statement about what to trust when the two sides conflict, not
+a case against planning or documentation. If your beautiful plan and your working software
 disagree, believe the software. If a document and a conversation with the customer
 disagree, have the conversation. The manifesto's twelve supporting principles push
 further: deliver working software frequently, welcome changing requirements even late,
@@ -196,8 +196,8 @@ them as empty ritual is a classic failure.
   *how* will we approach it.
 - The **Daily Scrum** (or standup) is a short, time-boxed check-in — fifteen minutes — where
   the Developers synchronize and re-plan the next day's work toward the sprint goal.[^4] It is
-  for the *team*, not a status report to a manager. The useful frame is not "what did I do
-  yesterday" theater but "are we still on track for the goal, and what is in our way?"
+  for the *team*, not a status report to a manager. The useful frame is "are we still on
+  track for the goal, and what is in our way?" rather than "what did I do yesterday" theater.
 - The **Sprint Review** closes the sprint's *product* loop. The team demonstrates the working
   increment to stakeholders and gathers feedback, which flows back into the product backlog.
   This is where requirements get corrected by contact with reality.
@@ -291,10 +291,108 @@ You write a small automated test for behavior that does not exist yet and watch 
 you write the least code that makes it pass (*green*). Then you improve the design while the
 test guards against breakage (*refactor*). Repeat in minutes-long cycles.[^9]
 
+One turn of this loop on the clinic app's appointment slots starts *red* — running these
+tests fails with a `NameError`, because `slots_overlap` does not exist yet:
+
+```python
+def test_overlapping_slots_conflict():
+  assert slots_overlap(("09:00", "09:30"), ("09:15", "09:45"))
+
+def test_back_to_back_slots_do_not_conflict():
+  assert not slots_overlap(("09:00", "09:30"), ("09:30", "10:00"))
+```
+
+```java
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+class SlotsOverlapTest {
+  @Test void overlappingSlotsConflict() {
+    assertTrue(slotsOverlap("09:00", "09:30", "09:15", "09:45"));
+  }
+
+  @Test void backToBackSlotsDoNotConflict() {
+    assertFalse(slotsOverlap("09:00", "09:30", "09:30", "10:00"));
+  }
+}
+```
+
+```javascript
+const test = require("node:test");
+const assert = require("node:assert/strict");
+
+test("overlapping slots conflict", () => {
+  assert.ok(slotsOverlap(["09:00", "09:30"], ["09:15", "09:45"]));
+});
+
+test("back-to-back slots do not conflict", () => {
+  assert.ok(!slotsOverlap(["09:00", "09:30"], ["09:30", "10:00"]));
+});
+```
+
+```go
+func TestOverlappingSlotsConflict(t *testing.T) {
+	if !slotsOverlap([2]string{"09:00", "09:30"}, [2]string{"09:15", "09:45"}) {
+		t.Error("want overlapping slots to conflict")
+	}
+}
+
+func TestBackToBackSlotsDoNotConflict(t *testing.T) {
+	if slotsOverlap([2]string{"09:00", "09:30"}, [2]string{"09:30", "10:00"}) {
+		t.Error("want back-to-back slots not to conflict")
+	}
+}
+```
+
+```ruby
+require "minitest/autorun"
+
+class TestSlotsOverlap < Minitest::Test
+  def test_overlapping_slots_conflict
+    assert slots_overlap(["09:00", "09:30"], ["09:15", "09:45"])
+  end
+
+  def test_back_to_back_slots_do_not_conflict
+    refute slots_overlap(["09:00", "09:30"], ["09:30", "10:00"])
+  end
+end
+```
+
+The least code that makes both tests pass turns the run *green*:
+
+```python
+def slots_overlap(a, b):
+  return a[0] < b[1] and b[0] < a[1]
+```
+
+```java
+static boolean slotsOverlap(String aStart, String aEnd, String bStart, String bEnd) {
+  return aStart.compareTo(bEnd) < 0 && bStart.compareTo(aEnd) < 0;
+}
+```
+
+```javascript
+function slotsOverlap(a, b) {
+  return a[0] < b[1] && b[0] < a[1];
+}
+```
+
+```go
+func slotsOverlap(a, b [2]string) bool {
+	return a[0] < b[1] && b[0] < a[1]
+}
+```
+
+```ruby
+def slots_overlap(a, b)
+  a[0] < b[1] && b[0] < a[1]
+end
+```
+
 Why work this way? Three reasons. First, tests written *first* are honest — they cannot be
 quietly shaped to match whatever the code happens to do. Second, the growing suite is a
 **regression net**: it lets you change code fearlessly, because a break announces itself
-immediately, which is exactly what makes continuous refactoring safe. Third, writing the
+immediately, which is what makes continuous refactoring safe. Third, writing the
 test first forces you to use your own interface before you build it, which surfaces awkward
 designs early. Testing, in XP, is less about catching bugs at the end and more about
 *driving* the design and *enabling* change — the very properties Chapter 1 said good
@@ -309,8 +407,8 @@ are where accidental complexity comes from.
 
 XP's answer rests on three habits. **Simple design**: build the simplest thing that could
 possibly work for the stories you have *now*, not the ones you imagine you might have later
-(the discipline of resisting speculative generality is sometimes captured as YAGNI — *you
-aren't gonna need it*).[^10] **Refactoring**: continuously improve the design of existing code
+(resisting speculative generality is sometimes captured as YAGNI — *you aren't gonna need
+it*).[^10] **Refactoring**: continuously improve the design of existing code
 without changing its behavior, so the structure keeps pace with your growing understanding.
 And the **test suite** that makes refactoring safe. Together these let the design *emerge*:
 it is always as good as your current understanding, and it improves as your understanding
@@ -363,7 +461,7 @@ iteration.[^12] The industry largely adopted the diagram and skipped the warning
 critiques the model as it was actually practiced.)
 
 Its appeal is real: it is simple to explain, easy to plan and bill against, and it front-loads
-the thinking. For genuinely well-understood problems with stable requirements, a waterfall-ish
+the thinking. For well-understood problems with stable requirements, a waterfall-ish
 flow can work fine. The trouble is that most software is *not* well understood up front, and
 waterfall's structure hides that trouble until the most expensive possible moment.
 
@@ -466,9 +564,10 @@ flowchart TD
 ```
 
 The dashed lines carry the model's central insight: each design activity has a corresponding
-test activity that checks *whether that design was right*. Detailed module design is verified
-by unit tests; the architecture is verified by integration and system tests; the original
-requirements are verified by acceptance tests. This pairing means you plan the tests *while*
+test activity that checks *whether that design was right*. The implementation is verified by
+unit tests; detailed module design by integration tests, which check that the pieces fit
+together the way the design claimed; the architecture by system tests; and the original
+requirements by acceptance tests. This pairing means you plan the tests *while*
 you do the design, not as an afterthought — and it makes explicit that different mistakes are
 caught at different levels.
 
@@ -494,9 +593,8 @@ engineering, and every level maps back to a decision made on the left arm.
   the two can diverge when the specification itself was wrong.
 
 These levels are not tied to waterfall; agile teams run all four, just continuously rather
-than in a final phase. The V-model's lasting contribution is not its schedule but its
-*vocabulary*: it gives you the ladder of testing levels that every process, iterative or not,
-has to climb.
+than in a final phase. The V-model's lasting contribution is its *vocabulary*: it gives you
+the ladder of testing levels that every process, iterative or not, has to climb.
 
 ### 2.5.3 Summary
 
@@ -587,7 +685,7 @@ late-validated bets are dangerous; small, early-validated ones are safe.
 
 The **spiral model** is an explicitly **risk-driven** process framework.[^16] Its central claim is
 that the *risks* of your particular project — not a fixed schedule — should decide what you do
-next. It is best understood not as a rival to waterfall or agile but as a meta-framework: at
+next. It is best understood as a meta-framework rather than a rival to waterfall or agile: at
 each turn it tells you *which* approach to apply based on where your biggest uncertainties lie.
 
 You proceed in a series of loops, each spiraling outward as the project grows more concrete and
@@ -629,7 +727,7 @@ Scrum, XP, and the spiral all iterate in short cycles and carry unfinished work 
 a backlog. **Shape Up** — the method Basecamp published as a free online book — keeps the
 fixed cadence but makes three sharp bets that set it apart: it fixes *time* and flexes
 *scope*, it refuses to keep a backlog, and it hands a team a whole shaped problem rather
-than a list of tasks.[^17] It is worth studying precisely because it questions assumptions the
+than a list of tasks.[^17] It belongs in this chapter because it questions assumptions the
 other models share.
 
 Shape Up runs in three phases that overlap across the calendar:

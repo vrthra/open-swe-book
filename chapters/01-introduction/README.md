@@ -21,7 +21,7 @@ head. Understanding the gap between those two activities is the subject of this 
 > enough, and economical to change — usually by a **team**, usually under **changing
 > requirements**, usually at a **scale** that defeats ad‑hoc effort.
 
-Going deeper into the three words in that definition that have a lot of weight:
+Three words in that definition carry a lot of weight:
 
 - **Team.** Almost all real software is built by groups. Coordination, communication,
   and shared understanding become first‑class engineering concerns, not afterthoughts.
@@ -119,7 +119,7 @@ have. The catch is that the people who *have* the need are usually not the peopl
 *build* the software, and they rarely state the need precisely. Users describe
 solutions ("add a dropdown here") when what they have is a *problem* ("I can't tell
 which appointments are unconfirmed"). Part of the engineer's job is to dig past the
-requested solution to the underlying goal / the problem to solve. 
+requested solution to the underlying problem.
 
 Requirements also come from more than the obvious end user. A clinic scheduling app has:
 
@@ -197,8 +197,8 @@ most important in all of software design.
 
 ## 1.4 Defects Are Inevitable
 
-Humans make mistakes; therefore software has defects. The engineering response is not to
-pretend otherwise but to build **multiple, overlapping** nets that catch defects early,
+Humans make mistakes; therefore software has defects. The engineering response is to
+accept this and build **multiple, overlapping** nets that catch defects early,
 when they are cheap to fix.
 
 ### 1.4.1 Fix faults to avoid failures
@@ -263,7 +263,7 @@ These constraints are coupled: you cannot freely fix all three. Want more **scop
 the same **time**? Pay more **cost** (people, tools). Want to ship sooner without more
 cost? Cut **scope**. The classic quip — *"good, fast, cheap: pick two"* — captures the
 reality that **quality is not free**, and that a manager who demands more scope, sooner,
-for less, is not being ambitious but innumerate.
+for less is mistaking innumeracy for ambition.
 
 Agile methods make a deliberate choice here: they **fix time and cost** (a fixed‑length
 iteration with a fixed team) and let **scope flex** — you always ship *something* valuable
@@ -291,7 +291,7 @@ device**: software that detected when the car was being emissions‑tested (from
 speed, and time patterns) and switched to a cleaner, lower‑performance mode *only during
 the test*. On the road, the cars emitted many times the legal limit of nitrogen oxides.[^9]
 
-The software worked *exactly as designed* — which is precisely the problem. This was not
+The software worked *exactly as designed* — and that is the problem. This was not
 a defect to be fixed by better testing; it was a *requirement* that should never have
 been implemented. Engineers wrote that code. The lesson: **correctness is not the same
 as rightness.** A professional must sometimes refuse to build what they are asked to
@@ -345,7 +345,30 @@ those pressures:
 - **Design and architecture** (Ch. 6–7) tame complexity so change stays cheap.
 - **Static checking and testing** (Ch. 8–9) catch the inevitable defects early.
 - **Metrics** (Ch. 10) tell us, with evidence rather than opinion, how we are doing.
+- **AI across the lifecycle** (Ch. 11) re-examines every one of those disciplines as
+  coding agents take over more of the typing.
+- **Delivery** (Ch. 12) carries a verified change the last mile, into production, safely.
 - **A team project** (Appendix A) puts it all into practice.
+
+A word about the code you will meet along the way. Concepts come first in this book and
+code second, but from Chapter 2 onward nearly every code-shaped idea is also shown as a
+short, runnable example — and each example appears in five languages: **Python, Java,
+JavaScript, Go, and Ruby**, behind a row of tabs. Pick your language once and every
+example on every page follows; you can also open any page with `?lang=go` (or `java`,
+`javascript`, `ruby`) in the address bar to pre-select one. Python is the tab you see
+first because its syntax sits closest to pseudocode — it reads well even if you have
+never written a line of it — and because a first course rarely has one language everyone
+shares.
+
+The other four are worth your attention even so, because some lessons only appear in the
+contrast: information hiding looks different as a Java interface, a Go implicit
+interface, and Ruby duck typing; the same five unit tests read differently in pytest,
+JUnit, `node:test`, `go test`, and Minitest — and each difference says something about
+the language's design. Every snippet is a real program, kept as a runnable file with a
+test in the book's repository and exercised by continuous integration, so the examples
+cannot silently rot. And when an example is *supposed* to fail — a type fault the
+compiler rejects in Chapter 8 — the error message printed beside it is the compiler's
+actual output, not a paraphrase.
 
 Keep the four cross‑cutting principles in view as you read: *software is complex;
 requirements change; defects are inevitable; teams need coordination.* Nearly every

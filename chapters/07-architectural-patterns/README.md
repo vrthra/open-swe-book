@@ -6,7 +6,7 @@
 > reach for* when you sit down to design a real system. This chapter closes that gap. An
 > **architectural pattern** is a reusable, named arrangement of modules and connectors
 > that has repeatedly solved a recurring design problem.[^1]<!-- -->[^2] Learning the catalog means you
-> rarely start from a blank page — and, more importantly, that you can *reason about the
+> rarely start from a blank page — and, better still, that you can *reason about the
 > trade-offs* of a structure before you commit code to it.
 
 A pattern is not a library you install or a framework you inherit. It is a *shape* — a
@@ -21,8 +21,8 @@ Every pattern in this chapter is presented the same way, so you can compare them
 the **problem** it solves, its **structure** (with a diagram), the **participants** and
 their responsibilities, the **trade-offs** you accept by adopting it, and a concrete
 **example** from systems you have probably used. Read for the trade-offs above all. The
-mark of an engineer, as Chapter 1 put it, is not knowing that a pattern exists but
-knowing *when it earns its cost and when it is overkill.*
+mark of an engineer, as Chapter 1 put it, is knowing *when a pattern earns its cost and
+when it is overkill*, not merely that it exists.
 
 > **Principle.** A pattern is a *contract with consequences*. Adopting it buys you some
 > qualities (flexibility, testability, scalability) and charges you others (indirection,
@@ -83,7 +83,7 @@ the presentation layer might reach past the application layer straight into
 infrastructure, coupling the top of the stack to the bottom.
 
 **A real example.** The seven-layer OSI model of network protocols is the textbook case:
-your application code hands a message to the transport layer without knowing whether it
+your application code hands a message down the stack without knowing whether it
 travels over copper, fiber, or radio, because each layer presents a clean service to the
 one above.[^3] Closer to daily work, the standard three-tier web application — browser,
 application server, database — is layering you already rely on, and any framework
@@ -117,12 +117,12 @@ The deeper trade-off is between **isolation and directness**. Strict layers isol
 change but add indirection; relaxed layers are direct but let coupling leak. The right
 call depends on which changes you expect. If you expect to swap infrastructure often,
 pay for strictness. If your layers are thin and stable, relax them. Notice that this is
-exactly the Chapter 1 principle in action: *make likely changes cheap*, and accept a
+the Chapter 1 principle in action: *make likely changes cheap*, and accept a
 small standing cost to do it.
 
 ## 7.2 Three Building Blocks
 
-Before the larger architectures, you need three smaller patterns that appear *inside*
+Before the larger architectures, you need three smaller building blocks that appear *inside*
 almost all of them. They are the mortar between the bricks: how modules share state
 without becoming tangled (shared data), how they react to each other's changes without
 tight coupling (the observer), and — implicit in both — how a stable interface lets
@@ -172,7 +172,7 @@ accessor at once — the store's interface is now a system-wide contract. And be
 every access funnels through one place, the store can become the scalability limit and a
 single point of failure. Relational databases, blackboard systems in AI, and the Redux
 "single store" in front-end apps are all shared-data designs, and all of them live with
-exactly this tension between convenient centralization and dangerous centralization.[^1]<!-- -->[^4]
+this same tension between convenient centralization and dangerous centralization.[^1]<!-- -->[^4]
 
 ### 7.2.2 Observers and Subscribers — the Observer Pattern
 
@@ -204,6 +204,140 @@ flowchart LR
     classDef s fill:#fee,stroke:#a66,color:#000;
     class O1,O2,O3 s;
 ```
+
+In the clinic scheduler, the waiting-room display must redraw when an appointment's
+status changes:
+
+```python
+class Appointment:
+  def __init__(self, status="booked"):
+    self.status = status
+    self._observers = []
+
+  def subscribe(self, observer):
+    self._observers.append(observer)
+
+  def set_status(self, new_status):
+    self.status = new_status
+    for obs in self._observers:      # any object with update() will do
+      obs.update(self)
+
+class WaitingRoomDisplay:
+  def update(self, appointment):
+    print(f"display: appointment is now {appointment.status}")
+
+appt = Appointment()
+appt.subscribe(WaitingRoomDisplay())
+appt.set_status("arrived")               # prints: display: appointment is now arrived
+```
+
+```java
+interface Observer { void update(Appointment appointment); }
+
+class Appointment {
+  String status = "booked";
+  private final List<Observer> observers = new ArrayList<>();
+
+  void subscribe(Observer observer) { observers.add(observer); }
+
+  void setStatus(String newStatus) {
+    status = newStatus;
+    for (Observer obs : observers) obs.update(this);   // any Observer will do
+  }
+}
+
+class WaitingRoomDisplay implements Observer {
+  public void update(Appointment appointment) {
+    IO.println("display: appointment is now " + appointment.status);
+  }
+}
+
+void main() {
+  Appointment appt = new Appointment();
+  appt.subscribe(new WaitingRoomDisplay());
+  appt.setStatus("arrived");             // prints: display: appointment is now arrived
+}
+```
+
+```javascript
+class Appointment {
+  constructor(status = "booked") {
+    this.status = status;
+    this.observers = [];
+  }
+
+  subscribe(callback) {
+    this.observers.push(callback);
+  }
+
+  setStatus(newStatus) {
+    this.status = newStatus;
+    for (const notify of this.observers) notify(this);  // any callback will do
+  }
+}
+
+const waitingRoomDisplay = (appointment) =>
+  console.log(`display: appointment is now ${appointment.status}`);
+
+const appt = new Appointment();
+appt.subscribe(waitingRoomDisplay);
+appt.setStatus("arrived");               // prints: display: appointment is now arrived
+```
+
+```go
+type Observer func(*Appointment)
+
+type Appointment struct {
+	Status    string
+	observers []Observer
+}
+
+func (a *Appointment) Subscribe(observer Observer) {
+	a.observers = append(a.observers, observer)
+}
+
+func (a *Appointment) SetStatus(newStatus string) {
+	a.Status = newStatus
+	for _, notify := range a.observers { // any Observer func will do
+		notify(a)
+	}
+}
+
+func main() {
+	appt := &Appointment{Status: "booked"}
+	appt.Subscribe(func(a *Appointment) {
+		fmt.Println("display: appointment is now " + a.Status)
+	})
+	appt.SetStatus("arrived") // prints: display: appointment is now arrived
+}
+```
+
+```ruby
+class Appointment
+  attr_reader :status
+
+  def initialize(status = "booked")
+    @status = status
+    @observers = []
+  end
+
+  def subscribe(&block)
+    @observers << block
+  end
+
+  def set_status(new_status)
+    @status = new_status
+    @observers.each { |notify| notify.call(self) }  # any block will do
+  end
+end
+
+appt = Appointment.new
+appt.subscribe { |a| puts "display: appointment is now #{a.status}" }
+appt.set_status("arrived")               # prints: display: appointment is now arrived
+```
+
+Nowhere does `Appointment` name a concrete observer type — it iterates whatever
+subscribed and calls `update` on each.
 
 **Participants.** The **subject** (or *observable*) owns the state and the subscriber
 list. The **observer** (or *subscriber*) implements the callback that runs on change. The
@@ -246,8 +380,8 @@ can be tested without a running screen.
 The governing design decision, then, is a **separation of concerns**: keep the *data and
 rules* apart from the *presentation* apart from the *input handling*. A second decision
 follows: because one piece of data may drive several displays, the data should not depend
-on any particular display — displays should depend on the data. That is exactly the
-observer relationship of §7.2.2, and it is the engine inside every UI architecture in
+on any particular display — displays should depend on the data. That is the observer
+relationship of §7.2.2, and it is the engine inside every UI architecture in
 this family.
 
 ### 7.3.2 The Basic Model-View-Controller Pattern
@@ -292,7 +426,7 @@ flowchart LR
 web frameworks.[^7] In a server-side web app, an incoming request is dispatched to a
 *controller* action, which manipulates *model* objects (and their database records) and
 then selects a *view* (a template) to render the response. The exact division of labor
-varies — front-end frameworks have spawned close cousins called **MVP**
+varies — UI frameworks have spawned close cousins called **MVP**
 (Model-View-Presenter) and **MVVM** (Model-View-ViewModel), which differ mainly in how
 much logic sits between the view and the model and in which direction the wiring points.[^8]
 What they share, and what you should carry away, is the core commitment: *the model does
@@ -324,8 +458,196 @@ clicking around will find its bugs. Pushing that logic down into the model — o
 dedicated **presenter/view-model** whose job is to pre-compute exactly what the view
 should show — moves it back under test.
 
-> **Principle.** *Put logic where it can be tested.* The humble-view rule is not about
-> aesthetics; it is a testability strategy. Treat the boundary of your test coverage as a
+In the clinic app's invoice list, a fat view buries the overdue rule where no unit test
+reaches it:
+
+```python
+class InvoiceWidget:
+  def render(self, invoice, today):
+    text = invoice.patient_name
+    if not invoice.paid and (today - invoice.sent_on).days > 30:
+      text += " — OVERDUE"         # a business rule, trapped on screen
+    return text
+```
+
+```java
+class InvoiceWidget {
+  String render(Invoice invoice, LocalDate today) {
+    String text = invoice.patientName();
+    if (!invoice.paid() && ChronoUnit.DAYS.between(invoice.sentOn(), today) > 30) {
+      text += " — OVERDUE";              // a business rule, trapped on screen
+    }
+    return text;
+  }
+}
+```
+
+```javascript
+const MS_PER_DAY = 86_400_000;
+
+class InvoiceWidget {
+  render(invoice, today) {
+    let text = invoice.patientName;
+    if (!invoice.paid && (today - invoice.sentOn) / MS_PER_DAY > 30) {
+      text += " — OVERDUE";              // a business rule, trapped on screen
+    }
+    return text;
+  }
+}
+```
+
+```go
+type InvoiceWidget struct{}
+
+func (w InvoiceWidget) Render(invoice Invoice, today time.Time) string {
+	text := invoice.PatientName
+	if !invoice.Paid && today.Sub(invoice.SentOn).Hours() > 30*24 {
+		text += " — OVERDUE" // a business rule, trapped on screen
+	}
+	return text
+}
+```
+
+```ruby
+class InvoiceWidget
+  def render(invoice, today)
+    text = invoice.patient_name
+    if !invoice.paid && (today - invoice.sent_on) > 30
+      text += " — OVERDUE"             # a business rule, trapped on screen
+    end
+    text
+  end
+end
+```
+
+The humble version moves the rule into a view-model and leaves the view nothing to decide:
+
+```python
+def is_overdue(invoice, today):          # the rule, extracted where tests reach it
+  return not invoice.paid and (today - invoice.sent_on).days > 30
+
+def invoice_view_model(invoice, today):
+  badge = " — OVERDUE" if is_overdue(invoice, today) else ""
+  return {"text": invoice.patient_name + badge}
+
+class InvoiceWidget:
+  def render(self, vm):                # maps a precomputed field to a widget
+    return vm["text"]
+```
+
+```java
+// the rule, extracted where tests reach it
+boolean isOverdue(Invoice invoice, LocalDate today) {
+  return !invoice.paid() && ChronoUnit.DAYS.between(invoice.sentOn(), today) > 30;
+}
+
+record InvoiceViewModel(String text) {}
+
+InvoiceViewModel invoiceViewModel(Invoice invoice, LocalDate today) {
+  String badge = isOverdue(invoice, today) ? " — OVERDUE" : "";
+  return new InvoiceViewModel(invoice.patientName() + badge);
+}
+
+class InvoiceWidget {
+  String render(InvoiceViewModel vm) {   // maps a precomputed field to a widget
+    return vm.text();
+  }
+}
+```
+
+```javascript
+function isOverdue(invoice, today) {     // the rule, extracted where tests reach it
+  return !invoice.paid && (today - invoice.sentOn) / MS_PER_DAY > 30;
+}
+
+function invoiceViewModel(invoice, today) {
+  const badge = isOverdue(invoice, today) ? " — OVERDUE" : "";
+  return { text: invoice.patientName + badge };
+}
+
+class InvoiceWidget {
+  render(vm) {                           // maps a precomputed field to a widget
+    return vm.text;
+  }
+}
+```
+
+```go
+// the rule, extracted where tests reach it
+func isOverdue(invoice Invoice, today time.Time) bool {
+	return !invoice.Paid && today.Sub(invoice.SentOn).Hours() > 30*24
+}
+
+type InvoiceViewModel struct{ Text string }
+
+func invoiceViewModel(invoice Invoice, today time.Time) InvoiceViewModel {
+	badge := ""
+	if isOverdue(invoice, today) {
+		badge = " — OVERDUE"
+	}
+	return InvoiceViewModel{Text: invoice.PatientName + badge}
+}
+
+// the view maps a precomputed field to a widget
+func (w InvoiceWidget) Render(vm InvoiceViewModel) string { return vm.Text }
+```
+
+```ruby
+def overdue?(invoice, today)             # the rule, extracted where tests reach it
+  !invoice.paid && (today - invoice.sent_on) > 30
+end
+
+def invoice_view_model(invoice, today)
+  badge = overdue?(invoice, today) ? " — OVERDUE" : ""
+  { text: invoice.patient_name + badge }
+end
+
+class InvoiceWidget
+  def render(vm)                         # maps a precomputed field to a widget
+    vm[:text]
+  end
+end
+```
+
+The extracted rule now tests in two lines, with no widget in sight:
+
+```python
+def test_unpaid_31_days_is_overdue():
+  assert is_overdue(Invoice("Ana", sent_on=date(2026, 6, 1), paid=False), date(2026, 7, 2))
+```
+
+```java
+void testUnpaid31DaysIsOverdue() {
+  assert isOverdue(new Invoice("Ana", LocalDate.of(2026, 6, 1), false),
+      LocalDate.of(2026, 7, 2));
+}
+```
+
+```javascript
+function testUnpaid31DaysIsOverdue() {
+  const ana = { patientName: "Ana", sentOn: new Date("2026-06-01"), paid: false };
+  assert(isOverdue(ana, new Date("2026-07-02")));
+}
+```
+
+```go
+func TestUnpaid31DaysIsOverdue(t *testing.T) {
+	ana := Invoice{"Ana", time.Date(2026, 6, 1, 0, 0, 0, 0, time.UTC), false}
+	if !isOverdue(ana, time.Date(2026, 7, 2, 0, 0, 0, 0, time.UTC)) {
+		t.Error("unpaid invoice sent 31 days ago should be overdue")
+	}
+}
+```
+
+```ruby
+def test_unpaid_31_days_is_overdue
+  ana = Invoice.new("Ana", Date.new(2026, 6, 1), false)
+  raise unless overdue?(ana, Date.new(2026, 7, 2))
+end
+```
+
+> **Principle.** *Put logic where it can be tested.* The humble-view rule is a
+> testability strategy, not a matter of aesthetics. Treat the boundary of your test coverage as a
 > design constraint, and keep the untestable layer as thin as physically possible.
 
 > **MVC in the wild.** Real frameworks realize the pattern under shuffled names. Django
@@ -336,7 +658,7 @@ should show — moves it back under test.
 > **unidirectional data-flow** store (Flux/Redux): the view fires actions, the store
 > updates, the view re-renders — the same separation with a stricter update discipline.[^4]
 > Very large products run on each (Instagram on Django, Shopify on Rails, Airbnb on
-> React), which is exactly the point: the pattern, not the framework, is the transferable
+> React), which is the point: the pattern, not the framework, is the transferable
 > knowledge.[^12]<!-- -->[^13]<!-- -->[^14]
 
 ## 7.4 Dataflow Architectures
@@ -370,11 +692,21 @@ flowchart LR
     class F1,F2,F3 f;
 ```
 
-**A real example.** The Unix shell pipeline is the canonical case: `cat access.log | grep
-404 | cut -d' ' -f1 | sort | uniq -c | sort -rn` chains six independent filters into a
-"most frequent sources of 404 errors" report, and each command was written by someone who
-never imagined this particular pipeline. Compilers are built the same way — lexer, parser,
-optimizer, code generator — and so is any image or audio processing chain.
+**A real example.** The Unix shell pipeline is the canonical case: six independent
+filters chain into a "most frequent sources of 404 errors" report, and each command was
+written by someone who never imagined this particular pipeline.
+
+```bash
+cat access.log  |   # read
+  grep 404      |   # select
+  cut -d' ' -f1 |   # project
+  sort          |   # order
+  uniq -c       |   # count
+  sort -rn          # rank
+```
+
+Compilers are built the same way — lexer, parser, optimizer, code generator — and so is
+any image or audio processing chain.
 
 **Trade-offs.** The wins are **reuse and composability** (filters recombine into new
 pipelines like Lego), **understandability** (each stage is simple in isolation), and
@@ -495,7 +827,7 @@ the server responds.
 for requests, handling each according to a published **protocol** (the request/response
 contract). The **client** knows the protocol and the server's address, sends requests,
 and consumes responses; clients generally do not talk to each other. The protocol is the
-interface that lets the two sides evolve independently, exactly as a layer's interface
+interface that lets the two sides evolve independently, just as a layer's interface
 does in §7.1.
 
 ```mermaid
@@ -537,13 +869,130 @@ do not want to mutate, or may be a paid third-party API. A test server implement
 enough of the protocol to exercise the client's behavior — you can program it to return
 specific responses, simulate errors and timeouts, and record what the client sent. This
 lets you test client behavior that is nearly impossible to trigger against the real
-thing, such as "what does the UI do when the server returns a 500?" It is the network-tier
-echo of the layering benefit in §7.1.2: *depend on an interface, and you can swap the
-implementation.* The trade-off is that a test server is only as faithful as you make it —
-tests can pass against a fake that behaves differently from reality, so a smaller number
-of full **integration tests** against a real server remain essential (Chapter 9). The same
-substitution idea, scaled to production, powers the blue‑green and canary deployment
-strategies of Chapter 12.
+thing, such as "what does the UI do when the server returns a 500?" Twenty lines of
+standard library answer that question for the clinic client:
+
+```python
+import http.server, threading, urllib.error, urllib.request
+
+class AlwaysFail(http.server.BaseHTTPRequestHandler):
+  def do_GET(self):
+    self.send_error(500)
+  def log_message(self, *_):           # keep test output clean
+    pass
+
+def fetch_appointments(base_url):
+  try:
+    with urllib.request.urlopen(base_url + "/appointments") as resp:
+      return resp.read()
+  except urllib.error.HTTPError:
+    return []                        # fallback: empty schedule, not a crash
+
+stub = http.server.HTTPServer(("127.0.0.1", 0), AlwaysFail)
+threading.Thread(target=stub.serve_forever, daemon=True).start()
+
+assert fetch_appointments(f"http://127.0.0.1:{stub.server_port}") == []
+stub.shutdown()
+```
+
+```java
+import com.sun.net.httpserver.HttpServer;
+
+byte[] fetchAppointments(String baseUrl) {
+  try (var in = URI.create(baseUrl + "/appointments").toURL().openStream()) {
+    return in.readAllBytes();
+  } catch (IOException e) {
+    return new byte[0];                  // fallback: empty schedule, not a crash
+  }
+}
+
+void main() throws Exception {
+  var stub = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+  stub.createContext("/", exchange -> exchange.sendResponseHeaders(500, -1));
+  stub.start();                          // serves requests on a background thread
+
+  var base = "http://127.0.0.1:" + stub.getAddress().getPort();
+  assert fetchAppointments(base).length == 0;
+  stub.stop(0);
+}
+```
+
+```javascript
+const assert = require("node:assert");
+const http = require("node:http");
+
+async function fetchAppointments(baseUrl) {
+  const resp = await fetch(baseUrl + "/appointments");
+  if (!resp.ok) return [];               // fallback: empty schedule, not a crash
+  return Buffer.from(await resp.arrayBuffer());
+}
+
+const stub = http.createServer((req, res) => res.writeHead(500).end());
+stub.listen(0, "127.0.0.1", async () => {
+  const base = `http://127.0.0.1:${stub.address().port}`;
+  assert.deepStrictEqual(await fetchAppointments(base), []);
+  stub.close();
+});
+```
+
+```go
+package main
+
+import (
+	"io"
+	"net/http"
+	"net/http/httptest"
+)
+
+func alwaysFail(w http.ResponseWriter, _ *http.Request) { http.Error(w, "boom", 500) }
+func fetchAppointments(baseURL string) []byte {
+	resp, err := http.Get(baseURL + "/appointments")
+	if err != nil || resp.StatusCode >= 400 {
+		return nil // fallback: empty schedule, not a crash
+	}
+	body, _ := io.ReadAll(resp.Body)
+	return body
+}
+
+func main() {
+	stub := httptest.NewServer(http.HandlerFunc(alwaysFail))
+	defer stub.Close()
+	if len(fetchAppointments(stub.URL)) != 0 {
+		panic("client should fall back to an empty schedule on 500")
+	}
+}
+```
+
+```ruby
+require "net/http"
+require "socket"
+
+stub = TCPServer.new("127.0.0.1", 0)
+Thread.new do
+  loop do
+    client = stub.accept                 # a stub programmed to always fail
+    client.gets("\r\n\r\n")              # consume the request head
+    client.write "HTTP/1.1 500 Internal Server Error\r\nContent-Length: 0\r\n\r\n"
+    client.close
+  end
+end
+
+def fetch_appointments(base_url)
+  resp = Net::HTTP.get_response(URI(base_url + "/appointments"))
+  resp.is_a?(Net::HTTPSuccess) ? resp.body : []  # fallback: empty schedule
+end
+
+port = stub.addr[1]
+raise unless fetch_appointments("http://127.0.0.1:#{port}") == []
+stub.close
+```
+
+The substitution is the network-tier echo of the layering benefit in §7.1.2: *depend on
+an interface, and you can swap the implementation.* The trade-off is that a test server
+is only as faithful as you make it — tests can pass against a fake that behaves
+differently from reality, so a smaller number of full **integration tests** against a
+real server remain essential (Chapter 9). The same substitution idea, scaled to
+production, powers the blue‑green and canary deployment strategies of Chapter 12.
 
 ### 7.5.3 The Broker Pattern
 
@@ -658,8 +1107,8 @@ rarely build one system in isolation; they build a *family* of related systems �
 product for different platforms, tiers, or customers. A phone maker ships dozens of
 handset models running variations of one software base. A car company runs related but
 distinct control software across an entire fleet. Treating each as a from-scratch project
-wastes the enormous overlap between them. **Software product-line engineering** is the
-discipline of building a family of related products from a shared set of assets in a
+wastes the enormous overlap between them. **Software product-line engineering** means
+building a family of related products from a shared set of assets in a
 planned way, and it changes what "architecture" is for.[^22]
 
 ### 7.6.1 Commonalities and Variabilities
@@ -670,7 +1119,7 @@ distinguishes them. A **commonality** is a feature, behavior, or component prese
 authenticates users. A **variability** is a point where products *differ* — one edition
 has video calling and another does not; one region requires a different tax calculation.
 
-**Why the distinction is the whole game.** Commonalities are built *once* and reused
+**Why the distinction matters.** Commonalities are built *once* and reused
 without change across the family, so effort spent making them solid is amortized over
 every product. Variabilities are the points you must design to *vary*, so each one needs
 an explicit mechanism — a configuration flag, a plug-in slot, a swappable module, a
@@ -694,7 +1143,7 @@ A product line needs a special kind of architecture: a **reference architecture*
 *platform*) that is shared by every product in the family and that makes the planned
 variabilities easy to exercise. This raises the stakes on the patterns earlier in the
 chapter. Every variation point is, in the end, an *interface behind which alternatives
-plug in* — and the patterns you have learned are exactly the machinery for building such
+plug in* — and the patterns you have learned are the machinery for building such
 interfaces:
 
 - **Layering** lets you vary one layer (say, the platform-specific infrastructure) across
@@ -732,7 +1181,7 @@ it" into a genuine, maintainable family.
 
 ### 7.6.3 Economics of Product-Line Engineering
 
-Product lines are ultimately an *economic* bet, and it is worth being honest about the
+Product lines are an *economic* bet, and you should be honest about the
 arithmetic. Building a reusable platform with well-designed variation points costs
 **more up front** than building a single product — you are engineering for change that
 has not happened yet.[^24] That investment pays back only when you build *enough* products

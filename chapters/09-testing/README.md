@@ -4,9 +4,8 @@
 > checking, types, and review. This chapter attacks them by *running* the program on
 > chosen inputs and comparing what it does against what it should do. Testing cannot
 > prove a program correct, but it is the single most practical net for catching the
-> defects that reviews miss — and, just as importantly, for catching the ones a future
-> change will introduce. The central skill is not writing *a* test; it is deciding
-> *which* tests to write and knowing when you have written *enough*.
+> defects that reviews miss — and the ones a future change will introduce. The central
+> skill is deciding *which* tests to write and knowing when you have written *enough*.
 
 You have already met testing in miniature: run the code, look at the output, decide if
 it is right. The trouble is that a real program has more possible inputs than there are
@@ -125,6 +124,100 @@ throw thousands of generated inputs at the function without hand-computing each 
 often the difference between a suite that finds real defects and one that only confirms
 the three cases you already thought of.
 
+With **Hypothesis**, Python's property-based testing library, both properties become one
+test run against hundreds of generated lists:
+
+```python
+from hypothesis import given, strategies as st
+
+def median(xs):
+  return sorted(xs)[len(xs) // 2]          # middle element (upper median)
+
+@given(st.lists(st.integers(), min_size=1))
+def test_median_properties(xs):
+  m = median(xs)
+  assert m == median(list(reversed(xs)))   # order independence
+  assert m in xs                           # the median is one of the inputs
+```
+
+```java
+import java.util.*;
+import net.jqwik.api.*;
+import net.jqwik.api.constraints.NotEmpty;
+
+class MedianProperties {
+  static int median(List<Integer> xs) {
+    var ys = new ArrayList<>(xs);
+    Collections.sort(ys);
+    return ys.get(ys.size() / 2);                // middle element (upper median)
+  }
+
+  @Property
+  boolean medianProperties(@ForAll @NotEmpty List<Integer> xs) {
+    var rev = new ArrayList<>(xs);
+    Collections.reverse(rev);
+    return median(xs) == median(rev)             // order independence
+        && xs.contains(median(xs));              // the median is one of the inputs
+  }
+}
+```
+
+```javascript
+const fc = require("fast-check");
+
+function median(xs) {
+  const ys = xs.toSorted((a, b) => a - b);
+  return ys[Math.floor(xs.length / 2)];   // middle element (upper median)
+}
+
+fc.assert(
+  fc.property(fc.array(fc.integer(), { minLength: 1 }), (xs) => {
+    const m = median(xs);
+    return m === median(xs.toReversed())  // order independence
+      && xs.includes(m);                  // the median is one of the inputs
+  })
+);
+```
+
+```go
+// rapid generates the inputs: go get pgregory.net/rapid
+func median(xs []int) int {
+	ys := slices.Clone(xs)
+	slices.Sort(ys)
+	return ys[len(ys)/2] // middle element (upper median)
+}
+
+func TestMedianProperties(t *testing.T) {
+	rapid.Check(t, func(t *rapid.T) {
+		xs := rapid.SliceOfN(rapid.Int(), 1, -1).Draw(t, "xs")
+		m := median(xs)
+		rev := slices.Clone(xs)
+		slices.Reverse(rev)
+		if m != median(rev) { // order independence
+			t.Errorf("median depends on order: %v", xs)
+		}
+		if !slices.Contains(xs, m) { // the median is one of the inputs
+			t.Errorf("median %d not in %v", m, xs)
+		}
+	})
+}
+```
+
+```ruby
+require "prop_check"
+G = PropCheck::Generators
+
+def median(xs)
+  xs.sort[xs.length / 2]                     # middle element (upper median)
+end
+
+PropCheck.forall(G.array(G.integer, empty: false)) do |xs|
+  m = median(xs)
+  raise "order dependence" unless m == median(xs.reverse)  # order independence
+  raise "median not in xs" unless xs.include?(m)   # the median is one of the inputs
+end
+```
+
 ### 9.1.5 Mutation Testing: Grading Your Suite
 
 Coverage tells you what your tests *ran*; it cannot tell you what they would *catch*. The
@@ -152,7 +245,33 @@ mutant **survives**. The survivor names the missing test precisely:
 
 ```python
 def test_free_item_allowed():
-    assert apply_discount(0.0, 50) == 0.0    # kills the `price <= 0` mutant
+  assert apply_discount(0.0, 50) == 0.0    # kills the `price <= 0` mutant
+```
+
+```java
+@Test void freeItemAllowed() {
+  assertEquals(0.0, applyDiscount(0.0, 50));   // kills the `price <= 0` mutant
+}
+```
+
+```javascript
+test("free item allowed", () => {
+  assert.equal(applyDiscount(0.0, 50), 0.0);   // kills the `price <= 0` mutant
+});
+```
+
+```go
+func TestFreeItemAllowed(t *testing.T) { // kills the `price <= 0` mutant
+	if got, err := ApplyDiscount(0.0, 50); err != nil || got != 0.0 {
+		t.Errorf("got %v, %v; want 0.0", got, err)
+	}
+}
+```
+
+```ruby
+def test_free_item_allowed
+  assert_equal(0.0, apply_discount(0.0, 50))   # kills the `price <= 0` mutant
+end
 ```
 
 Add it, rerun, and the mutant dies — and, not coincidentally, you have just written the
@@ -181,6 +300,214 @@ additionally records how it was called and lets you assert on those calls, and a
 is a lightweight working implementation (an in-memory database standing in for the real
 one).
 
+Each double below stands in for the `discounts` dependency of `PriceService` (§9.2.2) —
+the stub feeds the unit a canned percent and nothing more:
+
+```python
+class StubCatalog:
+  def price_of(self, item): return 12.0        # every item costs 12.0
+
+class StubDiscounts:
+  def percent_for(self, item): return 25       # canned answer, whatever the item
+
+svc = PriceService(StubCatalog(), StubDiscounts())
+assert svc.quote("mug") == 9.0                   # 12.0 * (1 - 0.25)
+```
+
+```java
+class StubCatalog implements Catalog {
+  public double priceOf(String item) { return 12.0; }  // every item costs 12.0
+}
+
+class StubDiscounts implements Discounts {
+  public int percentFor(String item) { return 25; }    // canned answer, whatever the item
+}
+
+var svc = new PriceService(new StubCatalog(), new StubDiscounts());
+assert svc.quote("mug") == 9.0;                  // 12.0 * (1 - 0.25)
+```
+
+```javascript
+class StubCatalog {
+  priceOf(item) { return 12.0; }        // every item costs 12.0
+}
+
+class StubDiscounts {
+  percentFor(item) { return 25; }       // canned answer, whatever the item
+}
+
+const svc = new PriceService(new StubCatalog(), new StubDiscounts());
+assert.equal(svc.quote("mug"), 9.0);             // 12.0 * (1 - 0.25)
+```
+
+```go
+type StubCatalog struct{}
+
+func (StubCatalog) PriceOf(item string) float64 { return 12.0 } // every item costs 12.0
+
+type StubDiscounts struct{}
+
+func (StubDiscounts) PercentFor(item string) float64 { return 25 } // canned answer
+
+func TestStubFeedsCannedPercent(t *testing.T) {
+	svc := NewPriceService(StubCatalog{}, StubDiscounts{})
+	if got, err := svc.Quote("mug"); err != nil || got != 9.0 {
+		t.Errorf("got %v, %v; want 9.0", got, err) // 12.0 * (1 - 0.25)
+	}
+}
+```
+
+```ruby
+class StubCatalog
+  def price_of(item) = 12.0        # every item costs 12.0
+end
+
+class StubDiscounts
+  def percent_for(item) = 25       # canned answer, whatever the item
+end
+
+svc = PriceService.new(StubCatalog.new, StubDiscounts.new)
+raise unless svc.quote("mug") == 9.0             # 12.0 * (1 - 0.25)
+```
+
+The mock also records the interaction, so the test can assert on *how* the unit used it:
+
+```python
+class MockDiscounts:
+  def __init__(self): self.calls = []
+  def percent_for(self, item):
+    self.calls.append(item)
+    return 25
+
+mock = MockDiscounts()
+PriceService(StubCatalog(), mock).quote("mug")
+assert mock.calls == ["mug"]                     # called exactly once, with "mug"
+```
+
+```java
+class MockDiscounts implements Discounts {
+  final List<String> calls = new ArrayList<>();
+  public int percentFor(String item) {
+    calls.add(item);
+    return 25;
+  }
+}
+
+var mock = new MockDiscounts();
+new PriceService(new StubCatalog(), mock).quote("mug");
+assert mock.calls.equals(List.of("mug"));        // called exactly once, with "mug"
+```
+
+```javascript
+class MockDiscounts {
+  calls = [];
+  percentFor(item) {
+    this.calls.push(item);
+    return 25;
+  }
+}
+
+const mock = new MockDiscounts();
+new PriceService(new StubCatalog(), mock).quote("mug");
+assert.deepEqual(mock.calls, ["mug"]);           // called exactly once, with "mug"
+```
+
+```go
+type MockDiscounts struct{ calls []string }
+
+func (m *MockDiscounts) PercentFor(item string) float64 {
+	m.calls = append(m.calls, item)
+	return 25
+}
+
+func TestMockRecordsInteraction(t *testing.T) {
+	mock := &MockDiscounts{}
+	NewPriceService(StubCatalog{}, mock).Quote("mug")
+	if !slices.Equal(mock.calls, []string{"mug"}) { // called exactly once, with "mug"
+		t.Errorf("calls = %v; want [mug]", mock.calls)
+	}
+}
+```
+
+```ruby
+class MockDiscounts
+  attr_reader :calls
+  def initialize = @calls = []
+  def percent_for(item)
+    @calls << item
+    25
+  end
+end
+
+mock = MockDiscounts.new
+PriceService.new(StubCatalog.new, mock).quote("mug")
+raise unless mock.calls == ["mug"]               # called exactly once, with "mug"
+```
+
+And the fake actually works — a dict stands in for the discount database, so any lookup
+behaves the way the real component would:
+
+```python
+class FakeDiscounts:
+  def __init__(self, table): self.table = dict(table)      # in-memory stand-in
+  def percent_for(self, item): return self.table.get(item, 0)
+
+svc = PriceService(StubCatalog(), FakeDiscounts({"mug": 25}))
+assert svc.quote("mug") == 9.0
+assert svc.quote("bowl") == 12.0                 # unknown item: no discount
+```
+
+```java
+class FakeDiscounts implements Discounts {
+  final Map<String, Integer> table;              // in-memory stand-in
+  FakeDiscounts(Map<String, Integer> table) { this.table = new HashMap<>(table); }
+  public int percentFor(String item) { return table.getOrDefault(item, 0); }
+}
+
+var svc = new PriceService(new StubCatalog(), new FakeDiscounts(Map.of("mug", 25)));
+assert svc.quote("mug") == 9.0;
+assert svc.quote("bowl") == 12.0;                // unknown item: no discount
+```
+
+```javascript
+class FakeDiscounts {
+  constructor(table) { this.table = { ...table }; }   // in-memory stand-in
+  percentFor(item) { return this.table[item] ?? 0; }
+}
+
+const svc = new PriceService(new StubCatalog(), new FakeDiscounts({ mug: 25 }));
+assert.equal(svc.quote("mug"), 9.0);
+assert.equal(svc.quote("bowl"), 12.0);           // unknown item: no discount
+```
+
+```go
+// FakeDiscounts reads an in-memory table; a missing item means no discount (0).
+type FakeDiscounts struct{ table map[string]float64 }
+
+func (f FakeDiscounts) PercentFor(item string) float64 { return f.table[item] }
+
+func TestFakeBehavesLikeRealTable(t *testing.T) {
+	svc := NewPriceService(StubCatalog{}, FakeDiscounts{map[string]float64{"mug": 25}})
+	if got, _ := svc.Quote("mug"); got != 9.0 {
+		t.Errorf("mug: got %v; want 9.0", got)
+	}
+	if got, _ := svc.Quote("bowl"); got != 12.0 { // unknown item: no discount
+		t.Errorf("bowl: got %v; want 12.0", got)
+	}
+}
+```
+
+```ruby
+class FakeDiscounts
+  def initialize(table) = @table = table.dup     # in-memory stand-in
+  def percent_for(item) = @table.fetch(item, 0)
+end
+
+svc = PriceService.new(StubCatalog.new, FakeDiscounts.new("mug" => 25))
+raise unless svc.quote("mug") == 9.0
+raise unless svc.quote("bowl") == 12.0           # unknown item: no discount
+```
+
 Unit tests are the workhorses of a suite because they are *fast*, *precise*, and *stable*:
 fast because they touch no network or disk, precise because a failure points at one unit,
 and stable because they do not break when an unrelated part of the system changes. Here is
@@ -188,12 +515,53 @@ a unit under test and a small suite:
 
 ```python
 def apply_discount(price, percent):
-    """Reduce price by percent (0..100). Raises ValueError on bad input."""
-    if price < 0:
-        raise ValueError("price must be non-negative")
-    if percent < 0 or percent > 100:
-        raise ValueError("percent must be in 0..100")
-    return round(price * (1 - percent / 100), 2)
+  """Reduce price by percent (0..100). Raises ValueError on bad input."""
+  if price < 0:
+    raise ValueError("price must be non-negative")
+  if percent < 0 or percent > 100:
+    raise ValueError("percent must be in 0..100")
+  return round(price * (1 - percent / 100), 2)
+```
+
+```java
+/** Reduce price by percent (0..100). Throws IllegalArgumentException on bad input. */
+static double applyDiscount(double price, double percent) {
+  if (price < 0) throw new IllegalArgumentException("price must be non-negative");
+  if (percent < 0 || percent > 100)
+    throw new IllegalArgumentException("percent must be in 0..100");
+  return Math.round(price * (1 - percent / 100) * 100) / 100.0;
+}
+```
+
+```javascript
+// Reduce price by percent (0..100). Throws RangeError on bad input.
+function applyDiscount(price, percent) {
+  if (price < 0) throw new RangeError("price must be non-negative");
+  if (percent < 0 || percent > 100) throw new RangeError("percent must be in 0..100");
+  return Math.round(price * (1 - percent / 100) * 100) / 100;
+}
+```
+
+```go
+// ApplyDiscount reduces price by percent (0..100). Returns an error on bad input.
+func ApplyDiscount(price, percent float64) (float64, error) {
+	if price < 0 {
+		return 0, errors.New("price must be non-negative")
+	}
+	if percent < 0 || percent > 100 {
+		return 0, errors.New("percent must be in 0..100")
+	}
+	return math.Round(price*(1-percent/100)*100) / 100, nil
+}
+```
+
+```ruby
+# Reduce price by percent (0..100). Raises ArgumentError on bad input.
+def apply_discount(price, percent)
+  raise ArgumentError, "price must be non-negative" if price < 0
+  raise ArgumentError, "percent must be in 0..100" unless (0..100).cover?(percent)
+  (price * (1 - percent / 100.0)).round(2)
+end
 ```
 
 ```python
@@ -202,9 +570,79 @@ def test_half_off():           assert apply_discount(100.0, 50)  == 50.0
 def test_rounds_to_cents():    assert apply_discount(9.99, 10)   == 8.99
 def test_full_discount():      assert apply_discount(40.0, 100)  == 0.0
 def test_rejects_bad_percent():
-    import pytest
-    with pytest.raises(ValueError):
-        apply_discount(100.0, 150)
+  import pytest
+  with pytest.raises(ValueError):
+    apply_discount(100.0, 150)
+```
+
+```java
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+class ApplyDiscountTest {
+  @Test void noDiscount()    { assertEquals(100.0, applyDiscount(100.0, 0)); }
+  @Test void halfOff()       { assertEquals(50.0, applyDiscount(100.0, 50)); }
+  @Test void roundsToCents() { assertEquals(8.99, applyDiscount(9.99, 10)); }
+  @Test void fullDiscount()  { assertEquals(0.0, applyDiscount(40.0, 100)); }
+  @Test void rejectsBadPercent() {
+    assertThrows(IllegalArgumentException.class, () -> applyDiscount(100.0, 150));
+  }
+}
+```
+
+```javascript
+const test = require("node:test");
+const assert = require("node:assert/strict");
+
+test("no discount", () => assert.equal(applyDiscount(100.0, 0), 100.0));
+test("half off", () => assert.equal(applyDiscount(100.0, 50), 50.0));
+test("rounds to cents", () => assert.equal(applyDiscount(9.99, 10), 8.99));
+test("full discount", () => assert.equal(applyDiscount(40.0, 100), 0.0));
+test("rejects bad percent", () => {
+  assert.throws(() => applyDiscount(100.0, 150), RangeError);
+});
+```
+
+```go
+func TestApplyDiscount(t *testing.T) {
+	cases := []struct {
+		name                 string
+		price, percent, want float64
+	}{
+		{"no discount", 100.0, 0, 100.0},
+		{"half off", 100.0, 50, 50.0},
+		{"rounds to cents", 9.99, 10, 8.99},
+		{"full discount", 40.0, 100, 0.0},
+	}
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			if got, err := ApplyDiscount(c.price, c.percent); err != nil || got != c.want {
+				t.Errorf("got %v, %v; want %v", got, err, c.want)
+			}
+		})
+	}
+}
+
+func TestRejectsBadPercent(t *testing.T) {
+	if _, err := ApplyDiscount(100.0, 150); err == nil {
+		t.Error("want error for percent 150, got nil")
+	}
+}
+```
+
+```ruby
+require "minitest/autorun"
+
+class TestApplyDiscount < Minitest::Test
+  def test_no_discount     = assert_equal(100.0, apply_discount(100.0, 0))
+  def test_half_off        = assert_equal(50.0, apply_discount(100.0, 50))
+  def test_rounds_to_cents = assert_equal(8.99, apply_discount(9.99, 10))
+  def test_full_discount   = assert_equal(0.0, apply_discount(40.0, 100))
+
+  def test_rejects_bad_percent
+    assert_raises(ArgumentError) { apply_discount(100.0, 150) }
+  end
+end
 ```
 
 Each test names a distinct behavior and carries its own oracle (the expected value or the
@@ -235,14 +673,78 @@ wrong data formats, and protocol errors surface.
 
 ```python
 class PriceService:
-    def __init__(self, catalog, discounts):
-        self.catalog = catalog          # unit A: name -> base price
-        self.discounts = discounts      # unit B: name -> percent off
+  def __init__(self, catalog, discounts):
+    self.catalog = catalog          # unit A: name -> base price
+    self.discounts = discounts      # unit B: name -> percent off
 
-    def quote(self, item):
-        base = self.catalog.price_of(item)
-        pct = self.discounts.percent_for(item)
-        return apply_discount(base, pct)
+  def quote(self, item):
+    base = self.catalog.price_of(item)
+    pct = self.discounts.percent_for(item)
+    return apply_discount(base, pct)
+```
+
+```java
+class PriceService {
+  private final Catalog catalog;      // unit A: name -> base price
+  private final Discounts discounts;  // unit B: name -> percent off
+
+  PriceService(Catalog catalog, Discounts discounts) {
+    this.catalog = catalog;
+    this.discounts = discounts;
+  }
+
+  double quote(String item) {
+    double base = catalog.priceOf(item);
+    double pct = discounts.percentFor(item);
+    return applyDiscount(base, pct);
+  }
+}
+```
+
+```javascript
+class PriceService {
+  constructor(catalog, discounts) {
+    this.catalog = catalog;        // unit A: name -> base price
+    this.discounts = discounts;    // unit B: name -> percent off
+  }
+
+  quote(item) {
+    const base = this.catalog.priceOf(item);
+    const pct = this.discounts.percentFor(item);
+    return applyDiscount(base, pct);
+  }
+}
+```
+
+```go
+type Catalog interface{ PriceOf(item string) float64 }
+type Discounts interface{ PercentFor(item string) float64 }
+
+type PriceService struct {
+	catalog   Catalog   // unit A: name -> base price
+	discounts Discounts // unit B: name -> percent off
+}
+
+func (s PriceService) Quote(item string) (float64, error) {
+	base := s.catalog.PriceOf(item)
+	pct := s.discounts.PercentFor(item)
+	return ApplyDiscount(base, pct)
+}
+```
+
+```ruby
+class PriceService
+  def initialize(catalog, discounts)
+    @catalog = catalog        # unit A: name -> base price
+    @discounts = discounts    # unit B: name -> percent off
+  end
+
+  def quote(item)
+    base = @catalog.price_of(item)
+    pct = @discounts.percent_for(item)
+    apply_discount(base, pct)
+  end
+end
 ```
 
 A unit test of `PriceService.quote` would *mock* `catalog` and `discounts`. An
@@ -251,15 +753,67 @@ together and checks that their contract holds end to end:
 
 ```python
 def test_quote_integrates_catalog_and_discounts():
-    catalog = Catalog({"mug": 12.0})
-    discounts = Discounts({"mug": 25})
-    svc = PriceService(catalog, discounts)
-    assert svc.quote("mug") == 9.0     # 12.0 * (1 - 0.25)
+  catalog = Catalog({"mug": 12.0})
+  discounts = Discounts({"mug": 25})
+  svc = PriceService(catalog, discounts)
+  assert svc.quote("mug") == 9.0     # 12.0 * (1 - 0.25)
+```
+
+```java
+import static org.junit.jupiter.api.Assertions.*;
+import java.util.Map;
+import org.junit.jupiter.api.Test;
+
+class PriceServiceIntegrationTest {
+  @Test void quoteIntegratesCatalogAndDiscounts() {
+    Catalog catalog = new Catalog(Map.of("mug", 12.0));
+    Discounts discounts = new Discounts(Map.of("mug", 25.0));
+    PriceService svc = new PriceService(catalog, discounts);
+    assertEquals(9.0, svc.quote("mug"));  // 12.0 * (1 - 0.25)
+  }
+}
+```
+
+```javascript
+const test = require("node:test");
+const assert = require("node:assert/strict");
+
+test("quote integrates catalog and discounts", () => {
+  const catalog = new Catalog({ mug: 12.0 });
+  const discounts = new Discounts({ mug: 25 });
+  const svc = new PriceService(catalog, discounts);
+  assert.equal(svc.quote("mug"), 9.0);  // 12.0 * (1 - 0.25)
+});
+```
+
+```go
+func TestQuoteIntegratesCatalogAndDiscounts(t *testing.T) {
+	catalog := MapCatalog{"mug": 12.0}
+	discounts := MapDiscounts{"mug": 25}
+	svc := PriceService{catalog, discounts}
+	got, err := svc.Quote("mug")
+	if err != nil || got != 9.0 { // 12.0 * (1 - 0.25)
+		t.Errorf("got %v, %v; want 9.0", got, err)
+	}
+}
+```
+
+```ruby
+require "minitest/autorun"
+
+class TestPriceServiceIntegration < Minitest::Test
+  def test_quote_integrates_catalog_and_discounts
+    catalog = Catalog.new({ "mug" => 12.0 })
+    discounts = Discounts.new({ "mug" => 25 })
+    svc = PriceService.new(catalog, discounts)
+    assert_equal(9.0, svc.quote("mug"))  # 12.0 * (1 - 0.25)
+  end
+end
 ```
 
 If `Discounts` returned a *fraction* (0.25) while `apply_discount` expects a *percentage*
 (25), every unit test could pass while this integration test correctly fails. That
-interface mismatch is exactly the defect class unit tests are blind to.
+interface mismatch is the defect class unit tests are blind to.
 
 ### 9.2.3 Functional, System, and Acceptance Testing
 
@@ -291,7 +845,7 @@ other.
 > specification runs on every build. This is functional/acceptance testing whose oracle
 > (§9.1.4) is the agreed scenario itself.
 
-One more system-level suite earns its own name because you will run it constantly. A
+One more system-level suite gets its own name because you will run it constantly. A
 **smoke test** is a fast, shallow pass that answers a single question: *is the build
 fundamentally alive?* The app starts, the homepage loads, a user can log in — nothing
 deeper. The name comes from hardware bring-up: power the board on and see whether smoke
@@ -371,14 +925,74 @@ Consider a function that classifies a number and, for positive numbers, sums 1..
 
 ```python
 def classify_and_sum(n):        # node 1  (entry)
-    if n < 0:                   # node 2  (decision)
-        return "negative"       # node 3
-    total = 0                   # node 4
-    i = 1                       # node 4
-    while i <= n:               # node 5  (decision)
-        total += i              # node 6
-        i += 1                  # node 6
-    return f"sum={total}"       # node 7  (exit)
+  if n < 0:                   # node 2  (decision)
+    return "negative"       # node 3
+  total = 0                   # node 4
+  i = 1                       # node 4
+  while i <= n:               # node 5  (decision)
+    total += i              # node 6
+    i += 1                  # node 6
+  return f"sum={total}"       # node 7  (exit)
+```
+
+```java
+static String classifyAndSum(int n) {  // node 1  (entry)
+  if (n < 0) {                         // node 2  (decision)
+    return "negative";                 // node 3
+  }
+  int total = 0;                       // node 4
+  int i = 1;                           // node 4
+  while (i <= n) {                     // node 5  (decision)
+    total += i;                        // node 6
+    i += 1;                            // node 6
+  }
+  return "sum=" + total;               // node 7  (exit)
+}
+```
+
+```javascript
+function classifyAndSum(n) {  // node 1  (entry)
+  if (n < 0) {                // node 2  (decision)
+    return "negative";        // node 3
+  }
+  let total = 0;              // node 4
+  let i = 1;                  // node 4
+  while (i <= n) {            // node 5  (decision)
+    total += i;               // node 6
+    i += 1;                   // node 6
+  }
+  return `sum=${total}`;      // node 7  (exit)
+}
+```
+
+```go
+func ClassifyAndSum(n int) string { // node 1  (entry)
+	if n < 0 { // node 2  (decision)
+		return "negative" // node 3
+	}
+	total := 0   // node 4
+	i := 1       // node 4
+	for i <= n { // node 5  (decision)
+		total += i // node 6
+		i++        // node 6
+	}
+	return fmt.Sprintf("sum=%d", total) // node 7  (exit)
+}
+```
+
+```ruby
+def classify_and_sum(n)  # node 1  (entry)
+  if n < 0               # node 2  (decision)
+    return "negative"    # node 3
+  end
+  total = 0              # node 4
+  i = 1                  # node 4
+  while i <= n           # node 5  (decision)
+    total += i           # node 6
+    i += 1               # node 6
+  end
+  "sum=#{total}"         # node 7  (exit)
+end
 ```
 
 Its control-flow graph:
@@ -467,8 +1081,8 @@ routines.
 
 The hierarchy, then: **path ⇒ branch ⇒ statement** (each implies the ones to its right).[^14]
 Strength costs test cases; the engineering choice is how far up the hierarchy a given
-piece of code justifies climbing. A checkout total earns branch coverage; an autopilot
-earns more (§9.5).
+piece of code justifies climbing. A checkout total merits branch coverage; an autopilot
+demands more (§9.5).
 
 ## 9.4 Input Coverage I: Black-Box Testing
 
@@ -524,9 +1138,45 @@ Six boundary tests. Watch them do their job. Suppose a developer wrote the guard
 
 ```python
 def set_volume(level):
-    if not isinstance(level, int) or level < 1 or level >= 100:   # BUG: >= should be >
-        raise ValueError("level must be 1..100")
-    _apply(level)
+  if not isinstance(level, int) or level < 1 or level >= 100:   # BUG: >= should be >
+    raise ValueError("level must be 1..100")
+  _apply(level)
+```
+
+```java
+static void setVolume(int level) {
+  if (level < 1 || level >= 100)  // BUG: >= should be >
+    throw new IllegalArgumentException("level must be 1..100");
+  apply(level);
+}
+```
+
+```javascript
+function setVolume(level) {
+  if (!Number.isInteger(level) || level < 1 || level >= 100) {  // BUG: >= should be >
+    throw new RangeError("level must be 1..100");
+  }
+  apply(level);
+}
+```
+
+```go
+func SetVolume(level int) error {
+	if level < 1 || level >= 100 { // BUG: >= should be >
+		return errors.New("level must be 1..100")
+	}
+	apply(level)
+	return nil
+}
+```
+
+```ruby
+def set_volume(level)
+  if !level.is_a?(Integer) || level < 1 || level >= 100   # BUG: >= should be >
+    raise ArgumentError, "level must be 1..100"
+  end
+  apply(level)
+end
 ```
 
 The equivalence-class test with representative `55` passes (it is happily accepted), and
@@ -547,10 +1197,10 @@ throws huge volumes of malformed, random, or mutated inputs at a program and wat
 crashes, hangs, and memory errors — no specification, no partitions, just the implicit
 oracle (§9.1.4) that the program *must not fall over*.[^16] It is a cousin of property-based
 testing but adversarial in spirit: instead of checking a property on well-formed inputs,
-it hunts for the ill-formed input nobody thought to reject. That makes fuzzing the
-workhorse of security testing — buffer overflows, injection flaws, and denial-of-service
-defects are exactly the bugs that surface when a parser meets input its author never
-imagined. Because an effective fuzzing campaign runs for hours or days, it belongs in a
+it hunts for the ill-formed input nobody thought to reject. That makes fuzzing a
+mainstay of security testing — buffer overflows, injection flaws, and denial-of-service
+defects are the bugs that surface when a parser meets input its author never imagined.
+Because an effective fuzzing campaign runs for hours or days, it belongs in a
 non-blocking pipeline stage (Chapter 12), not on the every-commit path.
 
 ## 9.5 Code Coverage II: MC/DC
@@ -582,12 +1232,11 @@ Neither implies the other. Consider the decision `A || B` with just two tests:
 
 Every condition takes both values (A is T then F; B is F then T), so **condition coverage
 is 100%**. Yet the decision is `true` in *both* tests — it never came out false — so
-**decision coverage is only 50%**. Conversely, testing `(A=true, B=true)` and
-`(A=false, B=false)` gives full decision coverage (T then F) but each condition only ever
-equals the other, hitting neither the "A alone decides" nor "B alone decides" situation.
-Because the two criteria can each be satisfied while the other is not, they are genuinely
-independent — and *neither alone* guarantees that every condition can actually change the
-result.
+**decision coverage is only 50%**. Conversely, testing `(A=true, B=false)` and
+`(A=false, B=false)` gives full decision coverage (T then F) while `B` never takes the
+value true — so **condition coverage is not met**. Because each criterion can be
+satisfied while the other is not, they are genuinely independent — and *neither alone*
+guarantees that every condition can actually change the result.
 
 ### 9.5.2 MC/DC Pairs of Tests
 
@@ -735,7 +1384,7 @@ each at least once. The same holds for Browser × OS and OS × Locale (verify OS
 an exercise). So every 2-way interaction is exercised, and the "Safari + JP" bug from above
 *cannot* slip through: test 7 pairs them. We reduced 27 runs to 9 — a 3× saving here, and
 the saving grows dramatically with more parameters (pairwise coverage of ten 3-valued
-parameters needs only a few dozen tests, not 59,049).
+parameters needs fewer than twenty tests, not 59,049).
 
 > **Note.** You rarely build these tables by hand. Tools — Microsoft's PICT, the NIST
 > **ACTS** tool, or libraries in most languages — generate a minimal (or near-minimal)
