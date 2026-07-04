@@ -1,6 +1,6 @@
 # Chapter 1 — Introduction
 
-> **Where we are.** This opening chapter introduces the ideas that thread through the
+> **Where we are.** This opening chapter introduces the ideas that thread through the book.
 These include the definition of software engineering, the challenges associated with requirements,
 the inherent complexity of software, the inevitability of defects, and the trade-offs among project 
 scope, cost, and time. Additionally, the chapter addresses the importance of social responsibility 
