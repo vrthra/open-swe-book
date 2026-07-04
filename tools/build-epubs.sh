@@ -23,12 +23,13 @@ export RASTER_DIR="$OUT/.raster"   # diagram PNG cache shared across editions
 run_pandoc() {  # run_pandoc <in-html> <out-epub> <edition-description> <title> <cover>
   local args=(-f html+tex_math_dollars --mathml
     --metadata title="$4" --metadata identifier="org.swebook.$2.$VERSION"
-    --metadata author="Thomas Hastings" --metadata lang=en
+    --metadata lang=en
     --metadata rights="CC BY-SA 4.0 (prose); MIT (code)"
     --metadata description="$3" --toc --toc-depth=2 --split-level=1)
   if command -v pandoc >/dev/null; then
     pandoc "$OUT/$1" -o "$OUT/$2" "${args[@]}" \
       --resource-path "$OUT" \
+      --epub-metadata tools/epub-metadata.xml \
       --css tools/epub.css --highlight-style tools/onelight.theme \
       --epub-cover-image "$5" \
       --epub-embed-font fonts/Inconsolata-latin.woff2
@@ -36,6 +37,7 @@ run_pandoc() {  # run_pandoc <in-html> <out-epub> <edition-description> <title> 
     docker run --rm --user "$(id -u):$(id -g)" -v "$OUT:/data" -v "$BOOK_DIR:/book" pandoc/core \
       "/data/$1" -o "/data/$2" "${args[@]}" \
       --resource-path /data \
+      --epub-metadata /book/tools/epub-metadata.xml \
       --css /book/tools/epub.css --highlight-style /book/tools/onelight.theme \
       --epub-cover-image "/book/$5" \
       --epub-embed-font /book/fonts/Inconsolata-latin.woff2
