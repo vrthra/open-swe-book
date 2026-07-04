@@ -28,12 +28,14 @@ run_pandoc() {  # run_pandoc <in-html> <out-epub> <edition-description> <title> 
     --metadata description="$3" --toc --toc-depth=2 --split-level=1)
   if command -v pandoc >/dev/null; then
     pandoc "$OUT/$1" -o "$OUT/$2" "${args[@]}" \
+      --resource-path "$OUT" \
       --css tools/epub.css --highlight-style tools/onelight.theme \
       --epub-cover-image "$5" \
       --epub-embed-font fonts/Inconsolata-latin.woff2
   else
     docker run --rm --user "$(id -u):$(id -g)" -v "$OUT:/data" -v "$BOOK_DIR:/book" pandoc/core \
       "/data/$1" -o "/data/$2" "${args[@]}" \
+      --resource-path /data \
       --css /book/tools/epub.css --highlight-style /book/tools/onelight.theme \
       --epub-cover-image "/book/$5" \
       --epub-embed-font /book/fonts/Inconsolata-latin.woff2
@@ -139,6 +141,7 @@ PY
   html="$OUT/pdf-$lang.html"
   if command -v pandoc >/dev/null; then
     pandoc "$OUT/filtered-$lang.html" -o "$html" -s -f html+tex_math_dollars --mathml \
+      --resource-path "$OUT" \
       --metadata title="$title" --toc --toc-depth=2 \
       --highlight-style tools/onelight.theme \
       --css "file://$BOOK_DIR/tools/epub.css" --css "file://$BOOK_DIR/tools/pdf.css"
