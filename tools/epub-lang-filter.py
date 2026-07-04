@@ -218,6 +218,13 @@ def main() -> None:
     body = drop_web_sections(body)
     body = re.sub(r'<pre class="mermaid"[^>]*>(.*?)</pre>', mermaid_to_img,
                   body, flags=re.S)
+    # Site-relative internal links (chapters/..., templates/..., curriculum/...)
+    # have no target inside the EPUB — 177 epubcheck RSC-007 errors and dead
+    # taps in readers. Unwrap them to plain text; same-page #anchors and
+    # external http(s)/mailto links survive.
+    body = re.sub(
+        r'<a href="(?!#|[a-zA-Z][a-zA-Z0-9+.-]*:)[^"]*"[^>]*>((?:(?!</a>).)*)</a>',
+        r"\1", body, flags=re.S)
     if target != "all":
         body = filter_language(body, target)
     # pandoc's highlighter keys on a bare language class ("python"), not

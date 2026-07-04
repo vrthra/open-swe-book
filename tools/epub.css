@@ -4,7 +4,7 @@
   font-family: "Inconsolata";
   font-style: normal;
   font-weight: 200 900;
-  src: url("Inconsolata-latin.woff2") format("woff2");
+  src: url("../fonts/Inconsolata-latin.woff2") format("woff2");
 }
 
 body {
@@ -36,10 +36,15 @@ pre {
   border-radius: 6px;
   padding: 0.7em 0.9em;
   margin: 0.9em 0;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-  page-break-inside: avoid;
+  /* !important: Apple Books' user font/theme settings can override publisher
+     styles; unwrapped pre clips at the page edge in paginated view */
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
   line-height: 1.45;
+}
+pre code {
+  white-space: pre-wrap !important;
 }
 pre code { font-size: 0.78em; background: none; }
 p code, li code, td code {
@@ -70,8 +75,8 @@ th, td {
 th { background: #eef1f6; }
 
 img, svg {
-  max-width: 100%;
-  height: auto;
+  max-width: 100% !important;
+  height: auto !important;
   display: block;
   margin: 0.8em auto;
 }

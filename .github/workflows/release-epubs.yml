@@ -37,6 +37,16 @@ jobs:
           SWEBOOK_VERSION: ${{ github.ref_name }}
         run: bash tools/build-epubs.sh
 
+      - name: Validate every EPUB with epubcheck
+        run: |
+          curl -sL -o /tmp/epubcheck.zip \
+            "https://github.com/w3c/epubcheck/releases/download/v5.1.0/epubcheck-5.1.0.zip"
+          unzip -q /tmp/epubcheck.zip -d /tmp
+          for f in dist/*.epub; do
+            echo "== $f"
+            java -jar /tmp/epubcheck-5.1.0/epubcheck.jar "$f"
+          done
+
       - name: Publish as release assets
         env:
           GH_TOKEN: ${{ github.token }}

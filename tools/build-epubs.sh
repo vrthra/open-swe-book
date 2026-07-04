@@ -60,10 +60,26 @@ t = t.replace("<head>",
               "catch(e){}</script>", 1)
 open(f"{out}/light-print.html", "w", encoding="utf-8").write(t)
 PY
-"$CHROME" --headless --disable-gpu ${CHROME_FLAGS:-} --dump-dom \
-  --virtual-time-budget=30000 \
-  "file://$OUT/light-print.html" > "$OUT/rendered.html"
-rm -f "$OUT/light-print.html"
+render_dump() {  # render_dump <budget-ms>
+  "$CHROME" --headless --disable-gpu ${CHROME_FLAGS:-} --dump-dom \
+    --virtual-time-budget="$1" \
+    "file://$OUT/light-print.html" > "$OUT/rendered.html" 2> "$OUT/chrome.log"
+}
+expected_diagrams=$(grep -rh -c '^```mermaid' chapters/*/*.md templates/*.md curriculum/*.md 2>/dev/null | awk '{n+=$1} END {print n+0}')
+render_dump 30000
+rendered=$(grep -c 'data-processed="true"' "$OUT/rendered.html" || true)
+if [ "$rendered" -lt "$expected_diagrams" ]; then
+  echo "mermaid rendered $rendered/$expected_diagrams — retrying with a larger budget" >&2
+  render_dump 90000
+  rendered=$(grep -c 'data-processed="true"' "$OUT/rendered.html" || true)
+fi
+if [ "$rendered" -lt "$expected_diagrams" ]; then
+  echo "FATAL: only $rendered of $expected_diagrams diagrams rendered; chrome log:" >&2
+  cat "$OUT/chrome.log" >&2
+  exit 1
+fi
+echo "diagrams rendered: $rendered/$expected_diagrams"
+rm -f "$OUT/light-print.html" "$OUT/chrome.log"
 
 # 2. Covers (regenerated every run: they carry the version).
 LANGS="${1:-python java javascript go ruby}"
@@ -84,6 +100,17 @@ for lang in $LANGS; do
     title="$TITLE (${PRETTY[$lang]} Edition)"; cover="tools/covers/cover-$lang.png"
   fi
   run_pandoc "filtered-$lang.html" "$name" "$edition" "$title" "$cover"
+  python3 - "$OUT/$name" <<'PY'
+import sys, zipfile
+# Apple Books: honor publisher fonts/styles by default (legacy but respected).
+with zipfile.ZipFile(sys.argv[1], "a") as z:
+    if "META-INF/com.apple.ibooks.display-options.xml" not in z.namelist():
+        z.writestr("META-INF/com.apple.ibooks.display-options.xml",
+                   '<?xml version="1.0" encoding="UTF-8"?>\n'
+                   '<display_options><platform name="*">'
+                   '<option name="specified-fonts">true</option>'
+                   "</platform></display_options>")
+PY
   if [ "$lang" != all ]; then
     python3 - "$OUT/$name" "$lang" <<'PY'
 import sys, zipfile, re
@@ -95,6 +122,14 @@ langs = set(re.findall(r'class="sourceCode (\w+)"', x))
 extra = langs - {lang, "bash", "gherkin", "bibtex", "text"}
 if extra:
     sys.exit(f"PURITY FAILURE in {path}: found {sorted(extra)}")
+media = [n for n in z.namelist() if "/media/" in n]
+pngs = sum(1 for n in media if n.endswith(".png"))
+svgs = sum(1 for n in media if n.endswith(".svg"))
+if pngs < 40 or svgs:
+    sys.exit(f"DIAGRAM FAILURE in {path}: {pngs} png / {svgs} svg in media "
+             "(expected ~47 png, 0 svg)")
+if "language-mermaid" in x or 'class="mermaid"' in x:
+    sys.exit(f"DIAGRAM FAILURE in {path}: unrendered mermaid source shipped")
 PY
   fi
   echo "built: $name (purity ok)"
