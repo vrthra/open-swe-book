@@ -6,52 +6,123 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { width: 1600px; height: 2560px; }
   body {
-    background: #141322;
+    background: #0b0d16;
     background-image:
-      radial-gradient(ellipse 1400px 900px at 50% -200px, rgba(74, 144, 226, 0.28), transparent),
-      radial-gradient(ellipse 1200px 800px at 50% 2700px, {{ACCENT}}33, transparent);
+      radial-gradient(ellipse 1200px 800px at 82% 24%, {{ACCENT}}1f, transparent 70%),
+      radial-gradient(ellipse 1000px 900px at 10% 60%, rgba(97,84,190,0.14), transparent 72%);
     color: #eef1f8;
     font-family: Georgia, "Liberation Serif", serif;
-    display: flex;
-    flex-direction: column;
-    padding: 170px 140px 150px;
+    position: relative;
+    overflow: hidden;
   }
-  .rule {
-    width: 220px; height: 6px; background: {{ACCENT}}; border-radius: 3px;
-    margin-bottom: 90px;
-  }
-  h1 {
-    font-size: 148px; line-height: 1.12; font-weight: normal;
-    letter-spacing: 0.5px; margin-bottom: 60px;
-  }
-  .subtitle {
-    font-size: 68px; line-height: 1.3; font-style: italic; color: #aebadd;
-    margin-bottom: 110px;
-  }
-  .badge {
-    align-self: flex-start;
-    font-family: "DejaVu Sans Mono", monospace;
-    font-size: 46px; color: #141322; background: {{ACCENT}};
-    padding: 18px 44px; border-radius: 46px; font-weight: bold;
-  }
-  .spacer { flex: 1; }
-  .meta { border-top: 2px solid rgba(174, 186, 221, 0.35); padding-top: 56px; }
-  .author { font-size: 62px; margin-bottom: 22px; }
-  .edition { font-size: 40px; color: #8f9bbf; }
-  .brace {
-    position: absolute; right: 110px; top: 45%;
-    font-family: "DejaVu Sans Mono", monospace;
-    font-size: 560px; color: {{ACCENT}}; opacity: 0.16; line-height: 1;
-  }
+  svg.field { position:absolute; left:0; top:0; }
+
+  .title { position:absolute; left:120px; top:330px; right:120px; }
+  .title h1 { font-size:172px; line-height:1.08; font-weight:normal; color:#f5f7ff; }
+  .subtitle { margin-top:56px; font-size:64px; font-style:italic; color:#aeb8dd; }
+  .badge { margin-top:70px; display:inline-block; font-family:"DejaVu Sans Mono",monospace;
+    font-size:44px; font-weight:bold; color:#0b0d16; background:{{ACCENT}};
+    padding:18px 52px; border-radius:46px; }
+
+  /* ---- Horizontal icon timeline with years ---- */
+  .tl { position:absolute; left:90px; right:90px; top:1560px; height:560px; }
+  .tl .line { position:absolute; left:0; right:0; top:279px; height:6px; border-radius:3px;
+    background: linear-gradient(90deg, transparent, {{ACCENT}} 6%, {{ACCENT}} 94%, transparent);
+    box-shadow: 0 0 24px {{ACCENT}}66; }
+  .node { position:absolute; top:0; width:0; }
+  .node .dot { position:absolute; left:-11px; top:271px; width:22px; height:22px;
+    border-radius:50%; background:#fff; box-shadow: 0 0 16px {{ACCENT}}; }
+  .node .stem { position:absolute; left:-2px; width:4px; background:{{ACCENT}}66; }
+  .node.up .stem { top:168px; height:103px; }
+  .node.dn .stem { top:293px; height:103px; }
+  .node .ic { position:absolute; left:-52px; width:104px; height:104px; border-radius:50%;
+    background: rgba(13,16,30,0.92); border: 3px solid {{ACCENT}};
+    box-shadow: 0 0 22px {{ACCENT}}44;
+    display:flex; align-items:center; justify-content:center; }
+  .node.up .ic { top:60px; }
+  .node.dn .ic { top:400px; }
+  .node .yr { position:absolute; left:-70px; width:140px; text-align:center;
+    font-family:"DejaVu Sans Mono",monospace; font-size:34px; font-weight:bold;
+    color:{{ACCENT}}; letter-spacing:2px; }
+  .node.up .yr { top:8px; }
+  .node.dn .yr { top:516px; }
+  .node svg { width:58px; height:58px; }
+  .node svg * { stroke:#eef1f8; stroke-width:2.6; fill:none; stroke-linecap:round; stroke-linejoin:round; }
+  .node svg .f { fill:#eef1f8; stroke:none; }
+
+  .meta { position:absolute; left:120px; right:120px; bottom:120px;
+    border-top: 2px solid rgba(174,184,221,0.35); padding-top:52px; }
+  .author { font-size:60px; color:#f0f3ff; }
+  .edition { margin-top:20px; font-size:38px; color:#8f99c0; }
 </style>
 </head>
 <body>
-  <div class="rule"></div>
-  <h1>Software<br>Engineering</h1>
-  <div class="subtitle">Standing on the Shoulders of Giants</div>
-  <div class="badge">{{LANG}} edition</div>
-  <div class="brace">{&nbsp;}</div>
-  <div class="spacer"></div>
+  <svg class="field" width="1600" height="1800" viewBox="0 0 1600 1800">
+      <path d="M 0 255 L 40 249 L 80 244 L 120 240 L 160 237 L 200 236 L 240 236 L 280 235 L 320 235 L 360 233 L 400 230 L 440 227 L 480 222 L 520 217 L 560 212 L 600 209 L 640 207 L 680 208 L 720 211 L 760 216 L 800 223 L 840 232 L 880 241 L 920 249 L 960 256 L 1000 262 L 1040 265 L 1080 266 L 1120 265 L 1160 263 L 1200 260 L 1240 258 L 1280 256 L 1320 254 L 1360 254 L 1400 255 L 1440 256 L 1480 256 L 1520 256 L 1560 254 L 1600 250" stroke="{{ACCENT}}" stroke-opacity="0.05" stroke-width="3.2" fill="none"/>
+      <path d="M 0 329 L 40 323 L 80 319 L 120 318 L 160 318 L 200 317 L 240 314 L 280 309 L 320 303 L 360 296 L 400 289 L 440 286 L 480 287 L 520 293 L 560 304 L 600 318 L 640 332 L 680 346 L 720 357 L 760 364 L 800 365 L 840 363 L 880 359 L 920 353 L 960 349 L 1000 346 L 1040 345 L 1080 345 L 1120 346 L 1160 345 L 1200 341 L 1240 333 L 1280 323 L 1320 311 L 1360 298 L 1400 287 L 1440 281 L 1480 279 L 1520 283 L 1560 291 L 1600 303" stroke="#7d6fd4" stroke-opacity="0.08" stroke-width="2.4" fill="none"/>
+      <path d="M 0 411 L 40 404 L 80 402 L 120 402 L 160 400 L 200 396 L 240 387 L 280 377 L 320 368 L 360 364 L 400 369 L 440 382 L 480 402 L 520 424 L 560 444 L 600 458 L 640 464 L 680 462 L 720 455 L 760 446 L 800 439 L 840 436 L 880 436 L 920 436 L 960 434 L 1000 427 L 1040 414 L 1080 397 L 1120 378 L 1160 363 L 1200 355 L 1240 357 L 1280 368 L 1320 385 L 1360 403 L 1400 419 L 1440 430 L 1480 435 L 1520 436 L 1560 435 L 1600 437" stroke="#4d5f9e" stroke-opacity="0.10" stroke-width="2.4" fill="none"/>
+      <path d="M 0 537 L 40 517 L 80 503 L 120 497 L 160 496 L 200 493 L 240 484 L 280 470 L 320 453 L 360 441 L 400 440 L 440 454 L 480 480 L 520 510 L 560 536 L 600 551 L 640 554 L 680 548 L 720 539 L 760 533 L 800 533 L 840 536 L 880 536 L 920 528 L 960 510 L 1000 484 L 1040 458 L 1080 438 L 1120 433 L 1160 442 L 1200 462 L 1240 485 L 1280 504 L 1320 515 L 1360 519 L 1400 519 L 1440 523 L 1480 532 L 1520 547 L 1560 560 L 1600 566" stroke="{{ACCENT}}" stroke-opacity="0.12" stroke-width="3.2" fill="none"/>
+      <path d="M 0 571 L 40 568 L 80 568 L 120 568 L 160 568 L 200 566 L 240 562 L 280 555 L 320 547 L 360 539 L 400 532 L 440 527 L 480 526 L 520 530 L 560 540 L 600 554 L 640 572 L 680 592 L 720 612 L 760 630 L 800 644 L 840 654 L 880 659 L 920 659 L 960 654 L 1000 647 L 1040 638 L 1080 629 L 1120 622 L 1160 617 L 1200 615 L 1240 614 L 1280 614 L 1320 614 L 1360 612 L 1400 607 L 1440 598 L 1480 586 L 1520 572 L 1560 556 L 1600 540" stroke="#7d6fd4" stroke-opacity="0.14" stroke-width="2.4" fill="none"/>
+      <path d="M 0 698 L 40 682 L 80 672 L 120 667 L 160 665 L 200 664 L 240 662 L 280 656 L 320 645 L 360 632 L 400 618 L 440 606 L 480 601 L 520 604 L 560 617 L 600 637 L 640 663 L 680 690 L 720 715 L 760 733 L 800 744 L 840 746 L 880 742 L 920 734 L 960 724 L 1000 717 L 1040 714 L 1080 713 L 1120 715 L 1160 716 L 1200 713 L 1240 705 L 1280 690 L 1320 669 L 1360 646 L 1400 623 L 1440 604 L 1480 592 L 1520 591 L 1560 599 L 1600 615" stroke="#4d5f9e" stroke-opacity="0.16" stroke-width="2.4" fill="none"/>
+      <path d="M 0 797 L 40 826 L 80 844 L 120 848 L 160 841 L 200 826 L 240 810 L 280 798 L 320 792 L 360 791 L 400 790 L 440 785 L 480 773 L 520 751 L 560 724 L 600 698 L 640 679 L 680 673 L 720 681 L 760 703 L 800 732 L 840 763 L 880 787 L 920 802 L 960 808 L 1000 807 L 1040 805 L 1080 805 L 1120 812 L 1160 822 L 1200 833 L 1240 838 L 1280 832 L 1320 814 L 1360 785 L 1400 750 L 1440 718 L 1480 694 L 1520 683 L 1560 686 L 1600 700" stroke="{{ACCENT}}" stroke-opacity="0.17" stroke-width="3.2" fill="none"/>
+      <path d="M 0 863 L 40 845 L 80 838 L 120 836 L 160 833 L 200 822 L 240 803 L 280 783 L 320 771 L 360 775 L 400 798 L 440 835 L 480 877 L 520 911 L 560 929 L 600 930 L 640 918 L 680 903 L 720 893 L 760 891 L 800 893 L 840 891 L 880 878 L 920 852 L 960 817 L 1000 783 L 1040 761 L 1080 758 L 1120 776 L 1160 807 L 1200 841 L 1240 867 L 1280 881 L 1320 884 L 1360 884 L 1400 888 L 1440 900 L 1480 917 L 1520 933 L 1560 936 L 1600 922" stroke="#7d6fd4" stroke-opacity="0.18" stroke-width="2.4" fill="none"/>
+      <path d="M 0 962 L 40 985 L 80 1005 L 120 1019 L 160 1026 L 200 1027 L 240 1023 L 280 1015 L 320 1004 L 360 993 L 400 983 L 440 976 L 480 972 L 520 970 L 560 970 L 600 970 L 640 968 L 680 963 L 720 954 L 760 941 L 800 924 L 840 905 L 880 885 L 920 867 L 960 853 L 1000 845 L 1040 844 L 1080 850 L 1120 862 L 1160 880 L 1200 901 L 1240 923 L 1280 943 L 1320 960 L 1360 972 L 1400 980 L 1440 984 L 1480 984 L 1520 983 L 1560 981 L 1600 981" stroke="#4d5f9e" stroke-opacity="0.18" stroke-width="2.4" fill="none"/>
+      <path d="M 0 1100 L 40 1115 L 80 1119 L 120 1114 L 160 1103 L 200 1087 L 240 1072 L 280 1060 L 320 1053 L 360 1050 L 400 1049 L 440 1047 L 480 1042 L 520 1031 L 560 1014 L 600 993 L 640 971 L 680 951 L 720 937 L 760 934 L 800 941 L 840 959 L 880 983 L 920 1011 L 960 1037 L 1000 1058 L 1040 1072 L 1080 1079 L 1120 1079 L 1160 1076 L 1200 1073 L 1240 1073 L 1280 1076 L 1320 1083 L 1360 1091 L 1400 1098 L 1440 1099 L 1480 1092 L 1520 1076 L 1560 1053 L 1600 1024" stroke="{{ACCENT}}" stroke-opacity="0.18" stroke-width="3.2" fill="none"/>
+      <path d="M 0 1197 L 40 1176 L 80 1154 L 120 1136 L 160 1124 L 200 1120 L 240 1118 L 280 1114 L 320 1105 L 360 1089 L 400 1068 L 440 1047 L 480 1033 L 520 1031 L 560 1043 L 600 1069 L 640 1102 L 680 1135 L 720 1161 L 760 1176 L 800 1180 L 840 1176 L 880 1168 L 920 1162 L 960 1161 L 1000 1164 L 1040 1169 L 1080 1170 L 1120 1163 L 1160 1145 L 1200 1117 L 1240 1084 L 1280 1054 L 1320 1033 L 1360 1026 L 1400 1034 L 1440 1053 L 1480 1078 L 1520 1101 L 1560 1118 L 1600 1127" stroke="#7d6fd4" stroke-opacity="0.17" stroke-width="2.4" fill="none"/>
+      <path d="M 0 1174 L 40 1188 L 80 1215 L 120 1248 L 160 1278 L 200 1296 L 240 1295 L 280 1276 L 320 1248 L 360 1219 L 400 1198 L 440 1188 L 480 1186 L 520 1185 L 560 1179 L 600 1166 L 640 1148 L 680 1135 L 720 1134 L 760 1150 L 800 1181 L 840 1219 L 880 1253 L 920 1274 L 960 1279 L 1000 1270 L 1040 1255 L 1080 1242 L 1120 1237 L 1160 1237 L 1200 1236 L 1240 1229 L 1280 1210 L 1320 1181 L 1360 1150 L 1400 1126 L 1440 1118 L 1480 1129 L 1520 1156 L 1560 1188 L 1600 1215" stroke="#4d5f9e" stroke-opacity="0.16" stroke-width="2.4" fill="none"/>
+      <path d="M 0 1282 L 40 1277 L 80 1275 L 120 1274 L 160 1274 L 200 1273 L 240 1271 L 280 1266 L 320 1258 L 360 1250 L 400 1241 L 440 1233 L 480 1229 L 520 1229 L 560 1234 L 600 1244 L 640 1258 L 680 1277 L 720 1297 L 760 1317 L 800 1334 L 840 1348 L 880 1358 L 920 1362 L 960 1361 L 1000 1356 L 1040 1349 L 1080 1340 L 1120 1333 L 1160 1326 L 1200 1322 L 1240 1321 L 1280 1321 L 1320 1321 L 1360 1320 L 1400 1318 L 1440 1312 L 1480 1303 L 1520 1290 L 1560 1275 L 1600 1258" stroke="{{ACCENT}}" stroke-opacity="0.14" stroke-width="3.2" fill="none"/>
+      <path d="M 0 1360 L 40 1360 L 80 1361 L 120 1360 L 160 1357 L 200 1350 L 240 1342 L 280 1334 L 320 1329 L 360 1328 L 400 1334 L 440 1347 L 480 1366 L 520 1387 L 560 1409 L 600 1427 L 640 1440 L 680 1445 L 720 1443 L 760 1436 L 800 1426 L 840 1416 L 880 1408 L 920 1403 L 960 1401 L 1000 1401 L 1040 1400 L 1080 1397 L 1120 1389 L 1160 1377 L 1200 1362 L 1240 1344 L 1280 1328 L 1320 1317 L 1360 1312 L 1400 1315 L 1440 1326 L 1480 1343 L 1520 1362 L 1560 1381 L 1600 1397" stroke="#7d6fd4" stroke-opacity="0.12" stroke-width="2.4" fill="none"/>
+      <path d="M 0 1444 L 40 1447 L 80 1455 L 120 1470 L 160 1490 L 200 1509 L 240 1525 L 280 1532 L 320 1530 L 360 1519 L 400 1504 L 440 1487 L 480 1473 L 520 1465 L 560 1461 L 600 1460 L 640 1459 L 680 1455 L 720 1447 L 760 1436 L 800 1426 L 840 1420 L 880 1421 L 920 1431 L 960 1448 L 1000 1470 L 1040 1491 L 1080 1508 L 1120 1517 L 1160 1518 L 1200 1512 L 1240 1505 L 1280 1498 L 1320 1494 L 1360 1494 L 1400 1495 L 1440 1494 L 1480 1489 L 1520 1478 L 1560 1461 L 1600 1442" stroke="#4d5f9e" stroke-opacity="0.10" stroke-width="2.4" fill="none"/>
+      <path d="M 0 1537 L 40 1538 L 80 1546 L 120 1560 L 160 1579 L 200 1596 L 240 1607 L 280 1607 L 320 1598 L 360 1584 L 400 1569 L 440 1558 L 480 1553 L 520 1552 L 560 1551 L 600 1546 L 640 1538 L 680 1527 L 720 1519 L 760 1518 L 800 1525 L 840 1542 L 880 1562 L 920 1581 L 960 1593 L 1000 1596 L 1040 1592 L 1080 1586 L 1120 1580 L 1160 1578 L 1200 1579 L 1240 1579 L 1280 1575 L 1320 1565 L 1360 1548 L 1400 1530 L 1440 1516 L 1480 1511 L 1520 1516 L 1560 1529 L 1600 1546" stroke="{{ACCENT}}" stroke-opacity="0.08" stroke-width="3.2" fill="none"/>
+  </svg>
+
+  <div class="title">
+    <h1>Software<br>Engineering</h1>
+    <div class="subtitle">Standing on the Shoulders of Giants</div>
+    <div><span class="badge">{{LANG}} edition</span></div>
+  </div>
+
+  <div class="tl">
+    <div class="line"></div>
+
+    <div class="node up" style="left:3%;"><div class="yr">1936</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><rect x="4" y="18" width="40" height="12" rx="2"/><line x1="14" y1="18" x2="14" y2="30"/><line x1="24" y1="18" x2="24" y2="30"/><line x1="34" y1="18" x2="34" y2="30"/><rect class="f" x="20" y="21.5" width="8" height="5"/><path d="M24 10 l0 5"/><path d="M21 12.5 L24 15.5 L27 12.5"/></svg>
+    </div></div>
+    <div class="node dn" style="left:11.8%;"><div class="yr">1945</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><path d="M16 8 h16 v18 a8 8 0 0 1 -16 0 z"/><line x1="20" y1="34" x2="20" y2="40"/><line x1="24" y1="35" x2="24" y2="41"/><line x1="28" y1="34" x2="28" y2="40"/><line x1="24" y1="14" x2="24" y2="24"/><circle class="f" cx="24" cy="26" r="2"/></svg>
+    </div></div>
+    <div class="node up" style="left:20.6%;"><div class="yr">1948</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><rect x="12" y="12" width="24" height="24" rx="3"/><rect x="20" y="20" width="8" height="8"/><line x1="18" y1="12" x2="18" y2="6"/><line x1="24" y1="12" x2="24" y2="6"/><line x1="30" y1="12" x2="30" y2="6"/><line x1="18" y1="36" x2="18" y2="42"/><line x1="24" y1="36" x2="24" y2="42"/><line x1="30" y1="36" x2="30" y2="42"/><line x1="12" y1="18" x2="6" y2="18"/><line x1="12" y1="30" x2="6" y2="30"/><line x1="36" y1="18" x2="42" y2="18"/><line x1="36" y1="30" x2="42" y2="30"/></svg>
+    </div></div>
+    <div class="node dn" style="left:29.4%;"><div class="yr">1957</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><path d="M10 8 h22 l6 6 v26 h-28 z"/><rect class="f" x="15" y="18" width="4" height="6"/><rect class="f" x="22" y="18" width="4" height="6"/><rect class="f" x="29" y="26" width="4" height="6"/><rect class="f" x="15" y="26" width="4" height="6"/></svg>
+    </div></div>
+    <div class="node up" style="left:38.2%;"><div class="yr">1968</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="7"/><path d="M24 10v-5 M24 38v5 M38 24h5 M5 24h5 M33.9 14.1l3.5-3.5 M10.6 37.4l3.5-3.5 M33.9 33.9l3.5 3.5 M10.6 10.6l3.5 3.5"/><circle cx="24" cy="24" r="14"/></svg>
+    </div></div>
+    <div class="node dn" style="left:47%;"><div class="yr">1969</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><path d="M24 5 c6 6 8 14 8 20 l-4 8 h-8 l-4 -8 c0 -6 2 -14 8 -20 z"/><circle cx="24" cy="18" r="4"/><path d="M16 28 l-6 8 8 -2 M32 28 l6 8 -8 -2 M21 35 c0 4 1 6 3 8 2 -2 3 -4 3 -8"/></svg>
+    </div></div>
+    <div class="node up" style="left:55.8%;"><div class="yr">1972</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><rect x="6" y="10" width="36" height="28" rx="3"/><path d="M13 20 l7 5 -7 5"/><line x1="24" y1="31" x2="33" y2="31"/></svg>
+    </div></div>
+    <div class="node dn" style="left:64.6%;"><div class="yr">1983</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><circle cx="24" cy="12" r="5"/><circle cx="10" cy="34" r="5"/><circle cx="38" cy="34" r="5"/><line x1="21" y1="16" x2="13" y2="30"/><line x1="27" y1="16" x2="35" y2="30"/><line x1="15" y1="34" x2="33" y2="34"/></svg>
+    </div></div>
+    <div class="node up" style="left:73.4%;"><div class="yr">1991</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="16"/><ellipse cx="24" cy="24" rx="7" ry="16"/><line x1="8" y1="24" x2="40" y2="24"/><path d="M11 15 a22 22 0 0 0 26 0 M11 33 a22 22 0 0 1 26 0"/></svg>
+    </div></div>
+    <div class="node dn" style="left:82.2%;"><div class="yr">2001</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><path d="M36 18 a14 14 0 1 0 2 12"/><path d="M36 8 v10 h-10"/></svg>
+    </div></div>
+    <div class="node up" style="left:91%;"><div class="yr">2005</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><circle cx="14" cy="10" r="5"/><circle cx="14" cy="38" r="5"/><circle cx="36" cy="16" r="5"/><line x1="14" y1="15" x2="14" y2="33"/><path d="M14 26 c0 -8 10 -4 18 -6"/></svg>
+    </div></div>
+    <div class="node dn" style="left:97%;"><div class="yr">2022</div><div class="stem"></div><div class="dot"></div><div class="ic">
+      <svg viewBox="0 0 48 48"><path class="f" d="M24 6 l4 12 12 4 -12 4 -4 12 -4 -12 -12 -4 12 -4 z"/><circle cx="40" cy="10" r="2.6"/><circle cx="8" cy="38" r="2.6"/></svg>
+    </div></div>
+  </div>
+
   <div class="meta">
     <div class="author">Thomas Hastings, Ph.D.</div>
     <div class="edition">First Edition &middot; {{VERSION}} &middot; swebook.org</div>
