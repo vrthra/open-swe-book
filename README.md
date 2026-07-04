@@ -7,9 +7,9 @@ modern software engineering: how software is built in industry using
 agile methods, how to discover and analyze requirements, how to design and architect
 modular systems, how to check and test code, and how to measure quality with metrics.
 
-The book is structured into twelve chapters and a team project appendix, following the topic.
+The book is structured into twelve chapters and a team project appendix, following the topic
 progression of the ACM/IEEE software‑engineering curriculum guidelines (SE2014/SEEK).[^1]
-Each chapter contains original explanatory prose rather than material copied from other textbooks.
+Each chapter contains original explanatory prose rather than material copied from other textbooks
 and is accompanied by a curated map of free or openly accessible resources
 MOOCs, university courseware, primary specifications, and papers; licenses vary and are
 with licenses noted where known. The material is designed to support a complete
