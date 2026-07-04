@@ -13,7 +13,7 @@ Each chapter contains original explanatory prose rather than material copied fro
 and is accompanied by a curated map of free or openly accessible resources
 MOOCs, university courseware, primary specifications, and papers; licenses vary and are
 with licenses noted where known. The material is designed to support a complete
-software‑engineering course**.
+software‑engineering course.
 
 > **An independent open educational resource.** This is a complete, standalone book.
 > Except for clearly attributed quotations and linked external resources, its explanatory
@@ -22,12 +22,6 @@ software‑engineering course**.
 > for the mapping from each chapter to complementary open materials. The prose was
 > drafted with AI assistance under the author's direction, review, and fact-checking —
 > see [How this book was made](#how-this-book-was-made-ai-assistance) below.
-
-> **Relationship to SWEBOK.** This is an independent open textbook for a first course
-> in software engineering. It is not affiliated with, endorsed by, or a replacement for
-> the IEEE Computer Society's *SWEBOK Guide*, the profession's consensus body of
-> knowledge. Instructors may use the SWEBOK Guide as a professional reference alongside
-> this book's SE2014/SEEK-aligned curriculum map.
 
 ---
 
