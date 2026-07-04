@@ -2,17 +2,17 @@
 
 *First Edition, July 2026.*
 
-This is a free, openly‑licensed, continuously maintained book that teaches the
-*principles and best practices* of modern software engineering: how software is built in industry using
+This book is freely available and openly licensed, providing instruction in the principles and best practices of
+modern software engineering: how software is built in industry using
 agile methods, how to discover and analyze requirements, how to design and architect
 modular systems, how to check and test code, and how to measure quality with metrics.
 
-It is organized as **twelve chapters and a team‑project appendix**, following the topic
+The book is structured into twelve chapters and a team project appendix, following the topic.
 progression of the ACM/IEEE software‑engineering curriculum guidelines (SE2014/SEEK).[^1]
-Every chapter consists of original explanatory prose rather than copied textbook
-material, and is paired with a curated map of **free or openly accessible resources** —
+Each chapter contains original explanatory prose rather than material copied from other textbooks.
+and is accompanied by a curated map of free or openly accessible resources
 MOOCs, university courseware, primary specifications, and papers; licenses vary and are
-noted where known — so the material is **designed to support a complete
+with licenses noted where known. The material is designed to support a complete
 software‑engineering course**.
 
 > **An independent open educational resource.** This is a complete, standalone book.
@@ -33,22 +33,22 @@ software‑engineering course**.
 
 ## Why this book exists
 
-Most software that matters is built by **teams**, under changing requirements, with
-inevitable defects, at a scale no one person can hold in their head. A university
-"programming" course teaches you to write a function; a **software engineering**
-course teaches you to build and evolve a *system* with other people. The discipline
-is less about any single language and more about a set of enduring principles:
+Most significant software is developed by teams, under evolving requirements, and with
+inevitable defects, at a scale that exceeds the capacity of any individual to fully comprehend. A university
+A typical programming course teaches students to write individual functions, whereas a software engineering
+course instructs students in building and evolving complete systems collaboratively. The discipline
+emphasizes enduring principles over proficiency in any single programming language:
 
 1. **Software is complex** → we manage complexity with design and architecture.
 2. **Requirements change** → we use iterative, agile methods to adapt.
 3. **Defects are inevitable** → we use reviews, static checking, and testing to catch them.
 4. **Teams need coordination** → we use processes, and a healthy balance of structure and flexibility.
 
-These four ideas thread through every chapter.
+These four foundational concepts are integrated throughout every chapter.
 
 ## How the book is organized
 
-The chapters group into arcs:
+The chapters are organized into thematic arcs:
 
 | Arc | Chapters | Question it answers |
 |-----|----------|---------------------|
@@ -72,9 +72,9 @@ The chapters group into arcs:
   work), 6–7 (weeks 4–5), 8–9 (weeks 6–7), 10 (week 8), and 12 (week 9), with
   Chapter 11 read alongside each topic through its per-stage sections (§11.2). Run a
   scoped-down project: proposal, two sprints, final demo.
-- **Self-study.** Read in order — every chapter ends with key takeaways, exercises, and
-  free resources for going deeper. Or enter through the arc table above for a specific
-  goal (Chapters 8–9 for quality practices, 12 for CI/CD); chapters cross-reference the
+- For self-study, chapters should be read sequentially. Each chapter concludes with key takeaways, exercises, and
+  free resources for further study. Alternatively, readers may use the arc table above to focus on a specific
+  goal, such as Chapters 8–9 for quality practices or Chapter 12 for CI/CD. Chapters cross-reference the
   earlier ideas they depend on.
 
 ## Code examples in five languages
@@ -106,7 +106,7 @@ All editions, including past versions, are on the
 
 ## Table of contents
 
-Use the sidebar for the full linked table of contents (chapters and sections), or jump in:
+The sidebar provides a complete, linked table of contents, including chapters and sections. Alternatively, readers may begin with any chapter of interest:
 
 1. [Introduction](chapters/01-introduction/) — what SE is, the requirements challenge, complexity, defects, the iron triangle, professional ethics.
 2. [Software Development Processes](chapters/02-software-development-processes/) — plan vs. grow, Scrum, XP, waterfall/V, spiral & risk.
@@ -125,15 +125,15 @@ Use the sidebar for the full linked table of contents (chapters and sections), o
 
 ## How to use this repository
 
-- **Learners:** read the chapters in order. Each ends with *Key takeaways*, *Exercises*,
+- Learners are advised to read the chapters sequentially. Each chapter concludes with Key Takeaways, Exercises,
   and *Open resources* pointing to free courses and readings for deeper study.
-- **Instructors:** the chapters map onto a 14–16 week semester — two ready-made plans
+- Instructors will find that the chapters align with a 14–16 week semester. Two ready-made plans
   (a milestone track and a two-week-sprint track) live in
   [`curriculum/course-plan.md`](curriculum/course-plan.md). Run the team project from
   Appendix A on a parallel track. Reusable document templates (idea pitch, proposal,
   sprint and status reports, team review, final report, individual write-up) are linked
   from [Appendix A](chapters/appendix-a-team-project/).
-- **Contributors:** see [`CONTRIBUTING.md`](CONTRIBUTING.md). This is meant to be a
+- Contributors should consult [`CONTRIBUTING.md`](CONTRIBUTING.md). This resource is intended to be a
   living, community‑improved resource.
 
 ## Building the book
