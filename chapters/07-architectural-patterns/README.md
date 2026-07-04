@@ -17,6 +17,15 @@ knows the vocabulary immediately shares a picture of the structure, its particip
 and the compromises it implies. That shared picture is the real payoff. Patterns give a
 team a *design language* precise enough to argue in.
 
+One honest caveat before the catalog: the patterns in this chapter do not all live at
+the same altitude, even though tradition files them under one name.[^3] Layering, shared
+data, and client-server shape *entire systems*; MVC organizes a *subsystem*; the
+observer is an object-level *design pattern* that architectures merely lean on; REST is
+a *convention for interfaces* between systems; and product lines are a *strategy across
+a family* of systems. Keep the altitude in mind as you read — "should we use observer
+or a product line?" is not a choice anyone faces, and knowing which level a pattern
+addresses tells you which decisions it can and cannot make for you.
+
 Every pattern in this chapter is presented the same way, so you can compare them fairly:
 the **problem** it solves, its **structure** (with a diagram), the **participants** and
 their responsibilities, the **trade-offs** you accept by adopting it, and a concrete
@@ -85,7 +94,7 @@ infrastructure, coupling the top of the stack to the bottom.
 **A real example.** The seven-layer OSI model of network protocols is the textbook case:
 your application code hands a message down the stack without knowing whether it
 travels over copper, fiber, or radio, because each layer presents a clean service to the
-one above.[^3] Closer to daily work, the standard three-tier web application — browser,
+one above.[^4] Closer to daily work, the standard three-tier web application — browser,
 application server, database — is layering you already rely on, and any framework
 organized as "controllers → services → repositories" is layering by another name.
 
@@ -172,7 +181,7 @@ accessor at once — the store's interface is now a system-wide contract. And be
 every access funnels through one place, the store can become the scalability limit and a
 single point of failure. Relational databases, blackboard systems in AI, and the Redux
 "single store" in front-end apps are all shared-data designs, and all of them live with
-this same tension between convenient centralization and dangerous centralization.[^1]<!-- -->[^4]
+this same tension between convenient centralization and dangerous centralization.[^1]<!-- -->[^5]
 
 ### 7.2.2 Observers and Subscribers — the Observer Pattern
 
@@ -182,7 +191,7 @@ must redraw. The naive solution has the state-holder call each interested party 
 but that means the state-holder must *know about* every interested party, hard-coding a
 dependency on things that logically depend on *it*. The **observer** pattern inverts that
 dependency: interested parties **subscribe**, and the state-holder notifies its
-subscribers without knowing who or what they are.[^5]
+subscribers without knowing who or what they are.[^6]
 
 **Structure.** A **subject** maintains a list of **observers** and offers `subscribe` and
 `unsubscribe` operations. When the subject's state changes, it iterates its list and
@@ -348,7 +357,7 @@ without recompiling the subject.
 
 At larger scale the same idea becomes **publish–subscribe**: publishers emit *events* to
 named channels or topics, and subscribers register interest in topics rather than in a
-specific subject.[^6] A message broker (§7.5.3) sits in the middle so that publishers and
+specific subject.[^7] A message broker (§7.5.3) sits in the middle so that publishers and
 subscribers need not even know the other exists or be running at the same time. Observer
 is publish–subscribe in miniature, in one process; pub/sub is observer scaled across a
 network.
@@ -424,12 +433,12 @@ flowchart TD
 ```
 
 **A real example.** The pattern was born in desktop UI toolkits and now underlies most
-web frameworks.[^7] In a server-side web app, an incoming request is dispatched to a
+web frameworks.[^8] In a server-side web app, an incoming request is dispatched to a
 *controller* action, which manipulates *model* objects (and their database records) and
 then selects a *view* (a template) to render the response. The exact division of labor
 varies — UI frameworks have spawned close cousins called **MVP**
 (Model-View-Presenter) and **MVVM** (Model-View-ViewModel), which differ mainly in how
-much logic sits between the view and the model and in which direction the wiring points.[^8]
+much logic sits between the view and the model and in which direction the wiring points.[^9]
 What they share, and what you should carry away, is the core commitment: *the model does
 not depend on the view*.
 
@@ -446,7 +455,7 @@ often, and how independently, the three concerns actually change.
 ### 7.3.3 Keep Views Simple
 
 The single most valuable discipline within MVC is to keep views **thin** — sometimes
-called the *humble view*.[^9] A view should contain as little logic as you can manage:
+called the *humble view*.[^10] A view should contain as little logic as you can manage:
 ideally it only reads values from the model (or a view-model prepared for it) and maps
 them onto widgets. It should contain no business rules, no decisions that matter, and no
 state that cannot be trivially reconstructed from the model.
@@ -653,14 +662,14 @@ end
 
 > **MVC in the wild.** Real frameworks realize the pattern under shuffled names. Django
 > calls its variant **MTV (Model-Template-View)**: Django's "view" plays the controller
-> role and its "template" is the view — the same triad, relabeled.[^10] Rails is classic
-> server-side MVC.[^11] **Single-page applications (SPAs)** built with React or Angular move
+> role and its "template" is the view — the same triad, relabeled.[^11] Rails is classic
+> server-side MVC.[^12] **Single-page applications (SPAs)** built with React or Angular move
 > the triad into the browser, often replacing two-way observer wiring with a
 > **unidirectional data-flow** store (Flux/Redux): the view fires actions, the store
-> updates, the view re-renders — the same separation with a stricter update discipline.[^4]
+> updates, the view re-renders — the same separation with a stricter update discipline.[^5]
 > Very large products run on each (Instagram on Django, Shopify on Rails, Airbnb on
 > React), which is the point: the pattern, not the framework, is the transferable
-> knowledge.[^12]<!-- -->[^13]<!-- -->[^14]
+> knowledge.[^13]<!-- -->[^14]<!-- -->[^15]
 
 ## 7.4 Dataflow Architectures
 
@@ -771,12 +780,12 @@ without ever waiting for an end that will not come.
 **Problem it solves and consequences.** Stream processing lets you compute continuously
 and react in near-real-time instead of in nightly batches. But unboundedness forces
 design decisions the batch world could ignore. You must reason in **windows** — "the
-count of events in the last five minutes" — because "the total count" is never final.[^15] You
+count of events in the last five minutes" — because "the total count" is never final.[^16] You
 must handle **out-of-order and late data**, because events generated at one time may
 arrive later, and you must decide how long to wait. You must bound memory, because you
 cannot buffer an infinite stream, which means most computations must be *incremental* and
 approximate. And **backpressure** becomes essential: when a downstream filter cannot keep
-up, it must signal upstream to slow down, or buffers overflow and the system falls over.[^16]
+up, it must signal upstream to slow down, or buffers overflow and the system falls over.[^17]
 
 > **Case study.** A fraud-detection system watches a never-ending stream of card
 > transactions and must flag a suspicious one within seconds. It cannot wait for a "batch"
@@ -791,7 +800,7 @@ When the data is not just endless but *enormous* — too large for one machine �
 becomes a strategy for **distributing** computation across a cluster. The
 **MapReduce** style captures a pattern that recurs across huge batch jobs: express the
 computation as a **map** step that transforms each record independently, followed by a
-**reduce** step that aggregates the mapped results by key.[^17] Because the map step treats
+**reduce** step that aggregates the mapped results by key.[^18] Because the map step treats
 records independently, the framework can shard the data across hundreds of machines and
 run the maps in parallel; because the reduce step aggregates by key, the framework can
 route all records with the same key to the same reducer.
@@ -815,9 +824,9 @@ massive parallelism and fault tolerance almost for free, provided your problem f
 map-then-reduce shape. The costs are real: the rigid two-phase structure forces awkward
 encodings for computations that are naturally iterative (many machine-learning
 algorithms) or that need many stages, and the shuffle — moving data across the network
-between phases — is often the dominant expense.[^17] Later engines generalize the idea into
+between phases — is often the dominant expense.[^18] Later engines generalize the idea into
 arbitrary dataflow graphs of transformations to reduce that cost, but the core insight is
-the same: *describe the dataflow, let the platform distribute it.*[^18]
+the same: *describe the dataflow, let the platform distribute it.*[^19]
 
 ## 7.5 Connecting Clients with Servers
 
@@ -1057,7 +1066,7 @@ in practice it too must be made redundant.
 Client–server tells you *who talks to whom*; it does not tell you what the conversation
 looks like. The dominant answer on today's web is **REST** (Representational State
 Transfer) — less a new pattern than a set of conventions that make the client–server
-pattern scale across the internet.[^19] An API that follows them is called **RESTful**.
+pattern scale across the internet.[^20] An API that follows them is called **RESTful**.
 
 **Problem it solves.** If every server invents its own vocabulary of operations
 (`getPatient`, `fetch_appt`, `makeBookingV2`…), every client must learn every server's
@@ -1072,7 +1081,7 @@ to *any* server using the same small grammar.
   verbs — the URI names a *thing*, not an *action*.
 - **A fixed set of verbs.** Instead of unlimited custom operations, HTTP's methods act on
   resources: **GET** reads (safely, with no side effects), **POST** creates, **PUT/PATCH**
-  update, **DELETE** removes.[^20] The clinic app's "mark patient arrived" becomes
+  update, **DELETE** removes.[^21] The clinic app's "mark patient arrived" becomes
   `PATCH /appointments/987` with body `{"status": "arrived"}` — no bespoke
   `markArrived` endpoint to document or learn.
 - **Representations.** The client never touches the server's internal objects; it
@@ -1080,7 +1089,7 @@ to *any* server using the same small grammar.
   schema can change freely as long as the representation stays stable (an interface, in
   Chapter 6's sense, at network scale).
 - **Statelessness.** Each request carries everything the server needs (identity,
-  parameters); the server keeps **no per‑client session state** between requests.[^19] That is
+  parameters); the server keeps **no per‑client session state** between requests.[^20] That is
   what lets any of the broker's servers (§7.5.3) answer any request — the foundation of
   horizontal scaling.
 
@@ -1110,7 +1119,7 @@ request grain can also mean chatty interfaces.
 One more pair of names to recognize: **service-oriented architecture (SOA)** and its
 modern descendant, **microservices**, describe systems built as fleets of small services
 calling one another — the services-calling-services lineage that client-server, broker,
-and REST together make workable at scale.[^21]
+and REST together make workable at scale.[^22]
 
 ## 7.6 Families and Product Lines
 
@@ -1121,7 +1130,7 @@ handset models running variations of one software base. A car company runs relat
 distinct control software across an entire fleet. Treating each as a from-scratch project
 wastes the enormous overlap between them. **Software product-line engineering** means
 building a family of related products from a shared set of assets in a
-planned way, and it changes what "architecture" is for.[^22]
+planned way, and it changes what "architecture" is for.[^23]
 
 ### 7.6.1 Commonalities and Variabilities
 
@@ -1140,7 +1149,7 @@ shared code. The design work of a product line is largely the work of **enumerat
 variabilities and choosing a variation mechanism for each**. A **feature model** is the
 common tool for recording this: it captures which features are mandatory, which are
 optional, and which are mutually exclusive, so that each valid product is a permitted
-selection of features.[^23]
+selection of features.[^24]
 
 > **Pitfall.** Guessing wrong about which axis will vary is expensive. If you hard-code
 > something that later must differ across products, retrofitting variability into shared
@@ -1187,7 +1196,7 @@ flowchart LR
 
 The organizational consequence is a split between two activities: **domain engineering**
 builds the reusable platform and its variation points, and **application engineering**
-assembles a specific product by selecting variants and adding only what is unique to it.[^24]
+assembles a specific product by selecting variants and adding only what is unique to it.[^25]
 Getting this split right is what turns "we copy-pasted last year's product and hacked on
 it" into a genuine, maintainable family.
 
@@ -1196,7 +1205,7 @@ it" into a genuine, maintainable family.
 Product lines are an *economic* bet, and you should be honest about the
 arithmetic. Building a reusable platform with well-designed variation points costs
 **more up front** than building a single product — you are engineering for change that
-has not happened yet.[^24] That investment pays back only when you build *enough* products
+has not happened yet.[^25] That investment pays back only when you build *enough* products
 from the platform that the per-product savings exceed the extra platform cost.
 
 ```mermaid
@@ -1267,28 +1276,30 @@ is how you learn to *combine* them, and combining them well is what architecture
 
 [^1]: Frank Buschmann, Regine Meunier, Hans Rohnert, Peter Sommerlad & Michael Stal, *Pattern-Oriented Software Architecture, Volume 1: A System of Patterns* (1996). [wiley.com](https://www.wiley.com/en-us/Pattern-Oriented+Software+Architecture,+Volume+1,+A+System+of+Patterns-p-9780471958697).
 [^2]: Mary Shaw & David Garlan, *Software Architecture: Perspectives on an Emerging Discipline* (1996). [dl.acm.org](https://dl.acm.org/doi/book/10.5555/231003).
-[^3]: ISO/IEC, *ISO/IEC 7498-1:1994 — Open Systems Interconnection — Basic Reference Model* (1994). [iso.org](https://www.iso.org/standard/20269.html).
-[^4]: Redux project, *Three Principles*, Redux documentation (accessed 2026). [redux.js.org](https://redux.js.org/understanding/thinking-in-redux/three-principles).
-[^5]: Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides, *Design Patterns: Elements of Reusable Object-Oriented Software* (1994). [informit.com](https://www.informit.com/store/design-patterns-elements-of-reusable-object-oriented-9780201633610).
-[^6]: Microsoft, *Publisher-Subscriber Pattern*, Azure Architecture Center (accessed 2026). [learn.microsoft.com](https://learn.microsoft.com/en-us/azure/architecture/patterns/publisher-subscriber).
-[^7]: Trygve Reenskaug, *MVC: Xerox PARC 1978–79* (1979; the inventor's notes). [folk.universitetetioslo.no](https://folk.universitetetioslo.no/trygver/themes/mvc/mvc-index.html).
-[^8]: Martin Fowler, *GUI Architectures* (2006). [martinfowler.com](https://martinfowler.com/eaaDev/uiArchs.html).
-[^9]: Martin Fowler, *Humble Object* (2020; after Michael Feathers' "Humble Dialog Box" and Gerard Meszaros' *xUnit Test Patterns*). [martinfowler.com](https://martinfowler.com/bliki/HumbleObject.html).
-[^10]: Django Software Foundation, *FAQ: General*, Django documentation (accessed 2026). [docs.djangoproject.com](https://docs.djangoproject.com/en/stable/faq/general/).
-[^11]: Rails team, *Getting Started with Rails*, Rails Guides (accessed 2026). [guides.rubyonrails.org](https://guides.rubyonrails.org/getting_started.html).
-[^12]: Instagram Engineering, *Static Analysis at Scale: An Instagram Story* (2019). [instagram-engineering.com](https://instagram-engineering.com/static-analysis-at-scale-an-instagram-story-8f498ab71a0c).
-[^13]: Shopify Engineering, *Deconstructing the Monolith* (2019). [shopify.engineering](https://shopify.engineering/deconstructing-monolith-designing-software-maximizes-developer-productivity).
-[^14]: Airbnb Engineering, *Rearchitecting Airbnb's Frontend* (2018). [medium.com/airbnb-engineering](https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2).
-[^15]: Tyler Akidau, *Streaming 101: The World Beyond Batch* (2015). [oreilly.com](https://www.oreilly.com/radar/the-world-beyond-batch-streaming-101/).
-[^16]: Jonas Bonér, Dave Farley, Roland Kuhn & Martin Thompson, *The Reactive Manifesto* (2014). [reactivemanifesto.org](https://www.reactivemanifesto.org/).
-[^17]: Jeffrey Dean & Sanjay Ghemawat, *MapReduce: Simplified Data Processing on Large Clusters*, OSDI (2004). [research.google](https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/).
-[^18]: Matei Zaharia et al., *Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing*, NSDI (2012). [usenix.org](https://www.usenix.org/conference/nsdi12/technical-sessions/presentation/zaharia).
-[^19]: Roy T. Fielding, *Architectural Styles and the Design of Network-based Software Architectures*, ch. 5 (2000). [ics.uci.edu](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm).
-[^20]: R. Fielding, M. Nottingham & J. Reschke (eds.), *RFC 9110: HTTP Semantics*, IETF (2022). [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc9110.html).
-[^21]: James Lewis & Martin Fowler, *Microservices* (2014). [martinfowler.com](https://martinfowler.com/articles/microservices.html).
-[^22]: Carnegie Mellon Software Engineering Institute, *Software Product Lines Collection* (accessed 2026). [sei.cmu.edu](https://www.sei.cmu.edu/library/software-product-lines-collection/).
-[^23]: Kyo C. Kang, Sholom G. Cohen, James A. Hess, William E. Novak & A. Spencer Peterson, *Feature-Oriented Domain Analysis (FODA) Feasibility Study*, CMU/SEI-90-TR-021 (1990). [sei.cmu.edu](https://www.sei.cmu.edu/library/feature-oriented-domain-analysis-foda-feasibility-study/).
-[^24]: Klaus Pohl, Günter Böckle & Frank van der Linden, *Software Product Line Engineering: Foundations, Principles and Techniques* (2005). [link.springer.com](https://link.springer.com/book/10.1007/3-540-28901-1).
+[^4]: ISO/IEC, *ISO/IEC 7498-1:1994 — Open Systems Interconnection — Basic Reference Model* (1994). [iso.org](https://www.iso.org/standard/20269.html).
+[^5]: Redux project, *Three Principles*, Redux documentation (accessed 2026). [redux.js.org](https://redux.js.org/understanding/thinking-in-redux/three-principles).
+[^6]: Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides, *Design Patterns: Elements of Reusable Object-Oriented Software* (1994). [informit.com](https://www.informit.com/store/design-patterns-elements-of-reusable-object-oriented-9780201633610).
+[^7]: Microsoft, *Publisher-Subscriber Pattern*, Azure Architecture Center (accessed 2026). [learn.microsoft.com](https://learn.microsoft.com/en-us/azure/architecture/patterns/publisher-subscriber).
+[^8]: Trygve Reenskaug, *MVC: Xerox PARC 1978–79* (1979; the inventor's notes). [folk.universitetetioslo.no](https://folk.universitetetioslo.no/trygver/themes/mvc/mvc-index.html).
+[^9]: Martin Fowler, *GUI Architectures* (2006). [martinfowler.com](https://martinfowler.com/eaaDev/uiArchs.html).
+[^10]: Martin Fowler, *Humble Object* (2020; after Michael Feathers' "Humble Dialog Box" and Gerard Meszaros' *xUnit Test Patterns*). [martinfowler.com](https://martinfowler.com/bliki/HumbleObject.html).
+[^11]: Django Software Foundation, *FAQ: General*, Django documentation (accessed 2026). [docs.djangoproject.com](https://docs.djangoproject.com/en/stable/faq/general/).
+[^12]: Rails team, *Getting Started with Rails*, Rails Guides (accessed 2026). [guides.rubyonrails.org](https://guides.rubyonrails.org/getting_started.html).
+[^13]: Instagram Engineering, *Static Analysis at Scale: An Instagram Story* (2019). [instagram-engineering.com](https://instagram-engineering.com/static-analysis-at-scale-an-instagram-story-8f498ab71a0c).
+[^14]: Shopify Engineering, *Deconstructing the Monolith* (2019). [shopify.engineering](https://shopify.engineering/deconstructing-monolith-designing-software-maximizes-developer-productivity).
+[^15]: Airbnb Engineering, *Rearchitecting Airbnb's Frontend* (2018). [medium.com/airbnb-engineering](https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2).
+[^16]: Tyler Akidau, *Streaming 101: The World Beyond Batch* (2015). [oreilly.com](https://www.oreilly.com/radar/the-world-beyond-batch-streaming-101/).
+[^17]: Jonas Bonér, Dave Farley, Roland Kuhn & Martin Thompson, *The Reactive Manifesto* (2014). [reactivemanifesto.org](https://www.reactivemanifesto.org/).
+[^18]: Jeffrey Dean & Sanjay Ghemawat, *MapReduce: Simplified Data Processing on Large Clusters*, OSDI (2004). [research.google](https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/).
+[^19]: Matei Zaharia et al., *Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing*, NSDI (2012). [usenix.org](https://www.usenix.org/conference/nsdi12/technical-sessions/presentation/zaharia).
+[^20]: Roy T. Fielding, *Architectural Styles and the Design of Network-based Software Architectures*, ch. 5 (2000). [ics.uci.edu](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm).
+[^21]: R. Fielding, M. Nottingham & J. Reschke (eds.), *RFC 9110: HTTP Semantics*, IETF (2022). [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc9110.html).
+[^22]: James Lewis & Martin Fowler, *Microservices* (2014). [martinfowler.com](https://martinfowler.com/articles/microservices.html).
+[^23]: Carnegie Mellon Software Engineering Institute, *Software Product Lines Collection* (accessed 2026). [sei.cmu.edu](https://www.sei.cmu.edu/library/software-product-lines-collection/).
+[^24]: Kyo C. Kang, Sholom G. Cohen, James A. Hess, William E. Novak & A. Spencer Peterson, *Feature-Oriented Domain Analysis (FODA) Feasibility Study*, CMU/SEI-90-TR-021 (1990). [sei.cmu.edu](https://www.sei.cmu.edu/library/feature-oriented-domain-analysis-foda-feasibility-study/).
+[^25]: Klaus Pohl, Günter Böckle & Frank van der Linden, *Software Product Line Engineering: Foundations, Principles and Techniques* (2005). [link.springer.com](https://link.springer.com/book/10.1007/3-540-28901-1).
+
+[^3]: Frank Buschmann, Regine Meunier, Hans Rohnert, Peter Sommerlad, and Michael Stal, *Pattern-Oriented Software Architecture, Volume 1: A System of Patterns* (Wiley, 1996) — which files recurring structures into three levels: architectural patterns, design patterns, and idioms. [wiley.com](https://www.wiley.com/en-us/Pattern+Oriented+Software+Architecture,+Volume+1,+A+System+of+Patterns-p-9780471958697).
 
 ---
 

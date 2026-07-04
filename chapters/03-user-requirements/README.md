@@ -620,6 +620,46 @@ when you need a roadmap, scenarios when you need to show a flow, explicit qualit
 requirements when you need a testable property, and a specification when the cost of
 ambiguity is unacceptable. Using the right form for each need is itself a skill.
 
+### 3.4.4 Tracing Requirements to Tests and Backlog Items
+
+Every artifact this section has introduced — story, acceptance criteria, executable
+scenario — is a link in a chain, and the chain has a name. **Requirements traceability**
+is the ability to follow a requirement *forward* to the backlog items, code, and tests
+that realize it, and *backward* from any of those artifacts to the requirement that
+justifies it.[^12] Without it, two questions that decide releases become guesswork: *is
+every requirement we promised actually covered by a passing test?* and *when this
+requirement changes, what else has to change with it?*
+
+You have already built most of the chain without noticing. Give each story a stable key
+when it enters the backlog, and the rest is discipline about references:
+
+| Link in the chain           | Where it lives                  | How it points back            |
+|-----------------------------|---------------------------------|-------------------------------|
+| Story `STORY-17`            | the backlog                     | — (the anchor)                |
+| Acceptance criteria         | `interpreter_alerts.feature`    | story key in the feature file |
+| Step definitions and tests  | the test suite (Chapter 9)      | they execute the criteria     |
+| Commits and pull requests   | version control                 | `STORY-17` in the message     |
+
+Each direction pays differently. Forward traceability turns "are we done?" into a
+checkable claim: every *Must* in the release plan (§4.4) has at least one acceptance
+scenario, and every scenario passes in the pipeline (Chapter 12) — a requirement with no
+test is a promise nobody is keeping. Backward traceability pays when things change or
+break: a failing scenario names the requirement it protects, and a proposed change to a
+requirement leads you — through its key — to exactly the scenarios, tests, and code that
+must move with it.
+
+How heavy to make this is a judgment call. Safety-regulated industries mandate complete
+**traceability matrices** — tables mapping every requirement to every design element,
+test, and verification result — and auditors read them. For most teams, that ceremony is
+wasted; the lightweight chain above, maintained through artifacts that already exist,
+gives you the two answers that matter.
+
+> **Pitfall.** A traceability matrix maintained by hand, after the fact, is fiction
+> within a month. Trace through artifacts that *execute* (scenarios that run as tests)
+> and links that tools maintain for you (story keys in commit messages, pull requests
+> that close backlog items). If keeping the trace requires a separate document nobody
+> runs, the trace is already broken.
+
 ## 3.5 Writing User-Experience Scenarios
 
 A **scenario** tells a concrete story of a specific person using the system to accomplish a
@@ -695,7 +735,7 @@ brainstorming, because it refuses to let anything stay vague.
 
 A scenario is a story told in prose; a **storyboard** is the same story told in pictures —
 a short sequence of rough sketches, one frame per step, showing what the user sees and
-does at each moment. Borrowed from film,[^12] storyboarding earns its place in requirements
+does at each moment. Borrowed from film,[^13] storyboarding earns its place in requirements
 work because a drawing forces decisions that a sentence lets you dodge: what is actually
 *on* the screen when Priya searches? Where does the *pending‑insurance* flag appear? What
 does she tap? If you cannot draw the frame, you have not yet imagined the requirement.
@@ -741,7 +781,7 @@ Good goals share properties that make them useful for reasoning:
 - **A goal can be satisfied to a degree.** Unlike a functional requirement (done or not),
   many goals — especially quality goals like "fast" or "secure" — are matters of *more or
   less*. These are sometimes called **soft goals**, and you satisfy them by argument and
-  measurement, not by a checkbox.[^13]
+  measurement, not by a checkbox.[^14]
 - **A goal is measurable, at least in principle.** "Reduce no‑shows to under 8%" can be
   checked against reality. A goal you cannot measure even in principle is a slogan, and it
   will not help you decide anything.
@@ -772,7 +812,7 @@ hierarchy of the next section.
 Asking "why" moves you toward broader goals; asking "how" moves you toward narrower ones.
 Do this systematically and goals organize into a **goal hierarchy** (or goal tree): a
 high‑level goal at the top, refined downward into sub‑goals, and finally into concrete
-features and stories at the leaves.[^13] The tree makes the *rationale* of your backlog visible
+features and stories at the leaves.[^14] The tree makes the *rationale* of your backlog visible
 — every leaf traces up to a goal someone owns, and every goal traces down to work that
 serves it.
 
@@ -844,7 +884,7 @@ trying to break your system.
 
 ### 3.7.1 Attack Trees: Think Like an Attacker
 
-An **attack tree** is a goal hierarchy for the enemy.[^14] The root is the attacker's goal —
+An **attack tree** is a goal hierarchy for the enemy.[^15] The root is the attacker's goal —
 "read a patient's medical record without authorization." The branches are the ways to
 achieve it, refined downward into ever more concrete attacks, exactly as a goal tree refines
 a user goal into stories. The power of the technique is that it forces *systematic*
@@ -888,7 +928,7 @@ otherwise miss:
 - **Use a threat checklist.** A common one groups threats as **STRIDE**: *Spoofing*
   (pretending to be someone), *Tampering* (altering data), *Repudiation* (denying an
   action), *Information disclosure* (leaking data), *Denial of service* (blocking access),
-  and *Elevation of privilege* (gaining rights you shouldn't have).[^15] Walking each category
+  and *Elevation of privilege* (gaining rights you shouldn't have).[^16] Walking each category
   against each asset surfaces branches brainstorming misses.
 - **Attack the humans and the process, not just the code.** The cheapest attack is often a
   convincing phone call to the front desk. Social engineering, weak password‑reset flows,
@@ -958,16 +998,19 @@ build here.
 
 [^11]: Cucumber, *Behaviour-Driven Development* (documentation). [cucumber.io](https://cucumber.io/docs/bdd/).
 
-[^12]: Interaction Design Foundation, *What are Storyboards?* (traces storyboarding to Walt Disney Studios in the 1930s). [interaction-design.org](https://www.interaction-design.org/literature/topics/storyboards).
-
-[^13]: Axel van Lamsweerde, "Goal-Oriented Requirements Engineering: A Guided Tour," *Proceedings of RE'01* (IEEE, 2001). [author PDF](https://webperso.info.ucl.ac.be/~avl/files/RE01.pdf).
-
-[^14]: Bruce Schneier, "Attack Trees," *Dr. Dobb's Journal* (1999). [schneier.com](https://www.schneier.com/academic/archives/1999/12/attack_trees.html).
-
-[^15]: Microsoft, *The STRIDE model* (Microsoft Threat Modeling Tool documentation). [learn.microsoft.com](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats).
+[^12]: Orlena C. Z. Gotel and Anthony C. W. Finkelstein, "An Analysis of the Requirements Traceability Problem," *Proceedings of the First International Conference on Requirements Engineering* (IEEE, 1994), pp. 94–101. [doi.org](https://doi.org/10.1109/ICRE.1994.292398).
 
 ---
 
 - **Key takeaways** are summarized above in §3.8.
 - Continue to the [Exercises](exercises.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.
+
+
+[^13]: Interaction Design Foundation, *What are Storyboards?* (traces storyboarding to Walt Disney Studios in the 1930s). [interaction-design.org](https://www.interaction-design.org/literature/topics/storyboards).
+
+[^14]: Axel van Lamsweerde, "Goal-Oriented Requirements Engineering: A Guided Tour," *Proceedings of RE'01* (IEEE, 2001). [author PDF](https://webperso.info.ucl.ac.be/~avl/files/RE01.pdf).
+
+[^15]: Bruce Schneier, "Attack Trees," *Dr. Dobb's Journal* (1999). [schneier.com](https://www.schneier.com/academic/archives/1999/12/attack_trees.html).
+
+[^16]: Microsoft, *The STRIDE model* (Microsoft Threat Modeling Tool documentation). [learn.microsoft.com](https://learn.microsoft.com/en-us/azure/security/develop/threat-modeling-tool-threats).

@@ -326,7 +326,7 @@ powerful buckets.[^11] The capital letters spell the name; the lowercase o's are
 | Multi-language UI                    | Won't (yet) | No current demand; revisit next quarter    |
 
 A healthy release is mostly *Should* and *Could*, with *Musts* held to roughly **60% or
-less** of the total effort.[^11] Why the cap? Because if every item is a Must, you have no
+less** of the total effort — a rule of thumb, not a law.[^11] Why the cap? Because if every item is a Must, you have no
 flexibility — the first delay forces a broken promise. The *Coulds* are the shock absorber
 that lets you hit the date with something shippable. A backlog with no Coulds is a plan with
 no margin.

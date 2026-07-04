@@ -141,6 +141,14 @@ its author's copyright.
   [en.wikipedia.org/wiki/Architectural_pattern](https://en.wikipedia.org/wiki/Architectural_pattern).
   A reliable, openly-licensed starting map with references. *Text under CC BY-SA.*
 
+## Pattern taxonomy
+
+- 📘 **"Pattern-Oriented Software Architecture, Vol. 1: A System of Patterns,"
+  Buschmann, Meunier, Rohnert, Sommerlad & Stal (Wiley, 1996)** — the classic
+  three-level taxonomy (architectural patterns, design patterns, idioms) behind this
+  chapter's altitude caveat.
+  <https://www.wiley.com/en-us/Pattern+Oriented+Software+Architecture,+Volume+1,+A+System+of+Patterns-p-9780471958697> · Publisher page.
+
 ## License note
 
 Linked resources remain under their own licenses; check each before reuse. This page and

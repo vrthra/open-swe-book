@@ -354,6 +354,11 @@ delivering an idea. Once agents remove the constraint of human typing bandwidth,
 manifesto argues, creation is limited by the *cost of compute*, not human capacity — and the
 profession should move "beyond software engineering" toward engineering **outcomes**.[^19]
 
+Treat this as an emerging framing, not a settled body of practice: at this writing the
+manifesto is months old, its vocabulary is still contested, and no independent evidence
+yet shows teams shipping better outcomes by adopting it. Read it the way you would read
+the Agile Manifesto in 2001 — a position paper whose worth the next decade will decide.
+
 It is organized around four shifts and **16 principles** in two parts.[^19] Whatever you make of
 its rhetoric, its principles map with surprising directness onto the disciplines in this
 book — which is itself an argument that the fundamentals endure.

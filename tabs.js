@@ -6,7 +6,7 @@
 // print.html (and therefore in the EPUB pipeline, which renders that page) the
 // blocks stay stacked in order, so every language remains visible in print.
 (() => {
-    if (window.location.pathname.endsWith('print.html')) return;
+    if (/print[^/]*\.html$/.test(window.location.pathname)) return;
 
     const LANGS = ['go', 'java', 'javascript', 'python', 'ruby'];
     const NAME = {

@@ -73,7 +73,7 @@ def mermaid_to_img(m: re.Match) -> str:
     if not s:
         return m.group(0)
     svg = fix_svg_xml(s.group(0))
-    vb = re.search(r'viewBox="[-\d. ]*? ([\d.]+)', svg)
+    vb = re.search(r'viewBox="[-\d. ]*? ([\d.]+) ([\d.]+)"', svg)
     width = int(float(vb.group(1))) if vb else 800
     try:
         png = rasterize_svg(svg)
@@ -224,10 +224,10 @@ def main() -> None:
     # highlight.js's "language-python hljs" form
     body = re.sub(r'<code class="language-(\w+)[^"]*"', r'<code class="\1"', body)
     if version:
-        body += ('<hr/><p><em>Software Engineering: An Open Body of Knowledge'
+        body += ('<hr/><p><em>Software Engineering: Standing on the Shoulders of Giants'
                  " &middot; build " + version + "</em></p>")
     print('<!DOCTYPE html><html><head><meta charset="utf-8">'
-          "<title>Software Engineering: An Open Body of Knowledge</title>"
+          "<title>Software Engineering: Standing on the Shoulders of Giants</title>"
           "</head><body>" + body + "</body></html>")
 
 

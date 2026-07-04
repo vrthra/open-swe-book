@@ -107,6 +107,14 @@ resource is free to read but not openly relicensable, it is marked *free to read
   fidelity (used in §6.1.2). <https://basecamp.com/shapeup/1.1-chapter-02> ·
   <https://basecamp.com/shapeup/1.3-chapter-04> · *Free to read online; © Basecamp.*
 
+## Quality-attribute scenarios
+
+- 📘 **"Software Architecture in Practice" (4th ed.), Bass, Clements & Kazman** — the
+  standard treatment of quality-attribute scenarios (§6.1.4) and architecture evaluation;
+  sample chapters and companion material are on the publisher and SEI sites.
+  <https://www.informit.com/store/software-architecture-in-practice-9780136886099> ·
+  Publisher page.
+
 ## License note
 
 Linked resources remain under their own licenses; where a resource is only *free to read*

@@ -1,6 +1,6 @@
 # mdBook configuration — https://rust-lang.github.io/mdBook/format/configuration/
 [book]
-title = "Software Engineering: An Open Body of Knowledge"
+title = "Software Engineering: Standing on the Shoulders of Giants"
 description = "A living, open body of knowledge for software engineering: process, requirements, design, quality, metrics, AI, and delivery."
 authors = ["Thomas Hastings and the open contributors of this repository"]
 language = "en"

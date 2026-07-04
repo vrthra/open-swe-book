@@ -31,6 +31,14 @@ standard deviation, wrap a confidence interval around its mean, and — using a 
 paired dataset — fit a regression line. Keep these numbers in view; they anchor
 everything abstract that follows.
 
+> **Two paths through this chapter.** For a first pass, §10.1–§10.5 stand alone:
+> meaningful metrics, software quality, charts, defect measurement, and a real
+> improvement case study — nothing beyond arithmetic. §10.6–§10.9 (dispersion,
+> probability distributions, confidence intervals, and regression) are the quantitative
+> backbone for courses that want students to *defend* a metric claim statistically;
+> they assume comfort with algebra and reward a second week. If you take only the first
+> path, return for §10.8 before you claim two releases differ in quality.
+
 ## 10.1 Meaningful Metrics
 
 ### 10.1.1 Metrics Quantify Attributes

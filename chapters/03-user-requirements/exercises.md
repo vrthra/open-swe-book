@@ -43,3 +43,9 @@ you to reason.
 11. **[analysis]** Build a three‑level attack tree for the goal "post a message as another
     user" on a social app. Use at least three STRIDE categories to find branches, then turn
     two leaves into concrete security requirements, naming the attack each one defeats.
+12. **[analysis]** A team's backlog holds three *Must* stories (`ST-4` flag interpreter,
+    `ST-9` cancel appointment, `ST-11` print day schedule). Their repo has feature files
+    for `ST-4` and `ST-11`, a passing scenario for a story `ST-2` that no longer exists,
+    and recent commit messages `"fix cancel flow"` and `"ST-11 print header"`. Using
+    §3.4.4, list every traceability gap you can find (forward and backward), and state
+    the one-line repair for each.

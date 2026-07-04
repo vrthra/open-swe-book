@@ -42,7 +42,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            --title "Software Engineering: An Open Body of Knowledge $GITHUB_REF_NAME" \
+            --title "Software Engineering: Standing on the Shoulders of Giants $GITHUB_REF_NAME" \
             --notes "EPUB and PDF editions of [swebook.org](https://www.swebook.org) — one per code-example language. Prose is identical across editions." \
             --verify-tag dist/*.epub dist/*.pdf \
           || gh release upload "$GITHUB_REF_NAME" dist/*.epub dist/*.pdf --clobber

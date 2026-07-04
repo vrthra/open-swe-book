@@ -58,12 +58,12 @@ t = t.replace("<head>",
               f'<head><base href="file://{d}/">'
               '<script>try{localStorage.setItem("mdbook-theme","light")}'
               "catch(e){}</script>", 1)
-open(f"{out}/print-light.html", "w", encoding="utf-8").write(t)
+open(f"{out}/light-print.html", "w", encoding="utf-8").write(t)
 PY
 "$CHROME" --headless --disable-gpu ${CHROME_FLAGS:-} --dump-dom \
   --virtual-time-budget=30000 \
-  "file://$OUT/print-light.html" > "$OUT/rendered.html"
-rm -f "$OUT/print-light.html"
+  "file://$OUT/light-print.html" > "$OUT/rendered.html"
+rm -f "$OUT/light-print.html"
 
 # 2. Covers (regenerated every run: they carry the version).
 LANGS="${1:-python java javascript go ruby}"
@@ -72,7 +72,7 @@ for lang in $LANGS; do
 done
 
 # 3. Per-language filter + pandoc.
-TITLE="Software Engineering: An Open Body of Knowledge"
+TITLE="Software Engineering: Standing on the Shoulders of Giants"
 declare -A PRETTY=([python]=Python [java]=Java [javascript]=JavaScript [go]=Go [ruby]=Ruby)
 for lang in $LANGS; do
   python3 tools/epub-lang-filter.py "$OUT/rendered.html" "$lang" "$VERSION" > "$OUT/filtered-$lang.html"
@@ -84,7 +84,20 @@ for lang in $LANGS; do
     title="$TITLE (${PRETTY[$lang]} Edition)"; cover="tools/covers/cover-$lang.png"
   fi
   run_pandoc "filtered-$lang.html" "$name" "$edition" "$title" "$cover"
-  echo "built: $name"
+  if [ "$lang" != all ]; then
+    python3 - "$OUT/$name" "$lang" <<'PY'
+import sys, zipfile, re
+path, lang = sys.argv[1], sys.argv[2]
+z = zipfile.ZipFile(path)
+x = "".join(z.read(n).decode("utf-8", "ignore")
+            for n in z.namelist() if n.endswith(".xhtml"))
+langs = set(re.findall(r'class="sourceCode (\w+)"', x))
+extra = langs - {lang, "bash", "gherkin", "bibtex", "text"}
+if extra:
+    sys.exit(f"PURITY FAILURE in {path}: found {sorted(extra)}")
+PY
+  fi
+  echo "built: $name (purity ok)"
 
   # PDF twin: same filtered HTML through pandoc standalone HTML (same One
   # Light highlighting + MathML), cover page injected, printed by Chrome.

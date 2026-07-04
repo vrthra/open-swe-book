@@ -77,6 +77,6 @@
 
 ---
 
-- [Curriculum: Open Resource Map](curriculum/open-resources-map.md)
-- [Curriculum: Course Plans](curriculum/course-plan.md)
-- [Contributing](CONTRIBUTING.md)
+[Curriculum: Open Resource Map](curriculum/open-resources-map.md)
+[Curriculum: Course Plans](curriculum/course-plan.md)
+[Contributing](CONTRIBUTING.md)

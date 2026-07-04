@@ -2,7 +2,7 @@
 # Format: Citation File Format (CFF) 1.2.0 — https://citation-file-format.github.io/
 cff-version: 1.2.0
 message: "If you use this book, please cite it using the metadata below."
-title: "Software Engineering: An Open Body of Knowledge"
+title: "Software Engineering: Standing on the Shoulders of Giants"
 authors:
   - family-names: Hastings
     given-names: Thomas
@@ -27,7 +27,7 @@ keywords:
 date-released: "2026-07-02"
 preferred-citation:
   type: book
-  title: "Software Engineering: An Open Body of Knowledge"
+  title: "Software Engineering: Standing on the Shoulders of Giants"
   authors:
     - family-names: Hastings
       given-names: Thomas

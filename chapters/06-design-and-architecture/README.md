@@ -138,6 +138,42 @@ Concretely, a good architecture tends to have these properties.
 > paying for them in the qualities it does not — rather than stumbling into whichever
 > trade-offs the code happens to make for you.
 
+### 6.1.4 Quality-Attribute Scenarios: Making "Good" Testable
+
+"The system should be fast" rules out no architecture at all, because every architect
+believes their design is fast. Before a quality requirement can shape a design — or
+judge one — it has to become concrete. The standard tool is the **quality-attribute
+scenario**: a short, structured statement that turns a vague quality into an observable
+event with a measurable outcome.[^5] A full scenario names six parts; four carry most of
+the weight:
+
+- **Stimulus** — the event that arrives: a request, a failure, a spike in load, a
+  change request, an attempted intrusion.
+- **Environment** — the conditions under which it arrives: normal operation, peak load,
+  degraded mode, mid-deployment.
+- **Response** — what the system visibly does about it.
+- **Response measure** — the number that says whether the response was good enough.
+
+(The other two parts name the *source* of the stimulus and the *artifact* it strikes.)
+For the clinic app of Chapter 3:
+
+> *During peak morning check-in* (environment), *a clerk submits a booking* (stimulus);
+> *the booking is confirmed on screen* (response) *within one second for 95% of
+> submissions* (response measure).
+
+> *While the payment provider is unreachable* (environment), *a patient completes a
+> visit* (stimulus); *the visit is recorded and billing is queued* (response) *with no
+> data loss, and the queue drains within ten minutes of recovery* (response measure).
+
+Notice what the format buys you. Each scenario is an architecture test you can run on
+paper — walk the design and ask *where* each stimulus lands and *which* structures
+produce the response in time — and later a real test you can run in Chapter 9's sense.
+The response measure is exactly the **fit criterion** of §3.1.3 wearing its
+architectural clothes, and the same scenarios reappear as the concrete cases an
+architecture review walks through (§8.1.1). If a quality requirement matters enough to
+influence the structure of your system, it matters enough to get a scenario; a quality
+with no scenario is an opinion, and opinions do not rule out designs.
+
 ## 6.2 Designing Modular Systems
 
 The single most powerful idea in software design is **modularity**: build the system out
@@ -154,7 +190,7 @@ almost entirely from what it *hides*.
 
 **Information hiding** is the practice of designing each module around a decision — often
 a design decision likely to change — and hiding that decision behind an interface, so that
-the rest of the system depends on the *interface* and not on the decision.[^5] The classic
+the rest of the system depends on the *interface* and not on the decision.[^6] The classic
 example: a module that stores user records should expose operations like `find(id)` and
 `save(record)` while hiding whether the records live in a SQL database, a file, or a
 remote service. Because callers never learned how records are stored, you can switch from
@@ -390,11 +426,11 @@ public method is a hostage to fortune.
 ### 6.2.2 Coupling and Cohesion
 
 Two measures, introduced together decades ago, tell you whether a
-decomposition is good: **coupling** between modules and **cohesion** within each.[^6]
+decomposition is good: **coupling** between modules and **cohesion** within each.[^7]
 
 **Coupling** is the strength of the dependency between two modules — how much one must know
 about the other, and how badly a change to one ripples into the other. You want it **low**.
-It also comes in kinds, and the kinds form a ladder from worst to best.[^7]
+It also comes in kinds, and the kinds form a ladder from worst to best.[^8]
 Knowing the ladder lets you diagnose *why* a dependency hurts, not just that it does.
 
 - **Content coupling (worst).** One module reaches inside another and manipulates its
@@ -418,7 +454,7 @@ Knowing the ladder lets you diagnose *why* a dependency hurts, not just that it 
 
 **Cohesion** is how well the elements *inside* a single module belong together — how
 focused the module is on one job. You want it **high**. It, too, comes in kinds, from worst
-to best:[^7]
+to best:[^8]
 
 - **Coincidental (worst):** the parts are grouped for no real reason — a "utils" grab-bag.
 - **Logical:** parts are grouped because they are the same *category* of thing (all the
@@ -431,7 +467,7 @@ to best:[^7]
   does that task completely and does nothing else.
 
 Coupling and cohesion pull in the same direction, which is why they are always taught
-together: **when you raise cohesion, coupling tends to fall, and vice versa.**[^7] If each
+together: **when you raise cohesion, coupling tends to fall, and vice versa.**[^8] If each
 module does exactly one thing (high cohesion), related logic sits together and does not need
 to reach across boundaries (low coupling). If a module does five unrelated things (low
 cohesion), pieces of those five jobs inevitably entangle with five other modules (high
@@ -471,16 +507,16 @@ heuristics rather than laws: each pays off far more often than not.
 
 Several of these guidelines circulate in industry under memorable names, and you should
 recognize them when colleagues use them. The best-known bundle is **SOLID** — five
-object-oriented design principles Robert C. Martin catalogued,[^8] later named for their
+object-oriented design principles Robert C. Martin catalogued,[^9] later named for their
 initials:
 
 - **S — Single responsibility:** guideline 1 above — one stateable job per module.
 - **O — Open-closed:** a module should be **open for extension, closed for
   modification** — you add behavior by adding new code (a new implementation of an
   interface, a new subclass), not by editing code that already works and that other
-  modules already depend on.[^9]
+  modules already depend on.[^10]
 - **L — Liskov substitution:** a subtype must be usable anywhere its supertype is
-  expected, with no surprises.[^10] If code that works on every `Conversation` breaks when
+  expected, with no surprises.[^11] If code that works on every `Conversation` breaks when
   handed a `GroupConversation`, the generalization arrow (§6.3.2) is a lie.
 - **I — Interface segregation:** many small, client-specific interfaces beat one fat
   one — guideline 2 taken seriously. A client forced to depend on operations it never
@@ -489,7 +525,7 @@ initials:
   implementations, and never let stable policy depend on volatile detail.
 
 A companion rule with its own name is **DRY — Don't Repeat Yourself**: every piece of
-knowledge in the system should have a single, authoritative representation.[^11] With
+knowledge in the system should have a single, authoritative representation.[^12] With
 duplicated logic, the wasted keystrokes are the least of it: a future change must now be
 found and fixed in two places, and eventually someone will fix only one.
 
@@ -505,7 +541,7 @@ found and fixed in two places, and eventually someone will fix only one.
 To design and discuss modular structure, you need a notation. The **class diagram** from
 the Unified Modeling Language (UML) is the lingua franca for describing the static
 structure of object-oriented systems: the classes, what each holds and does, and how they
-relate.[^12] You will not draw every class; you draw the ones whose relationships someone needs
+relate.[^13] You will not draw every class; you draw the ones whose relationships someone needs
 to understand.
 
 ### 6.3.1 Representing a Class
@@ -566,7 +602,7 @@ real content of the diagram, and they are the subject of the next section.
 ### 6.3.2 Relationships between Classes
 
 The lines in a class diagram carry precise meanings — each *shape* tells you how two
-classes are connected and how tightly.[^12] Getting them right is how a diagram
+classes are connected and how tightly.[^13] Getting them right is how a diagram
 communicates coupling.
 
 - **Association** (a plain solid line) says two classes are connected: objects of one
@@ -597,7 +633,7 @@ Multiplicities matter: `1` versus `0..1` versus `0..*` is often the difference
 between a null-pointer bug, a missing foreign key, and a correct schema.
 
 > **Pitfall.** Do not agonize over aggregation versus composition in every diagram — even
-> the UML specification leaves the precise semantics of aggregation open.[^12] What matters is the *lifetime and ownership*
+> the UML specification leaves the precise semantics of aggregation open.[^13] What matters is the *lifetime and ownership*
 > question the distinction forces you to ask: "if I delete the whole, does the part die,
 > and can two wholes share one part?" Answer that; the diamond follows.
 
@@ -607,12 +643,12 @@ A single diagram cannot capture a whole system any more than a single photograph
 a building. Stakeholders ask different questions — "what are the responsibilities?", "how
 does it perform under load?", "how do I check out and build the code?", "which server runs
 what?" — and each question is best answered by a different picture. A **view** is a
-representation of the system from one such perspective.[^13]
+representation of the system from one such perspective.[^14]
 
 ### 6.4.1 The 4+1 Grouping of Views
 
 A widely used way to organize views, introduced by Philippe Kruchten, groups them into four
-plus one.[^14] The four cover distinct concerns; the "+1" ties them together.
+plus one.[^15] The four cover distinct concerns; the "+1" ties them together.
 
 ```mermaid
 flowchart TB
@@ -964,16 +1000,18 @@ reuse the judgment, not just the diagram.
 [^2]: Ryan Singer, *Shape Up: Stop Running in Circles and Ship Work that Matters*, ch. "Principles of Shaping" (Basecamp, 2019). [basecamp.com](https://basecamp.com/shapeup/1.1-chapter-02).
 [^3]: Ryan Singer, *Shape Up: Stop Running in Circles and Ship Work that Matters*, ch. "Find the Elements" (Basecamp, 2019). [basecamp.com](https://basecamp.com/shapeup/1.3-chapter-04).
 [^4]: Frederick P. Brooks, Jr., *The Mythical Man-Month: Essays on Software Engineering* (1975; anniversary ed. 1995). [informit.com](https://www.informit.com/store/mythical-man-month-essays-on-software-engineering-anniversary-9780201835953).
-[^5]: David L. Parnas, "On the Criteria To Be Used in Decomposing Systems into Modules," *Communications of the ACM* 15(12) (1972). [dl.acm.org](https://dl.acm.org/doi/10.1145/361598.361623).
-[^6]: W. P. Stevens, G. J. Myers, and L. L. Constantine, "Structured Design," *IBM Systems Journal* 13(2) (1974). [dl.acm.org](https://dl.acm.org/doi/10.1147/sj.132.0115).
-[^7]: Edward Yourdon and Larry L. Constantine, *Structured Design: Fundamentals of a Discipline of Computer Program and Systems Design* (1979). [archive.org](https://archive.org/details/Structured_Design_Edward_Yourdon_Larry_Constantine).
-[^8]: Robert C. Martin, "Design Principles and Design Patterns" (2000). [objectmentor.com via web.archive.org](https://web.archive.org/web/20030416004136/http://www.objectmentor.com/resources/articles/Principles_and_Patterns.PDF).
-[^9]: Bertrand Meyer, *Object-Oriented Software Construction* (1988; 2nd ed. 1997). [bertrandmeyer.com](https://bertrandmeyer.com/OOSC2/).
-[^10]: Barbara H. Liskov and Jeannette M. Wing, "A Behavioral Notion of Subtyping," *ACM Transactions on Programming Languages and Systems* 16(6) (1994). [dl.acm.org](https://dl.acm.org/doi/10.1145/197320.197383).
-[^11]: Andrew Hunt and David Thomas, *The Pragmatic Programmer* (1999; 20th-anniversary ed. 2019). [pragprog.com](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/).
-[^12]: Object Management Group, *OMG Unified Modeling Language (OMG UML)*, version 2.5.1 (2017). [omg.org](https://www.omg.org/spec/UML/2.5.1/).
-[^13]: ISO/IEC/IEEE, *ISO/IEC/IEEE 42010:2022 — Software, systems and enterprise — Architecture description* (2022). [iso.org](https://www.iso.org/standard/74393.html).
-[^14]: Philippe Kruchten, "Architectural Blueprints — The 4+1 View Model of Software Architecture," *IEEE Software* 12(6) (1995). [cs.ubc.ca](https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf).
+[^6]: David L. Parnas, "On the Criteria To Be Used in Decomposing Systems into Modules," *Communications of the ACM* 15(12) (1972). [dl.acm.org](https://dl.acm.org/doi/10.1145/361598.361623).
+[^7]: W. P. Stevens, G. J. Myers, and L. L. Constantine, "Structured Design," *IBM Systems Journal* 13(2) (1974). [dl.acm.org](https://dl.acm.org/doi/10.1147/sj.132.0115).
+[^8]: Edward Yourdon and Larry L. Constantine, *Structured Design: Fundamentals of a Discipline of Computer Program and Systems Design* (1979). [archive.org](https://archive.org/details/Structured_Design_Edward_Yourdon_Larry_Constantine).
+[^9]: Robert C. Martin, "Design Principles and Design Patterns" (2000). [objectmentor.com via web.archive.org](https://web.archive.org/web/20030416004136/http://www.objectmentor.com/resources/articles/Principles_and_Patterns.PDF).
+[^10]: Bertrand Meyer, *Object-Oriented Software Construction* (1988; 2nd ed. 1997). [bertrandmeyer.com](https://bertrandmeyer.com/OOSC2/).
+[^11]: Barbara H. Liskov and Jeannette M. Wing, "A Behavioral Notion of Subtyping," *ACM Transactions on Programming Languages and Systems* 16(6) (1994). [dl.acm.org](https://dl.acm.org/doi/10.1145/197320.197383).
+[^12]: Andrew Hunt and David Thomas, *The Pragmatic Programmer* (1999; 20th-anniversary ed. 2019). [pragprog.com](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/).
+[^13]: Object Management Group, *OMG Unified Modeling Language (OMG UML)*, version 2.5.1 (2017). [omg.org](https://www.omg.org/spec/UML/2.5.1/).
+[^14]: ISO/IEC/IEEE, *ISO/IEC/IEEE 42010:2022 — Software, systems and enterprise — Architecture description* (2022). [iso.org](https://www.iso.org/standard/74393.html).
+[^15]: Philippe Kruchten, "Architectural Blueprints — The 4+1 View Model of Software Architecture," *IEEE Software* 12(6) (1995). [cs.ubc.ca](https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf).
+
+[^5]: Len Bass, Paul Clements, and Rick Kazman, *Software Architecture in Practice*, 4th ed. (Addison-Wesley, 2021), ch. 3 — the six-part quality-attribute scenario (source, stimulus, artifact, environment, response, response measure). [informit.com](https://www.informit.com/store/software-architecture-in-practice-9780136886099).
 
 ---
 

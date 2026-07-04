@@ -113,6 +113,14 @@ text · 🎓 course · 📄 primary source/standard · 🎥 video. Licenses vary
   the *baseline*, and avoiding "grab‑bag" requests (used in §3.3.2).
   <https://basecamp.com/shapeup/1.2-chapter-03> · Free to read online.
 
+## Traceability
+
+- 📄 **"An Analysis of the Requirements Traceability Problem," Gotel & Finkelstein
+  (ICRE 1994)** — the classic statement of why traces decay and what forward/backward
+  traceability must answer (used in §3.4.4).
+  <https://doi.org/10.1109/ICRE.1994.292398> · Publisher page; author preprints are
+  widely indexed.
+
 ## License note
 
 Linked resources remain under their own licenses; this page is CC BY‑SA 4.0.
