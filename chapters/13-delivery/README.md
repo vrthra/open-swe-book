@@ -543,11 +543,11 @@ technical debt (§13.6) of an unusually dangerous kind: dormant behavior sitting
 production, waiting for someone to trip it. The first case study below turned that danger
 from hypothetical to historical.
 
-> **Pitfall.** Never repurpose an existing flag to control new behavior. A flag's name
-> and its dormant code paths carry years of history you have not read — Knight
-> Capital's repurposed Power Peg flag (§13.3.5) is the canonical demonstration. Retire
-> the old flag, delete its dead code, and mint a new one; flag names are cheap, and the
-> alternative was not.
+> **Pitfall.** Never repurpose an existing flag to control new behavior. The old name
+> still points at whatever code the flag used to trigger, and that code is often dormant
+> rather than deleted — Knight Capital's repurposed Power Peg flag (§13.3.5) is the
+> canonical demonstration of what happens when it runs again. Retire the old flag, delete
+> its dead code, and mint a new one; flag names are cheap, and the alternative was not.
 
 ### 13.3.4 Rollback versus Roll-Forward
 
