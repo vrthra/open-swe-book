@@ -86,7 +86,7 @@ language. A handful of recurring challenges account for most requirements failur
   conflict disappear. Someone must *decide*, and requirements work makes the conflict
   visible enough to decide well.
 - **Ambiguous language.** "The report should load quickly." How quickly? For whom? Under
-  what load? "Quickly" is not a requirement; it is a placeholder for an argument no one has
+  what load? "Quickly" is a placeholder for an argument no one has
   had yet.
 - **Change.** Even a perfectly captured requirement expires. Regulations update, markets
   move, users mature. A frozen specification is a specification that is slowly going stale.
@@ -642,7 +642,7 @@ when it enters the backlog, and the rest is discipline about references:
 
 Each direction pays differently. Forward traceability turns "are we done?" into a
 checkable claim: every *Must* in the release plan (§4.4) has at least one acceptance
-scenario, and every scenario passes in the pipeline (Chapter 12) — a requirement with no
+scenario, and every scenario passes in the pipeline (Chapter 13) — a requirement with no
 test is a promise nobody is keeping. Backward traceability pays when things change or
 break: a failing scenario names the requirement it protects, and a proposed change to a
 requirement leads you — through its key — to exactly the scenarios, tests, and code that
@@ -855,7 +855,7 @@ hard decisions live. Two relationships matter most:
 ```mermaid
 flowchart LR
     A[Speed up check-in] -. conflicts .-> B[Verify patient identity]
-    C[Send SMS reminders] -. conflicts .-> D[Protect patient privacy]
+    A -. conflicts .-> D[Protect patient privacy]
     E[Maintain waitlist] == contributes ==> F[Reduce no-shows]
     E == contributes ==> G[Speed up throughput]
     linkStyle 0,1 stroke:#c33,stroke-width:2px;
@@ -942,6 +942,10 @@ otherwise miss:
 > will ship a system that does exactly what good people want — and exactly what bad people
 > want, too. Build one attack tree per critical asset *while* you write your user stories,
 > not after your first breach.
+
+Attack trees and STRIDE are where security *requirements* begin; [Chapter 10](../10-software-security/)
+picks the thread back up on the engineering side, from the OWASP Top 10 to securing the
+open-source supply chain your system is built from.
 
 ## 3.8 Conclusion
 

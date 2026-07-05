@@ -15,10 +15,10 @@ Resources are grouped as:
 - 📄 **Primary source** — the canonical spec, standard, or paper.
 - 🎥 **Video** — recorded lectures or talks.
 
-> **Coverage summary.** The book's twelve chapters cover a first course. The four
+> **Coverage summary.** The book's thirteen chapters cover a first course. The four
 > "anchor" open courses below reinforce most of that ground; the per‑chapter tables add
 > focused resources for the rest (estimation, use‑case mechanics, architectural pattern
-> catalogs, and the statistics in Chapter 10).
+> catalogs, and the statistics in Chapter 11).
 
 ## The four anchor courses
 
@@ -26,8 +26,8 @@ Resources are grouped as:
 |--------|-----------------|------------|---------|
 | **MIT 6.031 Software Construction** — [web.mit.edu/6.031](http://web.mit.edu/6.031), [OCW 6.005 (2016)](https://ocw.mit.edu/courses/6-005-software-construction-spring-2016/) | 6, 8, 9 | Complete, polished reading notes on specs, ADTs, testing, code review, and design. | CC BY‑SA (OCW) |
 | **UC Berkeley — Engineering Software as a Service (ESaaS)** — [saasbook.info](https://saasbook.info/) | 1, 2, 3, 9 | Free book + MOOC on agile, BDD/user stories, and testing. | Free book; CC‑BY media |
-| **CMU 17‑214 / 17‑313 Software Engineering** — [17-313 course site](https://cmu-313.github.io/) | 2, 6, 8, 10 | Open slides/readings on process, design, reviews, and measurement. | Course‑open |
-| **"Software Engineering at Google"** — [free online](https://abseil.io/resources/swe-book) | 1, 8, 9, 10 | Industry practices for reviews, testing, and metrics at scale. | CC BY‑NC‑ND |
+| **CMU 17‑214 / 17‑313 Software Engineering** — [17-313 course site](https://cmu-313.github.io/) | 2, 6, 8, 11 | Open slides/readings on process, design, reviews, and measurement. | Course‑open |
+| **"Software Engineering at Google"** — [free online](https://abseil.io/resources/swe-book) | 1, 8, 9, 11 | Industry practices for reviews, testing, and metrics at scale. | CC BY‑NC‑ND |
 
 ---
 
@@ -152,7 +152,24 @@ analysis, false positives/negatives.
 Covers: levels of testing, control‑flow graphs & coverage, MC/DC, equivalence/
 boundary, combinatorial testing.
 
-## Chapter 10 — Quality Metrics
+## Chapter 10 — Software Security
+
+| Type | Resource | Notes |
+|------|----------|-------|
+| 📄 | [OWASP Top 10:2025](https://owasp.org/Top10/) | The industry's shared vulnerability vocabulary (§10.2). CC BY‑SA 4.0. |
+| 🛠 | [OWASP Juice Shop](https://owasp.org/www-project-juice-shop/) · [WebGoat](https://owasp.org/www-project-webgoat/) | Deliberately insecure apps for hands‑on practice (§10.2). |
+| 🎓 | [PortSwigger Web Security Academy](https://portswigger.net/web-security) | Free hands‑on web‑security labs (§10.2). |
+| 🛠 | [Strix — autonomous AI pentest agents](https://github.com/usestrix/strix) | AI security testing (§10.3). Apache‑2.0; **authorized testing only.** |
+| 📄 | [Andres Freund's xz disclosure](https://www.openwall.com/lists/oss-security/2024/03/29/4) · [xz timeline](https://research.swtch.com/xz-timeline) | Primary sources for the xz‑utils case study (§10.4). |
+| 🛠 | [OpenSSF Scorecard](https://scorecard.dev/) · [SLSA](https://slsa.dev/) · [Sigstore](https://docs.sigstore.dev/) | Supply‑chain security tooling (§10.4). |
+| 🎓 | [OpenSSF "Developing Secure Software" (LFD121)](https://openssf.org/training/courses/) | Free course + certificate (§10.5). |
+| 📄 | [Hastings & Walcott, ISSREW 2022](https://doi.org/10.1109/ISSREW55968.2022.00068) | The six‑control continuous‑verification framework (§10.4). |
+
+Covers: the CIA triad and defense in depth, the OWASP Top 10:2025, SAST/DAST/SCA and
+AI‑assisted security testing, the open‑source supply chain (Log4Shell, xz‑utils, weak
+links, continuous verification), and building security in (SSDF).
+
+## Chapter 11 — Quality Metrics
 
 | Type | Resource | Notes |
 |------|----------|-------|
@@ -165,30 +182,30 @@ boundary, combinatorial testing.
 Covers: meaningful metrics & scales, forms of quality, boxplots/histograms, variance/
 SD, normal & t‑distributions, confidence intervals, linear regression.
 
-## Chapter 11 — Software Engineering in the Age of AI
+## Chapter 12 — Software Engineering in the Age of AI
 
 | Type | Resource | Notes |
 |------|----------|-------|
-| 📄 | [METR — Early-2025 AI & experienced developer productivity RCT](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | The ~19% slowdown trial (§11.1.4). |
-| 📄 | [o16g — the Outcome Engineering manifesto](https://o16g.com/manifesto/) | Primary source for §11.4. |
-| 📄 | [Perry et al. — "Do Users Write More Insecure Code with AI Assistants?"](https://arxiv.org/abs/2211.03622) | The false-sense-of-security study (§11.3). |
-| 📄 | [GitClear — AI code quality research](https://www.gitclear.com/ai_assistant_code_quality_2025_research) | Duplication up, refactoring down (§11.3). |
-| 📄 | [SWE-bench](https://www.swebench.com/) · [SWT-bench](https://arxiv.org/pdf/2406.12952) | Coding-agent capability benchmarks (§11.2.7). |
-| 📄 | [DORA](https://dora.dev/) | Delivery-performance research referenced in §11.2.8. |
+| 📄 | [METR — Early-2025 AI & experienced developer productivity RCT](https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/) | The ~19% slowdown trial (§12.1.4). |
+| 📄 | [o16g — the Outcome Engineering manifesto](https://o16g.com/manifesto/) | Primary source for §12.4. |
+| 📄 | [Perry et al. — "Do Users Write More Insecure Code with AI Assistants?"](https://arxiv.org/abs/2211.03622) | The false-sense-of-security study (§12.3). |
+| 📄 | [GitClear — AI code quality research](https://www.gitclear.com/ai_assistant_code_quality_2025_research) | Duplication up, refactoring down (§12.3). |
+| 📄 | [SWE-bench](https://www.swebench.com/) · [SWT-bench](https://arxiv.org/pdf/2406.12952) | Coding-agent capability benchmarks (§12.2.7). |
+| 📄 | [DORA](https://dora.dev/) | Delivery-performance research referenced in §12.2.8. |
 
 Covers: what AI changes vs. what endures, the productivity paradox, AI across each
 lifecycle stage, evidence on quality/security, the o16g manifesto.
 
-## Chapter 12 — Delivery: CI/CD, DevOps, and Evolution
+## Chapter 13 — Delivery: CI/CD, DevOps, and Evolution
 
 | Type | Resource | Notes |
 |------|----------|-------|
-| 📄 | [SEC Release No. 34‑70694 — In the Matter of Knight Capital](https://www.sec.gov/litigation/admin/2013/34-70694.pdf) | The primary source for the Knight Capital case study (§12.3). Public domain. |
-| 📄 | [CrowdStrike — External Technical Root Cause Analysis (2024)](https://www.crowdstrike.com/falcon-content-update-remediation-and-guidance-hub/) | Primary source for the July 2024 outage case study (§12.3). |
-| 📄 | [DORA — research and the four keys](https://dora.dev/) | Deployment frequency, lead time, change‑fail rate, failed‑deployment recovery time (§12.5). |
-| 📘 | [Martin Fowler — CI, Deployment Pipelines, Blue‑Green, Strangler Fig](https://martinfowler.com/) | Canonical free articles for §12.2–12.3, §12.6. |
+| 📄 | [SEC Release No. 34‑70694 — In the Matter of Knight Capital](https://www.sec.gov/litigation/admin/2013/34-70694.pdf) | The primary source for the Knight Capital case study (§13.3). Public domain. |
+| 📄 | [CrowdStrike — External Technical Root Cause Analysis (2024)](https://www.crowdstrike.com/falcon-content-update-remediation-and-guidance-hub/) | Primary source for the July 2024 outage case study (§13.3). |
+| 📄 | [DORA — research and the four keys](https://dora.dev/) | Deployment frequency, lead time, change‑fail rate, failed‑deployment recovery time (§13.5). |
+| 📘 | [Martin Fowler — CI, Deployment Pipelines, Blue‑Green, Strangler Fig](https://martinfowler.com/) | Canonical free articles for §13.2–13.3, §13.6. |
 | 📘 | [Google SRE books](https://sre.google/books/) | Free online; reliability, release engineering, postmortems. |
-| 📄 | [GitHub Dependabot docs](https://docs.github.com/en/code-security/dependabot) · [OWASP Dependency‑Check](https://owasp.org/www-project-dependency-check/) · [SLSA](https://slsa.dev/) | Dependency scanning and supply‑chain security (§12.4). |
+| 📄 | [GitHub Dependabot docs](https://docs.github.com/en/code-security/dependabot) · [OWASP Dependency‑Check](https://owasp.org/www-project-dependency-check/) · [SLSA](https://slsa.dev/) | Dependency scanning and supply‑chain security (§13.4). |
 | 📘 | [minimumcd.org](https://minimumcd.org/) | A concise, community definition of minimum CD practice. |
 
 Covers: SaaS & cloud, CI pipelines, continuous deployment & rollout strategies (Knight
@@ -223,11 +240,11 @@ covers the whole discipline, and the "Depth" column is honest about that.
 | Requirements / Modeling & Analysis (REQ, MAA) | Ch. 3–5 (elicitation, analysis, use cases) | Solid |
 | Software Design (DES) | Ch. 6–7 (modularity, UML, 4+1, patterns) | Solid |
 | Software V&V (VAV) | Ch. 8–9 (reviews, static analysis, testing, coverage) | Solid |
-| Software Quality (QUA) | Ch. 10 (metrics, statistics, defects) | Solid |
-| Security (SEC) | Ch. 3 §3.7 (attack trees, STRIDE), Ch. 8 §8.4 (SAST), Ch. 12 §12.4 (supply chain, SCA) | Introductory |
+| Software Quality (QUA) | Ch. 11 (metrics, statistics, defects) | Solid |
+| Security (SEC) | **Ch. 10 (OWASP Top 10:2025, SAST/DAST/SCA, AI security testing, supply‑chain security)**; reinforced by Ch. 3 §3.7 (attack trees, STRIDE), Ch. 8 §8.4 (SAST), Ch. 13 §13.4 (security pipelines) | Solid |
 | Software Construction (CST) | assumed as a prerequisite; touched in Ch. 8–9 | Light |
-| Software Evolution / Maintenance | Ch. 12 §12.6 (legacy code, refactoring, technical debt); cost‑of‑change theme throughout | Introductory |
-| Emerging practice: AI‑assisted SE | Ch. 11 | Introductory |
+| Software Evolution / Maintenance | Ch. 13 §13.6 (legacy code, refactoring, technical debt); cost‑of‑change theme throughout | Introductory |
+| Emerging practice: AI‑assisted SE | Ch. 12 | Introductory |
 | Computing Essentials, Math & Eng. Fundamentals (CMP, FND) | assumed prerequisites | Out of scope |
 
 ## Notes on coverage & gaps
@@ -238,12 +255,14 @@ coverage, so you know where the free supplements are richest:
 
 - **Abundant open supplements:** process/agile, requirements & user stories,
   design/modularity, code review & static analysis, testing & coverage, and all of the
-  statistics in Chapter 10.
+  statistics in Chapter 11.
 - **Thinner external coverage:** some *estimation* details (e.g. COCOMO calibration), a
   few *architectural‑pattern* treatments, and worked *case studies*. Our own chapters
   supply original explanations and examples for these.
 - **Deliberately light or out of scope** (per the SEEK table above): deep software
   *construction* and the CS/math prerequisites — appropriate omissions for a one‑semester
   first course, but worth naming so no one mistakes this for the whole discipline.
-  (*Maintenance/evolution* moved from this list to introductory coverage when Chapter 12
-  added legacy code, refactoring, and technical debt.)
+  (*Maintenance/evolution* moved from this list to introductory coverage when Chapter 13
+  added legacy code, refactoring, and technical debt; *security* moved to solid coverage
+  when Chapter 10 added the OWASP Top 10, AI‑assisted security testing, and open‑source
+  supply‑chain security.)

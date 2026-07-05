@@ -855,9 +855,9 @@ fundamentally alive?* The app starts, the homepage loads, a user can log in — 
 deeper. The name comes from hardware bring-up: power the board on and see whether smoke
 comes out before bothering with finer measurements.[^6] Smoke tests run immediately after a
 build or a deployment, as a *gate*: if they fail, the build is dead on arrival, no deeper
-(and more expensive) testing is worth starting, and a deploy must not proceed.[^7] Chapter 12
+(and more expensive) testing is worth starting, and a deploy must not proceed.[^7] Chapter 13
 gives them a formal home as a stage of the delivery pipeline, run right after each deploy
-([§12.2.2](../12-delivery/#1222-the-stages-of-a-pipeline)).
+([§13.2.2](../13-delivery/#1322-the-stages-of-a-pipeline)).
 
 ### 9.2.4 Case Study: Test Early and Often — the Testing Pyramid
 
@@ -909,7 +909,7 @@ red-then-green trains the team to ignore the suite.
 "Test early and often" also means testing *continuously*: run the fast tests on every
 save, the full suite on every push, and treat a broken build as a stop-the-line event.
 This is the testing half of **continuous integration** (Chapter 2) — the discipline that
-keeps the "make change cheap" promise from Chapter 1 honest. Chapter 12 assembles these
+keeps the "make change cheap" promise from Chapter 1 honest. Chapter 13 assembles these
 tests, with the static checks of Chapter 8, into the full delivery pipeline.
 
 ## 9.3 Code Coverage I: White-Box Testing
@@ -1030,8 +1030,8 @@ $9 - 8 + 2 = 3$. Conventional bands for reading the number: **1–10** is simple
 testable code; **11–20** is moderately complex; **21–50** is risky; above **50** is
 effectively untestable.[^12] The metric earns its keep as a *predictor*: high-complexity
 functions are where defects cluster and where the hard-to-cover branches live, which
-makes it a map of where to spend testing effort — and refactoring (Chapter 12,
-[§12.6](../12-delivery/#126-legacy-code-refactoring-and-technical-debt)) is the
+makes it a map of where to spend testing effort — and refactoring (Chapter 13,
+[§13.6](../13-delivery/#136-legacy-code-refactoring-and-technical-debt)) is the
 treatment for the hot spots it finds.[^13]
 
 ### 9.3.2 Control-Flow Coverage Criteria
@@ -1205,7 +1205,7 @@ it hunts for the ill-formed input nobody thought to reject. That makes fuzzing a
 mainstay of security testing — buffer overflows, injection flaws, and denial-of-service
 defects are the bugs that surface when a parser meets input its author never imagined.
 Because an effective fuzzing campaign runs for hours or days, it belongs in a
-non-blocking pipeline stage (Chapter 12), not on the every-commit path.
+non-blocking pipeline stage (Chapter 13), not on the every-commit path.
 
 ## 9.5 Code Coverage II: MC/DC
 
@@ -1425,9 +1425,11 @@ and measure the fraction you have.
 No single criterion is enough, and no amount of testing proves correctness. But a suite
 built from these criteria — black-box *and* white-box, at the right level, with honest
 oracles, run automatically on every change — is the most reliable, most economical net we
-have for catching the defects Chapter 1 promised are inevitable. In Chapter 10 we turn to
-measuring quality across a project as a whole; the coverage numbers you learned to compute
-here are among the first metrics you will report.
+have for catching the defects Chapter 1 promised are inevitable. The next chapter turns testing's
+adversarial instinct — probing the inputs and error paths where a program misbehaves —
+toward an attacker who is *trying* to make it misbehave. Then Chapter 11 turns to measuring
+quality across a whole project, where the coverage numbers you learned to compute here are
+among the first metrics you will report.
 
 ---
 

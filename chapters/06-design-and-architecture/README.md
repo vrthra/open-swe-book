@@ -814,8 +814,8 @@ flowchart TB
         MODEL[domain-model<br/>User · Message · Conversation]
     end
     subgraph L4["Infrastructure layer"]
-        TRANSPORT[transport<br/>«interface» + WebSocket impl]
-        PERSIST[persistence<br/>«interface» + DB impl]
+        TRANSPORT[transport<br/>WebSocket impl]
+        PERSIST[persistence<br/>DB impl]
     end
     WEB --> CONV
     WEB --> USERS
@@ -836,9 +836,10 @@ The dashed "no dependency" line is a design *rule*, not an observation, and a go
 setup enforces it (Chapter 8's static checks can fail the build if `domain-model` ever
 imports `transport`).
 
-Second, **the infrastructure layer is where interfaces meet implementations.** The
-`persistence` and `transport` modules each expose an interface that the application layer
-depends on, while hiding a concrete implementation behind it. This is dependency inversion
+Second, **the interface belongs to the layer that needs it, and the implementation lives
+below.** The application layer *owns* the interface each of these requires — what a store
+or a transport must *do* — while the `persistence` and `transport` modules in
+infrastructure hide a concrete implementation behind it. This is dependency inversion
 in the concrete: the important, stable code (application and domain) depends on abstractions,
 and the volatile code (the actual database driver, the actual socket library) depends on
 those same abstractions from below. Swapping the database becomes a change confined to one
@@ -997,19 +998,12 @@ reuse the judgment, not just the diagram.
 ### Sources
 
 [^1]: Len Bass, Paul Clements, and Rick Kazman, *Software Architecture in Practice*, 4th ed. (2021). [sei.cmu.edu](https://insights.sei.cmu.edu/library/software-architecture-in-practice-fourth-edition/).
+
 [^2]: Ryan Singer, *Shape Up: Stop Running in Circles and Ship Work that Matters*, ch. "Principles of Shaping" (Basecamp, 2019). [basecamp.com](https://basecamp.com/shapeup/1.1-chapter-02).
+
 [^3]: Ryan Singer, *Shape Up: Stop Running in Circles and Ship Work that Matters*, ch. "Find the Elements" (Basecamp, 2019). [basecamp.com](https://basecamp.com/shapeup/1.3-chapter-04).
+
 [^4]: Frederick P. Brooks, Jr., *The Mythical Man-Month: Essays on Software Engineering* (1975; anniversary ed. 1995). [informit.com](https://www.informit.com/store/mythical-man-month-essays-on-software-engineering-anniversary-9780201835953).
-[^6]: David L. Parnas, "On the Criteria To Be Used in Decomposing Systems into Modules," *Communications of the ACM* 15(12) (1972). [dl.acm.org](https://dl.acm.org/doi/10.1145/361598.361623).
-[^7]: W. P. Stevens, G. J. Myers, and L. L. Constantine, "Structured Design," *IBM Systems Journal* 13(2) (1974). [dl.acm.org](https://dl.acm.org/doi/10.1147/sj.132.0115).
-[^8]: Edward Yourdon and Larry L. Constantine, *Structured Design: Fundamentals of a Discipline of Computer Program and Systems Design* (1979). [archive.org](https://archive.org/details/Structured_Design_Edward_Yourdon_Larry_Constantine).
-[^9]: Robert C. Martin, "Design Principles and Design Patterns" (2000). [objectmentor.com via web.archive.org](https://web.archive.org/web/20030416004136/http://www.objectmentor.com/resources/articles/Principles_and_Patterns.PDF).
-[^10]: Bertrand Meyer, *Object-Oriented Software Construction* (1988; 2nd ed. 1997). [bertrandmeyer.com](https://bertrandmeyer.com/OOSC2/).
-[^11]: Barbara H. Liskov and Jeannette M. Wing, "A Behavioral Notion of Subtyping," *ACM Transactions on Programming Languages and Systems* 16(6) (1994). [dl.acm.org](https://dl.acm.org/doi/10.1145/197320.197383).
-[^12]: Andrew Hunt and David Thomas, *The Pragmatic Programmer* (1999; 20th-anniversary ed. 2019). [pragprog.com](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/).
-[^13]: Object Management Group, *OMG Unified Modeling Language (OMG UML)*, version 2.5.1 (2017). [omg.org](https://www.omg.org/spec/UML/2.5.1/).
-[^14]: ISO/IEC/IEEE, *ISO/IEC/IEEE 42010:2022 — Software, systems and enterprise — Architecture description* (2022). [iso.org](https://www.iso.org/standard/74393.html).
-[^15]: Philippe Kruchten, "Architectural Blueprints — The 4+1 View Model of Software Architecture," *IEEE Software* 12(6) (1995). [cs.ubc.ca](https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf).
 
 [^5]: Len Bass, Paul Clements, and Rick Kazman, *Software Architecture in Practice*, 4th ed. (Addison-Wesley, 2021), ch. 3 — the six-part quality-attribute scenario (source, stimulus, artifact, environment, response, response measure). [informit.com](https://www.informit.com/store/software-architecture-in-practice-9780136886099).
 
@@ -1018,3 +1012,23 @@ reuse the judgment, not just the diagram.
 - **Key takeaways** are summarized above in §6.6.
 - Continue to the [Exercises](exercises.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.
+
+[^6]: David L. Parnas, "On the Criteria To Be Used in Decomposing Systems into Modules," *Communications of the ACM* 15(12) (1972). [dl.acm.org](https://dl.acm.org/doi/10.1145/361598.361623).
+
+[^7]: W. P. Stevens, G. J. Myers, and L. L. Constantine, "Structured Design," *IBM Systems Journal* 13(2) (1974). [dl.acm.org](https://dl.acm.org/doi/10.1147/sj.132.0115).
+
+[^8]: Edward Yourdon and Larry L. Constantine, *Structured Design: Fundamentals of a Discipline of Computer Program and Systems Design* (1979). [archive.org](https://archive.org/details/Structured_Design_Edward_Yourdon_Larry_Constantine).
+
+[^9]: Robert C. Martin, "Design Principles and Design Patterns" (2000). [objectmentor.com via web.archive.org](https://web.archive.org/web/20030416004136/http://www.objectmentor.com/resources/articles/Principles_and_Patterns.PDF).
+
+[^10]: Bertrand Meyer, *Object-Oriented Software Construction* (1988; 2nd ed. 1997). [bertrandmeyer.com](https://bertrandmeyer.com/OOSC2/).
+
+[^11]: Barbara H. Liskov and Jeannette M. Wing, "A Behavioral Notion of Subtyping," *ACM Transactions on Programming Languages and Systems* 16(6) (1994). [dl.acm.org](https://dl.acm.org/doi/10.1145/197320.197383).
+
+[^12]: Andrew Hunt and David Thomas, *The Pragmatic Programmer* (1999; 20th-anniversary ed. 2019). [pragprog.com](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/).
+
+[^13]: Object Management Group, *OMG Unified Modeling Language (OMG UML)*, version 2.5.1 (2017). [omg.org](https://www.omg.org/spec/UML/2.5.1/).
+
+[^14]: ISO/IEC/IEEE, *ISO/IEC/IEEE 42010:2022 — Software, systems and enterprise — Architecture description* (2022). [iso.org](https://www.iso.org/standard/74393.html).
+
+[^15]: Philippe Kruchten, "Architectural Blueprints — The 4+1 View Model of Software Architecture," *IEEE Software* 12(6) (1995). [cs.ubc.ca](https://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf).

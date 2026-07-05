@@ -65,7 +65,7 @@ _See Chapters 8–9._
 
 ## 6. Metrics so far (Report 2)
 
-_Early numbers you are collecting for the final report (Chapter 10)._
+_Early numbers you are collecting for the final report (Chapter 11)._
 
 - **Defects:** _open / closed_
 - **Build health:** _…_

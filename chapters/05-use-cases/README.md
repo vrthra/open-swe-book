@@ -174,7 +174,7 @@ Continuing the ATM example:
 
 Notice how each alternative states its trigger step, its condition, its steps, and its
 *resumption point* — the step number where control returns to the basic flow. That
-resumption point is not bookkeeping; it is the seam that spares the alternative from
+resumption point is the seam that spares the alternative from
 re-narrating the rest of the transaction. "Resume at step 6" is a promise that everything
 from step 6 onward behaves exactly as already written.
 
@@ -207,7 +207,9 @@ honest, and far more compact, than copying the same alternative under every step
 range.
 
 The canonical example is a resource that can vanish at any time. Suppose the network link
-to the Bank Authorization System can drop during any of the steps that talk to it:
+to the Bank Authorization System can drop at any point during the withdrawal, whether or
+not the system is actively talking to it at that instant — a link that fails at step 5 is
+simply discovered at step 8:
 
 **B1. Authorization link lost** *(at any step from 4 through 8)*
 > If the connection to the Bank Authorization System is lost:

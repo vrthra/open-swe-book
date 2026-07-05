@@ -1013,7 +1013,7 @@ an interface, and you can swap the implementation.* The trade-off is that a test
 is only as faithful as you make it — tests can pass against a fake that behaves
 differently from reality, so a smaller number of full **integration tests** against a
 real server remain essential (Chapter 9). The same substitution idea, scaled to
-production, powers the blue‑green and canary deployment strategies of Chapter 12.
+production, powers the blue‑green and canary deployment strategies of Chapter 13.
 
 ### 7.5.3 The Broker Pattern
 
@@ -1275,29 +1275,8 @@ is how you learn to *combine* them, and combining them well is what architecture
 ### Sources
 
 [^1]: Frank Buschmann, Regine Meunier, Hans Rohnert, Peter Sommerlad & Michael Stal, *Pattern-Oriented Software Architecture, Volume 1: A System of Patterns* (1996). [wiley.com](https://www.wiley.com/en-us/Pattern-Oriented+Software+Architecture,+Volume+1,+A+System+of+Patterns-p-9780471958697).
+
 [^2]: Mary Shaw & David Garlan, *Software Architecture: Perspectives on an Emerging Discipline* (1996). [dl.acm.org](https://dl.acm.org/doi/book/10.5555/231003).
-[^4]: ISO/IEC, *ISO/IEC 7498-1:1994 — Open Systems Interconnection — Basic Reference Model* (1994). [iso.org](https://www.iso.org/standard/20269.html).
-[^5]: Redux project, *Three Principles*, Redux documentation (accessed 2026). [redux.js.org](https://redux.js.org/understanding/thinking-in-redux/three-principles).
-[^6]: Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides, *Design Patterns: Elements of Reusable Object-Oriented Software* (1994). [informit.com](https://www.informit.com/store/design-patterns-elements-of-reusable-object-oriented-9780201633610).
-[^7]: Microsoft, *Publisher-Subscriber Pattern*, Azure Architecture Center (accessed 2026). [learn.microsoft.com](https://learn.microsoft.com/en-us/azure/architecture/patterns/publisher-subscriber).
-[^8]: Trygve Reenskaug, *MVC: Xerox PARC 1978–79* (1979; the inventor's notes). [folk.universitetetioslo.no](https://folk.universitetetioslo.no/trygver/themes/mvc/mvc-index.html).
-[^9]: Martin Fowler, *GUI Architectures* (2006). [martinfowler.com](https://martinfowler.com/eaaDev/uiArchs.html).
-[^10]: Martin Fowler, *Humble Object* (2020; after Michael Feathers' "Humble Dialog Box" and Gerard Meszaros' *xUnit Test Patterns*). [martinfowler.com](https://martinfowler.com/bliki/HumbleObject.html).
-[^11]: Django Software Foundation, *FAQ: General*, Django documentation (accessed 2026). [docs.djangoproject.com](https://docs.djangoproject.com/en/stable/faq/general/).
-[^12]: Rails team, *Getting Started with Rails*, Rails Guides (accessed 2026). [guides.rubyonrails.org](https://guides.rubyonrails.org/getting_started.html).
-[^13]: Instagram Engineering, *Static Analysis at Scale: An Instagram Story* (2019). [instagram-engineering.com](https://instagram-engineering.com/static-analysis-at-scale-an-instagram-story-8f498ab71a0c).
-[^14]: Shopify Engineering, *Deconstructing the Monolith* (2019). [shopify.engineering](https://shopify.engineering/deconstructing-monolith-designing-software-maximizes-developer-productivity).
-[^15]: Airbnb Engineering, *Rearchitecting Airbnb's Frontend* (2018). [medium.com/airbnb-engineering](https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2).
-[^16]: Tyler Akidau, *Streaming 101: The World Beyond Batch* (2015). [oreilly.com](https://www.oreilly.com/radar/the-world-beyond-batch-streaming-101/).
-[^17]: Jonas Bonér, Dave Farley, Roland Kuhn & Martin Thompson, *The Reactive Manifesto* (2014). [reactivemanifesto.org](https://www.reactivemanifesto.org/).
-[^18]: Jeffrey Dean & Sanjay Ghemawat, *MapReduce: Simplified Data Processing on Large Clusters*, OSDI (2004). [research.google](https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/).
-[^19]: Matei Zaharia et al., *Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing*, NSDI (2012). [usenix.org](https://www.usenix.org/conference/nsdi12/technical-sessions/presentation/zaharia).
-[^20]: Roy T. Fielding, *Architectural Styles and the Design of Network-based Software Architectures*, ch. 5 (2000). [ics.uci.edu](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm).
-[^21]: R. Fielding, M. Nottingham & J. Reschke (eds.), *RFC 9110: HTTP Semantics*, IETF (2022). [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc9110.html).
-[^22]: James Lewis & Martin Fowler, *Microservices* (2014). [martinfowler.com](https://martinfowler.com/articles/microservices.html).
-[^23]: Carnegie Mellon Software Engineering Institute, *Software Product Lines Collection* (accessed 2026). [sei.cmu.edu](https://www.sei.cmu.edu/library/software-product-lines-collection/).
-[^24]: Kyo C. Kang, Sholom G. Cohen, James A. Hess, William E. Novak & A. Spencer Peterson, *Feature-Oriented Domain Analysis (FODA) Feasibility Study*, CMU/SEI-90-TR-021 (1990). [sei.cmu.edu](https://www.sei.cmu.edu/library/feature-oriented-domain-analysis-foda-feasibility-study/).
-[^25]: Klaus Pohl, Günter Böckle & Frank van der Linden, *Software Product Line Engineering: Foundations, Principles and Techniques* (2005). [link.springer.com](https://link.springer.com/book/10.1007/3-540-28901-1).
 
 [^3]: Frank Buschmann, Regine Meunier, Hans Rohnert, Peter Sommerlad, and Michael Stal, *Pattern-Oriented Software Architecture, Volume 1: A System of Patterns* (Wiley, 1996) — which files recurring structures into three levels: architectural patterns, design patterns, and idioms. [wiley.com](https://www.wiley.com/en-us/Pattern+Oriented+Software+Architecture,+Volume+1,+A+System+of+Patterns-p-9780471958697).
 
@@ -1306,3 +1285,47 @@ is how you learn to *combine* them, and combining them well is what architecture
 - **Key takeaways** are summarized above in §7.7.
 - Continue to the [Exercises](exercises.md).
 - Go deeper with the [Open Resources](resources.md) for this chapter.
+
+[^4]: ISO/IEC, *ISO/IEC 7498-1:1994 — Open Systems Interconnection — Basic Reference Model* (1994). [iso.org](https://www.iso.org/standard/20269.html).
+
+[^5]: Redux project, *Three Principles*, Redux documentation (accessed 2026). [redux.js.org](https://redux.js.org/understanding/thinking-in-redux/three-principles).
+
+[^6]: Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides, *Design Patterns: Elements of Reusable Object-Oriented Software* (1994). [informit.com](https://www.informit.com/store/design-patterns-elements-of-reusable-object-oriented-9780201633610).
+
+[^7]: Microsoft, *Publisher-Subscriber Pattern*, Azure Architecture Center (accessed 2026). [learn.microsoft.com](https://learn.microsoft.com/en-us/azure/architecture/patterns/publisher-subscriber).
+
+[^8]: Trygve Reenskaug, *MVC: Xerox PARC 1978–79* (1979; the inventor's notes). [folk.universitetetioslo.no](https://folk.universitetetioslo.no/trygver/themes/mvc/mvc-index.html).
+
+[^9]: Martin Fowler, *GUI Architectures* (2006). [martinfowler.com](https://martinfowler.com/eaaDev/uiArchs.html).
+
+[^10]: Martin Fowler, *Humble Object* (2020; after Michael Feathers' "Humble Dialog Box" and Gerard Meszaros' *xUnit Test Patterns*). [martinfowler.com](https://martinfowler.com/bliki/HumbleObject.html).
+
+[^11]: Django Software Foundation, *FAQ: General*, Django documentation (accessed 2026). [docs.djangoproject.com](https://docs.djangoproject.com/en/stable/faq/general/).
+
+[^12]: Rails team, *Getting Started with Rails*, Rails Guides (accessed 2026). [guides.rubyonrails.org](https://guides.rubyonrails.org/getting_started.html).
+
+[^13]: Instagram Engineering, *Static Analysis at Scale: An Instagram Story* (2019). [instagram-engineering.com](https://instagram-engineering.com/static-analysis-at-scale-an-instagram-story-8f498ab71a0c).
+
+[^14]: Shopify Engineering, *Deconstructing the Monolith* (2019). [shopify.engineering](https://shopify.engineering/deconstructing-monolith-designing-software-maximizes-developer-productivity).
+
+[^15]: Airbnb Engineering, *Rearchitecting Airbnb's Frontend* (2018). [medium.com/airbnb-engineering](https://medium.com/airbnb-engineering/rearchitecting-airbnbs-frontend-5e213efc24d2).
+
+[^16]: Tyler Akidau, *Streaming 101: The World Beyond Batch* (2015). [oreilly.com](https://www.oreilly.com/radar/the-world-beyond-batch-streaming-101/).
+
+[^17]: Jonas Bonér, Dave Farley, Roland Kuhn & Martin Thompson, *The Reactive Manifesto* (2014). [reactivemanifesto.org](https://www.reactivemanifesto.org/).
+
+[^18]: Jeffrey Dean & Sanjay Ghemawat, *MapReduce: Simplified Data Processing on Large Clusters*, OSDI (2004). [research.google](https://research.google/pubs/mapreduce-simplified-data-processing-on-large-clusters/).
+
+[^19]: Matei Zaharia et al., *Resilient Distributed Datasets: A Fault-Tolerant Abstraction for In-Memory Cluster Computing*, NSDI (2012). [usenix.org](https://www.usenix.org/conference/nsdi12/technical-sessions/presentation/zaharia).
+
+[^20]: Roy T. Fielding, *Architectural Styles and the Design of Network-based Software Architectures*, ch. 5 (2000). [ics.uci.edu](https://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm).
+
+[^21]: R. Fielding, M. Nottingham & J. Reschke (eds.), *RFC 9110: HTTP Semantics*, IETF (2022). [rfc-editor.org](https://www.rfc-editor.org/rfc/rfc9110.html).
+
+[^22]: James Lewis & Martin Fowler, *Microservices* (2014). [martinfowler.com](https://martinfowler.com/articles/microservices.html).
+
+[^23]: Carnegie Mellon Software Engineering Institute, *Software Product Lines Collection* (accessed 2026). [sei.cmu.edu](https://www.sei.cmu.edu/library/software-product-lines-collection/).
+
+[^24]: Kyo C. Kang, Sholom G. Cohen, James A. Hess, William E. Novak & A. Spencer Peterson, *Feature-Oriented Domain Analysis (FODA) Feasibility Study*, CMU/SEI-90-TR-021 (1990). [sei.cmu.edu](https://www.sei.cmu.edu/library/feature-oriented-domain-analysis-foda-feasibility-study/).
+
+[^25]: Klaus Pohl, Günter Böckle & Frank van der Linden, *Software Product Line Engineering: Foundations, Principles and Techniques* (2005). [link.springer.com](https://link.springer.com/book/10.1007/3-540-28901-1).

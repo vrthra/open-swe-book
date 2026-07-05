@@ -32,7 +32,7 @@ A requirement is ready to be estimated only when you can answer questions like t
 - **Why** — what underlying goal does it serve? If you cannot state the goal, you cannot
   tell whether a cheaper solution would do.
 - **How will we know it works?** What is the acceptance test? A requirement with no
-  acceptance criterion is not a requirement; it is a hope.
+  acceptance criterion is only a hope.
 - **What does it depend on?** Does it assume a login system, a payment gateway, a data
   migration that does not exist yet?
 - **What could go wrong?** Privacy, performance, edge cases, regulatory limits.
@@ -692,7 +692,7 @@ COCOMO also estimates **schedule** (calendar months) from effort, again as a pow
 size: dividing effort by schedule gives the average staff needed.[^7] **COCOMO II** refines all
 of this with size in function points, *scale factors* for team maturity and requirements
 volatility, and seventeen *effort multipliers* for things like personnel skill and tool
-support — but the beating heart is still Effort = a × Size^b.[^16]
+support — but the core is still Effort = a × Size^b.[^16]
 
 > **Pitfall.** A COCOMO estimate is only as good as its *size* input, and estimating KLOC
 > before you have written the code is itself hard and error-prone — you have pushed the

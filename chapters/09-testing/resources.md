@@ -15,8 +15,8 @@ known. Each entry notes its license or access terms; when in doubt, check the li
   [saasbook.info](https://www.saasbook.info/). Test-driven development, mocks/stubs, and
   the testing pyramid in a full-stack context. *License: book is free to read online;
   see the site for terms.*
-- 📘 **Software Engineering at Google — testing chapters** (Ch. 11 "Testing Overview",
-  Ch. 12 "Unit Testing", Ch. 13 "Test Doubles", Ch. 14 "Larger Testing") —
+- 📘 **Software Engineering at Google — testing chapters** (Ch. 12 "Testing Overview",
+  Ch. 13 "Unit Testing", Ch. 10 "Test Doubles", Ch. 14 "Larger Testing") —
   [abseil.io/resources/swe-book](https://abseil.io/resources/swe-book). Industrial
   perspective on test size, flakiness, hermeticity, and scaling a suite. *License: CC
   BY‑NC‑ND 4.0 (free to read; no derivatives).*

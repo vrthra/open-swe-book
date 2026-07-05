@@ -45,7 +45,7 @@ strong processes from weak ones is **how early and how often they expose mistake
 ### 2.1.2 Two Development Cultures: Plan versus Grow
 
 Underneath the alphabet soup of methods lie two genuinely different philosophies about
-how software should come into being. It is worth naming them plainly.
+how software should come into being.
 
 The **plan-driven** culture treats software like a building. You decide what you are going
 to build, in detail, *before* you build it. Requirements are elicited and frozen, a design
@@ -437,11 +437,11 @@ have not yet validated.
 ### 2.3.4 A Scrum+XP Hybrid
 
 In practice, many strong teams run **Scrum for the process and XP for the engineering**.
-Scrum gives the cadence — sprints, backlog, review, retrospective — and the roles that keep
+Scrum gives the cadence — sprints, backlog, review, retrospective — and the accountabilities that keep
 priorities and impediments owned. XP fills the sprint with the discipline that makes each
 increment genuinely done: TDD, pair or peer review, refactoring, and **continuous
 integration**, in which everyone merges into a shared mainline many times a day and an
-automated build-and-test pipeline verifies each merge.[^11] (Chapter 12 dissects that pipeline
+automated build-and-test pipeline verifies each merge.[^11] (Chapter 13 dissects that pipeline
 stage by stage and follows it all the way to production.)
 
 The combination is more than the sum of its parts. Scrum without engineering practice
@@ -820,7 +820,7 @@ practices are worth borrowing regardless of your process:
 - **Hill charts for progress.** Track each scope as a dot on a hill: **uphill** is
   *figuring it out* (unknowns remain), **downhill** is *just execution* (all unknowns
   solved). A dot that stops moving is a raised hand. This exposes uncertainty in a way a
-  to‑do list cannot — see [§10.3](../10-quality-metrics/#103-graphical-displays-of-data-sets).
+  to‑do list cannot — see [§11.3](../11-quality-metrics/#113-graphical-displays-of-data-sets).
 
 **The circuit breaker.** When the cycle ends, the project ships or it is *dropped* — it does
 **not** automatically get an extension. The most you can lose is one cycle. Extending is

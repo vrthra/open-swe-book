@@ -88,7 +88,7 @@ well. Types: 📘 open text · 🎓 course · 📄 primary source/standard · �
   Research on courses that use real external customers — the same customer–developer
   separation the dual-hat swap creates without needing industry partners. *Open access.*
 
-## Metrics for status reports and the final report (referenced from Ch. 10)
+## Metrics for status reports and the final report (referenced from Ch. 11)
 
 - 📘 **OpenIntro Statistics** — [openintro.org](https://www.openintro.org/book/os/).
   A free, openly-licensed statistics textbook; use it to analyze your velocity and defect

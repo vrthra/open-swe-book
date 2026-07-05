@@ -5,7 +5,7 @@ book — **Variant A**, a 15‑week milestone track, and **Variant B**, a 16‑w
 on two‑week sprints. Both run **two parallel tracks** (as the ACM/IEEE guidelines
 recommend[^1]):
 
-- **Concepts track** — the twelve chapters, one theme at a time.
+- **Concepts track** — the thirteen chapters, one theme at a time.
 - **Project track** — a real team project (Appendix A), started early and iterated.
 
 The two tracks are **tightly coupled at the start** (weeks 1–4, while teams form and
@@ -24,13 +24,22 @@ pace.
 | 6 | Ch. 6 — Design & Architecture | Architecture sketch; class diagram | MIT 6.031; 4+1 views |
 | 7 | Ch. 7 — Architectural Patterns | **Status Report 1** (skeletal system) | Fowler PoEAA; MS patterns |
 | 8 | *Midterm / catch‑up* | Sprint review + retrospective | — |
-| 9 | Ch. 8 — Static Checking; CI pipelines (§12.2) | Set up CI, linters, code review | Google eng‑practices; Fagan |
+| 9 | Ch. 8 — Static Checking; CI pipelines (§13.2) | Set up CI, linters, code review | Google eng‑practices; Fagan |
 | 10 | Ch. 9 — Testing (coverage) | Test plan; coverage targets | MIT 6.031 testing; Ammann/Offutt |
 | 11 | Ch. 9 — Testing (MC/DC, combinatorial) | **Status Report 2** (viable system) | NIST combinatorial |
-| 12 | Ch. 10 — Metrics (quality & defects) | Defect tracking; quality dashboard | OpenIntro Stats; DORA |
-| 13 | Ch. 10 — Metrics (statistics); DORA (§12.5) | Measure & analyze project data | OpenIntro Stats; DORA |
-| 14 | Ch. 11 — SE in the Age of AI; Ch. 12 — CD, security pipelines, evolution + review | **Comprehensive Final Report** (A.5) | METR study; o16g manifesto; SEC 34‑70694 |
+| 12 | Ch. 11 — Metrics (quality & defects) | Defect tracking; quality dashboard | OpenIntro Stats; DORA |
+| 13 | Ch. 11 — Metrics (statistics); DORA (§13.5) | Measure & analyze project data | OpenIntro Stats; DORA |
+| 14 | Ch. 12 — SE in the Age of AI; Ch. 13 — CD, security pipelines, evolution + review | **Comprehensive Final Report** (A.5) | METR study; o16g manifesto; SEC 34‑70694 |
 | 15 | Final presentations / demos | Ship & retrospective | — |
+
+> **Placing Chapter 10 (Software Security).** These tracks predate the security chapter
+> and leave its scheduling to you, because security fits more than one way. Its
+> SAST/DAST/SCA and supply-chain material pairs naturally with the CI and static-analysis
+> weeks (week 9 above), so many instructors teach it there as the pipeline is built.
+> Others give it a dedicated session before metrics, or thread the OWASP Top 10 and the
+> dependency-vetting exercises through the project's hardening sprints. Whichever you
+> choose, the project's "static analysis + supply-chain security" sprint (Appendix A) is
+> the natural place for students to apply it.
 
 ## Variant B: 16-week semester on two-week sprints
 
@@ -44,20 +53,20 @@ progressive engineering-hardening arc (CI → CD → lint/dependency scans → d
 
 | Week | Concepts (chapter) | Project / sprint deliverable |
 |------|--------------------|------------------------------|
-| 1 | Ch. 1 — Introduction; SaaS & the cloud (§12.1) | Think about project ideas |
+| 1 | Ch. 1 — Introduction; SaaS & the cloud (§13.1) | Think about project ideas |
 | 2 | Ch. 3 — User Requirements; Shape Up (§2.8, §4.2.4) | — |
 | 3 | Ch. 2 — Processes & types of agile | Teams form; **Sprint 0‑0**: idea pitches |
 | 4 | Ch. 6 — Design principles | **Sprint 0‑1**: pitch swap + proposal with customer |
 | 5 | Ch. 7 — Architectures + REST (§7.5.4); idea presentations | **Sprint 0‑2**: user stories + lo‑fi UI/storyboards (§3.4–3.5) |
-| 6 | Ch. 9 — Testing; CI pipelines (§12.2); DORA (§12.5) | **Sprint 0‑3**: initial view, deployed |
+| 6 | Ch. 9 — Testing; CI pipelines (§13.2); DORA (§13.5) | **Sprint 0‑3**: initial view, deployed |
 | 7 | Demo Day; sprints & iterations (§2.2) | **Sprint 1** begins; team review #0 |
 | 8 | *Test 1* | — |
-| 9 | Continuous deployment (§12.3: Knight Capital, CrowdStrike) | Sprint 1 due → Demo Day; **Sprint 2**; review #1 |
+| 9 | Continuous deployment (§13.3: Knight Capital, CrowdStrike) | Sprint 1 due → Demo Day; **Sprint 2**; review #1 |
 | 10 | *Spring break* | — |
 | 11 | Ch. 8 — Static checking; risk | Sprint 2 continues |
-| 12 | Security pipelines (§12.4) | Sprint 2 due → Demo Day; **Sprint 3**; review #2 |
-| 13 | Legacy code & refactoring (§12.6); Ch. 11 AI readings | Sprint 3 continues |
-| 14 | Work days; Ch. 10 metrics in practice | Sprint 3 due → Demo Day; **Sprint 4**; review #3 |
+| 12 | Security pipelines (§13.4) | Sprint 2 due → Demo Day; **Sprint 3**; review #2 |
+| 13 | Legacy code & refactoring (§13.6); Ch. 12 AI readings | Sprint 3 continues |
+| 14 | Work days; Ch. 11 metrics in practice | Sprint 3 due → Demo Day; **Sprint 4**; review #3 |
 | 15 | *Test 2* | Sprint 4 due |
 | 16 | Final presentations | Individual write‑ups; review #4 |
 

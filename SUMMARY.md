@@ -43,23 +43,29 @@
   - [Exercises](chapters/09-testing/exercises.md)
   - [Open Resources](chapters/09-testing/resources.md)
 
+# Security
+
+- [Software Security](chapters/10-software-security/README.md)
+  - [Exercises](chapters/10-software-security/exercises.md)
+  - [Open Resources](chapters/10-software-security/resources.md)
+
 # Metrics
 
-- [Quality Metrics](chapters/10-quality-metrics/README.md)
-  - [Exercises](chapters/10-quality-metrics/exercises.md)
-  - [Open Resources](chapters/10-quality-metrics/resources.md)
+- [Quality Metrics](chapters/11-quality-metrics/README.md)
+  - [Exercises](chapters/11-quality-metrics/exercises.md)
+  - [Open Resources](chapters/11-quality-metrics/resources.md)
 
 # The AI Shift
 
-- [Software Engineering in the Age of AI](chapters/11-ai-across-the-lifecycle/README.md)
-  - [Exercises](chapters/11-ai-across-the-lifecycle/exercises.md)
-  - [Open Resources](chapters/11-ai-across-the-lifecycle/resources.md)
+- [Software Engineering in the Age of AI](chapters/12-ai-across-the-lifecycle/README.md)
+  - [Exercises](chapters/12-ai-across-the-lifecycle/exercises.md)
+  - [Open Resources](chapters/12-ai-across-the-lifecycle/resources.md)
 
 # Delivery
 
-- [Delivery: CI/CD, DevOps, and Evolution](chapters/12-delivery/README.md)
-  - [Exercises](chapters/12-delivery/exercises.md)
-  - [Open Resources](chapters/12-delivery/resources.md)
+- [Delivery: CI/CD, DevOps, and Evolution](chapters/13-delivery/README.md)
+  - [Exercises](chapters/13-delivery/exercises.md)
+  - [Open Resources](chapters/13-delivery/resources.md)
 
 # Practice
 

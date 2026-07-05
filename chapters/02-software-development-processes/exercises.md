@@ -20,7 +20,7 @@ trade-offs.
 
 ## Scrum (§2.2)
 
-4. **[warm-up]** Match each Scrum role to the question it owns — *what/why*, *how*, or *the
+4. **[warm-up]** Match each Scrum accountability to the question it owns — *what/why*, *how*, or *the
    process itself* — and explain why the Product Owner accountability is held by a single
    person rather than a committee.
 

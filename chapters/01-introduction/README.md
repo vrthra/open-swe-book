@@ -271,7 +271,7 @@ on the date, even if not everything. Plan‑driven methods more often fix scope 
 time. Chapters 2 and 4 return to this trade‑off with concrete estimation and
 prioritization techniques (story points, MoSCoW, value/cost/risk). And modern software
 increasingly ships as a **continuously updated service** rather than a boxed product —
-Chapter 12 examines how that reshapes the triangle, when releasing becomes a routine
+Chapter 13 examines how that reshapes the triangle, when releasing becomes a routine
 decision instead of a once‑a‑year event.
 
 > **Pitfall.** Silently absorbing a scope increase by working nights ("crunch") hides
@@ -291,8 +291,7 @@ device**: software that detected when the car was being emissions‑tested (from
 speed, and time patterns) and switched to a cleaner, lower‑performance mode *only during
 the test*. On the road, the cars emitted many times the legal limit of nitrogen oxides.[^9]
 
-The software worked *exactly as designed* — and that is the problem. This was not
-a defect to be fixed by better testing; it was a *requirement* that should never have
+The software worked *exactly as designed* — and that is the problem. This was no mere testing failure — it was a *requirement* that should never have
 been implemented. Engineers wrote that code. The lesson: **correctness is not the same
 as rightness.** A professional must sometimes refuse to build what they are asked to
 build.
@@ -344,10 +343,11 @@ those pressures:
 - **Requirements** (Ch. 3–5) discover and pin down *what to build*.
 - **Design and architecture** (Ch. 6–7) tame complexity so change stays cheap.
 - **Static checking and testing** (Ch. 8–9) catch the inevitable defects early.
-- **Metrics** (Ch. 10) tell us, with evidence rather than opinion, how we are doing.
-- **AI across the lifecycle** (Ch. 11) re-examines every one of those disciplines as
+- **Security** (Ch. 10) makes the software resist attack, from the code to the supply chain it is built from.
+- **Metrics** (Ch. 11) tell us, with evidence rather than opinion, how we are doing.
+- **AI across the lifecycle** (Ch. 12) re-examines every one of those disciplines as
   coding agents take over more of the typing.
-- **Delivery** (Ch. 12) carries a verified change the last mile, into production, safely.
+- **Delivery** (Ch. 13) carries a verified change the last mile, into production, safely.
 - **A team project** (Appendix A) puts it all into practice.
 
 A word about the code you will meet along the way. Concepts come first in this book and

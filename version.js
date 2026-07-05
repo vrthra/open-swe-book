@@ -17,13 +17,13 @@
 
 // Sidebar numbering: the appendix displays as "A." and the suffix entries
 // (curriculum, contributing) carry no number, so the sidebar matches the
-// "twelve chapters + appendix" framing rather than looking like 16 chapters.
+// "thirteen chapters + appendix" framing rather than looking like 17 chapters.
 (() => {
     document.querySelectorAll('#sidebar ol.chapter > li.chapter-item > a > strong')
         .forEach((st) => {
             const n = parseInt(st.textContent, 10);
-            if (n === 13) st.textContent = 'A.';
-            else if (n > 13) st.textContent = '';
+            if (n === 14) st.textContent = 'A.';
+            else if (n > 14) st.textContent = '';
         });
 })();
 

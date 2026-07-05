@@ -204,7 +204,7 @@ review was shallow, not that the code was clean.[^5] By recording review rates, 
 and where in the lifecycle each defect was found, a team can answer questions that opinion
 alone cannot: *Are our inspections worth the time? Which kinds of defects slip through? Should
 we inspect this class of module at all?* Measurement turns inspection from a ritual into a
-controllable process, and connects directly to Chapter 10's treatment of quality metrics.
+controllable process, and connects directly to Chapter 11's treatment of quality metrics.
 
 > **Principle.** Slow down to speed up. In inspection, a *lower* review rate finds *more*
 > defects, and finding a defect on the page is far cheaper than finding it in production.
@@ -533,9 +533,10 @@ different question. It helps to know the categories so you can assemble the righ
   equality, integer overflow in a size calculation, a lock acquired without a matching
   release. Each pattern is a mistake that has bitten enough programmers that someone wrote a
   detector for it. Security-focused variants (often called SAST tools) specialize in patterns
-  that lead to vulnerabilities.
+  that lead to vulnerabilities — the security applications of static analysis get their own
+  treatment, alongside dynamic and AI-driven testing, in [Chapter 10](../10-software-security/).
 
-Most teams run several of these together in **continuous integration** (Chapters 2 and 12), so that
+Most teams run several of these together in **continuous integration** (Chapters 2 and 13), so that
 every proposed change is automatically type-checked, linted, and pattern-scanned before a
 human reviewer ever looks at it. The tools handle the mechanical layer; the humans handle
 judgment. That division of labor is the whole point.
